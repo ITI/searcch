@@ -15,7 +15,7 @@
         v-for="item in items"
         max-width="344"
         class="mx-auto elevation-2"
-        key="item.id"
+        :key="item.id"
       >
         <v-card-text>
           {{ item.title }}
@@ -47,7 +47,9 @@ export default {
   },
   methods: {
     async asyncData({ $axios }) {
-      let queryResult = await $axios.$get('https://zenodo.org/api/')
+      let queryResult = await $axios.$get(
+        'https://zenodo.org/api/records/?q=cyber'
+      )
       return { items: queryResult }
     }
   }
