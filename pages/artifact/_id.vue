@@ -16,17 +16,21 @@
         <v-data-table
           :headers="headers"
           :items="entries"
-          :items-per-page="15"
           :search="search"
           :hide-default-header="true"
+          :expanded.sync="expanded"
+          :items-per-page="15"
+          :custom-filter="filterAll"
+          item-key="name"
+          show-expand
           class="elevation-2"
         >
-          <template v-slot:item.value="{ item }">
-            {{
-              typeof item.value === 'object'
-                ? JSON.stringify(item.value)
-                : item.value
-            }}
+          <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length">
+              <pre>
+                {{ item.value }}
+              </pre>
+            </td>
           </template>
         </v-data-table>
       </v-card>
@@ -45,15 +49,32 @@ export default {
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Value', value: 'value' }
-      ]
+      ],
+      expanded: []
+    }
+  },
+  methods: {
+    filterAll(value, search, item) {
+      return (
+        value != null &&
+        search != null &&
+        typeof value === 'string' &&
+        value.toString().indexOf(search) !== -1
+      )
     }
   },
   computed: {
     entries() {
       var entries = []
       for (var key of Object.keys(this.record)) {
-        entries.push({ name: key, value: this.record[key] })
-        console.log(key)
+        if (typeof this.record[key] === 'object') {
+          entries.push({
+            name: key,
+            value: JSON.stringify(this.record[key], undefined, 2)
+          })
+        } else {
+          entries.push({ name: key, value: this.record[key] })
+        }
       }
       return entries
     }
