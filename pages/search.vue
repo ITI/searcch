@@ -40,7 +40,12 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('https://zenodo.org/api/records/?q=cyber')
+      .get(process.env.ZENODO_API_URL + 'records/', {
+        params: {
+          q: 'cyber',
+          size: '20'
+        }
+      })
       .then(response => {
         this.items = response.data
       })
