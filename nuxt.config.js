@@ -35,7 +35,7 @@ export default {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ['@nuxtjs/vuetify'],
+  buildModules: ['@nuxtjs/vuetify', '@nuxtjs/dotenv'],
   /*
    ** Nuxt.js modules
    */
@@ -64,6 +64,11 @@ export default {
         }
       }
     }
+  },
+  dotenv: {
+    /* module options */
+    path: '.env',
+    filename: '.env.' + process.env.NODE_ENV
   },
   /*
    ** Build configuration
