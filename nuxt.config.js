@@ -6,7 +6,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    titleTemplate: '%s - SEARCCH Portal ',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -19,6 +19,7 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
+  serverMiddleware: ['~/servermiddleware/seo.js'],
   /*
    ** Customize the progress-bar color
    */
