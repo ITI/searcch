@@ -40,6 +40,18 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: this.record.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.record.title
+        }
+      ]
+    }
+  },
   data() {
     return {
       search: '',
@@ -89,18 +101,6 @@ export default {
       .then(response => {
         this.record = response.data
       })
-  },
-  head() {
-    return {
-      title: this.record.title,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.record.title
-        }
-      ]
-    }
   }
 }
 </script>
