@@ -3,7 +3,8 @@
     <div v-if="record" id="record">
       <v-card>
         <v-card-title>
-          Zenodo Artifact {{ record.id }}
+          Zenodo Artifact &nbsp;
+          <a :href="zenodoURL" target="_blank">{{ record.id }}</a>
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -55,14 +56,14 @@ export default {
   data() {
     return {
       search: '',
-      title: 'Artifact View',
       id: this.$route.params.id,
       record: {},
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Value', value: 'value' }
       ],
-      expanded: []
+      expanded: [],
+      zenodoURL: ''
     }
   },
   methods: {
@@ -100,6 +101,7 @@ export default {
       .get(process.env.ZENODO_API_URL + `records/${this.id}`)
       .then(response => {
         this.record = response.data
+        this.zenodoURL = 'https://zenodo.org/record/' + response.data.id
       })
   }
 }
