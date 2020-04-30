@@ -1,0 +1,10 @@
+# code owner protection settings for specific files
+#
+# this will require the named person to review any 
+# modifications to these specific files
+
+# protect any modifications to the expected runtime environment variables
+.env/* @timyardley
+
+# protect modification of the CODEOWNERS settings
+CODEOWNERS @timyardley
