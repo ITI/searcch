@@ -119,7 +119,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get(process.env.ZENODO_API_URL + 'records/', {
+      .get(this.$store.state.ZENODO_API_URL + 'records/', {
         params: {
           q: 'cyber',
           size: '20'
