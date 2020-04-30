@@ -93,12 +93,12 @@ export default {
     }
   },
   mounted() {
-    this.$axios.setToken(process.env.ZENODO_API_KEY, 'Bearer', [
+    this.$axios.setToken(this.$store.state.ZENODO_API_KEY, 'Bearer', [
       'post',
       'delete'
     ])
     this.$axios
-      .get(process.env.ZENODO_API_URL + `records/${this.id}`)
+      .get(this.$store.state.ZENODO_API_URL + `records/${this.id}`)
       .then(response => {
         this.record = response.data
         this.zenodoURL = 'https://zenodo.org/record/' + response.data.id
