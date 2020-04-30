@@ -42,6 +42,12 @@
               <v-btn icon :to="`/artifact/${item.id}`" nuxt>
                 <v-icon>mdi-card-search</v-icon>
               </v-btn>
+              <v-btn icon :to="`/artifact/${item.id}`" nuxt>
+                <v-icon>mdi-star-outline</v-icon>
+              </v-btn>
+              <v-btn icon :to="`/artifact/${item.id}`" nuxt>
+                <v-icon>mdi-comment</v-icon>
+              </v-btn>
             </v-card>
           </v-col>
         </v-row>
