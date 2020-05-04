@@ -1,0 +1,99 @@
+<template>
+  <div>
+    <v-card class="mx-auto my-12">
+      <v-img
+        height="20"
+        width="172"
+        v-if="record.links"
+        :src="record.links.badge"
+      ></v-img>
+
+      <v-card-title> {{ record.title }} </v-card-title>
+
+      <v-card-text>
+        <v-row align="center" class="mx-0">
+          <v-rating
+            :value="4.5"
+            color="amber"
+            dense
+            half-increments
+            readonly
+            size="14"
+          ></v-rating>
+          <div class="grey--text ml-4">4.5 (42)</div>
+        </v-row>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title>Full Record</v-card-title>
+
+      <v-card-text v-if="record" v-for="(v, k) in record" :key="k" cols="12">
+        <div class="my-4 subtitle-1">
+          {{ k }}
+        </div>
+        <div v-html="v"></div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title>Metadata</v-card-title>
+
+      <v-card-text
+        v-if="record.metadata"
+        v-for="(v, k) in record.metadata"
+        :key="k"
+        cols="12"
+      >
+        <div class="my-4 subtitle-1">
+          {{ k }}
+        </div>
+        <div v-html="v"></div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title>Files</v-card-title>
+
+      <v-card-text
+        v-if="record.files"
+        v-for="(v, k) in record.files"
+        :key="k"
+        cols="12"
+      >
+        <div class="my-4 subtitle-1">
+          {{ k }}
+        </div>
+        <div v-html="v"></div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title>Links</v-card-title>
+
+      <v-card-text
+        v-if="record.links"
+        v-for="(v, k) in record.links"
+        :key="k"
+        cols="12"
+      >
+        <div class="my-4 subtitle-1">
+          {{ k }}
+        </div>
+        <div v-html="v"></div>
+      </v-card-text>
+    </v-card>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'zenodoartifact',
+  props: {
+    record: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
