@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div v-if="record">
+    <h1>
+      Zenodo Artifact
+      <a :href="zenodoURL" target="_blank">{{ record.id }}</a>
+    </h1>
+
     <v-card class="mx-auto my-12">
       <v-img
         height="20"
@@ -22,17 +27,6 @@
           ></v-rating>
           <div class="grey--text ml-4">4.5 (42)</div>
         </v-row>
-      </v-card-text>
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title>Full Record</v-card-title>
-
-      <v-card-text v-if="record" v-for="(v, k) in record" :key="k" cols="12">
-        <div class="my-4 subtitle-1">
-          {{ k }}
-        </div>
-        <div v-html="v"></div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
@@ -82,6 +76,17 @@
         </div>
         <div v-html="v"></div>
       </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title>Full Record</v-card-title>
+
+      <v-card-text v-for="(v, k) in record" :key="k" cols="12">
+        <div class="my-4 subtitle-1">
+          {{ k }}
+        </div>
+        <div v-html="v"></div>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -92,6 +97,10 @@ export default {
   props: {
     record: {
       type: Object,
+      required: true
+    },
+    zenodoURL: {
+      type: String,
       required: true
     }
   }
