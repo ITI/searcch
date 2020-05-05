@@ -2,7 +2,9 @@
   <div v-if="record">
     <h1>
       Zenodo Artifact
-      <a :href="zenodoURL" target="_blank">{{ record.id }}</a>
+      <a v-if="record.links" :href="record.links.html" target="_blank">{{
+        record.id
+      }}</a>
     </h1>
 
     <v-card class="mx-auto my-12">
@@ -97,10 +99,6 @@ export default {
   props: {
     record: {
       type: Object,
-      required: true
-    },
-    zenodoURL: {
-      type: String,
       required: true
     }
   }

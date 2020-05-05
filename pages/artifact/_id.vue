@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <zenodoartifact :record="record" :zenodoURL="zenodoURL" />
+    <zenodoartifact :record="record" />
   </div>
 </template>
 
@@ -28,8 +28,7 @@ export default {
     return {
       search: '',
       id: this.$route.params.id,
-      record: {},
-      zenodoURL: ''
+      record: {}
     }
   },
   mounted() {
@@ -41,7 +40,6 @@ export default {
       .get(this.$store.state.ZENODO_API_URL + `records/${this.id}`)
       .then(response => {
         this.record = response.data
-        this.zenodoURL = 'https://zenodo.org/record/' + response.data.id
       })
   }
 }
