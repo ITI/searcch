@@ -18,7 +18,7 @@
             dense
             half-increments
             readonly
-            size="14"
+            size="18"
           ></v-rating>
         </v-card-text>
 

@@ -20,14 +20,14 @@
       <v-card-text>
         <v-row align="center" class="mx-0">
           <v-rating
-            :value="4.5"
+            v-model="rating"
             color="amber"
             dense
             half-increments
-            readonly
-            size="14"
+            hover
+            size="18"
           ></v-rating>
-          <div class="grey--text ml-4">4.5 (42)</div>
+          <div class="grey--text ml-4">{{ rating }} (42)</div>
         </v-row>
       </v-card-text>
 
@@ -100,6 +100,11 @@ export default {
     record: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      rating: 4.5
     }
   }
 }
