@@ -59,7 +59,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/filters', '~/plugins/vue2-filters'],
   /*
    ** Nuxt.js dev-modules
    */
