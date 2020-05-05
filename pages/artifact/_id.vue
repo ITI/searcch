@@ -1,46 +1,21 @@
 <template>
-  <div>
-    <div v-if="record" id="record">
-      <v-card>
-        <v-card-title>
-          Zenodo Artifact &nbsp;
-          <a :href="zenodoURL" target="_blank">{{ record.id }}</a>
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :items="entries"
-          :search="search"
-          :hide-default-header="true"
-          :expanded.sync="expanded"
-          :items-per-page="15"
-          :custom-filter="filterAll"
-          item-key="name"
-          show-expand
-          class="elevation-2"
-        >
-          <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="headers.length">
-              <pre>
-                {{ item.value }}
-              </pre>
-            </td>
-          </template>
-        </v-data-table>
-      </v-card>
-    </div>
+  <div v-if="record" id="record">
+    <router-link to="/search">Back</router-link>
+    <h1>
+      Zenodo Artifact
+      <a :href="zenodoURL" target="_blank">{{ record.id }}</a>
+    </h1>
+    <zenodoartifact v-if="record" :record="record" />
   </div>
 </template>
 
 <script>
+import zenodoartifact from '~/components/zenodoartifact'
+
 export default {
+  components: {
+    zenodoartifact
+  },
   head() {
     return {
       title: this.record.title,
