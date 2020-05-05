@@ -5,13 +5,6 @@
         <v-card-title class="align-start">
           <div>
             <span class="headline">{{ artifact.title | titlecase }}</span>
-            <v-spacer></v-spacer>
-            <v-img
-              v-if="artifact.links"
-              height="20px"
-              width="250px"
-              :src="artifact.links.badge"
-            ></v-img>
           </div>
         </v-card-title>
         <v-card-text>
