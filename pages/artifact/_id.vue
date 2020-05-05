@@ -1,11 +1,7 @@
 <template>
-  <div v-if="record" id="record">
+  <div>
     <router-link to="/search">Back</router-link>
-    <h1>
-      Zenodo Artifact
-      <a :href="zenodoURL" target="_blank">{{ record.id }}</a>
-    </h1>
-    <zenodoartifact v-if="record" :record="record" />
+    <zenodoartifact :record="record" :zenodoURL="zenodoURL" />
   </div>
 </template>
 
@@ -33,38 +29,7 @@ export default {
       search: '',
       id: this.$route.params.id,
       record: {},
-      headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'Value', value: 'value' }
-      ],
-      expanded: [],
       zenodoURL: ''
-    }
-  },
-  methods: {
-    filterAll(value, search, item) {
-      return (
-        value != null &&
-        search != null &&
-        typeof value === 'string' &&
-        value.toString().indexOf(search) !== -1
-      )
-    }
-  },
-  computed: {
-    entries() {
-      var entries = []
-      for (var key of Object.keys(this.record)) {
-        if (typeof this.record[key] === 'object') {
-          entries.push({
-            name: key,
-            value: JSON.stringify(this.record[key], undefined, 2)
-          })
-        } else {
-          entries.push({ name: key, value: this.record[key] })
-        }
-      }
-      return entries
     }
   },
   mounted() {
@@ -81,5 +46,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>
