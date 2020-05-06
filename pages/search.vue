@@ -39,7 +39,6 @@ export default {
   data() {
     return {
       artifacts: [],
-      oldartifacts: [],
       search: ''
     }
   },
