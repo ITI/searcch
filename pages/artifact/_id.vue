@@ -26,9 +26,12 @@ export default {
   },
   data() {
     return {
-      search: '',
-      id: this.$route.params.id,
       record: {}
+    }
+  },
+  async asyncData(ctx) {
+    return {
+      record: await ctx.app.$zenodoRecordRepository.show(ctx.params.id)
     }
   },
   mounted() {
@@ -36,11 +39,6 @@ export default {
       'post',
       'delete'
     ])
-    this.$axios
-      .get(this.$store.state.ZENODO_API_URL + `records/${this.id}`)
-      .then(response => {
-        this.record = response.data
-      })
   }
 }
 </script>

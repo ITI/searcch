@@ -39,37 +39,28 @@ export default {
   data() {
     return {
       artifacts: [],
+      oldartifacts: [],
       search: ''
     }
   },
   components: {
     ZenodoArtifactList
   },
-  mounted() {
-    this.$axios
-      .get(this.$store.state.ZENODO_API_URL + 'records/', {
-        params: {
-          q: this.search || 'cyber',
-          size: '20'
-        }
+  async asyncData(ctx) {
+    return {
+      artifacts: await ctx.app.$zenodoRecordRepository.index({
+        q: 'cyber',
+        size: '20'
       })
-      .then(response => {
-        this.artifacts = response.data
-      })
+    }
   },
   methods: {
-    onSubmit(evt) {
+    async onSubmit(evt) {
       evt.preventDefault()
-      this.$axios
-        .get(this.$store.state.ZENODO_API_URL + 'records/', {
-          params: {
-            q: this.search,
-            size: '20'
-          }
-        })
-        .then(response => {
-          this.artifacts = response.data
-        })
+      this.artifacts = await this.$zenodoRecordRepository.index({
+        q: this.search,
+        size: '20'
+      })
     }
   }
 }

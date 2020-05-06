@@ -59,7 +59,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/filters', '~/plugins/vue2-filters'],
+  plugins: [
+    '~/plugins/filters',
+    '~/plugins/vue2-filters',
+    '~/plugins/repository'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -100,13 +104,13 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: false,
       themes: {
         light: {
           primary: '#00476B',
           accent: '#6D6E71',
           secondary: '#395C23'
-        }
+        },
+        dark: {}
       }
     }
   },
