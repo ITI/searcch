@@ -8,9 +8,11 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <span class="pl-2 grey--text text--darken-2 font-weight-light caption"
-            >42 reviews</span
+          <span
+            class="pl-2 grey--text text--darken-2 font-weight-light caption"
           >
+            42 reviews
+          </span>
           <v-spacer></v-spacer>
           <v-rating
             :value="4.5"
@@ -42,8 +44,9 @@
             :to="`/artifact/${artifact.id}`"
             nuxt
             target="_blank"
-            >Read More</v-btn
           >
+            Read More
+          </v-btn>
         </v-card-actions>
       </v-card>
     </div>

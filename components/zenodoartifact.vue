@@ -2,16 +2,16 @@
   <div v-if="record">
     <h1>
       Zenodo Artifact
-      <a v-if="record.links" :href="record.links.html" target="_blank">{{
-        record.id
-      }}</a>
+      <a v-if="record.links" :href="record.links.html" target="_blank">
+        {{ record.id }}
+      </a>
     </h1>
 
     <v-card class="mx-auto my-12">
       <v-img
         height="20"
         width="172"
-        v-if="record.links"
+        v-if="record.links && record.metadata && record.files && record.links"
         :src="record.links.badge"
       ></v-img>
 
@@ -35,12 +35,7 @@
 
       <v-card-title>Metadata</v-card-title>
 
-      <v-card-text
-        v-if="record.metadata"
-        v-for="(v, k) in record.metadata"
-        :key="k"
-        cols="12"
-      >
+      <v-card-text v-for="(v, k) in record.metadata" :key="k" cols="12">
         <div class="my-4 subtitle-1">
           {{ k }}
         </div>
@@ -51,12 +46,7 @@
 
       <v-card-title>Files</v-card-title>
 
-      <v-card-text
-        v-if="record.files"
-        v-for="(v, k) in record.files"
-        :key="k"
-        cols="12"
-      >
+      <v-card-text v-for="(v, k) in record.files" :key="k" cols="12">
         <div class="my-4 subtitle-1">
           {{ k }}
         </div>
@@ -67,12 +57,7 @@
 
       <v-card-title>Links</v-card-title>
 
-      <v-card-text
-        v-if="record.links"
-        v-for="(v, k) in record.links"
-        :key="k"
-        cols="12"
-      >
+      <v-card-text v-for="(v, k) in record.links" :key="k" cols="12">
         <div class="my-4 subtitle-1">
           {{ k }}
         </div>

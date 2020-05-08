@@ -33,8 +33,8 @@
           <p>
             For more information on SEARCCH, check out the
             <a href="https://searcch.cyberexperimentation.org" target="_blank">
-              project homepage </a
-            >.
+              project homepage.
+            </a>
           </p>
           <div class="text-xs-right">
             <em><small>&mdash; SEARCCH Team</small></em>
