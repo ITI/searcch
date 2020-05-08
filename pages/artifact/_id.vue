@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <zenodoartifact :record="record" :zenodoURL="zenodoURL" />
+    <zenodoartifact :record="record" />
   </div>
 </template>
 
@@ -26,10 +26,12 @@ export default {
   },
   data() {
     return {
-      search: '',
-      id: this.$route.params.id,
-      record: {},
-      zenodoURL: ''
+      record: {}
+    }
+  },
+  async asyncData(ctx) {
+    return {
+      record: await ctx.app.$zenodoRecordRepository.show(ctx.params.id)
     }
   },
   mounted() {
@@ -37,12 +39,6 @@ export default {
       'post',
       'delete'
     ])
-    this.$axios
-      .get(this.$store.state.ZENODO_API_URL + `records/${this.id}`)
-      .then(response => {
-        this.record = response.data
-        this.zenodoURL = 'https://zenodo.org/record/' + response.data.id
-      })
   }
 }
 </script>

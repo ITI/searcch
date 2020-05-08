@@ -51,7 +51,7 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#000' },
   /*
    ** Global CSS
    */
@@ -59,7 +59,14 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    '~/plugins/filters',
+    '~/plugins/vue2-filters',
+    '~/plugins/repository',
+    '~/plugins/base.js',
+    '~/plugins/chartist.js',
+    '~/plugins/components.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -86,7 +93,8 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
   /*
    ** Axios module configuration
@@ -119,9 +127,8 @@ export default {
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
-    extend(config, ctx) {}
+    extractCSS: true,
+    extend(config, ctx) {},
+    transpile: [/^vuetify/]
   }
 }
