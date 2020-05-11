@@ -28,7 +28,7 @@
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/comment/${id}`" nuxt>
+        <v-btn icon :to="`/artifact/comment/${id}?source=${source}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
 
@@ -38,7 +38,7 @@
           small
           replace
           color="info"
-          :to="`/artifact/${id}`"
+          :to="`/artifact/${id}?source=${source}`"
           nuxt
           target="_blank"
         >
@@ -52,6 +52,10 @@
 <script>
 export default {
   props: {
+    source: {
+      type: String,
+      required: true
+    },
     id: {
       type: Number,
       required: true

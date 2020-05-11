@@ -16,12 +16,12 @@
       >
       </v-text-field>
     </v-form>
-    <ZenodoArtifactList :artifacts="artifacts"></ZenodoArtifactList>
+    <ArtifactList :artifacts="artifacts"></ArtifactList>
   </div>
 </template>
 
 <script>
-import ZenodoArtifactList from '~/components/ZenodoArtifactList'
+import ArtifactList from '~/components/ArtifactList'
 
 export default {
   head() {
@@ -43,7 +43,7 @@ export default {
     }
   },
   components: {
-    ZenodoArtifactList
+    ArtifactList
   },
   async asyncData(ctx) {
     return {

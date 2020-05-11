@@ -1,20 +1,21 @@
 <template>
   <div>
     <div v-for="artifact in artifacts" :key="artifact.id">
-      <ZenodoArtifactShort
+      <ArtifactShort
         :id="artifact.id"
         :title="artifact.title"
         :description="artifact.metadata.description"
-      ></ZenodoArtifactShort>
+        source="zenodo"
+      ></ArtifactShort>
     </div>
   </div>
 </template>
 
 <script>
-import ZenodoArtifactShort from '@/components/ZenodoArtifactShort'
+import ArtifactShort from '@/components/ArtifactShort'
 export default {
   components: {
-    ZenodoArtifactShort
+    ArtifactShort
   },
   props: {
     artifacts: {
