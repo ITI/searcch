@@ -1,16 +1,16 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <zenodoartifact :record="record" />
+    <ZenodoArtifactLong :record="record" />
   </div>
 </template>
 
 <script>
-import zenodoartifact from '~/components/zenodoartifact'
+import ZenodoArtifactLong from '~/components/ZenodoArtifactLong'
 
 export default {
   components: {
-    zenodoartifact
+    ZenodoArtifactLong
   },
   head() {
     return {

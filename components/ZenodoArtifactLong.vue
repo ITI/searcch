@@ -1,5 +1,5 @@
 <template>
-  <div v-if="record">
+  <div>
     <h1>
       Zenodo Artifact
       <a v-if="record.links" :href="record.links.html" target="_blank">
