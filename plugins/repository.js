@@ -7,4 +7,11 @@ export default (ctx, inject) => {
     'zenodoRecordRepository',
     repositoryWithAxios('https://zenodo.org/api/' + 'records')
   )
+  // knowledge graph
+  inject(
+    'knowledgeGraphRepository',
+    repositoryWithAxios(
+      'http://ec2-54-67-82-172.us-west-1.compute.amazonaws.com/' + 'search'
+    )
+  )
 }
