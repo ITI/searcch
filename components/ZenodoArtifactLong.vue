@@ -11,7 +11,7 @@
       <v-img
         height="20"
         width="172"
-        v-if="record.links && record.metadata && record.files && record.links"
+        v-if="record.links"
         :src="record.links.badge"
       ></v-img>
 
