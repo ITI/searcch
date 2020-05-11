@@ -80,7 +80,7 @@
 
 <script>
 export default {
-  name: 'zenodoartifact',
+  name: 'ZenodoArtifactLong',
   props: {
     record: {
       type: Object,

@@ -16,6 +16,7 @@
       >
       </v-text-field>
     </v-form>
+
     <ArtifactList
       :artifacts="artifacts"
       :source="source"
@@ -26,6 +27,9 @@
 
 <script>
 import ArtifactList from '~/components/ArtifactList'
+
+// FIXME: remove test data import
+import testdata from '~/static/kgtest.json'
 
 export default {
   head() {
@@ -42,9 +46,9 @@ export default {
   },
   data() {
     return {
-      artifacts: [],
+      artifacts: testdata,
       search: '',
-      source: 'zenodo',
+      source: 'kg',
       limit: 20
     }
   },
@@ -64,18 +68,18 @@ export default {
       ciphertext
       man in the middle attack
 
-    */
     return {
-      artifacts: await ctx.app.$zenodoRecordRepository.index({
+      artifacts: await ctx.app.$KGRecordRepository.index({
         q: 'cybersecurity',
         size: '20'
       })
     }
+    */
   },
   methods: {
     async onSubmit(evt) {
       evt.preventDefault()
-      this.artifacts = await this.$zenodoRecordRepository.index({
+      this.artifacts = await this.$KGRecordRepository.index({
         q: this.search,
         size: '20'
       })

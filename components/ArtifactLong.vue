@@ -1,17 +1,7 @@
 <template>
   <div>
-    <div
-      v-for="(artifact, index) in artifacts"
-      v-if="index <= limit"
-      :key="artifact.id"
-    >
       <div v-if="source === 'zenodo'">
-        <ArtifactShort
-          :id="artifact.id"
-          :title="artifact.title"
-          :description="artifact.metadata.description"
-          :source="source"
-        ></ArtifactShort>
+        <ZenodoArtifactLong :record="artifact" />
       </div>
       <div v-else-if="source === 'kg'">
         <ArtifactShort
@@ -26,14 +16,17 @@
 </template>
 
 <script>
+import ZenodoArtifactLong from '@/components/ZenodoArtifactLong'
 import ArtifactShort from '@/components/ArtifactShort'
+
 export default {
   components: {
+    ZenodoArtifactLong,
     ArtifactShort
   },
   props: {
-    artifacts: {
-      type: Array,
+    artifact: {
+      type: Object,
       required: true
     },
     source: {

@@ -1,37 +1,48 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <ZenodoArtifactLong :record="record" />
+    <ArtifactLong :artifact="artifact" :source="source" :limit="limit" />
   </div>
 </template>
 
 <script>
-import ZenodoArtifactLong from '~/components/ZenodoArtifactLong'
+import ArtifactLong from '~/components/ArtifactLong'
+
+// FIXME: remove test data import
+import testdata from '~/static/kgtest.json'
 
 export default {
   components: {
-    ZenodoArtifactLong
+    ArtifactLong
   },
   head() {
     return {
-      title: this.record.title,
+      title: this.artifact.title,
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: this.record.title
+          content: this.artifact.title
         }
       ]
     }
   },
   data() {
     return {
-      record: {}
+      artifact: {},
+      limit: 20,
+      source: ''
     }
   },
+  validate({ params }) {
+    // Must be a number
+    return /^\d+$/.test(params.id)
+  },
   async asyncData(ctx) {
-    return {
-      record: await ctx.app.$zenodoRecordRepository.show(ctx.params.id)
+    if (ctx.app.source === 'zenodo') {
+      return {
+        artifact: await ctx.app.$zenodoRecordRepository.show(ctx.params.id)
+      }
     }
   },
   mounted() {
@@ -39,6 +50,10 @@ export default {
       'post',
       'delete'
     ])
+    this.source = this.$route.query.source || 'zenodo'
+    if (this.source == 'kg') {
+      this.artifact = testdata[this.$route.params.id]
+    }
   }
 }
 </script>

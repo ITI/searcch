@@ -1,0 +1,486 @@
+[
+  {
+    "id": 1,
+    "title": "Adult osteochondrosis of spine, occipt-atlan-ax region",
+    "description": "Adult osteochondrosis of spine, occipito-atlanto-axial region"
+  },
+  {
+    "id": 2,
+    "title": "Fx superior rim of unsp pubis, subs for fx w routn heal",
+    "description": "Fracture of superior rim of unspecified pubis, subsequent encounter for fracture with routine healing"
+  },
+  {
+    "id": 3,
+    "title": "Unspecified fracture of second lumbar vertebra",
+    "description": "Unspecified fracture of second lumbar vertebra"
+  },
+  {
+    "id": 4,
+    "title": "Poisoning by electrolytic/caloric/wtr-bal agnt, assault",
+    "description": "Poisoning by electrolytic, caloric and water-balance agents, assault"
+  },
+  {
+    "id": 5,
+    "title": "Burn first deg mult sites of shldr/up lmb, ex wrs/hnd, sqla",
+    "description": "Burn of first degree of multiple sites of unspecified shoulder and upper limb, except wrist and hand, sequela"
+  },
+  {
+    "id": 6,
+    "title": "Displaced dome fracture of right talus",
+    "description": "Displaced dome fracture of right talus"
+  },
+  {
+    "id": 7,
+    "title": "Breakdown (mechanical) of int fix of left femur",
+    "description": "Breakdown (mechanical) of internal fixation device of left femur"
+  },
+  {
+    "id": 8,
+    "title": "Corrosion of first degree of left scapular region, subs",
+    "description": "Corrosion of first degree of left scapular region, subsequent encounter"
+  },
+  {
+    "id": 9,
+    "title": "Matern care for damag to fetus from viral dis in mother, oth",
+    "description": "Maternal care for (suspected) damage to fetus from viral disease in mother, other fetus"
+  },
+  {
+    "id": 10,
+    "title": "Type 2 diab with severe nonp rtnop without mclr edema, unsp",
+    "description": "Type 2 diabetes mellitus with severe nonproliferative diabetic retinopathy without macular edema, unspecified eye"
+  },
+  {
+    "id": 11,
+    "title": "Primary blast injury of unspecified ear",
+    "description": "Primary blast injury of unspecified ear"
+  },
+  {
+    "id": 12,
+    "title": "Rheumatoid lung disease w rheumatoid arthritis of r elbow",
+    "description": "Rheumatoid lung disease with rheumatoid arthritis of right elbow"
+  },
+  {
+    "id": 13,
+    "title": "External constriction of right wrist",
+    "description": "External constriction of right wrist"
+  },
+  {
+    "id": 14,
+    "title": "Acute serous otitis media, right ear",
+    "description": "Acute serous otitis media, right ear"
+  },
+  {
+    "id": 15,
+    "title": "Embolism due to genitourinary prosth dev/grft, subs",
+    "description": "Embolism due to genitourinary prosthetic devices, implants and grafts, subsequent encounter"
+  },
+  { "id": 16, "title": "Parapsoriasis", "description": "Parapsoriasis" },
+  {
+    "id": 17,
+    "title": "Unsp car occupant injured in clsn w oth mv nontraf, sequela",
+    "description": "Unspecified car occupant injured in collision with other motor vehicles in nontraffic accident, sequela"
+  },
+  {
+    "id": 18,
+    "title": "Stress fracture, other site",
+    "description": "Stress fracture, other site"
+  },
+  {
+    "id": 19,
+    "title": "Smith's fx left rad, subs for opn fx type I/2 w delay heal",
+    "description": "Smith's fracture of left radius, subsequent encounter for open fracture type I or II with delayed healing"
+  },
+  {
+    "id": 20,
+    "title": "Toxic effect of ingested (parts of) plant(s), assault, subs",
+    "description": "Toxic effect of other ingested (parts of) plant(s), assault, subsequent encounter"
+  },
+  {
+    "id": 21,
+    "title": "Gonorrhea compl preg/chldbrth",
+    "description": "Gonorrhea complicating pregnancy, childbirth and the puerperium"
+  },
+  {
+    "id": 22,
+    "title": "Disloc of interphaln joint of unsp lesser toe(s), sequela",
+    "description": "Dislocation of interphalangeal joint of unspecified lesser toe(s), sequela"
+  },
+  {
+    "id": 23,
+    "title": "Sltr-haris Type IV physl fx low end ulna, unsp arm, 7thP",
+    "description": "Salter-Harris Type IV physeal fracture of lower end of ulna, unspecified arm, subsequent encounter for fracture with malunion"
+  },
+  {
+    "id": 24,
+    "title": "Obst labor due to pelvic outlet and mid-cavity contrctn",
+    "description": "Obstructed labor due to pelvic outlet and mid-cavity contraction"
+  },
+  {
+    "id": 25,
+    "title": "Open bite of abdominal wall, periumb rgn w/o penet perit cav",
+    "description": "Open bite of abdominal wall, periumbilic region without penetration into peritoneal cavity"
+  },
+  {
+    "id": 26,
+    "title": "Complete loss of teeth due to oth cause, class III",
+    "description": "Complete loss of teeth due to other specified cause, class III"
+  },
+  {
+    "id": 27,
+    "title": "Laceration of lung, bilateral, subsequent encounter",
+    "description": "Laceration of lung, bilateral, subsequent encounter"
+  },
+  {
+    "id": 28,
+    "title": "Animal-rider injured in collision w nonmtr vehicles, subs",
+    "description": "Animal-rider injured in collision with other nonmotor vehicles, subsequent encounter"
+  },
+  {
+    "id": 29,
+    "title": "Oth psychoactive substance dependence w oth disorder",
+    "description": "Other psychoactive substance dependence with other psychoactive substance-induced disorder"
+  },
+  {
+    "id": 30,
+    "title": "Corrosions of oth parts of left eye and adnexa, subs encntr",
+    "description": "Corrosions of other specified parts of left eye and adnexa, subsequent encounter"
+  },
+  {
+    "id": 31,
+    "title": "Unsp traum displ spondylolysis of 5th cervcal vert, 7thB",
+    "description": "Unspecified traumatic displaced spondylolisthesis of fifth cervical vertebra, initial encounter for open fracture"
+  },
+  {
+    "id": 32,
+    "title": "Age-rel osteopor w current path fx, unsp low leg, sequela",
+    "description": "Age-related osteoporosis with current pathological fracture, unspecified lower leg, sequela"
+  },
+  {
+    "id": 33,
+    "title": "Nondisp intertroch fx r femr, 7thF",
+    "description": "Nondisplaced intertrochanteric fracture of right femur, subsequent encounter for open fracture type IIIA, IIIB, or IIIC with routine healing"
+  },
+  {
+    "id": 34,
+    "title": "Azoospermia due to obstruction of efferent ducts",
+    "description": "Azoospermia due to obstruction of efferent ducts"
+  },
+  {
+    "id": 35,
+    "title": "Adult osteochondrosis of spine, thoracolumbar region",
+    "description": "Adult osteochondrosis of spine, thoracolumbar region"
+  },
+  {
+    "id": 36,
+    "title": "Unspecified sprain of right elbow, sequela",
+    "description": "Unspecified sprain of right elbow, sequela"
+  },
+  {
+    "id": 37,
+    "title": "Unspecified dislocation of other finger, sequela",
+    "description": "Unspecified dislocation of other finger, sequela"
+  },
+  { "id": 38, "title": "Cleft palate", "description": "Cleft palate" },
+  {
+    "id": 39,
+    "title": "Tuberculosis of intestines, peritoneum and mesenteric glands",
+    "description": "Tuberculosis of intestines, peritoneum and mesenteric glands"
+  },
+  { "id": 40, "title": "Ataxic gait", "description": "Ataxic gait" },
+  {
+    "id": 41,
+    "title": "Fracture of coccyx, initial encounter for open fracture",
+    "description": "Fracture of coccyx, initial encounter for open fracture"
+  },
+  {
+    "id": 42,
+    "title": "Toxic effect of aflatoxin, undetermined, subs encntr",
+    "description": "Toxic effect of aflatoxin, undetermined, subsequent encounter"
+  },
+  {
+    "id": 43,
+    "title": "Malignant neoplasm of mandible",
+    "description": "Malignant neoplasm of mandible"
+  },
+  {
+    "id": 44,
+    "title": "Strain flexor musc/fasc/tend r little finger at wrs/hnd lv",
+    "description": "Strain of flexor muscle, fascia and tendon of right little finger at wrist and hand level"
+  },
+  {
+    "id": 45,
+    "title": "Oth fx upr end unsp tibia, 7thQ",
+    "description": "Other fracture of upper end of unspecified tibia, subsequent encounter for open fracture type I or II with malunion"
+  },
+  {
+    "id": 46,
+    "title": "Poisoning by antifungal antibiotics, sys used, assault, subs",
+    "description": "Poisoning by antifungal antibiotics, systemically used, assault, subsequent encounter"
+  },
+  {
+    "id": 47,
+    "title": "Allergic rhinitis, unspecified",
+    "description": "Allergic rhinitis, unspecified"
+  },
+  {
+    "id": 48,
+    "title": "Disp fx of lateral condyle of unsp tibia, 7thM",
+    "description": "Displaced fracture of lateral condyle of unspecified tibia, subsequent encounter for open fracture type I or II with nonunion"
+  },
+  {
+    "id": 49,
+    "title": "Unspecified kidney failure",
+    "description": "Unspecified kidney failure"
+  },
+  {
+    "id": 50,
+    "title": "Other fall from one level to another, initial encounter",
+    "description": "Other fall from one level to another, initial encounter"
+  },
+  {
+    "id": 51,
+    "title": "Contusion of lung, unilateral, initial encounter",
+    "description": "Contusion of lung, unilateral, initial encounter"
+  },
+  {
+    "id": 52,
+    "title": "Other injury of ovary, unilateral, initial encounter",
+    "description": "Other injury of ovary, unilateral, initial encounter"
+  },
+  {
+    "id": 53,
+    "title": "Injury of unspecified nerve at hip and thigh level, left leg",
+    "description": "Injury of unspecified nerve at hip and thigh level, left leg"
+  },
+  {
+    "id": 54,
+    "title": "Algoneurodystrophy, left ankle and foot",
+    "description": "Algoneurodystrophy, left ankle and foot"
+  },
+  {
+    "id": 55,
+    "title": "Lacerat msl/fasc/tnd post grp at thi lev, left thigh, subs",
+    "description": "Laceration of muscle, fascia and tendon of the posterior muscle group at thigh level, left thigh, subsequent encounter"
+  },
+  {
+    "id": 56,
+    "title": "Secondary hyperparathyroidism, not elsewhere classified",
+    "description": "Secondary hyperparathyroidism, not elsewhere classified"
+  },
+  {
+    "id": 57,
+    "title": "Pedl cyc pasngr inj in clsn w oth pedl cyc in traf, sequela",
+    "description": "Pedal cycle passenger injured in collision with other pedal cycle in traffic accident, sequela"
+  },
+  {
+    "id": 58,
+    "title": "Milt op w explosn of improv explosv device, civ, sequela",
+    "description": "Military operations involving explosion of improvised explosive device [IED], civilian, sequela"
+  },
+  {
+    "id": 59,
+    "title": "Injury of nerves at wrist and hand level",
+    "description": "Injury of nerves at wrist and hand level"
+  },
+  {
+    "id": 60,
+    "title": "Corros 80-89% of body surface w 40-49% third degree corros",
+    "description": "Corrosions involving 80-89% of body surface with 40-49% third degree corrosion"
+  },
+  {
+    "id": 61,
+    "title": "Malignant neoplasm of lower limb",
+    "description": "Malignant neoplasm of lower limb"
+  },
+  {
+    "id": 62,
+    "title": "Non-pressure chronic ulcer of ankle",
+    "description": "Non-pressure chronic ulcer of ankle"
+  },
+  {
+    "id": 63,
+    "title": "Other oral mucositis (ulcerative)",
+    "description": "Other oral mucositis (ulcerative)"
+  },
+  {
+    "id": 64,
+    "title": "Sprain of unspecified coracohumeral (ligament), init encntr",
+    "description": "Sprain of unspecified coracohumeral (ligament), initial encounter"
+  },
+  {
+    "id": 65,
+    "title": "Corros unsp deg mult sites of right lower limb, ex ank/ft",
+    "description": "Corrosion of unspecified degree of multiple sites of right lower limb, except ankle and foot"
+  },
+  {
+    "id": 66,
+    "title": "Laceration of right renal vein, subsequent encounter",
+    "description": "Laceration of right renal vein, subsequent encounter"
+  },
+  {
+    "id": 67,
+    "title": "Unspecified superficial injury of right forearm, sequela",
+    "description": "Unspecified superficial injury of right forearm, sequela"
+  },
+  {
+    "id": 68,
+    "title": "Unspecified open wound of unspecified wrist",
+    "description": "Unspecified open wound of unspecified wrist"
+  },
+  {
+    "id": 69,
+    "title": "Laceration of muscle, fascia and tendon of unsp hip, init",
+    "description": "Laceration of muscle, fascia and tendon of unspecified hip, initial encounter"
+  },
+  {
+    "id": 70,
+    "title": "Assault by gasoline bomb, subsequent encounter",
+    "description": "Assault by gasoline bomb, subsequent encounter"
+  },
+  { "id": 71, "title": "Astigmatism", "description": "Astigmatism" },
+  {
+    "id": 72,
+    "title": "Oth soft tissue disorders related to use/pressure, unsp leg",
+    "description": "Other soft tissue disorders related to use, overuse and pressure, unspecified leg"
+  },
+  {
+    "id": 73,
+    "title": "Sltr-haris Type III physeal fx lower end of humer, left arm",
+    "description": "Salter-Harris Type III physeal fracture of lower end of humerus, left arm"
+  },
+  {
+    "id": 74,
+    "title": "Osteonecrosis due to previous trauma, left ankle",
+    "description": "Osteonecrosis due to previous trauma, left ankle"
+  },
+  {
+    "id": 75,
+    "title": "Unspecified injury of left thigh, subsequent encounter",
+    "description": "Unspecified injury of left thigh, subsequent encounter"
+  },
+  {
+    "id": 76,
+    "title": "Poisoning by oth antiepileptic and sed-hypntc drugs, assault",
+    "description": "Poisoning by other antiepileptic and sedative-hypnotic drugs, assault"
+  },
+  {
+    "id": 77,
+    "title": "Adult osteochondrosis of spine, lumbosacral region",
+    "description": "Adult osteochondrosis of spine, lumbosacral region"
+  },
+  {
+    "id": 78,
+    "title": "Nondisp seg fx shaft of r fibula, 7thC",
+    "description": "Nondisplaced segmental fracture of shaft of right fibula, initial encounter for open fracture type IIIA, IIIB, or IIIC"
+  },
+  {
+    "id": 79,
+    "title": "Parasitic cyst of retina, right eye",
+    "description": "Parasitic cyst of retina, right eye"
+  },
+  {
+    "id": 80,
+    "title": "Oth extrartic fx low end l rad, subs for clos fx w malunion",
+    "description": "Other extraarticular fracture of lower end of left radius, subsequent encounter for closed fracture with malunion"
+  },
+  {
+    "id": 81,
+    "title": "Encntr male test for genetic dis carrier status for pro mgmt",
+    "description": "Encounter of male for testing for genetic disease carrier status for procreative management"
+  },
+  {
+    "id": 82,
+    "title": "Prsn brd/alit mtrcy injured in collision w pedal cycle",
+    "description": "Person boarding or alighting a motorcycle injured in collision with pedal cycle"
+  },
+  {
+    "id": 83,
+    "title": "Other calcification of muscle, left forearm",
+    "description": "Other calcification of muscle, left forearm"
+  },
+  {
+    "id": 84,
+    "title": "Poisoning by antigonadtr/antiestr/antiandrg, NEC, self-harm",
+    "description": "Poisoning by antigonadotrophins, antiestrogens, antiandrogens, not elsewhere classified, intentional self-harm"
+  },
+  {
+    "id": 85,
+    "title": "Unspecified fracture of second cervical vertebra",
+    "description": "Unspecified fracture of second cervical vertebra"
+  },
+  {
+    "id": 86,
+    "title": "Oth physeal fx upper end of l tibia, subs for fx w malunion",
+    "description": "Other physeal fracture of upper end of left tibia, subsequent encounter for fracture with malunion"
+  },
+  {
+    "id": 87,
+    "title": "Corrosion of third degree of unsp toe(s) (nail), init encntr",
+    "description": "Corrosion of third degree of unspecified toe(s) (nail), initial encounter"
+  },
+  {
+    "id": 88,
+    "title": "Occup of pk-up/van inj in clsn w rail trn/veh in traf, init",
+    "description": "Unspecified occupant of pick-up truck or van injured in collision with railway train or railway vehicle in traffic accident, initial encounter"
+  },
+  {
+    "id": 89,
+    "title": "Contact with running hot water",
+    "description": "Contact with running hot water"
+  },
+  {
+    "id": 90,
+    "title": "Unsp fx shaft of l rad, 7thJ",
+    "description": "Unspecified fracture of shaft of left radius, subsequent encounter for open fracture type IIIA, IIIB, or IIIC with delayed healing"
+  },
+  {
+    "id": 91,
+    "title": "Unsp intracap fx left femur, subs for clos fx w malunion",
+    "description": "Unspecified intracapsular fracture of left femur, subsequent encounter for closed fracture with malunion"
+  },
+  {
+    "id": 92,
+    "title": "Oth fx head/neck of l femr, 7thQ",
+    "description": "Other fracture of head and neck of left femur, subsequent encounter for open fracture type I or II with malunion"
+  },
+  {
+    "id": 93,
+    "title": "Hemiplga following oth cerebvasc disease affecting unsp side",
+    "description": "Hemiplegia and hemiparesis following other cerebrovascular disease affecting unspecified side"
+  },
+  {
+    "id": 94,
+    "title": "Flail joint, right wrist",
+    "description": "Flail joint, right wrist"
+  },
+  {
+    "id": 95,
+    "title": "Fracture of acromial process",
+    "description": "Fracture of acromial process"
+  },
+  {
+    "id": 96,
+    "title": "Unsp inj flexor musc/fasc/tend unsp fngr at forarm lv, init",
+    "description": "Unspecified injury of flexor muscle, fascia and tendon of unspecified finger at forearm level, initial encounter"
+  },
+  {
+    "id": 97,
+    "title": "Maternal care for viable fetus in abd preg, third trimester",
+    "description": "Maternal care for viable fetus in abdominal pregnancy, third trimester"
+  },
+  {
+    "id": 98,
+    "title": "Poisoning by otorhino drugs and prep, undetermined, subs",
+    "description": "Poisoning by otorhinolaryngological drugs and preparations, undetermined, subsequent encounter"
+  },
+  {
+    "id": 99,
+    "title": "Shock therapy cause abn react/compl, w/o misadvnt",
+    "description": "Shock therapy as the cause of abnormal reaction of the patient, or of later complication, without mention of misadventure at the time of the procedure"
+  },
+  {
+    "id": 100,
+    "title": "Postprocedural air leak",
+    "description": "Postprocedural air leak"
+  }
+]
