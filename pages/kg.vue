@@ -68,18 +68,18 @@ export default {
       ciphertext
       man in the middle attack
 
+    */
     return {
-      artifacts: await ctx.app.$KGRecordRepository.index({
+      artifacts: await ctx.app.$knowledgeGraphSearchRepository.index({
         q: 'cybersecurity',
         size: '20'
       })
     }
-    */
   },
   methods: {
     async onSubmit(evt) {
       evt.preventDefault()
-      this.artifacts = await this.$KGRecordRepository.index({
+      this.artifacts = await this.$knowledgeGraphSearchRepository.index({
         q: this.search,
         size: '20'
       })
