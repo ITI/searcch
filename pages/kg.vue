@@ -4,7 +4,7 @@
       <img src="/images/horiz-tagline.png" alt="SEARCCH Portal" class="mb-5" />
     </v-flex>
 
-    <v-form ref="search" @submit="onSubmit">
+    <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
         light
         solo
@@ -16,9 +16,8 @@
       >
       </v-text-field>
     </v-form>
-
     <ArtifactList
-      :artifacts="artifacts"
+      :artifacts="artifacts.artifacts"
       :source="source"
       :limit="limit"
     ></ArtifactList>
@@ -27,11 +26,12 @@
 
 <script>
 import ArtifactList from '~/components/ArtifactList'
-
-// FIXME: remove test data import
-import testdata from '~/static/kgtest.json'
+import { mapState } from 'vuex'
 
 export default {
+  components: {
+    ArtifactList
+  },
   head() {
     return {
       title: 'SEARCH Artifact Search',
@@ -46,42 +46,41 @@ export default {
   },
   data() {
     return {
-      artifacts: testdata,
-      search: '',
       source: 'kg',
       limit: 20
     }
   },
-  components: {
-    ArtifactList
-  },
-  async asyncData(ctx) {
-    /* TODO: change to the appropriate initial query -- or don't query
-
-    keyword queries:
-      cybersecurity
-      phishing
-      denial of service
-      botnet
-      honeypot
-      vulnerability
-      ciphertext
-      man in the middle attack
-
-    */
-    return {
-      artifacts: await ctx.app.$knowledgeGraphSearchRepository.index({
-        q: 'cybersecurity',
-        size: '20'
+  async fetch({ store, error }) {
+    try {
+      await store.dispatch('artifacts/fetchArtifacts', {
+        source: 'kg',
+        keyword: 'cybersecurity'
+      })
+    } catch (e) {
+      error({
+        statusCode: 503,
+        message: 'Unable to fetch artifacts at this time. Please try again.'
       })
     }
   },
+  computed: {
+    ...mapState({
+      artifacts: state => state.artifacts.artifacts
+    }),
+    search: {
+      get() {
+        return this.$store.state.artifacts.search
+      },
+      set(value) {
+        this.$store.commit('artifacts/SET_SEARCH', value)
+      }
+    }
+  },
   methods: {
-    async onSubmit(evt) {
-      evt.preventDefault()
-      this.artifacts = await this.$knowledgeGraphSearchRepository.index({
-        q: this.search,
-        size: '20'
+    onSubmit(evt) {
+      this.$store.dispatch('artifacts/fetchArtifacts', {
+        source: this.source,
+        keyword: this.search
       })
     }
   }

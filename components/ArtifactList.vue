@@ -15,7 +15,7 @@
       </div>
       <div v-else-if="source === 'kg'">
         <ArtifactShort
-          :id="artifact.id"
+          :id="artifact.doi"
           :title="artifact.title"
           :description="artifact.description"
           :source="source"

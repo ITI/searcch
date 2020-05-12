@@ -1,28 +1,22 @@
 <template>
   <div>
-      <div v-if="source === 'zenodo'">
-        <ZenodoArtifactLong :record="artifact" />
-      </div>
-      <div v-else-if="source === 'kg'">
-        <ArtifactShort
-          :id="artifact.id"
-          :title="artifact.title"
-          :description="artifact.description"
-          :source="source"
-        ></ArtifactShort>
-      </div>
+    <div v-if="source === 'zenodo'">
+      <ZenodoArtifactLong :record="artifact" />
+    </div>
+    <div v-else-if="source === 'kg'">
+      <KGArtifactLong :record="artifact" />
     </div>
   </div>
 </template>
 
 <script>
 import ZenodoArtifactLong from '@/components/ZenodoArtifactLong'
-import ArtifactShort from '@/components/ArtifactShort'
+import KGArtifactLong from '@/components/KGArtifactLong'
 
 export default {
   components: {
     ZenodoArtifactLong,
-    ArtifactShort
+    KGArtifactLong
   },
   props: {
     artifact: {

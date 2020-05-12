@@ -23,7 +23,7 @@
 
       <v-card-text v-html="description"> </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions v-if="source === 'zenodo'">
         <v-btn icon>
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
@@ -45,6 +45,29 @@
           Read More
         </v-btn>
       </v-card-actions>
+
+      <v-card-actions v-else-if="source === 'kg'">
+        <v-btn icon>
+          <v-icon>mdi-heart-outline</v-icon>
+        </v-btn>
+
+        <v-btn icon :to="`/artifact/?doi=${id}&source=${source}`" nuxt>
+          <v-icon>mdi-comment</v-icon>
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+        <v-btn
+          small
+          replace
+          color="info"
+          :to="`/artifact/?doi=${id}&source=${source}`"
+          nuxt
+          target="_blank"
+        >
+          Read More
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -57,7 +80,7 @@ export default {
       required: true
     },
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     title: {
