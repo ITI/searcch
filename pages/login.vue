@@ -9,18 +9,17 @@
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <v-form @submit="userLogin">
                   <v-text-field
-                    label="Username"
-                    name="user"
                     prepend-icon="mdi-account"
+                    v-model="login.username"
+                    autocomplete="username"
                     type="text"
                   />
                   <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
+                    v-model="login.password"
                     prepend-icon="mdi-lock"
+                    autocomplete="current-password"
                     type="password"
                   />
                 </v-form>
@@ -41,6 +40,24 @@
 export default {
   props: {
     source: String
+  },
+  data() {
+    return {
+      login: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    async userLogin() {
+      try {
+        let response = await this.$auth.loginWith('local', { data: this.login })
+        console.log(response)
+      } catch (err) {
+        console.log(err)
+      }
+    }
   }
 }
 </script>
