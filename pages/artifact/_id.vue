@@ -8,8 +8,7 @@
 <script>
 import ArtifactLong from '~/components/ArtifactLong'
 
-// FIXME: remove test data import
-import testdata from '~/static/kgtest.json'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -29,21 +28,15 @@ export default {
   },
   data() {
     return {
-      artifact: {},
+      source: '',
       limit: 20,
-      source: ''
+      testing: false
     }
   },
-  validate({ params }) {
-    // Must be a number
-    return /^\d+$/.test(params.id)
-  },
-  async asyncData(ctx) {
-    if (ctx.app.source === 'zenodo') {
-      return {
-        artifact: await ctx.app.$zenodoRecordRepository.show(ctx.params.id)
-      }
-    }
+  computed: {
+    ...mapState({
+      artifact: state => state.artifacts.artifact
+    })
   },
   mounted() {
     this.$axios.setToken(this.$store.state.ZENODO_API_KEY, 'Bearer', [
@@ -51,9 +44,10 @@ export default {
       'delete'
     ])
     this.source = this.$route.query.source || 'zenodo'
-    if (this.source == 'kg') {
-      this.artifact = testdata[this.$route.params.id]
-    }
+    this.$store.dispatch('artifacts/fetchArtifact', {
+      id: this.source === 'kg' ? this.$route.query.doi : this.$route.params.id,
+      source: this.source
+    })
   }
 }
 </script>
