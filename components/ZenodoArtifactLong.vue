@@ -27,7 +27,7 @@
             hover
             size="18"
           ></v-rating>
-          <div class="grey--text ml-4">{{ rating }} (42)</div>
+          <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
         </v-row>
       </v-card-text>
 
@@ -89,7 +89,8 @@ export default {
   },
   data() {
     return {
-      rating: 4.5
+      reviews: Math.floor(Math.random() * 1000 + 1),
+      rating: Math.round(Math.random() * 10 + 1) / 2
     }
   }
 }

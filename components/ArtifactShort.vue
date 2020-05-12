@@ -8,11 +8,11 @@
       </v-card-title>
       <v-card-text>
         <span class="pl-2 grey--text text--darken-2 font-weight-light caption">
-          42 reviews
+          {{ reviews }} reviews
         </span>
         <v-spacer></v-spacer>
         <v-rating
-          :value="4.5"
+          v-model="rating"
           color="amber"
           dense
           half-increments
@@ -51,7 +51,7 @@
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/?doi=${id}&source=${source}`" nuxt>
+        <v-btn icon :to="`/artifact/?doi=${doi}&source=${source}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
 
@@ -61,7 +61,7 @@
           small
           replace
           color="info"
-          :to="`/artifact/?doi=${id}&source=${source}`"
+          :to="`/artifact/?doi=${doi}&source=${source}`"
           nuxt
           target="_blank"
         >
@@ -80,8 +80,12 @@ export default {
       required: true
     },
     id: {
+      type: Number,
+      required: false
+    },
+    doi: {
       type: String,
-      required: true
+      required: false
     },
     title: {
       type: String,
@@ -90,6 +94,12 @@ export default {
     description: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      reviews: Math.floor(Math.random() * 1000 + 1),
+      rating: Math.round(Math.random() * 10 + 1) / 2
     }
   }
 }
