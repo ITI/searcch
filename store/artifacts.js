@@ -43,33 +43,30 @@ export const actions = {
             man in the middle attack
 
     */
-    let target = {}
-    if (payload.source === 'kg') {
-      target = this.$knowledgeGraphSearchRepository
-      let a = await target.index({
-        keywords: payload.keyword
-      })
-      commit('SET_ARTIFACTS', a)
-    } else {
-      target = this.$zenodoRecordRepository
-      let a = await target.index({
+    let a = {}
+    if (payload.source === 'zenodo') {
+      a = await this.$zenodoRecordRepository.index({
         q: payload.keyword,
         size: '20'
       })
       commit('SET_ARTIFACTS', a)
+    } else {
+      a = await this.$knowledgeGraphSearchRepository.index({
+        keywords: payload.keyword
+      })
+      commit('SET_ARTIFACTS', a)
     }
+    return a
   },
   async fetchArtifact({ commit }, payload) {
     let target = {}
-    if (payload.source === 'kg') {
-      target = this.$knowledgeGraphRecordRepository
-      let a = await target.index({
-        doi: payload.id
-      })
+    if (payload.source === 'zenodo') {
+      let a = await this.$zenodoRecordRepository.show(payload.id)
       commit('SET_ARTIFACT', a)
     } else {
-      target = this.$zenodoRecordRepository
-      let a = await target.show(payload.id)
+      let a = await this.$knowledgeGraphRecordRepository.index({
+        doi: payload.id
+      })
       commit('SET_ARTIFACT', a)
     }
   }

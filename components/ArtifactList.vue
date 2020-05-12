@@ -5,28 +5,27 @@
       v-if="index <= limit"
       :key="artifact.id"
     >
-      <div v-if="source === 'zenodo'">
-        <ArtifactShort
-          :id="artifact.id"
-          :title="artifact.title"
-          :description="artifact.metadata.description"
-          :source="source"
-        ></ArtifactShort>
-      </div>
-      <div v-else-if="source === 'kg'">
-        <ArtifactShort
-          :doi="artifact.doi"
-          :title="artifact.title"
-          :description="artifact.description"
-          :source="source"
-        ></ArtifactShort>
-      </div>
+      <ArtifactShort
+        v-if="source === 'zenodo' && artifact.metadata"
+        :id="artifact.id"
+        :title="artifact.title"
+        :description="artifact.metadata.description"
+        :source="source"
+      ></ArtifactShort>
+      <ArtifactShort
+        v-if="source === 'kg'"
+        :doi="artifact.doi"
+        :title="artifact.title"
+        :description="artifact.description"
+        :source="source"
+      ></ArtifactShort>
     </div>
   </div>
 </template>
 
 <script>
 import ArtifactShort from '@/components/ArtifactShort'
+
 export default {
   components: {
     ArtifactShort
