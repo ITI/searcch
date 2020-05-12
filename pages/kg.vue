@@ -16,21 +16,7 @@
       >
       </v-text-field>
     </v-form>
-    <div hidden>
-      <v-select
-        v-model="searchsource"
-        :items="engines"
-        label="Search Engine"
-      ></v-select>
-    </div>
     <ArtifactList
-      v-if="source === 'zenodo'"
-      :artifacts="artifacts"
-      :source="source"
-      :limit="limit"
-    ></ArtifactList>
-    <ArtifactList
-      v-if="source === 'kg'"
       :artifacts="artifacts.artifacts"
       :source="source"
       :limit="limit"
@@ -61,12 +47,10 @@ export default {
   data() {
     return {
       source: 'kg',
-      searchsource: 'kg',
-      engines: ['kg', 'zenodo'],
       limit: 20
     }
   },
-  async fetch({ store, error, params }) {
+  async fetch({ store, error }) {
     try {
       await store.dispatch('artifacts/fetchArtifacts', {
         source: 'kg',
@@ -93,12 +77,11 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
+    onSubmit(evt) {
       this.$store.dispatch('artifacts/fetchArtifacts', {
-        source: this.searchsource,
+        source: this.source,
         keyword: this.search
       })
-      this.source = this.searchsource
     }
   }
 }

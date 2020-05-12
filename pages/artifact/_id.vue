@@ -1,44 +1,53 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <zenodoartifact :record="record" />
+    <ArtifactLong :artifact="artifact" :source="source" :limit="limit" />
   </div>
 </template>
 
 <script>
-import zenodoartifact from '~/components/zenodoartifact'
+import ArtifactLong from '~/components/ArtifactLong'
+
+import { mapState } from 'vuex'
 
 export default {
   components: {
-    zenodoartifact
+    ArtifactLong
   },
   head() {
     return {
-      title: this.record.title,
+      title: this.artifact.title,
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: this.record.title
+          content: this.artifact.title
         }
       ]
     }
   },
   data() {
     return {
-      record: {}
+      source: '',
+      limit: 20,
+      testing: false
     }
   },
-  async asyncData(ctx) {
-    return {
-      record: await ctx.app.$zenodoRecordRepository.show(ctx.params.id)
-    }
+  computed: {
+    ...mapState({
+      artifact: state => state.artifacts.artifact
+    })
   },
   mounted() {
     this.$axios.setToken(this.$store.state.ZENODO_API_KEY, 'Bearer', [
       'post',
       'delete'
     ])
+    this.source = this.$route.query.source || 'zenodo'
+    this.$store.dispatch('artifacts/fetchArtifact', {
+      id: this.source === 'kg' ? this.$route.query.doi : this.$route.params.id,
+      source: this.source
+    })
   }
 }
 </script>

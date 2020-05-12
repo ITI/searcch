@@ -1,5 +1,5 @@
 <template>
-  <div v-if="record">
+  <div>
     <h1>
       Zenodo Artifact
       <a v-if="record.links" :href="record.links.html" target="_blank">
@@ -11,7 +11,7 @@
       <v-img
         height="20"
         width="172"
-        v-if="record.links && record.metadata && record.files && record.links"
+        v-if="record.links"
         :src="record.links.badge"
       ></v-img>
 
@@ -27,7 +27,7 @@
             hover
             size="18"
           ></v-rating>
-          <div class="grey--text ml-4">{{ rating }} (42)</div>
+          <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
         </v-row>
       </v-card-text>
 
@@ -80,7 +80,7 @@
 
 <script>
 export default {
-  name: 'zenodoartifact',
+  name: 'ZenodoArtifactLong',
   props: {
     record: {
       type: Object,
@@ -89,7 +89,8 @@ export default {
   },
   data() {
     return {
-      rating: 4.5
+      reviews: Math.floor(Math.random() * 1000 + 1),
+      rating: Math.round(Math.random() * 10 + 1) / 2
     }
   }
 }
