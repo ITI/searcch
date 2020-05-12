@@ -21,7 +21,7 @@
         ></v-rating>
       </v-card-text>
 
-      <v-card-text v-html="description"> </v-card-text>
+      <v-card-text v-html="filteredDescription"> </v-card-text>
 
       <v-card-actions v-if="source === 'zenodo'">
         <v-btn icon>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import clip from 'text-clipper'
+
 export default {
   props: {
     source: {
@@ -100,6 +102,11 @@ export default {
     return {
       reviews: Math.floor(Math.random() * 1000 + 1),
       rating: Math.round(Math.random() * 10 + 1) / 2
+    }
+  },
+  computed: {
+    filteredDescription: function() {
+      return clip(this.description, 2000, { html: true, maxLines: 40 })
     }
   }
 }
