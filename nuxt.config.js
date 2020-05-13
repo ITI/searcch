@@ -63,9 +63,10 @@ export default {
     '~/plugins/filters',
     '~/plugins/vue2-filters',
     '~/plugins/repository',
-    '~/plugins/base.js',
-    '~/plugins/chartist.js',
-    '~/plugins/components.js'
+    '~/plugins/base',
+    '~/plugins/chartist',
+    '~/plugins/components',
+    '~/plugins/sanitize'
   ],
   /*
    ** Nuxt.js dev-modules
