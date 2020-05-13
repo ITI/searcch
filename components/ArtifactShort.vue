@@ -21,7 +21,7 @@
         ></v-rating>
       </v-card-text>
 
-      <v-card-text v-html="filteredDescription"> </v-card-text>
+      <v-card-text v-html="sanitizedDescription"> </v-card-text>
 
       <v-card-actions v-if="source === 'zenodo'">
         <v-btn icon>
@@ -105,8 +105,11 @@ export default {
     }
   },
   computed: {
-    filteredDescription: function() {
-      return clip(this.description, 2000, { html: true, maxLines: 40 })
+    sanitizedDescription: function() {
+      return clip(this.$sanitize(this.description), 2000, {
+        html: true,
+        maxLines: 40
+      })
     }
   }
 }
