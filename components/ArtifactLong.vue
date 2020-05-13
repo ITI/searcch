@@ -3,7 +3,7 @@
     <div v-if="source === 'zenodo'">
       <ZenodoArtifactLong :record="artifact" />
     </div>
-    <div v-else-if="source === 'kg'">
+    <div v-if="source === 'kg'">
       <KGArtifactLong :record="artifact" />
     </div>
   </div>
@@ -25,10 +25,6 @@ export default {
     },
     source: {
       type: String,
-      required: true
-    },
-    limit: {
-      type: Number,
       required: true
     }
   }
