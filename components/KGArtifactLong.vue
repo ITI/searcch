@@ -24,54 +24,56 @@
         </v-row>
       </v-card-text>
 
-      <v-card-text>
-        <div class="my-4 subtitle-1">
-          Description
-        </div>
-        <div v-html="record.description"></div>
-      </v-card-text>
+      <v-card-title> Description </v-card-title>
 
       <v-card-text>
-        <div class="my-4 subtitle-1">
-          Relevance Score
-        </div>
-        <div v-html="record.relevance_score"></div>
+        <div v-html="sanitizedDescription"></div>
       </v-card-text>
 
-      <v-card-text>
-        <div class="my-4 subtitle-1">
-          TFIDF Score
-        </div>
-        <div v-html="record.tfidf_score"></div>
-      </v-card-text>
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title> Artifact Type </v-card-title>
 
       <v-card-text>
-        <div class="my-4 subtitle-1">
-          TFIDF Score Probability
-        </div>
-        <div v-html="record.tfidf_score_prob"></div>
+        <div v-if="record.resource_type">{{ record.resource_type.title }}</div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title> Relevance Score </v-card-title>
+
+      <v-card-text>
+        <div>{{ record.relevance_score }}</div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title>Creators</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.creators" :key="k" cols="12">
-        <div class="my-4 subtitle-1">
-          {{ k }}
+      <v-card-text v-for="c in record.creators" :key="c.name" cols="12">
+        <div>
+          {{ c.name }}
         </div>
-        <div v-html="v"></div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-title>Keywords</v-card-title>
+
+      <v-card-text v-for="(v, k) in record.keywords" :key="k" cols="12">
+        <div>
+          {{ v }}
+        </div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title>Files</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.files" :key="k" cols="12">
-        <div class="my-4 subtitle-1">
-          {{ k }}
+      <v-card-text v-for="(v, k) in record.files" :key="v.key" cols="12">
+        <div>
+          <a :href="v.links.self">{{ v.key }}</a> (size: {{ v.size }} bytes)
         </div>
-        <div v-html="v"></div>
       </v-card-text>
     </v-card>
   </div>
@@ -90,6 +92,11 @@ export default {
     return {
       reviews: Math.floor(Math.random() * 1000 + 1),
       rating: Math.round(Math.random() * 10 + 1) / 2
+    }
+  },
+  computed: {
+    sanitizedDescription: function() {
+      return this.$sanitize(this.record.description)
     }
   }
 }

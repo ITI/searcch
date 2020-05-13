@@ -21,6 +21,16 @@
         ></v-rating>
       </v-card-text>
 
+      <v-card-text v-if="score">
+        <span class="pl-2 grey--text text--darken-2 font-weight-light caption">
+          Relevance Score
+        </span>
+        <v-spacer></v-spacer>
+
+        <div class="my-4 subtitle-1"></div>
+        <div>{{ score }}</div>
+      </v-card-text>
+
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
 
       <v-card-actions v-if="source === 'zenodo'">
@@ -96,6 +106,10 @@ export default {
     description: {
       type: String,
       required: true
+    },
+    score: {
+      type: Number,
+      required: false
     }
   },
   data() {

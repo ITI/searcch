@@ -18,6 +18,7 @@
         :title="artifact.title"
         :description="artifact.description"
         :source="source"
+        :score="artifact.relevance_score"
       ></ArtifactShort>
     </div>
   </div>

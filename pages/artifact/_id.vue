@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <ArtifactLong :artifact="artifact" :source="source" :limit="limit" />
+    <ArtifactLong :artifact="artifact" :source="source" />
   </div>
 </template>
 
@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       source: '',
-      limit: 20,
       testing: false
     }
   },
