@@ -74,7 +74,7 @@ export default {
       this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
     }
     if (this.source === 'zenodo' || this.$route.query.source === 'zenodo') {
-      this.$axios.setToken(this.$store.state.ZENODO_API_KEY, 'Bearer', [
+      this.$axios.setToken(this.$store.state.app.ZENODO_API_KEY, 'Bearer', [
         'post',
         'delete'
       ])

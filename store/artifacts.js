@@ -18,7 +18,7 @@ export const state = () => ({
   source: ''
 })
 
-export const getters = () => ({
+export const getters = {
   artifacts: state => {
     return state.artifacts
   },
@@ -31,7 +31,7 @@ export const getters = () => ({
   source: state => {
     return state.source
   }
-})
+}
 
 export const mutations = {
   SET_ARTIFACTS(state, artifacts) {
