@@ -5,21 +5,7 @@
       v-if="index <= limit"
       :key="artifact.id"
     >
-      <ArtifactShort
-        v-if="source === 'zenodo' && artifact.metadata"
-        :id="artifact.id"
-        :title="artifact.title"
-        :description="artifact.metadata.description"
-        :source="source"
-      ></ArtifactShort>
-      <ArtifactShort
-        v-if="source === 'kg'"
-        :id="artifact.id"
-        :title="artifact.title"
-        :description="artifact.description"
-        :source="source"
-        :score="artifact.relevance_score"
-      ></ArtifactShort>
+      <ArtifactShort :artifact="artifact"></ArtifactShort>
     </div>
   </div>
 </template>

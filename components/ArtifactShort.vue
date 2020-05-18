@@ -3,7 +3,7 @@
     <v-card class="mx-auto overflow-hidden">
       <v-card-title class="align-start">
         <div>
-          <span class="headline">{{ title | titlecase }}</span>
+          <span class="headline">{{ artifact.title | titlecase }}</span>
         </div>
       </v-card-title>
       <v-card-text>
@@ -21,14 +21,14 @@
         ></v-rating>
       </v-card-text>
 
-      <v-card-text v-if="score">
+      <v-card-text v-if="artifact.score">
         <span class="pl-2 grey--text text--darken-2 font-weight-light caption">
           Relevance Score
         </span>
         <v-spacer></v-spacer>
 
         <div class="my-4 subtitle-1"></div>
-        <div>{{ score }}</div>
+        <div>{{ artifact.score }}</div>
       </v-card-text>
 
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
@@ -68,7 +68,7 @@
         <v-btn
           v-if="source === 'zenodo'"
           icon
-          :to="`/artifact/comment/${id}?source=${source}`"
+          :to="`/artifact/comment/${artifact.id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -77,7 +77,7 @@
         <v-btn
           v-else-if="source === 'kg'"
           icon
-          :to="`/artifact/comment/?doi=${id}&source=${source}`"
+          :to="`/artifact/comment/?doi=${artifact.id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -90,7 +90,7 @@
           small
           replace
           color="info"
-          :to="`/artifact/${id}?source=${source}`"
+          :to="`/artifact/${artifact.id}`"
           nuxt
           target="_blank"
         >
@@ -102,7 +102,7 @@
           small
           replace
           color="info"
-          :to="`/artifact/?doi=${id}&source=${source}`"
+          :to="`/artifact/?doi=${artifact.id}`"
           nuxt
           target="_blank"
         >
@@ -115,27 +115,13 @@
 
 <script>
 import clip from 'text-clipper'
+import { mapState } from 'vuex'
 
 export default {
   props: {
-    source: {
-      type: String,
+    artifact: {
+      type: Object,
       required: true
-    },
-    id: {
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    score: {
-      type: Number,
-      required: false
     },
     comments: {
       type: Array,
@@ -154,8 +140,17 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      source: state => state.artifacts.source
+    }),
     sanitizedDescription: function() {
-      return clip(this.$sanitize(this.description), 2000, {
+      let description = ''
+      if (this.source === 'zenodo') {
+        description = this.artifact.metadata.description
+      } else {
+        description = this.artifact.description
+      }
+      return clip(this.$sanitize(description), 2000, {
         html: true,
         maxLines: 40
       })

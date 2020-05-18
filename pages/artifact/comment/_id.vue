@@ -1,23 +1,7 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <ArtifactShort
-      v-if="source === 'zenodo' && artifact.metadata"
-      :id="artifact.id"
-      :title="artifact.title"
-      :description="artifact.metadata.description"
-      :source="source"
-      :comments="comments"
-    ></ArtifactShort>
-    <ArtifactShort
-      v-if="source === 'kg'"
-      :id="artifact.id"
-      :title="artifact.title"
-      :description="artifact.description"
-      :source="source"
-      :score="artifact.relevance_score"
-      :comments="comments"
-    ></ArtifactShort>
+    <ArtifactShort :artifact="artifact" :comments="comments"></ArtifactShort>
   </div>
 </template>
 
@@ -83,7 +67,10 @@ export default {
     })
   },
   mounted() {
-    if (typeof this.$route.query.source !== 'undefined' && this.source === '') {
+    if (this.source === '') {
+      this.$store.commit('artifacts/SET_SOURCE', 'kg')
+    }
+    if (typeof this.$route.query.source !== 'undefined') {
       this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
     }
     if (this.source === 'zenodo' || this.$route.query.source === 'zenodo') {

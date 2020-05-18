@@ -12,6 +12,7 @@
 <script>
 import ZenodoArtifactLong from '@/components/ZenodoArtifactLong'
 import KGArtifactLong from '@/components/KGArtifactLong'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -22,11 +23,12 @@ export default {
     artifact: {
       type: Object,
       required: true
-    },
-    source: {
-      type: String,
-      required: true
     }
+  },
+  computed: {
+    ...mapState({
+      source: state => state.artifacts.source
+    })
   }
 }
 </script>

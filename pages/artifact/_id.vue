@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <ArtifactLong :artifact="artifact" :source="source" />
+    <ArtifactLong :artifact="artifact" />
   </div>
 </template>
 
@@ -36,7 +36,10 @@ export default {
     })
   },
   mounted() {
-    if (typeof this.$route.query.source !== 'undefined' && this.source === '') {
+    if (this.source === '') {
+      this.$store.commit('artifacts/SET_SOURCE', 'kg')
+    }
+    if (typeof this.$route.query.source !== 'undefined') {
       this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
     }
     if (this.source === 'zenodo' || this.$route.query.source === 'zenodo') {
