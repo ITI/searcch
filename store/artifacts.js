@@ -11,11 +11,20 @@ const processArtifacts = obj => {
   return renameKeys({ doi: 'id' }, obj)
 }
 
+const relevantScores = obj => {
+  let relevanceResult = []
+  obj.forEach(artifact => {
+    relevanceResult.push(artifact.relevance_score)
+  })
+  return relevanceResult
+}
+
 export const state = () => ({
   artifacts: [],
   artifact: {},
   search: '',
-  source: ''
+  source: '',
+  scores: []
 })
 
 export const getters = {
@@ -30,6 +39,9 @@ export const getters = {
   },
   source: state => {
     return state.source
+  },
+  scores: state => {
+    return state.scores
   }
 }
 
@@ -45,6 +57,9 @@ export const mutations = {
   },
   SET_SOURCE(state, source) {
     state.source = source
+  },
+  SET_RELEVANCE_SCORES(state, scores) {
+    state.scores = scores
   }
 }
 
@@ -75,7 +90,13 @@ export const actions = {
       a = await this.$knowledgeGraphSearchRepository.index({
         keywords: payload.keyword
       })
-      commit('SET_ARTIFACTS', a.artifacts.map(processArtifacts))
+      commit(
+        'SET_ARTIFACTS',
+        a.artifacts.map(processArtifacts).sort(function(a, b) {
+          return b.relevance_score - a.relevance_score
+        })
+      )
+      commit('SET_RELEVANCE_SCORES', relevantScores(state.artifacts))
     }
   },
   async fetchArtifact({ commit, state }, payload) {
