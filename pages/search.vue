@@ -1,9 +1,8 @@
 <template>
   <div>
-    <v-flex class="text-center">
-      <img src="/images/horiz-tagline.png" alt="SEARCCH Portal" class="mb-5" />
-    </v-flex>
-
+    <div class="text-center">
+      <logo />
+    </div>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
         light
@@ -23,27 +22,18 @@
         label="Search Engine"
       ></v-select>
     </div>
-    <ArtifactList
-      v-if="source === 'zenodo'"
-      :artifacts="artifacts"
-      :source="source"
-      :limit="limit"
-    ></ArtifactList>
-    <ArtifactList
-      v-if="source === 'kg'"
-      :artifacts="artifacts.artifacts"
-      :source="source"
-      :limit="limit"
-    ></ArtifactList>
+    <ArtifactList :limit="limit"></ArtifactList>
   </div>
 </template>
 
 <script>
 import ArtifactList from '~/components/ArtifactList'
+import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
+    Logo,
     ArtifactList
   },
   head() {
@@ -53,24 +43,27 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'SEARCCH Portal Artifact Search Results'
+          content: 'SEARCCH Hub Artifact Search Results'
         }
       ]
     }
   },
   data() {
     return {
-      source: 'kg',
       searchsource: 'kg',
       engines: ['kg', 'zenodo'],
-      limit: 20
+      limit: 20,
+      search: ''
     }
   },
-  async fetch({ store, error, params }) {
+  async fetch({ store, error }) {
+    store.commit('artifacts/SET_SOURCE', 'kg')
     try {
       await store.dispatch('artifacts/fetchArtifacts', {
-        source: 'kg',
-        keyword: 'cybersecurity'
+        keyword:
+          store.state.artifacts.search !== ''
+            ? store.state.artifacts.search
+            : 'cybersecurity'
       })
     } catch (e) {
       error({
@@ -81,24 +74,16 @@ export default {
   },
   computed: {
     ...mapState({
-      artifacts: state => state.artifacts.artifacts
-    }),
-    search: {
-      get() {
-        return this.$store.state.artifacts.search
-      },
-      set(value) {
-        this.$store.commit('artifacts/SET_SEARCH', value)
-      }
-    }
+      artifacts: state => state.artifacts.artifacts,
+      source: state => state.artifacts.source
+    })
   },
   methods: {
     onSubmit() {
+      this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
       this.$store.dispatch('artifacts/fetchArtifacts', {
-        source: this.searchsource,
         keyword: this.search
       })
-      this.source = this.searchsource
     }
   }
 }

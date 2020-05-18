@@ -1,10 +1,24 @@
+const renameKeys = (keysMap, obj) =>
+  Object.keys(obj).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...{ [keysMap[key] || key]: obj[key] }
+    }),
+    {}
+  )
+
+const processArtifacts = obj => {
+  return renameKeys({ doi: 'id' }, obj)
+}
+
 export const state = () => ({
   artifacts: [],
   artifact: {},
-  search: ''
+  search: '',
+  source: ''
 })
 
-export const getters = () => ({
+export const getters = {
   artifacts: state => {
     return state.artifacts
   },
@@ -13,8 +27,11 @@ export const getters = () => ({
   },
   search: state => {
     return state.search
+  },
+  source: state => {
+    return state.source
   }
-})
+}
 
 export const mutations = {
   SET_ARTIFACTS(state, artifacts) {
@@ -25,11 +42,14 @@ export const mutations = {
   },
   SET_SEARCH(state, search) {
     state.search = search
+  },
+  SET_SOURCE(state, source) {
+    state.source = source
   }
 }
 
 export const actions = {
-  async fetchArtifacts({ commit }, payload) {
+  async fetchArtifacts({ commit, state }, payload) {
     /* TODO: change to the appropriate initial query -- or don't query
 
         keyword queries:
@@ -44,7 +64,8 @@ export const actions = {
 
     */
     let a = {}
-    if (payload.source === 'zenodo') {
+    commit('SET_SEARCH', payload.keyword)
+    if (state.source === 'zenodo') {
       a = await this.$zenodoRecordRepository.index({
         q: payload.keyword,
         size: '20'
@@ -54,20 +75,36 @@ export const actions = {
       a = await this.$knowledgeGraphSearchRepository.index({
         keywords: payload.keyword
       })
-      commit('SET_ARTIFACTS', a)
+      commit('SET_ARTIFACTS', a.artifacts.map(processArtifacts))
     }
-    return a
   },
-  async fetchArtifact({ commit }, payload) {
-    let target = {}
-    if (payload.source === 'zenodo') {
-      let a = await this.$zenodoRecordRepository.show(payload.id)
-      commit('SET_ARTIFACT', a)
+  async fetchArtifact({ commit, state }, payload) {
+    let a = {}
+    if (
+      typeof payload.source !== 'undefined' &&
+      state.source !== payload.source
+    ) {
+      // override state.source if forced from function call
+      console.log('overriding source')
+      commit('SET_SOURCE', payload.source)
+    }
+    if (
+      typeof state.artifact.id !== 'undefined' &&
+      state.artifact.id === payload.id
+    ) {
+      console.log('returning cached entry ' + payload.id)
+      return state.artifact
     } else {
-      let a = await this.$knowledgeGraphRecordRepository.index({
-        doi: payload.id
-      })
-      commit('SET_ARTIFACT', a)
+      console.log('fetching entry ' + payload.id)
+      if (state.source === 'zenodo') {
+        a = await this.$zenodoRecordRepository.show(payload.id)
+        commit('SET_ARTIFACT', a)
+      } else {
+        a = await this.$knowledgeGraphRecordRepository.index({
+          doi: payload.id
+        })
+        commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
+      }
     }
   }
 }

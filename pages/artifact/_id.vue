@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <ArtifactLong :artifact="artifact" :source="source" />
+    <ArtifactLong :artifact="artifact" />
   </div>
 </template>
 
@@ -27,25 +27,30 @@ export default {
     }
   },
   data() {
-    return {
-      source: '',
-      testing: false
-    }
+    return {}
   },
   computed: {
     ...mapState({
-      artifact: state => state.artifacts.artifact
+      artifact: state => state.artifacts.artifact,
+      source: state => state.artifacts.source
     })
   },
   mounted() {
-    this.$axios.setToken(this.$store.state.ZENODO_API_KEY, 'Bearer', [
-      'post',
-      'delete'
-    ])
-    this.source = this.$route.query.source || 'zenodo'
+    if (this.source === '') {
+      this.$store.commit('artifacts/SET_SOURCE', 'kg')
+    }
+    if (typeof this.$route.query.source !== 'undefined') {
+      this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
+    }
+    if (this.source === 'zenodo' || this.$route.query.source === 'zenodo') {
+      this.$axios.setToken(this.$store.state.app.ZENODO_API_KEY, 'Bearer', [
+        'post',
+        'delete'
+      ])
+    }
     this.$store.dispatch('artifacts/fetchArtifact', {
       id: this.source === 'kg' ? this.$route.query.doi : this.$route.params.id,
-      source: this.source
+      source: this.$route.query.source ? this.$route.query.source : this.source
     })
   }
 }

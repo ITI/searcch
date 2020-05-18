@@ -6,7 +6,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - SEARCCH Portal ',
+    titleTemplate: '%s - SEARCCH Hub ',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -31,7 +31,7 @@ export default {
       { property: 'og:type', content: 'website' },
       {
         property: 'og:title',
-        content: 'SEARCCH Portal for Cyber Security Artifacts'
+        content: 'SEARCCH Hub for Cyber Security Artifacts'
       },
       {
         property: 'og:description',

@@ -33,7 +33,7 @@
     </v-app-bar>
     <v-content>
       <v-container>
-        <nuxt />
+        <nuxt keep-alive />
       </v-container>
     </v-content>
     <v-footer app>
@@ -62,7 +62,7 @@ export default {
       ],
       miniVariant: true,
       right: true,
-      title: 'SEARCCH Portal'
+      title: 'SEARCCH Hub'
     }
   }
 }

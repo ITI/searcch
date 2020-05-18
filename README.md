@@ -1,6 +1,6 @@
 # frontend
 
-> SEARCCH Portal
+> SEARCCH Hub
 
 ## Build Setup
 
@@ -20,7 +20,6 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
-
 
 ## Using docker-compose
 

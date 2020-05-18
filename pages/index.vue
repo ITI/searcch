@@ -6,29 +6,16 @@
       </div>
       <v-card>
         <v-card-title class="headline">
-          Welcome to the SEARCCH Portal
+          Welcome to the SEARCCH Hub
         </v-card-title>
         <v-card-text>
           <p>
-            SEARCCH: Sharing Expertise and Artifacts for Reuse through a
-            Cybersecurity Community Hub. SEARCCH is creating a collaborative,
-            community-driven platform that lowers the barrier to sharing by
-            aiding researchers in packaging, importing, locating, understanding,
-            and reusing experiment artifacts. The artifacts organized by the
-            platform, including tools, methodologies, documentation, and data,
-            can be deployed to community testbeds for performing new
-            experiments. Concurrently, SEARCCH engages in outreach activities to
-            build an active, diverse, online community around the hub to enable
-            direct sharing of expertise and crowdsourcing research ideas and
-            experiment design. Through a process of continuous learning and
-            improvement, the hub will grow over time to include collections of
-            artifacts covering a broad range of cybersecurity research topics
-            and add support for newly identified community needs. These
-            activities together will transform the way cybersecurity research is
-            conducted in the cybersecurity community, improving the overall
-            scientific quality of cybersecurity research through validation,
-            repeatable sharing and reuse, and a collective approach to building
-            on research results.
+            The SEARCCH hub is a collaborative, community-driven platform that
+            lowers the barrier to sharing by aiding researchers in packaging,
+            importing, locating, understanding, and reusing experiment
+            artifacts. The artifacts organized by the hub, including tools,
+            methodologies, documentation, and data, can be deployed to community
+            testbeds for performing new experiments.
           </p>
           <p>
             For more information on SEARCCH, check out the
@@ -36,9 +23,20 @@
               project homepage.
             </a>
           </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; SEARCCH Team</small></em>
-          </div>
+          <p>
+            To get started click continue...
+          </p>
+          <v-row align="center">
+            <v-col cols="12" sm="1" align="right">
+              <v-img src="/images/nsf.png" alt="NSF Logo" width="50"></v-img>
+            </v-col>
+            <v-col align="left">
+              <em>
+                SEARCCH is supported by the National Science Foundation under
+                Grant Numbers 1925773, 1925616, 1925588, 1925564
+              </em>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer />

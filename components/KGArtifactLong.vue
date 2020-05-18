@@ -3,7 +3,7 @@
     <h1>
       Knowledge Graph Artifact
       <a href="#" target="_blank">
-        {{ record.doi }}
+        {{ record.id }}
       </a>
     </h1>
 
@@ -34,37 +34,35 @@
 
       <v-card-title> Artifact Type </v-card-title>
 
-      <v-card-text>
+      <v-chip>
         <div v-if="record.resource_type">{{ record.resource_type.title }}</div>
-      </v-card-text>
+      </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title> Relevance Score </v-card-title>
 
-      <v-card-text>
+      <v-chip>
         <div>{{ record.relevance_score }}</div>
-      </v-card-text>
+      </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title>Creators</v-card-title>
 
-      <v-card-text v-for="c in record.creators" :key="c.name" cols="12">
+      <v-chip v-for="c in record.creators" :key="c.name" cols="12">
         <div>
           {{ c.name }}
         </div>
-      </v-card-text>
-
-      <v-divider class="mx-4"></v-divider>
+      </v-chip>
 
       <v-card-title>Keywords</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.keywords" :key="k" cols="12">
+      <v-chip v-for="(v, k) in record.keywords" :key="k" cols="12">
         <div>
           {{ v }}
         </div>
-      </v-card-text>
+      </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
