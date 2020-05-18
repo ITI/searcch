@@ -23,18 +23,7 @@
         label="Search Engine"
       ></v-select>
     </div>
-    <ArtifactList
-      v-if="source === 'zenodo'"
-      :artifacts="artifacts"
-      :source="source"
-      :limit="limit"
-    ></ArtifactList>
-    <ArtifactList
-      v-if="source === 'kg'"
-      :artifacts="artifacts.artifacts"
-      :source="source"
-      :limit="limit"
-    ></ArtifactList>
+    <ArtifactList :limit="limit"></ArtifactList>
   </div>
 </template>
 
@@ -60,16 +49,16 @@ export default {
   },
   data() {
     return {
-      source: 'kg',
       searchsource: 'kg',
       engines: ['kg', 'zenodo'],
-      limit: 20
+      limit: 20,
+      search: ''
     }
   },
   async fetch({ store, error, params }) {
+    store.commit('artifacts/SET_SOURCE', 'kg')
     try {
       await store.dispatch('artifacts/fetchArtifacts', {
-        source: 'kg',
         keyword: 'cybersecurity'
       })
     } catch (e) {
@@ -81,24 +70,16 @@ export default {
   },
   computed: {
     ...mapState({
-      artifacts: state => state.artifacts.artifacts
-    }),
-    search: {
-      get() {
-        return this.$store.state.artifacts.search
-      },
-      set(value) {
-        this.$store.commit('artifacts/SET_SEARCH', value)
-      }
-    }
+      artifacts: state => state.artifacts.artifacts,
+      source: state => state.artifacts.source
+    })
   },
   methods: {
     onSubmit() {
+      this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
       this.$store.dispatch('artifacts/fetchArtifacts', {
-        source: this.searchsource,
         keyword: this.search
       })
-      this.source = this.searchsource
     }
   }
 }

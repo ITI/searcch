@@ -14,7 +14,7 @@
       ></ArtifactShort>
       <ArtifactShort
         v-if="source === 'kg'"
-        :doi="artifact.doi"
+        :id="artifact.id"
         :title="artifact.title"
         :description="artifact.description"
         :source="source"
@@ -26,24 +26,23 @@
 
 <script>
 import ArtifactShort from '@/components/ArtifactShort'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     ArtifactShort
   },
   props: {
-    artifacts: {
-      type: Array,
-      required: true
-    },
-    source: {
-      type: String,
-      required: true
-    },
     limit: {
       type: Number,
       required: true
     }
+  },
+  computed: {
+    ...mapState({
+      artifacts: state => state.artifacts.artifacts,
+      source: state => state.artifacts.source
+    })
   }
 }
 </script>

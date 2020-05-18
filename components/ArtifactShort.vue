@@ -60,18 +60,33 @@
         </v-row>
       </div>
 
-      <v-card-actions v-if="source === 'zenodo'">
+      <v-card-actions>
         <v-btn icon>
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/comment/${id}?source=${source}`" nuxt>
+        <v-btn
+          v-if="source === 'zenodo'"
+          icon
+          :to="`/artifact/comment/${id}?source=${source}`"
+          nuxt
+        >
+          <v-icon>mdi-comment</v-icon>
+        </v-btn>
+
+        <v-btn
+          v-else-if="source === 'kg'"
+          icon
+          :to="`/artifact/comment/?doi=${id}&source=${source}`"
+          nuxt
+        >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
 
         <v-spacer></v-spacer>
 
         <v-btn
+          v-if="source === 'zenodo'"
           small
           replace
           color="info"
@@ -81,24 +96,13 @@
         >
           Read More
         </v-btn>
-      </v-card-actions>
-
-      <v-card-actions v-else-if="source === 'kg'">
-        <v-btn icon>
-          <v-icon>mdi-heart-outline</v-icon>
-        </v-btn>
-
-        <v-btn icon :to="`/artifact/comment/?doi=${doi}&source=${source}`" nuxt>
-          <v-icon>mdi-comment</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
 
         <v-btn
+          v-else-if="source === 'kg'"
           small
           replace
           color="info"
-          :to="`/artifact/?doi=${doi}&source=${source}`"
+          :to="`/artifact/?doi=${id}&source=${source}`"
           nuxt
           target="_blank"
         >
@@ -119,12 +123,7 @@ export default {
       required: true
     },
     id: {
-      type: Number,
-      required: false
-    },
-    doi: {
-      type: String,
-      required: false
+      required: true
     },
     title: {
       type: String,
