@@ -1,9 +1,8 @@
 <template>
   <div>
-    <v-flex class="text-center">
-      <img src="/images/horiz-tagline.png" alt="SEARCCH Portal" class="mb-5" />
-    </v-flex>
-
+    <div class="text-center">
+      <logo />
+    </div>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
         light
@@ -29,10 +28,12 @@
 
 <script>
 import ArtifactList from '~/components/ArtifactList'
+import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
+    Logo,
     ArtifactList
   },
   head() {
@@ -42,7 +43,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'SEARCCH Portal Artifact Search Results'
+          content: 'SEARCCH Hub Artifact Search Results'
         }
       ]
     }

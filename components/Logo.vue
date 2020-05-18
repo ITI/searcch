@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="/images/icon-vert.png" alt="SEARCCH Icon" srcset="" />
+    <img src="/images/horiz-tagline.png" alt="SEARCCH Tagline" srcset="" />
   </div>
 </template>
 

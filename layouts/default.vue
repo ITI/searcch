@@ -62,7 +62,7 @@ export default {
       ],
       miniVariant: true,
       right: true,
-      title: 'SEARCCH Portal'
+      title: 'SEARCCH Hub'
     }
   }
 }
