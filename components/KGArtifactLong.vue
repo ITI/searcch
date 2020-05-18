@@ -34,7 +34,11 @@
 
       <v-card-title> Artifact Type </v-card-title>
 
-      <v-chip>
+      <v-chip color="primary" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>mdi-newspaper-variant-outline</v-icon>
+        </v-avatar>
+
         <div v-if="record.resource_type">{{ record.resource_type.title }}</div>
       </v-chip>
 
@@ -42,26 +46,48 @@
 
       <v-card-title> Relevance Score </v-card-title>
 
-      <v-chip>
-        <div>{{ record.relevance_score }}</div>
+      <v-chip :color="relevanceColor" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>mdi-finance</v-icon>
+        </v-avatar>
+
+        {{ record.relevance_score }}
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title>Creators</v-card-title>
 
-      <v-chip v-for="c in record.creators" :key="c.name" cols="12">
-        <div>
-          {{ c.name }}
-        </div>
+      <v-chip
+        color="primary"
+        v-for="c in record.creators"
+        :key="c.name"
+        cols="12"
+        class="ma-2"
+        label
+      >
+        <v-avatar left>
+          <v-icon>mdi-account-circle</v-icon>
+        </v-avatar>
+        {{ c.name }}
       </v-chip>
 
       <v-card-title>Keywords</v-card-title>
 
-      <v-chip v-for="(v, k) in record.keywords" :key="k" cols="12">
-        <div>
-          {{ v }}
-        </div>
+      <v-chip
+        color="primary"
+        v-for="(v, k) in record.keywords"
+        :key="k"
+        cols="12"
+        class="ma-2"
+        label
+        @click="search"
+      >
+        <v-avatar left>
+          <v-icon>mdi-tag-outline</v-icon>
+        </v-avatar>
+
+        {{ v }}
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
@@ -95,6 +121,25 @@ export default {
   computed: {
     sanitizedDescription: function() {
       return this.$sanitize(this.record.description)
+    },
+    relevanceColor: {
+      get() {
+        if (this.record.relevance_score <= 60) {
+          return 'error'
+        } else if (
+          this.record.relevance_score > 60 &&
+          this.record.relevance_score <= 90
+        ) {
+          return 'warning'
+        } else {
+          return 'success'
+        }
+      }
+    }
+  },
+  methods: {
+    search() {
+      alert('searching')
     }
   }
 }
