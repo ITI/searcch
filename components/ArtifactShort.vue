@@ -33,6 +33,33 @@
 
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
 
+      <div v-if="comments">
+        <v-row justify="center">
+          <v-expansion-panels inset multiple focusable v-model="expanded">
+            <v-expansion-panel v-for="(comment, i) in comments" :key="i">
+              <v-expansion-panel-header disable-icon-rotate>
+                <template v-slot:actions>
+                  <v-icon color="primary">mdi-comment</v-icon>
+                </template>
+                {{ comment.person }} -- {{ comment.title }}
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-rating
+                  v-model="rating"
+                  color="amber"
+                  dense
+                  half-increments
+                  readonly
+                  size="18"
+                ></v-rating>
+
+                {{ comment.content }}
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-row>
+      </div>
+
       <v-card-actions v-if="source === 'zenodo'">
         <v-btn icon>
           <v-icon>mdi-heart-outline</v-icon>
@@ -61,7 +88,7 @@
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/?doi=${doi}&source=${source}`" nuxt>
+        <v-btn icon :to="`/artifact/comment/?doi=${doi}&source=${source}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
 
@@ -110,12 +137,21 @@ export default {
     score: {
       type: Number,
       required: false
+    },
+    comments: {
+      type: Array,
+      required: false
     }
   },
   data() {
     return {
       reviews: Math.floor(Math.random() * 1000 + 1),
-      rating: Math.round(Math.random() * 10 + 1) / 2
+      rating: Math.round(Math.random() * 10 + 1) / 2,
+      expanded: this.comments
+        ? Array(this.comments.length)
+            .fill(1)
+            .map(Number.call, Number)
+        : []
     }
   },
   computed: {
