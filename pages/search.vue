@@ -56,11 +56,14 @@ export default {
       search: ''
     }
   },
-  async fetch({ store, error, params }) {
+  async fetch({ store, error }) {
     store.commit('artifacts/SET_SOURCE', 'kg')
     try {
       await store.dispatch('artifacts/fetchArtifacts', {
-        keyword: 'cybersecurity'
+        keyword:
+          store.state.artifacts.search !== ''
+            ? store.state.artifacts.search
+            : 'cybersecurity'
       })
     } catch (e) {
       error({

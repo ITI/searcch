@@ -92,7 +92,6 @@
           color="info"
           :to="`/artifact/${artifact.id}`"
           nuxt
-          target="_blank"
         >
           Read More
         </v-btn>
@@ -104,7 +103,6 @@
           color="info"
           :to="`/artifact/?doi=${artifact.id}`"
           nuxt
-          target="_blank"
         >
           Read More
         </v-btn>

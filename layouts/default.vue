@@ -33,7 +33,7 @@
     </v-app-bar>
     <v-content>
       <v-container>
-        <nuxt />
+        <nuxt keep-alive />
       </v-container>
     </v-content>
     <v-footer app>
