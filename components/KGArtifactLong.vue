@@ -2,7 +2,7 @@
   <div>
     <h1>
       Knowledge Graph Artifact
-      <a href="#" target="_blank">
+      <a :href="`http://doi.org/${record.id}`" target="_blank">
         {{ record.id }}
       </a>
     </h1>
