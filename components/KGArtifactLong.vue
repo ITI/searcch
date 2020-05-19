@@ -24,6 +24,18 @@
         </v-row>
       </v-card-text>
 
+      <v-card-title> Relevance Score </v-card-title>
+
+      <v-chip :color="relevanceColor" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>mdi-finance</v-icon>
+        </v-avatar>
+
+        {{ record.relevance_score }}
+      </v-chip>
+
+      <v-divider class="mx-4"></v-divider>
+
       <v-card-title> Description </v-card-title>
 
       <v-card-text>
@@ -40,18 +52,6 @@
         </v-avatar>
 
         <div v-if="record.resource_type">{{ record.resource_type.title }}</div>
-      </v-chip>
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title> Relevance Score </v-card-title>
-
-      <v-chip :color="relevanceColor" class="ma-2" label>
-        <v-avatar left>
-          <v-icon>mdi-finance</v-icon>
-        </v-avatar>
-
-        {{ record.relevance_score }}
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
