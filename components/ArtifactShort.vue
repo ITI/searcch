@@ -47,7 +47,7 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-rating
-                  v-model="rating"
+                  v-model="comment.rating"
                   color="amber"
                   dense
                   half-increments
