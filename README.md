@@ -2,6 +2,9 @@
 
 > SEARCCH Hub
 
+The SEARCCH hub is a collaborative, community-driven platform that lowers the barrier to sharing by aiding researchers in packaging, importing, locating, understanding, and reusing experiment artifacts. The artifacts organized by the hub, including tools, methodologies, documentation, and data, can be deployed to community testbeds for performing new experiments.
+
+
 ## Build Setup
 
 ```bash
