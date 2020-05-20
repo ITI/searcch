@@ -17,7 +17,6 @@
             color="amber"
             dense
             half-increments
-            hover
             size="18"
           ></v-rating>
           <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
