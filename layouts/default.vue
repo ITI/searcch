@@ -33,11 +33,15 @@
     </v-app-bar>
     <v-content>
       <v-container>
-        <nuxt keep-alive />
+        <nuxt />
       </v-container>
     </v-content>
     <v-footer app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <span
+        >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
+        National Science Foundation under Grant Numbers 1925773, 1925616,
+        1925588, 1925564</span
+      >
     </v-footer>
   </v-app>
 </template>

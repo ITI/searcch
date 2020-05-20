@@ -21,14 +21,16 @@
         ></v-rating>
       </v-card-text>
 
-      <v-card-text v-if="artifact.score">
-        <span class="pl-2 grey--text text--darken-2 font-weight-light caption">
-          Relevance Score
-        </span>
-        <v-spacer></v-spacer>
+      <v-card-text v-if="artifact.relevance_score">
+        <v-card-title> Relevance Score </v-card-title>
 
-        <div class="my-4 subtitle-1"></div>
-        <div>{{ artifact.score }}</div>
+        <v-chip :color="relevanceColor" class="ma-2" label>
+          <v-avatar left>
+            <v-icon>mdi-finance</v-icon>
+          </v-avatar>
+
+          {{ artifact.relevance_score }}
+        </v-chip>
       </v-card-text>
 
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
@@ -45,7 +47,7 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-rating
-                  v-model="rating"
+                  v-model="comment.rating"
                   color="amber"
                   dense
                   half-increments
@@ -152,6 +154,20 @@ export default {
         html: true,
         maxLines: 40
       })
+    },
+    relevanceColor: {
+      get() {
+        if (this.artifact.relevance_score <= 60) {
+          return 'error'
+        } else if (
+          this.artifact.relevance_score > 60 &&
+          this.artifact.relevance_score <= 90
+        ) {
+          return 'warning'
+        } else {
+          return 'success'
+        }
+      }
     }
   }
 }
