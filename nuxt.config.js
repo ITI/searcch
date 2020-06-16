@@ -151,7 +151,8 @@ export default {
     strategies: {
       github: {
         client_id: process.env.GITHUB_CLIENT_ID || 'undefined',
-        client_secret: process.env.GITHUB_CLIENT_SECRET || 'undefined'
+        client_secret: process.env.GITHUB_CLIENT_SECRET || 'undefined',
+        scope: ['read:user']
       }
     },
     plugins: ['~/plugins/auth.js']
