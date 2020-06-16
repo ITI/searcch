@@ -10,7 +10,8 @@
               </v-toolbar>
               <v-card-text>
                 <v-form @submit="userLogin">
-                  <v-text-field
+                  <!--
+                    <v-text-field
                     prepend-icon="mdi-account"
                     v-model="login.username"
                     autocomplete="username"
@@ -22,11 +23,12 @@
                     autocomplete="current-password"
                     type="password"
                   />
+                  -->
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary">Login</v-btn>
+                <v-btn color="primary" @click="userLogin">GitHub Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -51,12 +53,7 @@ export default {
   },
   methods: {
     async userLogin() {
-      try {
-        let response = await this.$auth.loginWith('local', { data: this.login })
-        console.log(response)
-      } catch (err) {
-        console.log(err)
-      }
+      this.$auth.loginWith('github')
     }
   }
 }

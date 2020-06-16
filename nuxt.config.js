@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+require('dotenv').config()
+
 export default {
   mode: 'universal',
   /*
@@ -131,7 +133,7 @@ export default {
   },
   dotenv: {
     /* module options */
-    path: '.env',
+    path: '.env-dir',
     filename: '.env.' + process.env.NODE_ENV
   },
   /*
@@ -141,5 +143,17 @@ export default {
     extractCSS: true,
     extend(config, ctx) {},
     transpile: [/^vuetify/]
+  },
+  router: {
+    middleware: 'auth'
+  },
+  auth: {
+    strategies: {
+      github: {
+        client_id: process.env.GITHUB_CLIENT_ID || 'undefined',
+        client_secret: process.env.GITHUB_CLIENT_SECRET || 'undefined'
+      }
+    },
+    plugins: ['~/plugins/auth.js']
   }
 }
