@@ -109,7 +109,7 @@ export default {
   },
   proxy: {
     '/kg/': {
-      target: 'http://ec2-54-67-82-172.us-west-1.compute.amazonaws.com',
+      target: 'http://128.9.160.71:8000/',
       pathRewrite: { '^/kg/': '/' }
     }
   },
@@ -131,10 +131,12 @@ export default {
       }
     }
   },
-  dotenv: {
-    /* module options */
-    path: '.env-dir',
-    filename: '.env.' + process.env.NODE_ENV
+  publicRuntimeConfig: {},
+  privateRuntimeConfig: {
+    gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
+    gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET || 'undefined',
+    zenodoAPIKey: process.env.ZENODO_API_KEY || 'undefined',
+    zenodoAPIURL: process.env.ZENODO_API_URL || 'https://zenodo.org/api/'
   },
   /*
    ** Build configuration
@@ -150,8 +152,8 @@ export default {
   auth: {
     strategies: {
       github: {
-        client_id: process.env.GITHUB_CLIENT_ID || 'undefined',
-        client_secret: process.env.GITHUB_CLIENT_SECRET || 'undefined',
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
         scope: ['read:user']
       }
     },
