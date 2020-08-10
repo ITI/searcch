@@ -157,11 +157,11 @@ export default {
     },
     relevanceColor: {
       get() {
-        if (this.artifact.relevance_score <= 60) {
+        if (this.artifact.relevance_score <= 0.4) {
           return 'error'
         } else if (
-          this.artifact.relevance_score > 60 &&
-          this.artifact.relevance_score <= 90
+          this.artifact.relevance_score > 0.4 &&
+          this.artifact.relevance_score <= 0.8
         ) {
           return 'warning'
         } else {
