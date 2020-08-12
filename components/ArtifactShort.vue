@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto overflow-hidden">
+    <v-card class="mx-auto overflow-hidden" elevation="3">
       <v-chip
         v-if="artifact.relevance_score && !comments"
         :color="relevanceColor"
