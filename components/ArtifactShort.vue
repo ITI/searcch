@@ -2,7 +2,7 @@
   <div>
     <v-card class="mx-auto overflow-hidden">
       <v-chip
-        v-if="artifact.relevance_score"
+        v-if="artifact.relevance_score && !comments"
         :color="relevanceColor"
         class="ma-2"
         label
