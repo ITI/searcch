@@ -70,7 +70,11 @@
       </div>
 
       <v-card-actions>
-        <v-btn icon>
+        <v-btn
+          icon
+          @click="favorite = true"
+          :color="favorite == true ? 'pink' : ''"
+        >
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
 
@@ -143,7 +147,8 @@ export default {
         ? Array(this.comments.length)
             .fill(1)
             .map(Number.call, Number)
-        : []
+        : [],
+      favorite: false
     }
   },
   computed: {
