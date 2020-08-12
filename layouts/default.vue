@@ -31,11 +31,11 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
     </v-app-bar>
-    <v-content>
+    <v-main>
       <v-container>
         <nuxt />
       </v-container>
-    </v-content>
+    </v-main>
     <v-footer app>
       <span
         >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
