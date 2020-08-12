@@ -31,6 +31,16 @@
 
           {{ artifact.relevance_score }}
         </v-chip>
+
+        <v-card-title> Artifact Type </v-card-title>
+
+        <v-chip color="primary" class="ma-2" label>
+          <v-avatar left>
+            <v-icon>mdi-newspaper-variant-outline</v-icon>
+          </v-avatar>
+
+          <div v-if="artifact.type">{{ artifact.type }}</div>
+        </v-chip>
       </v-card-text>
 
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
