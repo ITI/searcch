@@ -101,18 +101,6 @@
         <v-btn icon :to="`/artifact/comment/?doi=${record.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-btn
-          small
-          replace
-          color="info"
-          :to="`/artifact/?doi=${record.id}`"
-          nuxt
-        >
-          Read More
-        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
