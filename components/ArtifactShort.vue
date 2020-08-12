@@ -79,7 +79,7 @@
         </v-btn>
 
         <v-btn
-          v-if="source === 'zenodo'"
+          v-if="source === 'zenodo' && !comments"
           icon
           :to="`/artifact/comment/${artifact.id}`"
           nuxt
@@ -88,7 +88,7 @@
         </v-btn>
 
         <v-btn
-          v-else-if="source === 'kg'"
+          v-else-if="source === 'kg' && !comments"
           icon
           :to="`/artifact/comment/?doi=${artifact.id}`"
           nuxt
