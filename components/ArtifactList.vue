@@ -1,23 +1,5 @@
 <template>
   <div>
-    <v-card class="mt-4 mx-auto text-center">
-      <v-sheet
-        class="v-sheet--offset mx-auto"
-        elevation="12"
-        max-width="calc(100% - 32px)"
-        color="primary"
-      >
-        <v-sparkline
-          :value="sparkScores"
-          color="rgba(255, 255, 255, .7)"
-        ></v-sparkline>
-      </v-sheet>
-
-      <v-card-text class="pt-0">
-        <div class="title font-weight-light mb-2 center">Relevance Score</div>
-      </v-card-text>
-    </v-card>
-
     <div
       v-for="(artifact, index) in artifacts"
       v-if="index <= limit"
