@@ -88,6 +88,32 @@
           <a :href="v.links.self">{{ v.key }}</a> (size: {{ v.size }} bytes)
         </div>
       </v-card-text>
+
+      <v-card-actions>
+        <v-btn
+          icon
+          @click="favorite = true"
+          :color="favorite == true ? 'pink' : ''"
+        >
+          <v-icon>mdi-heart-outline</v-icon>
+        </v-btn>
+
+        <v-btn icon :to="`/artifact/comment/?doi=${record.id}`" nuxt>
+          <v-icon>mdi-comment</v-icon>
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+        <v-btn
+          small
+          replace
+          color="info"
+          :to="`/artifact/?doi=${record.id}`"
+          nuxt
+        >
+          Read More
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -104,7 +130,8 @@ export default {
   data() {
     return {
       reviews: Math.floor(Math.random() * 1000 + 1),
-      rating: Math.round(Math.random() * 10 + 1) / 2
+      rating: Math.round(Math.random() * 10 + 1) / 2,
+      favorite: false
     }
   },
   computed: {
