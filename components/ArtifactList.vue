@@ -1,12 +1,16 @@
 <template>
   <div>
-    <div
-      v-for="(artifact, index) in artifacts"
-      v-if="index <= limit"
-      :key="artifact.id"
-    >
-      <ArtifactShort :artifact="artifact"></ArtifactShort>
-    </div>
+    <v-container>
+      <v-row
+        v-for="(artifact, index) in artifacts"
+        v-if="index <= limit"
+        :key="artifact.id"
+      >
+        <v-col>
+          <ArtifactShort :artifact="artifact"></ArtifactShort>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
