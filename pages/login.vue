@@ -53,7 +53,14 @@ export default {
   },
   methods: {
     async userLogin() {
-      this.$auth.loginWith('github')
+      let response = await this.$auth.loginWith('github')
+      // Github specific email extractor
+      // The email in the original auth token does not get set if the user's Github profile has visibility for that email set to none
+      // so you have to use a separate GET request to retrieve it from the Github user session 
+      console.log(response)
+      let emails = await this.$axios.$get("https://api.github.com/user/emails")
+      response.data.user.email = emails[0].email
+      this.$auth.setUser(response.data.user)
     }
   }
 }
