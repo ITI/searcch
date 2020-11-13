@@ -85,10 +85,11 @@ export const actions = {
         q: payload.keyword,
         size: '20'
       })
+      console.log(a)
       commit('SET_ARTIFACTS', a)
     } else {
       a = await this.$knowledgeGraphSearchRepository.index({
-        keywords: payload.keyword
+        ...payload
       })
       commit(
         'SET_ARTIFACTS',
@@ -121,9 +122,7 @@ export const actions = {
         a = await this.$zenodoRecordRepository.show(payload.id)
         commit('SET_ARTIFACT', a)
       } else {
-        a = await this.$knowledgeGraphRecordRepository.index({
-          doi: payload.id
-        })
+        a = await this.$knowledgeGraphSearchRepository.show(payload.id)
         commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
       }
     }

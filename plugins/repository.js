@@ -11,12 +11,18 @@ export default (ctx, inject) => {
   // knowledge graph searching
   inject(
     'knowledgeGraphSearchRepository',
-    repositoryWithAxios('kg/' + 'search')
+    repositoryWithAxios('kg/' + 'artifacts')
   )
 
   // knowledge graph record retrieval
   inject(
     'knowledgeGraphRecordRepository',
     repositoryWithAxios('kg/' + 'record')
+  )
+
+  // knowledge graph record retrieval
+  inject(
+    'loginEndpoint',
+    repositoryWithAxios('kg/' + 'login')
   )
 }

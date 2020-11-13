@@ -49,9 +49,10 @@ export default {
       ])
     }
     this.$store.dispatch('artifacts/fetchArtifact', {
-      id: this.source === 'kg' ? this.$route.query.doi : this.$route.params.id,
+      id: this.$route.params.id,
       source: this.$route.query.source ? this.$route.query.source : this.source
     })
+    console.log("Artifact", this.artifact)
   }
 }
 </script>

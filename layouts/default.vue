@@ -30,6 +30,7 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-btn class="primary">Logout</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>

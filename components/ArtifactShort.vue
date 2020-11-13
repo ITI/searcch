@@ -28,7 +28,7 @@
 
       <v-spacer></v-spacer>
 
-      <span class="pl-2 grey--text text--darken-2 font-weight-light caption">
+      <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
         {{ reviews }} reviews
       </span>
       <v-rating
@@ -38,6 +38,7 @@
         half-increments
         readonly
         size="18"
+        class="ml-3"
       ></v-rating>
 
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
@@ -90,7 +91,7 @@
         <v-btn
           v-else-if="source === 'kg' && !comments"
           icon
-          :to="`/artifact/comment/?doi=${artifact.id}`"
+          :to="`/artifact/comment/${artifact.id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -114,7 +115,7 @@
           small
           replace
           color="info"
-          :to="`/artifact/?doi=${artifact.id}`"
+          :to="`/artifact/${artifact.id}`"
           nuxt
         >
           Read More

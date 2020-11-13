@@ -57,9 +57,7 @@ export default {
     Logo
   },
   async mounted () {
-    let emails = await this.$axios.$get("https://api.github.com/user/emails")
-    console.log(emails)
-    console.log(this.$auth)
+    // let emails = await this.$axios.$get("https://api.github.com/user/emails")
   }
 }
 </script>

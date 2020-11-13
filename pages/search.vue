@@ -16,7 +16,7 @@
         hide-details
       >
       </v-text-field>
-      <v-expansion-panels>
+      <v-expansion-panels model="advanced.open">
         <v-expansion-panel  class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -154,6 +154,7 @@ export default {
       limit: 20,
       search: '',
       advanced: {
+        open: false,
         types: ['Dataset','Publication','Code'],
         query: '',
         filter: 'Name',
@@ -186,6 +187,7 @@ export default {
   //           : 'cybersecurity'
   //     })
   //   } catch (e) {
+  //     console.log(e)
   //     error({
   //       statusCode: 503,
   //       message: 'Unable to fetch artifacts at this time. Please try again.'
@@ -216,9 +218,25 @@ export default {
   methods: {
     onSubmit() {
       this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
-      this.$store.dispatch('artifacts/fetchArtifacts', {
-        keyword: this.search
-      })
+      let payload 
+      if (!this.advanced.open) {
+        payload = {
+          keywords: this.search
+        }
+      } else {
+        payload = {
+          keywords: this.search,
+          type: this.advanced.types,
+          author: null,
+          orginization: null
+        }
+      }
+      if (this.advanced.filter == "Name") {
+        payload.author = this.advanced.query
+      } else if (this.advanced.filter == "Organization") {
+        payload.orginization = this.advanced.query
+      }
+      this.$store.dispatch('artifacts/fetchArtifacts', payload)
     },
     toggle () {
         this.$nextTick(() => {
