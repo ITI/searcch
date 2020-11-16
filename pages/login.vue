@@ -55,20 +55,17 @@ export default {
     async userLogin() {
       let response = await this.$auth.loginWith('github')
       console.log(response)
-
-      // Github specific email extractor
-      // The email in the original auth token does not get set if the user's Github profile has visibility for that email set to none
-      // so you have to use a separate GET request to retrieve it from the Github user session -moved to backend
-      // let emails = await this.$axios.$get("https://api.github.com/user/emails")
-      // response.data.user.email = emails[0].email
-      // this.$auth.setUser(response.data.user)
-
-      // let payload = {
-      //   api_key: ,
-      //   strategy: 'github',
-      //   token: response,
-      // }
-      // let login_response = await this.$loginEndpoint.create()
+      let emails = await this.$axios.$get("https://api.github.com/user/emails")
+      console.log(emails)
+      let payload = {
+        api_key: process.env.KG_API_KEY,
+        strategy: 'github',
+        token: this.$auth.getToken('github'),
+      }
+      let login_response = await this.$loginEndpoint.create(payload)
+      if (login_response !== '200') {
+        console.log(login_response)
+      }
     }
   }
 }

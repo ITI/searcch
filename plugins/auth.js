@@ -7,7 +7,8 @@ export default function({ $auth }) {
     'inderdeepsingh',
     'teesh',
     'hardiksurana',
-    'imneedham'
+    'imneedham',
+    'carboxylman'
   ]
   if (!$auth.loggedIn) {
     return

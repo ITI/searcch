@@ -109,7 +109,7 @@ export default {
   },
   proxy: {
     '/kg/': {
-      target: 'http://128.9.160.71:8000/',
+      target: 'http://128.9.160.71/v1/',
       pathRewrite: { '^/kg/': '/' }
     }
   },
@@ -154,7 +154,7 @@ export default {
       github: {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
-        scope: ['read:user']
+        scope: ['read:user','user:email']
       }
     },
     plugins: ['~/plugins/auth.js']

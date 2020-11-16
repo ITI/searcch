@@ -122,7 +122,7 @@ export const actions = {
         a = await this.$zenodoRecordRepository.show(payload.id)
         commit('SET_ARTIFACT', a)
       } else {
-        a = await this.$knowledgeGraphSearchRepository.show(payload.id)
+        a = await this.$knowledgeGraphRecordRepository.show(payload.id)
         commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
       }
     }

@@ -30,7 +30,7 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn class="primary">Logout</v-btn>
+      <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()">Logout</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -68,6 +68,30 @@ export default {
       miniVariant: true,
       right: true,
       title: 'SEARCCH Hub'
+    }
+  },
+  methods: {
+    async logout () {
+      if (confirm("Log out of SEARCCH?")) {
+        console.log("Logging out")
+        this.$auth.logout()
+        location.reload()
+      } else {
+        // let payload = {
+        //   api_key: process.env.KG_API_KEY,
+        //   strategy: 'github',
+        //   token: this.$auth.getToken('github'),
+        // }
+        // let login_response
+        // try {
+        //   login_response = await this.$loginEndpoint.create(payload)
+        // } catch (e) {
+        //   console.log(e)
+        // }
+        // console.log(login_response)
+        let emails = await this.$axios.$get("https://api.github.com/user/emails")
+        console.log(emails)
+      }
     }
   }
 }

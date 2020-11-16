@@ -177,23 +177,6 @@ export default {
       ]
     }
   },
-  // async fetch({ store, error }) {
-  //   store.commit('artifacts/SET_SOURCE', 'kg')
-  //   try {
-  //     await store.dispatch('artifacts/fetchArtifacts', {
-  //       keyword:
-  //         store.state.artifacts.search !== ''
-  //           ? store.state.artifacts.search
-  //           : 'cybersecurity'
-  //     })
-  //   } catch (e) {
-  //     console.log(e)
-  //     error({
-  //       statusCode: 503,
-  //       message: 'Unable to fetch artifacts at this time. Please try again.'
-  //     })
-  //   }
-  // },
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,

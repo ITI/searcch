@@ -17,7 +17,7 @@ export default (ctx, inject) => {
   // knowledge graph record retrieval
   inject(
     'knowledgeGraphRecordRepository',
-    repositoryWithAxios('kg/' + 'record')
+    repositoryWithAxios('kg/' + 'artifact')
   )
 
   // knowledge graph record retrieval
