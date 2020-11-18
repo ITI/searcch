@@ -14,7 +14,6 @@ export default function({ $auth }) {
     return
   } else {
     if (!validUsers.includes($auth.user.login.toLowerCase())) {
-      console.log($auth.user.login)
       $auth.logout('github')
     }
   }

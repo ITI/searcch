@@ -25,4 +25,22 @@ export default (ctx, inject) => {
     'loginEndpoint',
     repositoryWithAxios('kg/' + 'login')
   )
+
+  // favorites lookup API
+  inject(
+    'findFavoritesEndpoint',
+    repositoryWithAxios('kg/' + 'favorites')
+  )
+
+  // favorites modify API
+  inject(
+    'favoritesEndpoint',
+    repositoryWithAxios('kg/' + 'favorite')
+  )
+
+  // reviews modify API
+  inject(
+    'reviewsEndpoint',
+    repositoryWithAxios('kg/' + 'review')
+  )
 }

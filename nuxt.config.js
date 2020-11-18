@@ -147,7 +147,7 @@ export default {
     transpile: [/^vuetify/]
   },
   router: {
-    middleware: 'auth'
+    // middleware: 'auth'
   },
   auth: {
     strategies: {

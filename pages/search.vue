@@ -16,7 +16,7 @@
         hide-details
       >
       </v-text-field>
-      <v-expansion-panels model="advanced.open">
+      <!-- <v-expansion-panels model="advanced.open">
         <v-expansion-panel  class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -110,7 +110,7 @@
             </v-row>
           </v-expansion-panel-content>
         </v-expansion-panel>
-      </v-expansion-panels>
+      </v-expansion-panels> -->
     </v-form>
     <div hidden>
       <v-select
@@ -122,6 +122,9 @@
     <br>
     <hr>
     <ArtifactList :limit="limit"></ArtifactList>
+    <span v-if="artifacts.length == 0 && searchLoading == true">Loading...</span>
+    <span v-else><h3>Type a search term into the input above and press Enter</h3></span>
+    <v-btn v-if="showScrollToTop != 0" class="primary" id="scrollbtn" @click="scrollToTop()" elevation="10">Back to Top</v-btn>
   </div>
 </template>
 
@@ -129,6 +132,7 @@
 import ArtifactList from '~/components/ArtifactList'
 import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
+import goTo from 'vuetify/es5/services/goto'
 
 export default {
   components: {
@@ -153,6 +157,7 @@ export default {
       engines: ['kg', 'zenodo'],
       limit: 20,
       search: '',
+      searchLoading: false,
       advanced: {
         open: false,
         types: ['Dataset','Publication','Code'],
@@ -174,8 +179,15 @@ export default {
       filters: [
         'Name',
         'Organization',
-      ]
+      ],
+      showScrollToTop: 0,
     }
+  },
+  beforeMount () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   computed: {
     ...mapState({
@@ -196,40 +208,49 @@ export default {
     advancedPlaceholder () {
       if (this.advanced.filter === "Name") return "First or Last name"
       if (this.advanced.filter === "Organization") return "Organization name"
-    }
+    },
   },
   methods: {
     onSubmit() {
+      this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
+      this.searchLoading = true
       this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
-      let payload 
-      if (!this.advanced.open) {
+      let payload
+      // comment out advanced query options for first test demo or until API built
+      // if (!this.advanced.open) {
         payload = {
           keywords: this.search
         }
-      } else {
-        payload = {
-          keywords: this.search,
-          type: this.advanced.types,
-          author: null,
-          orginization: null
-        }
-      }
-      if (this.advanced.filter == "Name") {
-        payload.author = this.advanced.query
-      } else if (this.advanced.filter == "Organization") {
-        payload.orginization = this.advanced.query
-      }
+      // } else {
+      //   payload = {
+      //     keywords: this.search,
+      //     type: this.advanced.types,
+      //     author: null,
+      //     orginization: null
+      //   }
+      // }
+      // if (this.advanced.filter == "Name") {
+      //   payload.author = this.advanced.query
+      // } else if (this.advanced.filter == "Organization") {
+      //   payload.orginization = this.advanced.query
+      // }
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
     },
     toggle () {
-        this.$nextTick(() => {
-          if (this.allArtifacts) {
-            this.advanced.types = []
-          } else {
-            this.advanced.types = this.types.slice()
-          }
-        })
-      },
+      this.$nextTick(() => {
+        if (this.allArtifacts) {
+          this.advanced.types = []
+        } else {
+          this.advanced.types = this.types.slice()
+        }
+      })
+    }, 
+    scrollToTop () {
+      goTo(0)
+    },
+    handleScroll () {
+      this.showScrollToTop = window.scrollY
+    }
   }
 }
 </script>
@@ -241,4 +262,9 @@ export default {
   .v-text-field--outlined .v-input__prepend-outer, .v-text-field--outlined .v-input__append-outer {
     margin-top: 4px;
   }
+  #scrollbtn {
+    position: fixed;
+    bottom: 80px;
+    right: 30px;
+}
 </style>

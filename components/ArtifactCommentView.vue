@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto overflow-hidden" elevation="3">
+    <v-card class="mx-auto overflow-hidden" elevation="3" v-if="artifact.artifact">
       <!-- <v-chip
         v-if="artifact.relevance_score && !comments"
         :color="relevanceColor"
@@ -13,16 +13,16 @@
         {{ artifact.relevance_score }}
       </v-chip> -->
 
-      <v-chip v-if="artifact.type" color="primary" class="ma-2" label>
+      <v-chip v-if="artifact.artifact.type" color="primary" class="ma-2" label>
         <v-avatar left>
           <v-icon>mdi-newspaper-variant-outline</v-icon>
         </v-avatar>
-        <div v-if="artifact.type">{{ artifact.type }}</div>
+        <div v-if="artifact.artifact.type">{{ artifact.artifact.type }}</div>
       </v-chip>
 
       <v-card-title class="align-start">
         <div>
-          <span class="headline">{{ artifact.title | titlecase }}</span>
+          <span class="headline">{{ artifact.artifact.title | titlecase }}</span>
         </div>
       </v-card-title>
 
@@ -73,18 +73,10 @@
       <v-card-actions>
         <v-btn
           icon
-          @click="favoriteThis()"
+          @click="favorite = !favorite"
           :color="favorite == true ? 'red' : ''"
         >
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-        </v-btn>
-
-        <v-btn
-          icon
-          :to="`/artifact/comment/${artifact.id}`"
-          nuxt
-        >
-          <v-icon>mdi-comment</v-icon>
         </v-btn>
 
         <v-spacer></v-spacer>
@@ -93,13 +85,14 @@
           small
           replace
           color="info"
-          :to="`/artifact/${artifact.id}`"
+          :to="`/artifact/${artifact.artifact.id}`"
           nuxt
         >
           Read More
         </v-btn>
       </v-card-actions>
     </v-card>
+    <span v-else>Loading...</span>
   </div>
 </template>
 
@@ -130,15 +123,14 @@ export default {
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
-      user_id: state => state.user.user_id
+      source: state => state.artifacts.source
     }),
     sanitizedDescription: function() {
       let description = ''
       if (this.source === 'zenodo') {
         description = this.artifact.metadata.description
       } else {
-        description = this.artifact.description
+        description = this.artifact.artifact.description
       }
       return clip(this.$sanitize(description), 2000, {
         html: true,
@@ -159,20 +151,6 @@ export default {
     //     }
     //   }
     // }
-  },
-  methods:{
-    favoriteThis () {
-      if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
-      } else {
-        this.favorite = !this.favorite
-        // if (this.favorite) {
-        //   this.$favoritesEndpoint.update(this.artifact.id, {
-        //     user_id: this.user_id
-        //   })
-        // }
-      }
-    }
   }
 }
 </script>

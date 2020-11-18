@@ -54,18 +54,6 @@ export default {
   methods: {
     async userLogin() {
       let response = await this.$auth.loginWith('github')
-      console.log(response)
-      let emails = await this.$axios.$get("https://api.github.com/user/emails")
-      console.log(emails)
-      let payload = {
-        api_key: process.env.KG_API_KEY,
-        strategy: 'github',
-        token: this.$auth.getToken('github'),
-      }
-      let login_response = await this.$loginEndpoint.create(payload)
-      if (login_response !== '200') {
-        console.log(login_response)
-      }
     }
   }
 }
