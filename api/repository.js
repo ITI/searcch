@@ -21,5 +21,9 @@ export default $axios => resource => ({
 
   delete(id) {
     return $axios.$delete(`${resource}/${id}`)
+  },
+
+  remove(id, payload) {
+    return $axios.$delete(`${resource}/${id}`, payload)
   }
 })

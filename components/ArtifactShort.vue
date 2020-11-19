@@ -125,13 +125,13 @@ export default {
             .fill(1)
             .map(Number.call, Number)
         : [],
-      favorite: false
     }
   },
   computed: {
     ...mapState({
       source: state => state.artifacts.source,
-      user_id: state => state.user.user_id
+      user_id: state => state.user.user_id,
+      favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
       let description = ''
@@ -145,6 +145,15 @@ export default {
         maxLines: 40
       })
     },
+    favorite: {
+      get () {
+        return this.favorites[this.artifact.id] ? true : false
+      },
+      set (value) {
+        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
+      }
+    }
     // relevanceColor: {
     //   get() {
     //     if (this.artifact.relevance_score <= 0.4) {
@@ -165,12 +174,18 @@ export default {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
+        let action = !this.favorite
         this.favorite = !this.favorite
-        // if (this.favorite) {
-        //   this.$favoritesEndpoint.update(this.artifact.id, {
-        //     user_id: this.user_id
-        //   })
-        // }
+        let payload = {
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id
+        }
+        if (action) {
+          this.$favoritesEndpoint.update(this.artifact.id, payload)
+        } else {
+          this.$favoritesEndpoint.remove(this.artifact.id, payload)
+        }
       }
     }
   }

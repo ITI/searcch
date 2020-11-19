@@ -30,6 +30,7 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <span v-if="$auth.loggedIn" class="mr-2">User {{ user_id }} logged in</span>
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()">Logout</v-btn>
       <v-btn v-else class="primary" nuxt to="/login">Login</v-btn>
     </v-app-bar>
@@ -49,6 +50,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -71,27 +74,16 @@ export default {
       title: 'SEARCCH Hub'
     }
   },
+  computed: {
+    ...mapState({
+      user_id: state => state.user.user_id,
+    })
+  },
   methods: {
     async logout () {
       if (confirm("Log out of SEARCCH?")) {
         console.log("Logging out")
         this.$auth.logout()
-        location.reload()
-      } else {
-        // let payload = {
-        //   api_key: process.env.KG_API_KEY,
-        //   strategy: 'github',
-        //   token: this.$auth.getToken('github'),
-        // }
-        // let login_response
-        // try {
-        //   login_response = await this.$loginEndpoint.create(payload)
-        // } catch (e) {
-        //   console.log(e)
-        // }
-        // console.log(login_response)
-        let emails = await this.$axios.$get("https://api.github.com/user/emails")
-        console.log(emails)
       }
     }
   }

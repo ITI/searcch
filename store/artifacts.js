@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const renameKeys = (keysMap, obj) =>
   Object.keys(obj).reduce(
     (acc, key) => ({
@@ -24,7 +26,9 @@ export const state = () => ({
   artifact: {},
   search: '',
   source: '',
-  scores: []
+  scores: [],
+  favorites: [],
+  favoritesIDs: {}
 })
 
 export const getters = {
@@ -42,7 +46,13 @@ export const getters = {
   },
   scores: state => {
     return state.scores
-  }
+  },
+  favorites: state => {
+    return state.favorites
+  },
+  favoritesIDs: state => {
+    return state.favoritesIDs
+  },
 }
 
 export const mutations = {
@@ -60,7 +70,16 @@ export const mutations = {
   },
   SET_RELEVANCE_SCORES(state, scores) {
     state.scores = scores
-  }
+  },
+  SET_FAVORITES(state, favorites) {
+    state.favorites = favorites
+  },
+  ADD_FAVORITE(state, id) {
+    Vue.set(state.favoritesIDs, id, true)
+  },
+  REMOVE_FAVORITE(state, id) {
+    delete state.favoritesIDs[id]
+  },
 }
 
 export const actions = {
@@ -124,6 +143,15 @@ export const actions = {
       } else {
         a = await this.$knowledgeGraphRecordRepository.show(payload.id)
         commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
+      }
+    }
+  },
+  async fetchFavorites({ commit, state }, payload) {
+    let response = await this.$findFavoritesEndpoint.show(payload)
+    if (response.artifacts) {
+      commit('SET_FAVORITES', response.artifacts)
+      for (let fav in response.artifacts) {
+        commit('ADD_FAVORITE', response.artifacts[fav].id)
       }
     }
   }

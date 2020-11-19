@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div v-if="source === 'zenodo'">
-      <ZenodoArtifactLong :record="artifact" />
-    </div>
-    <div v-if="source === 'kg'">
-      <KGArtifactLong :record="artifact" />
-    </div>
+    <KGArtifactLong :record="artifact"/>
   </div>
 </template>
 

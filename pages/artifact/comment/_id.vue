@@ -28,7 +28,6 @@
                       hover
                       size="32"
                     ></v-rating>
-                    <v-input :error-messages="ratingCheck"> </v-input>
                   </v-col>
 
                   <v-col cols="12">
@@ -36,8 +35,6 @@
                       label="Title"
                       placeholder="Title"
                       v-model="title"
-                      :rules="[v => !!v || 'Required']"
-                      required
                     >
                     </v-text-field>
                   </v-col>
@@ -46,13 +43,11 @@
                       label="Comment"
                       placeholder="Add comment..."
                       v-model="comment"
-                      :rules="[v => !!v || 'Required']"
-                      required
                     >
                     </v-textarea>
                   </v-col>
                   <v-col cols="12" class="text-right">
-                    <v-btn color="success" @click="onSubmit" :disabled="!valid">
+                    <v-btn color="success" @click="onSubmit" :disabled="!formCheck">
                       Add Comment
                     </v-btn>
                   </v-col>
@@ -113,22 +108,35 @@ export default {
       source: state => state.artifacts.source,
       comments: state => state.artifacts.artifact.reviews
     }),
-    ratingCheck() {
-      return this.rating !== 0 ? '' : 'Required'
+    formCheck() {
+      if (this.rating == 0 && this.title == '' && this.title == '') return false
+      return true
     }
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.rating == 0) {
         return false
       } else {
-        this.comments.push({
-          title: this.title,
-          person: 'Joe Admin',
-          posted: '20th May 2020',
-          content: this.comment,
-          rating: this.rating
-        })
+        if (this.rating) {
+          let rating_payload = {
+            api_key: process.env.KG_API_KEY,
+            token: this.$auth.getToken('github'),
+            userid: this.user_id,
+            rating: this.rating
+          }
+          let response = await this.$ratingsEndpoint.update(this.artifact.artifact.id, rating_payload)
+          this.$store.dispatch('artifacts/fetchArtifact', {
+            id: this.$route.params.id,
+            source: 'kg'
+          })
+        }
+        if (this.title && this.comment) {
+          // let comment_payload = {
+          //   title: this.title || 'No title',
+          //   content: this.comment || 'No comment',
+          // }
+        }
         this.$refs.comment.reset()
         this.rating = 0
       }

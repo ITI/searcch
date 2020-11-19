@@ -1,25 +1,19 @@
 <template>
   <div v-if="record.artifact">
-    <h1>
-      Knowledge Graph Artifact
-      <a :href="`http://doi.org/${record.artifact.id}`" target="_blank">
-        {{ record.artifact.id }}
-      </a>
-    </h1>
-
-    <v-card class="mx-auto my-12">
+    <v-card class="mx-auto my-2">
       <v-card-title> {{ record.artifact.title }} </v-card-title>
 
       <v-card-text>
         <v-row align="center" class="mx-0">
           <v-rating
-            v-model="rating"
+            v-model="record.avg_rating"
             color="amber"
             dense
             half-increments
             size="18"
+            readonly
           ></v-rating>
-          <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
+          <div class="grey--text ml-4">({{ record.num_ratings }})</div>
         </v-row>
       </v-card-text>
 
@@ -68,7 +62,7 @@
       <v-chip
         color="primary"
         v-for="(v, k) in record.artifact.tags"
-        :key="k"
+        :key="`chip${k}`"
         cols="12"
         class="ma-2"
         label
@@ -85,7 +79,7 @@
 
       <v-card-title>Files</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.artifact.files" :key="k" cols="12">
+      <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
         <div>
           <a :href="v.url">{{ k }}</a> (type: {{ v.filetype }}, size: {{ v.size }} bytes)
         </div>
@@ -105,6 +99,10 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <h6>
+      Knowledge Graph Artifact
+        {{ record.artifact.id }}
+    </h6>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>

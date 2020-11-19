@@ -58,16 +58,6 @@ export default {
   },
   async mounted () {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")
-    if (this.$auth.loggedIn) {
-      console.log('Logging in at back-end')
-      // let payload = {
-      //   api_key: process.env.KG_API_KEY,
-      //   strategy: 'github',
-      //   token: this.$auth.getToken('github'),
-      // }
-      // let login_response = await this.$loginEndpoint.create(payload)
-      // console.log(login_response)
-    }
   }
 }
 </script>

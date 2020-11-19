@@ -1,4 +1,4 @@
-export default function({ $auth }) {
+export default function({ $loginEndpoint, store, $auth }) {
   var validUsers = [
     'timyardley',
     'jelenamirkovic',
@@ -15,6 +15,21 @@ export default function({ $auth }) {
   } else {
     if (!validUsers.includes($auth.user.login.toLowerCase())) {
       $auth.logout('github')
+    } else {
+      let payload = {
+        api_key: process.env.KG_API_KEY,
+        strategy: 'github',
+        token: $auth.getToken('github'),
+      }
+      $loginEndpoint.create(payload).then(response => {
+        console.log(response)
+        if (response.userid) {
+          store.commit('user/SET_USER_ID', response.userid)
+          store.dispatch('artifacts/fetchFavorites', response.userid)
+        }
+      }).catch(error => {
+        console.log("Login error", error)
+      })
     }
   }
 }

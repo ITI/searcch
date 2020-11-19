@@ -40,6 +40,12 @@ export default (ctx, inject) => {
 
   // reviews modify API
   inject(
+    'ratingsEndpoint',
+    repositoryWithAxios('kg/' + 'rating')
+  )
+
+  // reviews modify API
+  inject(
     'reviewsEndpoint',
     repositoryWithAxios('kg/' + 'review')
   )
