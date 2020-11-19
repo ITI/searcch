@@ -1,9 +1,10 @@
 export default () => ({
+  user_id: null,
   username: null,
   email: null,
-  firstname: 'Tim',
-  lastname: 'Yardley',
-  function: 'DEVELOPER',
-  description: 'Something something something',
-  citation: 'Some quote here'
+  firstname: null,
+  lastname: null,
+  function: null,
+  description: null,
+  citation: null
 })

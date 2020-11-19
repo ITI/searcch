@@ -1,25 +1,19 @@
 <template>
-  <div>
-    <h1>
-      Knowledge Graph Artifact
-      <a :href="`http://doi.org/${record.id}`" target="_blank">
-        {{ record.id }}
-      </a>
-    </h1>
-
-    <v-card class="mx-auto my-12">
-      <v-card-title> {{ record.title }} </v-card-title>
+  <div v-if="record.artifact">
+    <v-card class="mx-auto my-2">
+      <v-card-title> {{ record.artifact.title }} </v-card-title>
 
       <v-card-text>
         <v-row align="center" class="mx-0">
           <v-rating
-            v-model="rating"
+            v-model="record.avg_rating"
             color="amber"
             dense
             half-increments
             size="18"
+            readonly
           ></v-rating>
-          <div class="grey--text ml-4">{{ rating }} ({{ reviews }})</div>
+          <div class="grey--text ml-4">({{ record.num_ratings }})</div>
         </v-row>
       </v-card-text>
 
@@ -40,7 +34,7 @@
           <v-icon>mdi-newspaper-variant-outline</v-icon>
         </v-avatar>
 
-        <div v-if="record.resource_type">{{ record.resource_type.title }}</div>
+        <div>{{ record.artifact.type }}</div>
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
@@ -49,24 +43,26 @@
 
       <v-chip
         color="primary"
-        v-for="c in record.creators"
-        :key="c.name"
+        v-for="c in record.affiliations"
+        :key="c.id"
         cols="12"
         class="ma-2"
         label
       >
-        <v-avatar left>
-          <v-icon>mdi-account-circle</v-icon>
-        </v-avatar>
-        {{ c.name }}
+        <span v-if="c.roles == 'Author'">
+          <v-avatar left>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          {{ c.person.name }}
+        </span>
       </v-chip>
 
       <v-card-title>Keywords</v-card-title>
 
       <v-chip
         color="primary"
-        v-for="(v, k) in record.keywords"
-        :key="k"
+        v-for="(v, k) in record.artifact.tags"
+        :key="`chip${k}`"
         cols="12"
         class="ma-2"
         label
@@ -76,37 +72,47 @@
           <v-icon>mdi-tag-outline</v-icon>
         </v-avatar>
 
-        {{ v }}
+        {{ v.tag }}
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title>Files</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.files" :key="v.key" cols="12">
+      <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
         <div>
-          <a :href="v.links.self">{{ v.key }}</a> (size: {{ v.size }} bytes)
+          <a :href="v.url">{{ k }}</a> (type: {{ v.filetype }}, size: {{ v.size }} bytes)
         </div>
       </v-card-text>
 
       <v-card-actions>
         <v-btn
           icon
-          @click="favorite = true"
-          :color="favorite == true ? 'pink' : ''"
+          @click="favoriteThis()"
+          :color="favorite == true ? 'red' : ''"
         >
-          <v-icon>mdi-heart-outline</v-icon>
+          <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/comment/?doi=${record.id}`" nuxt>
+        <v-btn icon :to="`/artifact/comment/${record.artifact.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
+    <h6>
+      Knowledge Graph Artifact
+        {{ record.artifact.id }}
+    </h6>
+  </div>
+  <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
+  <div v-else>
+    Loading...
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'KGArtifactLong',
   props: {
@@ -117,33 +123,49 @@ export default {
   },
   data() {
     return {
-      reviews: Math.floor(Math.random() * 1000 + 1),
-      rating: Math.round(Math.random() * 10 + 1) / 2,
-      favorite: false
+      loading: true,
     }
   },
   computed: {
+    ...mapState({
+      source: state => state.artifacts.source,
+      user_id: state => state.user.user_id,
+      favorites: state => state.artifacts.favoritesIDs
+    }),
     sanitizedDescription: function() {
-      return this.$sanitize(this.record.description)
+      return this.$sanitize(this.record.artifact.description)
     },
-    relevanceColor: {
-      get() {
-        if (this.record.relevance_score <= 60) {
-          return 'error'
-        } else if (
-          this.record.relevance_score > 60 &&
-          this.record.relevance_score <= 90
-        ) {
-          return 'warning'
-        } else {
-          return 'success'
-        }
+    favorite: {
+      get () {
+        return this.favorites[this.record.artifact.id] ? true : false
+      },
+      set (value) {
+        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.record.artifact.id)
       }
     }
   },
   methods: {
     search() {
       alert('searching')
+    },
+    favoriteThis () {
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        let action = !this.favorite
+        this.favorite = !this.favorite
+        let payload = {
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id
+        }
+        if (action) {
+          this.$favoritesEndpoint.update(this.record.artifact.id, payload)
+        } else {
+          this.$favoritesEndpoint.remove(this.record.artifact.id, payload)
+        }
+      }
     }
   }
 }

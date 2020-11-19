@@ -1,9 +1,9 @@
 <template>
   <div>
     <router-link to="/search">Back</router-link>
-    <ArtifactShort :artifact="artifact" :comments="comments"></ArtifactShort>
+    <ArtifactCommentView :artifact="artifact" :comments="comments"></ArtifactCommentView>
 
-    <v-container fill-height fluid grid-list-xl>
+    <v-container v-if="$auth.loggedIn" fill-height fluid grid-list-xl>
       <v-row justify="center">
         <v-col cols="12">
           <material-card
@@ -25,36 +25,21 @@
                       v-model="rating"
                       color="amber"
                       dense
-                      half-increments
                       hover
                       size="32"
                     ></v-rating>
-                    <v-input :error-messages="ratingCheck"> </v-input>
-                  </v-col>
-
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Title"
-                      placeholder="Title"
-                      v-model="title"
-                      :rules="[v => !!v || 'Required']"
-                      required
-                    >
-                    </v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
-                      label="Comment"
-                      placeholder="Add comment..."
+                      label="Review"
+                      placeholder="Add review..."
                       v-model="comment"
-                      :rules="[v => !!v || 'Required']"
-                      required
                     >
                     </v-textarea>
                   </v-col>
                   <v-col cols="12" class="text-right">
-                    <v-btn color="success" @click="onSubmit" :disabled="!valid">
-                      Add Comment
+                    <v-btn color="success" @click="onSubmit" :disabled="!formCheck">
+                      Add Review
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -64,17 +49,29 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-container v-else fill-height fluid grid-list-xl>
+      <v-row justify="center">
+        <v-col cols="12">
+          <material-card
+            color="primary"
+            title="Log in to add a comment"
+            nuxt to="/login"
+          >
+          </material-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-import ArtifactShort from '~/components/ArtifactShort'
+import ArtifactCommentView from '~/components/ArtifactCommentView'
 
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    ArtifactShort
+    ArtifactCommentView
   },
   head() {
     return {
@@ -90,70 +87,51 @@ export default {
   },
   data() {
     return {
-      comments: [
-        {
-          title: 'Comment 1',
-          rating: 3.5,
-          person: 'John Doe',
-          posted: '1st Jan 2020',
-          content:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt consequuntur eos eligendi illum minima adipisci deleniti, dicta mollitia enim explicabo fugiat quidem ducimus praesentium voluptates porro molestias non sequi animi!'
-        },
-        {
-          title: 'Another Comment',
-          rating: 3.0,
-          person: 'Jane Doe',
-          posted: '10th Jan 2020',
-          content:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt consequuntur eos eligendi illum minima adipisci deleniti, dicta mollitia enim explicabo fugiat quidem ducimus praesentium voluptates porro molestias non sequi animi!'
-        },
-        {
-          title: 'More Comments',
-          rating: 4.5,
-          person: 'Charlie Doe',
-          posted: '20th Feb 2020',
-          content:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt consequuntur eos eligendi illum minima adipisci deleniti, dicta mollitia enim explicabo fugiat quidem ducimus praesentium voluptates porro molestias non sequi animi!'
-        },
-        {
-          title: 'Yet another comment',
-          rating: 2.5,
-          person: 'Abigail Doe',
-          posted: '20th Mar 2020',
-          content:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt consequuntur eos eligendi illum minima adipisci deleniti, dicta mollitia enim explicabo fugiat quidem ducimus praesentium voluptates porro molestias non sequi animi!'
-        }
-      ],
       valid: true,
       comment: '',
-      title: '',
       rating: 0
     }
   },
   computed: {
     ...mapState({
       artifact: state => state.artifacts.artifact,
-      source: state => state.artifacts.source
+      source: state => state.artifacts.source,
+      comments: state => state.artifacts.artifact.reviews,
+      user_id: state => state.user.user_id,
     }),
-    ratingCheck() {
-      return this.rating !== 0 ? '' : 'Required'
+    formCheck() {
+      if (this.rating == 0 && this.comment == '') return false
+      return true
     }
   },
   methods: {
-    onSubmit() {
-      if (this.rating == 0) {
-        return false
-      } else {
-        this.comments.push({
-          title: this.title,
-          person: 'Joe Admin',
-          posted: '20th May 2020',
-          content: this.comment,
+    async onSubmit() {
+      if (this.rating) {
+        let rating_payload = {
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id,
           rating: this.rating
-        })
-        this.$refs.comment.reset()
-        this.rating = 0
+        }
+        await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
       }
+      if (this.comment) {
+        let comment_payload = {
+          review: this.comment,
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id
+        }
+        await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
+      }
+      if (this.comment || this.rating) {
+        this.$store.dispatch('artifacts/fetchArtifact', {
+          id: this.$route.params.id,
+          source: 'kg'
+        })
+      }
+      this.$refs.comment.reset()
+      this.rating = 0
     }
   },
   mounted() {
@@ -163,15 +141,9 @@ export default {
     if (typeof this.$route.query.source !== 'undefined') {
       this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
     }
-    if (this.source === 'zenodo' || this.$route.query.source === 'zenodo') {
-      this.$axios.setToken(this.$store.state.app.ZENODO_API_KEY, 'Bearer', [
-        'post',
-        'delete'
-      ])
-    }
     this.$store.dispatch('artifacts/fetchArtifact', {
-      id: this.source === 'kg' ? this.$route.query.doi : this.$route.params.id,
-      source: this.$route.query.source ? this.$route.query.source : this.source
+      id: this.$route.params.id,
+      source: 'kg'
     })
   }
 }

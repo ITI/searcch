@@ -2,8 +2,7 @@
   <div>
     <v-container>
       <v-row
-        v-for="(artifact, index) in artifacts"
-        v-if="index <= limit"
+        v-for="artifact in artifacts"
         :key="artifact.id"
       >
         <v-col>

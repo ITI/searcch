@@ -30,6 +30,9 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <span v-if="$auth.loggedIn" class="mr-2">User {{ user_id }} logged in</span>
+      <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()">Logout</v-btn>
+      <v-btn v-else class="primary" nuxt to="/login">Login</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -47,6 +50,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -67,6 +72,19 @@ export default {
       miniVariant: true,
       right: true,
       title: 'SEARCCH Hub'
+    }
+  },
+  computed: {
+    ...mapState({
+      user_id: state => state.user.user_id,
+    })
+  },
+  methods: {
+    async logout () {
+      if (confirm("Log out of SEARCCH?")) {
+        console.log("Logging out")
+        this.$auth.logout()
+      }
     }
   }
 }

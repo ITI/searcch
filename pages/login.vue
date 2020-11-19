@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     async userLogin() {
-      this.$auth.loginWith('github')
+      let response = await this.$auth.loginWith('github')
     }
   }
 }

@@ -19,7 +19,17 @@ export default $axios => resource => ({
     return $axios.$post(`${resource}/${id}`, payload)
   },
 
+  put(id, payload) {
+    return $axios.$put(`${resource}/${id}`, payload)
+  },
+
   delete(id) {
     return $axios.$delete(`${resource}/${id}`)
+  },
+
+  remove(id, payload) {
+    return $axios.$delete(`${resource}/${id}`, {
+      params: payload
+    })
   }
 })

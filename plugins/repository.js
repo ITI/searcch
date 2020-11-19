@@ -11,12 +11,42 @@ export default (ctx, inject) => {
   // knowledge graph searching
   inject(
     'knowledgeGraphSearchRepository',
-    repositoryWithAxios('kg/' + 'search')
+    repositoryWithAxios('kg/' + 'artifacts')
   )
 
   // knowledge graph record retrieval
   inject(
     'knowledgeGraphRecordRepository',
-    repositoryWithAxios('kg/' + 'record')
+    repositoryWithAxios('kg/' + 'artifact')
+  )
+
+  // knowledge graph record retrieval
+  inject(
+    'loginEndpoint',
+    repositoryWithAxios('kg/' + 'login')
+  )
+
+  // favorites lookup API
+  inject(
+    'findFavoritesEndpoint',
+    repositoryWithAxios('kg/' + 'favorites')
+  )
+
+  // favorites modify API
+  inject(
+    'favoritesEndpoint',
+    repositoryWithAxios('kg/' + 'favorite')
+  )
+
+  // reviews modify API
+  inject(
+    'ratingsEndpoint',
+    repositoryWithAxios('kg/' + 'rating')
+  )
+
+  // reviews modify API
+  inject(
+    'reviewsEndpoint',
+    repositoryWithAxios('kg/' + 'review')
   )
 }

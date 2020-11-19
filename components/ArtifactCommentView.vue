@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto overflow-hidden" elevation="3">
+    <v-card class="mx-auto overflow-hidden" elevation="3" v-if="artifact.artifact">
       <!-- <v-chip
         v-if="artifact.relevance_score && !comments"
         :color="relevanceColor"
@@ -13,16 +13,16 @@
         {{ artifact.relevance_score }}
       </v-chip> -->
 
-      <v-chip v-if="artifact.type" color="primary" class="ma-2" label>
+      <v-chip v-if="artifact.artifact.type" color="primary" class="ma-2" label>
         <v-avatar left>
           <v-icon>mdi-newspaper-variant-outline</v-icon>
         </v-avatar>
-        <div v-if="artifact.type">{{ artifact.type }}</div>
+        <div v-if="artifact.artifact.type">{{ artifact.artifact.type }}</div>
       </v-chip>
 
       <v-card-title class="align-start">
         <div>
-          <span class="headline">{{ artifact.title | titlecase }}</span>
+          <span class="headline">{{ artifact.artifact.title | titlecase }}</span>
         </div>
       </v-card-title>
 
@@ -44,30 +44,23 @@
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
 
       <div v-if="comments">
-        <v-row justify="center">
-          <v-expansion-panels inset multiple focusable v-model="expanded">
-            <v-expansion-panel v-for="(comment, i) in comments" :key="i">
-              <v-expansion-panel-header disable-icon-rotate>
-                <template v-slot:actions>
-                  <v-icon color="primary">mdi-comment</v-icon>
-                </template>
-                {{ comment.person }} -- {{ comment.title }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-rating
-                  v-model="comment.rating"
-                  color="amber"
-                  dense
-                  half-increments
-                  readonly
-                  size="18"
-                ></v-rating>
-
-                {{ comment.content }}
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-row>
+        <v-container fluid>
+          <v-card outlined tile v-for="(comment, i) in comments" :key="i">
+            <v-card-text>
+              {{ comment.review }}
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                v-if="user_id == comment.reviewer.id"
+                text
+                color="primary"
+                @click="deleteReview(comment.id)"
+              >
+                Delete
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-container>
       </div>
 
       <v-card-actions>
@@ -79,27 +72,20 @@
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn
-          icon
-          :to="`/artifact/comment/${artifact.id}`"
-          nuxt
-        >
-          <v-icon>mdi-comment</v-icon>
-        </v-btn>
-
         <v-spacer></v-spacer>
 
         <v-btn
           small
           replace
           color="info"
-          :to="`/artifact/${artifact.id}`"
+          :to="`/artifact/${artifact.artifact.id}`"
           nuxt
         >
           Read More
         </v-btn>
       </v-card-actions>
     </v-card>
+    <span v-else>Loading...</span>
   </div>
 </template>
 
@@ -138,7 +124,7 @@ export default {
       if (this.source === 'zenodo') {
         description = this.artifact.metadata.description
       } else {
-        description = this.artifact.description
+        description = this.artifact.artifact.description
       }
       return clip(this.$sanitize(description), 2000, {
         html: true,
@@ -147,11 +133,11 @@ export default {
     },
     favorite: {
       get () {
-        return this.favorites[this.artifact.id] ? true : false
+        return this.favorites[this.artifact.artifact.id] ? true : false
       },
       set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
+        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact.id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact.id)
       }
     }
     // relevanceColor: {
@@ -182,11 +168,30 @@ export default {
           userid: this.user_id
         }
         if (action) {
-          this.$favoritesEndpoint.update(this.artifact.id, payload)
+          this.$favoritesEndpoint.update(this.artifact.artifact.id, payload)
         } else {
-          this.$favoritesEndpoint.remove(this.artifact.id, payload)
+          this.$favoritesEndpoint.remove(this.artifact.artifact.id, payload)
         }
       }
+    },
+    async deleteReview (id) {
+      let rating_payload = {
+        api_key: process.env.KG_API_KEY,
+        token: this.$auth.getToken('github'),
+        userid: this.user_id
+      }
+      await this.$ratingsEndpoint.remove(this.artifact.artifact.id, rating_payload)
+      let comment_payload = {
+        api_key: process.env.KG_API_KEY,
+        token: this.$auth.getToken('github'),
+        userid: this.user_id,
+        reviewid: id
+      }
+      await this.$reviewsEndpoint.remove(this.artifact.artifact.id, comment_payload)
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        id: this.$route.params.id,
+        source: 'kg'
+      })
     }
   }
 }
