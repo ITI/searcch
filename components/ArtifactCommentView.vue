@@ -44,30 +44,23 @@
       <v-card-text v-html="sanitizedDescription"> </v-card-text>
 
       <div v-if="comments">
-        <v-row justify="center">
-          <v-expansion-panels inset multiple focusable v-model="expanded">
-            <v-expansion-panel v-for="(comment, i) in comments" :key="i">
-              <v-expansion-panel-header disable-icon-rotate>
-                <template v-slot:actions>
-                  <v-icon color="primary">mdi-comment</v-icon>
-                </template>
-                {{ comment.person }} -- {{ comment.title }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-rating
-                  v-model="comment.rating"
-                  color="amber"
-                  dense
-                  half-increments
-                  readonly
-                  size="18"
-                ></v-rating>
-
-                {{ comment.content }}
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-row>
+        <v-container fluid>
+          <v-card outlined tile v-for="(comment, i) in comments" :key="i">
+            <v-card-text>
+              {{ comment.review }}
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                v-if="user_id == comment.reviewer.id"
+                text
+                color="primary"
+                @click="deleteReview(comment.id)"
+              >
+                Delete
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-container>
       </div>
 
       <v-card-actions>
@@ -143,8 +136,8 @@ export default {
         return this.favorites[this.artifact.artifact.id] ? true : false
       },
       set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
+        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact.id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact.id)
       }
     }
     // relevanceColor: {
@@ -180,6 +173,25 @@ export default {
           this.$favoritesEndpoint.remove(this.artifact.artifact.id, payload)
         }
       }
+    },
+    async deleteReview (id) {
+      let rating_payload = {
+        api_key: process.env.KG_API_KEY,
+        token: this.$auth.getToken('github'),
+        userid: this.user_id
+      }
+      await this.$ratingsEndpoint.remove(this.artifact.artifact.id, rating_payload)
+      let comment_payload = {
+        api_key: process.env.KG_API_KEY,
+        token: this.$auth.getToken('github'),
+        userid: this.user_id,
+        reviewid: id
+      }
+      await this.$reviewsEndpoint.remove(this.artifact.artifact.id, comment_payload)
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        id: this.$route.params.id,
+        source: 'kg'
+      })
     }
   }
 }

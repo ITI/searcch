@@ -88,10 +88,10 @@
       <v-card-actions>
         <v-btn
           icon
-          @click="favorite = true"
-          :color="favorite == true ? 'pink' : ''"
+          @click="favoriteThis()"
+          :color="favorite == true ? 'red' : ''"
         >
-          <v-icon>mdi-heart-outline</v-icon>
+          <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
         <v-btn icon :to="`/artifact/comment/${record.artifact.id}`" nuxt>
@@ -111,6 +111,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'KGArtifactLong',
   props: {
@@ -122,33 +124,48 @@ export default {
   data() {
     return {
       loading: true,
-      reviews: Math.floor(Math.random() * 1000 + 1),
-      rating: Math.round(Math.random() * 10 + 1) / 2,
-      favorite: false
     }
   },
   computed: {
+    ...mapState({
+      source: state => state.artifacts.source,
+      user_id: state => state.user.user_id,
+      favorites: state => state.artifacts.favoritesIDs
+    }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
     },
-    relevanceColor: {
-      get() {
-        if (this.record.artifact.relevance_score <= 60) {
-          return 'error'
-        } else if (
-          this.record.artifact.relevance_score > 60 &&
-          this.record.artifact.relevance_score <= 90
-        ) {
-          return 'warning'
-        } else {
-          return 'success'
-        }
+    favorite: {
+      get () {
+        return this.favorites[this.record.artifact.id] ? true : false
+      },
+      set (value) {
+        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.record.artifact.id)
       }
     }
   },
   methods: {
     search() {
       alert('searching')
+    },
+    favoriteThis () {
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        let action = !this.favorite
+        this.favorite = !this.favorite
+        let payload = {
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id
+        }
+        if (action) {
+          this.$favoritesEndpoint.update(this.record.artifact.id, payload)
+        } else {
+          this.$favoritesEndpoint.remove(this.record.artifact.id, payload)
+        }
+      }
     }
   }
 }

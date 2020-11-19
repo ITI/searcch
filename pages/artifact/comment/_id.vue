@@ -29,26 +29,17 @@
                       size="32"
                     ></v-rating>
                   </v-col>
-
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Title"
-                      placeholder="Title"
-                      v-model="title"
-                    >
-                    </v-text-field>
-                  </v-col>
                   <v-col cols="12">
                     <v-textarea
-                      label="Comment"
-                      placeholder="Add comment..."
+                      label="Review"
+                      placeholder="Add review..."
                       v-model="comment"
                     >
                     </v-textarea>
                   </v-col>
                   <v-col cols="12" class="text-right">
                     <v-btn color="success" @click="onSubmit" :disabled="!formCheck">
-                      Add Comment
+                      Add Review
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -98,7 +89,6 @@ export default {
     return {
       valid: true,
       comment: '',
-      title: '',
       rating: 0
     }
   },
@@ -106,40 +96,42 @@ export default {
     ...mapState({
       artifact: state => state.artifacts.artifact,
       source: state => state.artifacts.source,
-      comments: state => state.artifacts.artifact.reviews
+      comments: state => state.artifacts.artifact.reviews,
+      user_id: state => state.user.user_id,
     }),
     formCheck() {
-      if (this.rating == 0 && this.title == '' && this.title == '') return false
+      if (this.rating == 0 && this.comment == '') return false
       return true
     }
   },
   methods: {
     async onSubmit() {
-      if (this.rating == 0) {
-        return false
-      } else {
-        if (this.rating) {
-          let rating_payload = {
-            api_key: process.env.KG_API_KEY,
-            token: this.$auth.getToken('github'),
-            userid: this.user_id,
-            rating: this.rating
-          }
-          let response = await this.$ratingsEndpoint.update(this.artifact.artifact.id, rating_payload)
-          this.$store.dispatch('artifacts/fetchArtifact', {
-            id: this.$route.params.id,
-            source: 'kg'
-          })
+      if (this.rating) {
+        let rating_payload = {
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id,
+          rating: this.rating
         }
-        if (this.title && this.comment) {
-          // let comment_payload = {
-          //   title: this.title || 'No title',
-          //   content: this.comment || 'No comment',
-          // }
-        }
-        this.$refs.comment.reset()
-        this.rating = 0
+        await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
       }
+      if (this.comment) {
+        let comment_payload = {
+          review: this.comment,
+          api_key: process.env.KG_API_KEY,
+          token: this.$auth.getToken('github'),
+          userid: this.user_id
+        }
+        await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
+      }
+      if (this.comment || this.rating) {
+        this.$store.dispatch('artifacts/fetchArtifact', {
+          id: this.$route.params.id,
+          source: 'kg'
+        })
+      }
+      this.$refs.comment.reset()
+      this.rating = 0
     }
   },
   mounted() {

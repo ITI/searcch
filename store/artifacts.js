@@ -78,7 +78,7 @@ export const mutations = {
     Vue.set(state.favoritesIDs, id, true)
   },
   REMOVE_FAVORITE(state, id) {
-    delete state.favoritesIDs[id]
+    Vue.delete(state.favoritesIDs, id)
   },
 }
 
