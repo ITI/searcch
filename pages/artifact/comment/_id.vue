@@ -106,32 +106,36 @@ export default {
   },
   methods: {
     async onSubmit() {
-      if (this.rating) {
-        let rating_payload = {
-          api_key: process.env.KG_API_KEY,
-          token: this.$auth.getToken('github'),
-          userid: this.user_id,
-          rating: this.rating
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        if (this.rating) {
+          let rating_payload = {
+            api_key: process.env.KG_API_KEY,
+            token: this.$auth.getToken('github'),
+            userid: this.user_id,
+            rating: this.rating
+          }
+          await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
         }
-        await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
-      }
-      if (this.comment) {
-        let comment_payload = {
-          review: this.comment,
-          api_key: process.env.KG_API_KEY,
-          token: this.$auth.getToken('github'),
-          userid: this.user_id
+        if (this.comment) {
+          let comment_payload = {
+            review: this.comment,
+            api_key: process.env.KG_API_KEY,
+            token: this.$auth.getToken('github'),
+            userid: this.user_id
+          }
+          await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
         }
-        await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
+        if (this.comment || this.rating) {
+          this.$store.dispatch('artifacts/fetchArtifact', {
+            id: this.$route.params.id,
+            source: 'kg'
+          })
+        }
+        this.$refs.comment.reset()
+        this.rating = 0
       }
-      if (this.comment || this.rating) {
-        this.$store.dispatch('artifacts/fetchArtifact', {
-          id: this.$route.params.id,
-          source: 'kg'
-        })
-      }
-      this.$refs.comment.reset()
-      this.rating = 0
     }
   },
   mounted() {

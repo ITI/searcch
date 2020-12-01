@@ -1,5 +1,8 @@
 <template>
   <div v-if="record.artifact">
+    <h3>
+      <a :href="record.artifact.url">  Knowledge Graph Artifact {{ record.artifact.id }} </a>
+    </h3>
     <v-card class="mx-auto my-2">
       <v-card-title> {{ record.artifact.title }} </v-card-title>
 
@@ -81,7 +84,7 @@
 
       <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
         <div>
-          <a :href="v.url">{{ k }}</a> (type: {{ v.filetype }}, size: {{ v.size }} bytes)
+          <a :href="v.url">{{ v.url }}</a> (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
         </div>
       </v-card-text>
 
@@ -99,10 +102,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <h6>
-      Knowledge Graph Artifact
-        {{ record.artifact.id }}
-    </h6>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
@@ -166,6 +165,12 @@ export default {
           this.$favoritesEndpoint.remove(this.record.artifact.id, payload)
         }
       }
+    },
+    bytesToSize(bytes) {
+      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+      if (bytes == 0) return '0 Byte'
+      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+      return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
     }
   }
 }

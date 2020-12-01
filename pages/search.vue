@@ -121,7 +121,7 @@
     </div>
     <br>
     <hr>
-    <ArtifactList :limit="limit"></ArtifactList>
+    <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
     <span v-if="artifacts.length == 0 && searchLoading == true">Loading...</span>
     <span v-if="artifacts.length == 0 && searchLoading == false"><h3>Type a search term into the input above and press Enter</h3></span>
     <v-btn v-if="showScrollToTop != 0" class="primary" id="scrollbtn" @click="scrollToTop()" elevation="10">Back to Top</v-btn>

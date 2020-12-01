@@ -22,6 +22,10 @@ export default {
     ArtifactShort
   },
   props: {
+    artifacts: {
+      type: Array,
+      required: true
+    },
     limit: {
       type: Number,
       required: true
@@ -34,7 +38,6 @@ export default {
   },
   computed: {
     ...mapState({
-      artifacts: state => state.artifacts.artifacts,
       source: state => state.artifacts.source,
       scores: state => state.artifacts.scores
     }),

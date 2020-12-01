@@ -57,7 +57,17 @@ export default {
     return {
       clipped: true,
       drawer: true,
-      items: [
+      miniVariant: true,
+      right: true,
+      title: 'SEARCCH Hub'
+    }
+  },
+  computed: {
+    ...mapState({
+      user_id: state => state.user.user_id,
+    }),
+    items () {
+      let items = [
         {
           icon: 'mdi-apps',
           title: 'Welcome',
@@ -67,22 +77,21 @@ export default {
           icon: 'mdi-cloud-search',
           title: 'Search',
           to: '/search'
-        }
-      ],
-      miniVariant: true,
-      right: true,
-      title: 'SEARCCH Hub'
+        },
+      ]
+      if (this.user_id) items.push({
+          icon: 'mdi-table-heart',
+          title: 'Favorites',
+          to: '/favorites'
+      })
+      return items
     }
-  },
-  computed: {
-    ...mapState({
-      user_id: state => state.user.user_id,
-    })
   },
   methods: {
     async logout () {
       if (confirm("Log out of SEARCCH?")) {
         console.log("Logging out")
+        this.$store.commit('user/SET_USER_ID', null)
         this.$auth.logout()
       }
     }

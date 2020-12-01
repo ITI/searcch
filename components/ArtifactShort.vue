@@ -154,20 +154,6 @@ export default {
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
       }
     }
-    // relevanceColor: {
-    //   get() {
-    //     if (this.artifact.relevance_score <= 0.4) {
-    //       return 'error'
-    //     } else if (
-    //       this.artifact.relevance_score > 0.4 &&
-    //       this.artifact.relevance_score <= 0.8
-    //     ) {
-    //       return 'warning'
-    //     } else {
-    //       return 'success'
-    //     }
-    //   }
-    // }
   },
   methods:{
     favoriteThis () {
