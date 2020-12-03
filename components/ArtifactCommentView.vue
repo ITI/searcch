@@ -33,21 +33,7 @@
 
       <div v-if="comments">
         <v-container fluid>
-          <v-card outlined tile v-for="(comment, i) in comments" :key="i">
-            <v-card-text>
-              {{ comment.review }}
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                v-if="user_id == comment.reviewer.id"
-                text
-                color="primary"
-                @click="deleteReview(comment.id)"
-              >
-                Delete
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <SingleComment outlined tile v-for="(comment, i) in comments" :comment="comment" :key="i"></SingleComment>
         </v-container>
       </div>
 
@@ -78,10 +64,14 @@
 </template>
 
 <script>
+import SingleComment from '@/components/SingleComment'
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
 
 export default {
+  components: {
+    SingleComment,
+  },
   props: {
     artifact: {
       type: Object,
@@ -170,6 +160,9 @@ export default {
         id: this.$route.params.id,
         source: 'kg'
       })
+    },
+    async editReview (id) {
+      
     }
   }
 }
