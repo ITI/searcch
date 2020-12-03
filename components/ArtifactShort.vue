@@ -1,32 +1,20 @@
 <template>
   <div>
     <v-card class="mx-auto overflow-hidden" elevation="3">
-      <!-- <v-chip
-        v-if="artifact.relevance_score && !comments"
-        :color="relevanceColor"
-        class="ma-2"
-        label
-      >
-        <v-avatar left>
-          <v-icon>mdi-finance</v-icon>
-        </v-avatar>
-        {{ artifact.relevance_score }}
-      </v-chip> -->
-
-      <v-chip v-if="artifact.type" color="primary" class="ma-2" label>
-        <v-avatar left>
-          <v-icon>mdi-newspaper-variant-outline</v-icon>
-        </v-avatar>
-        <div v-if="artifact.type">{{ artifact.type }}</div>
-      </v-chip>
-
-      <v-card-title class="align-start">
-        <div>
-          <span class="headline">{{ artifact.title | titlecase }}</span>
-        </div>
-      </v-card-title>
-
-      <v-spacer></v-spacer>
+      <v-row class="px-3">
+        <v-card-title class="align-start">
+          <div>
+            <span class="headline">{{ artifact.title | titlecase }}</span>
+          </div>
+        </v-card-title>
+        <v-spacer></v-spacer>
+        <v-chip v-if="artifact.type" color="primary" class="ma-2" label>
+          <v-avatar left>
+            <v-icon>{{ artifactIcon }}</v-icon>
+          </v-avatar>
+          <div v-if="artifact.type">{{ artifact.type }}</div>
+        </v-chip>
+      </v-row>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
         {{ artifact.num_reviews }} reviews
@@ -153,6 +141,10 @@ export default {
         if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
       }
+    },
+    artifactIcon () {
+      if (this.artifact.type == "publication") return "mdi-newspaper-variant-outline"
+      if (this.artifact.type == "code") return "mdi-code-braces"
     }
   },
   methods:{

@@ -25,24 +25,23 @@
       <v-card-title> Description </v-card-title>
 
       <v-card-text>
-        <div v-html="sanitizedDescription"></div>
+        <vue-markdown :source="markdown"></vue-markdown>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title> Artifact Type </v-card-title>
+      <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
 
       <v-chip color="primary" class="ma-2" label>
         <v-avatar left>
-          <v-icon>mdi-newspaper-variant-outline</v-icon>
+          <v-icon>mdi-code-braces</v-icon>
         </v-avatar>
 
         <div>{{ record.artifact.type }}</div>
       </v-chip>
 
-      <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>Creators</v-card-title>
+      <v-card-title class="py-0">Creators</v-card-title>
 
       <v-chip
         color="primary"
@@ -60,11 +59,11 @@
         </span>
       </v-chip>
 
-      <v-card-title>Keywords</v-card-title>
+      <v-card-title class="py-0">Languages</v-card-title>
 
       <v-chip
         color="primary"
-        v-for="(v, k) in record.artifact.tags"
+        v-for="(v, k) in languages"
         :key="`chip${k}`"
         cols="12"
         class="ma-2"
@@ -75,17 +74,19 @@
           <v-icon>mdi-tag-outline</v-icon>
         </v-avatar>
 
-        {{ v.tag }}
+        {{ v }}
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>Files</v-card-title>
+      <v-card-title class="py-0 mt-2">Files</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
-        <div>
-          <a target="_blank" :href="v.url">{{ v.url }}</a> (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
-        </div>
+      <v-card-text  cols="12">
+        <v-list CLASS="ma-0">
+          <v-list-item v-for="(v, k) in record.artifact.files" :key="`file${k}`" dense>
+            <a target="_blank" :href="v.url">{{ v.url }}</a> (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+          </v-list-item>
+        </v-list>
       </v-card-text>
 
       <v-card-actions>
@@ -111,9 +112,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import VueMarkdown from 'vue-markdown'
 
 export default {
   name: 'KGArtifactLong',
+  components: {
+    VueMarkdown
+  },
   props: {
     record: {
       type: Object,
@@ -142,6 +147,16 @@ export default {
         if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.record.artifact.id)
       }
+    },
+    languages () {
+      let csv = this.record.artifact.meta.find(o => o.name == "languages")
+      console.log(csv)
+      return csv.value.split(',')
+    },
+    markdown () {
+      let file = this.record.artifact.files.find(f => f.url == "README.md")
+      if (!file) return ''
+      return file.content
     }
   },
   methods: {
@@ -168,7 +183,7 @@ export default {
     },
     bytesToSize(bytes) {
       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes == 0) return '0 Byte'
+      if (bytes == 0 || bytes == null) return '0 Byte'
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
     }
