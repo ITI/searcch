@@ -1,12 +1,12 @@
 <template>
     <v-card v-if="comment">
         <v-card-text>
-            <span v-if="!editing">{{ comment.review }}</span>
+            <pre v-if="!editing">{{ review }}</pre>
             <v-textarea
                 v-else
                 label="Review"
                 placeholder="Add review..."
-                v-model="comment.review"
+                v-model="review"
             >
             </v-textarea>
         </v-card-text>
@@ -14,7 +14,7 @@
             <v-btn
                 text
                 color="primary"
-                @click="editReview(comment.id)"
+                @click="editing = true"
                 v-if="!editing"
             >
                 Edit
@@ -22,7 +22,8 @@
             <v-btn
                 text
                 color="primary"
-                @click="saveReview(comment.id)"
+                @click="saveReview()"
+                disable="this.review == ''"
                 v-if="editing"
             >
                 Save
@@ -30,9 +31,18 @@
             <v-btn
                 text
                 color="primary"
-                @click="deleteReview(comment.id)"
+                @click="deleteReview()"
+                v-if="!editing"
             >
                 Delete
+            </v-btn>
+            <v-btn
+                text
+                color="primary"
+                @click="editing = false"
+                v-if="editing"
+            >
+                Cancel
             </v-btn>
         </v-card-actions>
     </v-card>
@@ -51,32 +61,55 @@ export default {
   data () {
     return {
       editing: false,
+      review: this.comment.review,
+      id: this.comment.id,
     }
   },
   computed: {
       ...mapState({
       user_id: state => state.user.user_id,
     }),
-    review: {
-      get () {
-        return this.comment.review
-      },
-      set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact.id)
-      }
-    },
   },
   methods: {
-      editReview (id) {
-          this.editing = true
+      async saveReview () {
+        this.editing = false
+        let comment_payload = {
+            api_key: process.env.KG_API_KEY,
+            token: this.$auth.getToken('github'),
+            userid: this.user_id,
+            reviewid: this.id,
+            review: this.review
+        }
+        await this.$reviewsEndpoint.put(this.$route.params.id, comment_payload)
+        this.$store.dispatch('artifacts/fetchArtifact', {
+            id: this.$route.params.id,
+            source: 'kg'
+        })
       },
-      saveReview (id) {
-          this.editing = false
-      },
-      deleteReview (id) {
-          
+      async deleteReview () {
+        let rating_payload = {
+            api_key: process.env.KG_API_KEY,
+            token: this.$auth.getToken('github'),
+            userid: this.user_id
+        }
+        await this.$ratingsEndpoint.remove(this.$route.params.id, rating_payload)
+        let comment_payload = {
+            api_key: process.env.KG_API_KEY,
+            token: this.$auth.getToken('github'),
+            userid: this.user_id,
+            reviewid: this.id
+        }
+        await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
+        this.$store.dispatch('artifacts/fetchArtifact', {
+            id: this.$route.params.id,
+            source: 'kg'
+        })
       }
   }
 }
 </script>
+<style scoped>
+pre {
+    font: inherit;
+}
+</style>

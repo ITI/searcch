@@ -3,7 +3,7 @@
     <router-link to="/search">Back</router-link>
     <ArtifactCommentView :artifact="artifact" :comments="comments"></ArtifactCommentView>
 
-    <v-container v-if="$auth.loggedIn" fill-height fluid grid-list-xl>
+    <v-container v-if="$auth.loggedIn && !alreadyCommented" fill-height fluid grid-list-xl>
       <v-row justify="center">
         <v-col cols="12">
           <material-card
@@ -49,7 +49,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container v-else fill-height fluid grid-list-xl>
+    <v-container v-else-if="!$auth.loggedIn" fill-height fluid grid-list-xl>
       <v-row justify="center">
         <v-col cols="12">
           <material-card
@@ -102,6 +102,11 @@ export default {
     formCheck() {
       if (this.rating == 0 && this.comment == '') return false
       return true
+    },
+    alreadyCommented () {
+      if (!this.comments) return false
+      if (this.comments.find(c => c.reviewer.id == this.user_id)) return true
+      return false
     }
   },
   methods: {

@@ -33,7 +33,7 @@
 
       <div v-if="comments">
         <v-container fluid>
-          <SingleComment outlined tile v-for="(comment, i) in comments" :comment="comment" :key="i"></SingleComment>
+          <SingleComment outlined tile v-for="(comment, i) in commentsReordered" :comment="comment" :key="i"></SingleComment>
         </v-container>
       </div>
 
@@ -121,6 +121,15 @@ export default {
     artifactIcon () {
       if (this.artifact.artifact.type == "publication") return "mdi-newspaper-variant-outline"
       if (this.artifact.artifact.type == "code") return "mdi-code-braces"
+    },
+    commentsReordered () {
+      let first = []
+      let rest = []
+      for (let comment of this.comments) {
+        if (comment.reviewer.id === this.user_id) first.push(comment)
+        else rest.push(comment)
+      }
+      return first.concat(rest)
     }
   },
   methods:{
@@ -141,28 +150,6 @@ export default {
           this.$favoritesEndpoint.remove(this.artifact.artifact.id, payload)
         }
       }
-    },
-    async deleteReview (id) {
-      let rating_payload = {
-        api_key: process.env.KG_API_KEY,
-        token: this.$auth.getToken('github'),
-        userid: this.user_id
-      }
-      await this.$ratingsEndpoint.remove(this.artifact.artifact.id, rating_payload)
-      let comment_payload = {
-        api_key: process.env.KG_API_KEY,
-        token: this.$auth.getToken('github'),
-        userid: this.user_id,
-        reviewid: id
-      }
-      await this.$reviewsEndpoint.remove(this.artifact.artifact.id, comment_payload)
-      this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.$route.params.id,
-        source: 'kg'
-      })
-    },
-    async editReview (id) {
-      
     }
   }
 }
