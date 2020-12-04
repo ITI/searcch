@@ -3,6 +3,8 @@
     <div class="text-center">
       <logo />
     </div>
+    <h1>Search</h1>
+    <v-divider></v-divider><br>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
         light
@@ -120,7 +122,7 @@
       ></v-select>
     </div>
     <br>
-    <hr>
+    <v-divider></v-divider>
     <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
     <span v-if="artifacts.length == 0 && searchLoading == true">Loading...</span>
     <span v-if="artifacts.length == 0 && searchLoading == false"><h3>Type a search term into the input above and press Enter</h3></span>

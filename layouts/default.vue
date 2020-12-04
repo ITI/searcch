@@ -79,11 +79,18 @@ export default {
           to: '/search'
         },
       ]
-      if (this.user_id) items.push({
+      if (this.user_id) {
+        items.push({
           icon: 'mdi-table-heart',
           title: 'Favorites',
           to: '/favorites'
-      })
+        })
+        items.push({
+          icon: 'mdi-card-account-details',
+          title: 'Profile',
+          to: '/profile'
+        })
+      }
       return items
     }
   },
