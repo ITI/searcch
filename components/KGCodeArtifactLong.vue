@@ -163,9 +163,18 @@
       </v-chip>
 
       <v-card-title v-if="license" class="py-0">License</v-card-title>
-      <v-card-text  cols="12">
-        {{ license }}
-      </v-card-text>
+      <v-chip
+      color="primary"
+      cols="12"
+      class="ma-2"
+      label
+    >
+      <v-avatar left>
+        <v-icon>mdi-scale-balance</v-icon>
+      </v-avatar>
+
+      {{ license }}
+    </v-chip>
 
       <v-divider class="mx-4"></v-divider>
 
@@ -272,9 +281,9 @@ export default {
       return watchers.value
     },
     license () {
-      let license = this.record.artifact.files.find(f => f.url == "LICENSE")
+      let license = this.record.artifact.license
       if (!license) return null
-      return license.content
+      return license.long_name
     },
     tags () {
       let tags = []
