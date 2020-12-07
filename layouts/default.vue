@@ -85,11 +85,11 @@ export default {
           title: 'Favorites',
           to: '/favorites'
         })
-        items.push({
-          icon: 'mdi-card-account-details',
-          title: 'Profile',
-          to: '/profile'
-        })
+        // items.push({
+        //   icon: 'mdi-card-account-details',
+        //   title: 'Profile',
+        //   to: '/profile'
+        // })
       }
       return items
     }

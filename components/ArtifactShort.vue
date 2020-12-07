@@ -8,7 +8,7 @@
           </div>
         </v-card-title>
         <v-spacer></v-spacer>
-        <v-chip v-if="artifact.type" color="primary" class="ma-2" label>
+        <v-chip v-if="artifact.type" :color="artifactColor" class="ma-2" label>
           <v-avatar left>
             <v-icon>{{ artifactIcon }}</v-icon>
           </v-avatar>
@@ -80,7 +80,6 @@
         <v-btn
           small
           replace
-          color="info"
           :to="`/artifact/${artifact.id}`"
           nuxt
         >
@@ -145,6 +144,10 @@ export default {
     artifactIcon () {
       if (this.artifact.type == "publication") return "mdi-newspaper-variant-outline"
       if (this.artifact.type == "code") return "mdi-code-braces"
+    },
+    artifactColor () {
+      if (this.artifact.type == "publication") return "info"
+      if (this.artifact.type == "code") return "purple white--text"
     }
   },
   methods:{

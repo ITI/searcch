@@ -32,7 +32,7 @@
 
       <v-card-title> Artifact Type </v-card-title>
 
-      <v-chip color="primary" class="ma-2" label>
+      <v-chip color="info" class="ma-2" label>
         <v-avatar left>
           <v-icon>mdi-newspaper-variant-outline</v-icon>
         </v-avatar>
@@ -46,17 +46,17 @@
 
       <v-chip
         color="primary"
-        v-for="c in record.affiliations"
+        v-for="c in record.artifact.affiliations"
         :key="c.id"
         cols="12"
         class="ma-2"
         label
       >
-        <span v-if="c.roles == 'Author'">
+        <span v-if="c.affiliation.roles == 'Author'">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          {{ c.person.name }}
+          {{ c.affiliation.person.name }}
         </span>
       </v-chip>
 
@@ -84,7 +84,7 @@
 
       <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
         <div>
-          <a target="_blank" :href="v.url">{{ v.url }}</a> (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+          <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
         </div>
       </v-card-text>
 
@@ -168,7 +168,7 @@ export default {
     },
     bytesToSize(bytes) {
       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes == 0) return '0 Byte'
+      if (bytes == 0) return '0 Bytes'
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
     }

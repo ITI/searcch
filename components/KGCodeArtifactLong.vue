@@ -22,17 +22,19 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title> Description </v-card-title>
-
-      <v-card-text>
+      <v-card-title> <v-row class="mx-1">Description<v-spacer></v-spacer><v-btn v-if="isOverflow" @click="expanded=!expanded">{{ !expanded ? 'Expand' : 'Collapse' }}</v-btn></v-row> </v-card-title>
+      
+      <v-card-text ref="descDiv" :class="hideOverflow">
         <vue-markdown :source="markdown"></vue-markdown>
       </v-card-text>
+      <v-btn elevation="0" tile v-if="isOverflow" @click="expanded=!expanded" block><v-icon>{{ overflowIcon }}</v-icon></v-btn>
+
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
 
-      <v-chip color="primary" class="ma-2" label>
+      <v-chip color="purple white--text" class="ma-2" label>
         <v-avatar left>
           <v-icon>mdi-code-braces</v-icon>
         </v-avatar>
@@ -40,35 +42,73 @@
         <div>{{ record.artifact.type }}</div>
       </v-chip>
 
+      <span v-if="homepage">
+      <v-card-title class="py-0">Home Page</v-card-title>
 
+      <v-chip
+        color="primary"
+        cols="12"
+        class="ma-2"
+        label
+        :href="homepage"
+        target="_blank"
+      >
+        <v-avatar left>
+          <v-icon>mdi-link-variant</v-icon>
+        </v-avatar>
+
+        {{ homepage }}
+      </v-chip>
+      </span>
+
+      <span v-if="authors">
       <v-card-title class="py-0">Creators</v-card-title>
 
       <v-chip
         color="primary"
-        v-for="c in record.affiliations"
-        :key="c.id"
+        v-for="a in authors"
+        :key="a.id"
         cols="12"
         class="ma-2"
         label
       >
-        <span v-if="c.roles == 'Author'">
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          {{ c.person.name }}
-        </span>
+        <v-avatar left>
+          <v-icon>mdi-account-circle</v-icon>
+        </v-avatar>
+        {{ a.affiliation.person.name }}
       </v-chip>
+      </span>
 
+      <span v-if="languages">
       <v-card-title class="py-0">Languages</v-card-title>
 
       <v-chip
         color="primary"
         v-for="(v, k) in languages"
-        :key="`chip${k}`"
+        :key="`lang${k}`"
         cols="12"
         class="ma-2"
         label
-        @click="search"
+      >
+        <v-avatar left>
+          <v-icon>mdi-code-brackets</v-icon>
+        </v-avatar>
+
+        {{ v }}
+      </v-chip>
+      </span>
+
+      <span v-if="tags">
+      <v-card-title class="py-0">Keywords</v-card-title>
+
+      <v-chip
+        color="primary"
+        v-for="(v, k) in tags"
+        :key="`tag${k}`"
+        cols="12"
+        class="ma-2"
+        label
+        :to="{path: `/search?keywords=${v}` }"
       >
         <v-avatar left>
           <v-icon>mdi-tag-outline</v-icon>
@@ -76,6 +116,56 @@
 
         {{ v }}
       </v-chip>
+      </span>
+
+      <span v-if="stars || watchers">
+      <v-card-title class="py-0">Gtihub Metrics</v-card-title>
+
+      <v-chip
+        color="primary"
+        cols="12"
+        class="ma-2"
+        label
+      >
+        <v-avatar left>
+          <v-icon color="yellow">mdi-star</v-icon>
+        </v-avatar>
+
+        {{ stars }}
+      </v-chip>
+      <v-chip
+        color="primary"
+        cols="12"
+        class="ma-2"
+        label
+      >
+        <v-avatar left>
+          <v-icon>mdi-eye</v-icon>
+        </v-avatar>
+
+        {{ watchers }}
+      </v-chip>
+      </span>
+
+      <v-card-title class="py-0">Importer</v-card-title>
+
+      <v-chip
+        color="primary"
+        cols="12"
+        class="ma-2"
+        label
+      >
+        <v-avatar left>
+          <v-icon>mdi-file-download-outline</v-icon>
+        </v-avatar>
+
+        {{ `${record.artifact.importer.name} v${record.artifact.importer.version}` }}
+      </v-chip>
+
+      <v-card-title v-if="license" class="py-0">License</v-card-title>
+      <v-card-text  cols="12">
+        {{ license }}
+      </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
 
@@ -84,7 +174,7 @@
       <v-card-text  cols="12">
         <v-list CLASS="ma-0">
           <v-list-item v-for="(v, k) in record.artifact.files" :key="`file${k}`" dense>
-            <a target="_blank" :href="v.url">{{ v.url }}</a> (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+            <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
           </v-list-item>
         </v-list>
       </v-card-text>
@@ -128,7 +218,12 @@ export default {
   data() {
     return {
       loading: true,
+      loaded: false,
+      expanded: false,
     }
+  },
+  mounted () {
+    this.loaded = true
   },
   computed: {
     ...mapState({
@@ -148,21 +243,68 @@ export default {
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.record.artifact.id)
       }
     },
+    authors () {
+      let authors = []
+      for (let a of this.record.artifact.affiliations) {
+        if (a.affiliation.roles == 'Author') authors.push(a)
+      }
+      if (!authors.length) return null
+      return authors
+    },
     languages () {
       let csv = this.record.artifact.meta.find(o => o.name == "languages")
-      console.log(csv)
+      if (!csv) return null
       return csv.value.split(',')
+    },
+    homepage () {
+      let hp = this.record.artifact.meta.find(o => o.name == "homepage")
+      if (!hp) return null
+      return hp.value
+    },
+    stars () {
+      let stars = this.record.artifact.meta.find(o => o.name == "stargazers_count")
+      if (!stars) return null
+      return stars.value
+    },
+    watchers () {
+      let watchers = this.record.artifact.meta.find(o => o.name == "watchers_count")
+      if (!watchers) return null
+      return watchers.value
+    },
+    license () {
+      let license = this.record.artifact.files.find(f => f.url == "LICENSE")
+      if (!license) return null
+      return license.content
+    },
+    tags () {
+      let tags = []
+      let topics = this.record.artifact.meta.find(o => o.name == "topics")
+      if (!topics) return null
+      tags = topics.value.split(',').map(t => t.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "))
+      return tags
     },
     markdown () {
       let file = this.record.artifact.files.find(f => f.url == "README.md")
       if (!file) return ''
       return file.content
+    },
+    hideOverflow () {
+      return {
+        hideoverflow: !this.expanded,
+      }
+    },
+    isOverflow () {
+      if (!this.loaded) return false
+      console.log(this.$refs)
+      let element = this.$refs["descDiv"]
+      return element.offsetHeight >= 700
+    },
+    overflowIcon () {
+      if (!this.expanded) return 'mdi-chevron-down'
+      else return 'mdi-chevron-up'
     }
   },
   methods: {
-    search() {
-      alert('searching')
-    },
     favoriteThis () {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
@@ -183,10 +325,17 @@ export default {
     },
     bytesToSize(bytes) {
       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes == 0 || bytes == null) return '0 Byte'
+      if (bytes == 0 || bytes == null) return '0 Bytes'
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
     }
   }
 }
 </script>
+
+<style scoped>
+.hideoverflow {
+  max-height: 700px;
+  overflow: hidden;
+}
+</style>

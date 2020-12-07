@@ -191,6 +191,12 @@ export default {
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
   },
+  mounted () {
+    if(this.$route.query.keywords) {
+      this.search = this.$route.query.keywords
+      this.onSubmit()
+    }
+  },
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
