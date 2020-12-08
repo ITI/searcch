@@ -108,7 +108,7 @@
         cols="12"
         class="ma-2"
         label
-        :to="{path: `/search?keywords=${v}` }"
+        :to="{ path: `/search?keywords=${v}` }"
       >
         <v-avatar left>
           <v-icon>mdi-tag-outline</v-icon>
@@ -180,13 +180,16 @@
 
       <v-card-title class="py-0 mt-2">Files</v-card-title>
 
-      <v-card-text  cols="12">
-        <v-list CLASS="ma-0">
-          <v-list-item v-for="(v, k) in record.artifact.files" :key="`file${k}`" dense>
-            <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+      <v-list-item v-for="(v, k) in record.artifact.files" :key="`file${k}`" dense>
+        <v-list-group :value="true" no-action sub-group>
+          <template v-slot:activator>
+            <a @click.stop target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+          </template>
+          <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
+            <a target="_blank" :href="vm.html_url || vm.download_url">{{ vm.pathname || vm.name || vm.html_url || vm.download_url }}</a> &nbsp; (type: {{ vm.filetype }}, size: {{ bytesToSize(vm.size) }})
           </v-list-item>
-        </v-list>
-      </v-card-text>
+        </v-list-group>
+      </v-list-item>
 
       <v-card-actions>
         <v-btn
@@ -293,9 +296,12 @@ export default {
       return tags
     },
     markdown () {
-      let file = this.record.artifact.files.find(f => f.url == "README.md")
-      if (!file) return ''
-      return file.content
+      let readme
+      this.record.artifact.files.some(f => {
+        readme = f.members.find(f => f.name == "README.md")
+        if (readme) return true
+      })
+      return readme.content
     },
     hideOverflow () {
       return {
@@ -304,7 +310,6 @@ export default {
     },
     isOverflow () {
       if (!this.loaded) return false
-      console.log(this.$refs)
       let element = this.$refs["descDiv"]
       return element.offsetHeight >= 700
     },

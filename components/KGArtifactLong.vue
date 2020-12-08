@@ -69,7 +69,7 @@
         cols="12"
         class="ma-2"
         label
-        @click="search"
+        :to="{ path: `/search?keywords=${v.tag}` }"
       >
         <v-avatar left>
           <v-icon>mdi-tag-outline</v-icon>
