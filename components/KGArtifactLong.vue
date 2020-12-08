@@ -1,5 +1,8 @@
 <template>
   <div v-if="record.artifact">
+    <h3>
+      <a target="_blank" :href="record.artifact.url">  Knowledge Graph Artifact {{ record.artifact.id }} </a>
+    </h3>
     <v-card class="mx-auto my-2">
       <v-card-title> {{ record.artifact.title }} </v-card-title>
 
@@ -29,7 +32,7 @@
 
       <v-card-title> Artifact Type </v-card-title>
 
-      <v-chip color="primary" class="ma-2" label>
+      <v-chip color="info" class="ma-2" label>
         <v-avatar left>
           <v-icon>mdi-newspaper-variant-outline</v-icon>
         </v-avatar>
@@ -43,17 +46,17 @@
 
       <v-chip
         color="primary"
-        v-for="c in record.affiliations"
+        v-for="c in record.artifact.affiliations"
         :key="c.id"
         cols="12"
         class="ma-2"
         label
       >
-        <span v-if="c.roles == 'Author'">
+        <span v-if="c.affiliation.roles == 'Author'">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          {{ c.person.name }}
+          {{ c.affiliation.person.name }}
         </span>
       </v-chip>
 
@@ -66,7 +69,7 @@
         cols="12"
         class="ma-2"
         label
-        @click="search"
+        :to="{ path: `/search?keywords=${v.tag}` }"
       >
         <v-avatar left>
           <v-icon>mdi-tag-outline</v-icon>
@@ -81,7 +84,7 @@
 
       <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
         <div>
-          <a :href="v.url">{{ k }}</a> (type: {{ v.filetype }}, size: {{ v.size }} bytes)
+          <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
         </div>
       </v-card-text>
 
@@ -99,10 +102,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <h6>
-      Knowledge Graph Artifact
-        {{ record.artifact.id }}
-    </h6>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
@@ -166,6 +165,12 @@ export default {
           this.$favoritesEndpoint.remove(this.record.artifact.id, payload)
         }
       }
+    },
+    bytesToSize(bytes) {
+      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+      if (bytes == 0) return '0 Bytes'
+      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+      return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
     }
   }
 }

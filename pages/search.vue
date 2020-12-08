@@ -3,6 +3,8 @@
     <div class="text-center">
       <logo />
     </div>
+    <h1>Search</h1>
+    <v-divider></v-divider><br>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
         light
@@ -120,8 +122,8 @@
       ></v-select>
     </div>
     <br>
-    <hr>
-    <ArtifactList :limit="limit"></ArtifactList>
+    <v-divider></v-divider>
+    <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
     <span v-if="artifacts.length == 0 && searchLoading == true">Loading...</span>
     <span v-if="artifacts.length == 0 && searchLoading == false"><h3>Type a search term into the input above and press Enter</h3></span>
     <v-btn v-if="showScrollToTop != 0" class="primary" id="scrollbtn" @click="scrollToTop()" elevation="10">Back to Top</v-btn>
@@ -188,6 +190,12 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
+  },
+  mounted () {
+    if(this.$route.query.keywords) {
+      this.search = this.$route.query.keywords
+      this.onSubmit()
+    }
   },
   computed: {
     ...mapState({

@@ -84,19 +84,6 @@ export const mutations = {
 
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
-    /* TODO: change to the appropriate initial query -- or don't query
-
-        keyword queries:
-            cybersecurity
-            phishing
-            denial of service
-            botnet
-            honeypot
-            vulnerability
-            ciphertext
-            man in the middle attack
-
-    */
     let a = {}
     commit('SET_SEARCH', payload.keyword)
     if (state.source === 'zenodo') {

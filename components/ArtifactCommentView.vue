@@ -1,32 +1,20 @@
 <template>
   <div>
     <v-card class="mx-auto overflow-hidden" elevation="3" v-if="artifact.artifact">
-      <!-- <v-chip
-        v-if="artifact.relevance_score && !comments"
-        :color="relevanceColor"
-        class="ma-2"
-        label
-      >
-        <v-avatar left>
-          <v-icon>mdi-finance</v-icon>
-        </v-avatar>
-        {{ artifact.relevance_score }}
-      </v-chip> -->
-
-      <v-chip v-if="artifact.artifact.type" color="primary" class="ma-2" label>
-        <v-avatar left>
-          <v-icon>mdi-newspaper-variant-outline</v-icon>
-        </v-avatar>
-        <div v-if="artifact.artifact.type">{{ artifact.artifact.type }}</div>
-      </v-chip>
-
-      <v-card-title class="align-start">
-        <div>
-          <span class="headline">{{ artifact.artifact.title | titlecase }}</span>
-        </div>
-      </v-card-title>
-
-      <v-spacer></v-spacer>
+      <v-row class="px-3">
+        <v-card-title class="align-start">
+          <div>
+            <span class="headline">{{ artifact.artifact.title | titlecase }}</span>
+          </div>
+        </v-card-title>
+        <v-spacer></v-spacer>
+        <v-chip v-if="artifact.artifact.type" :color="artifactColor" class="ma-2" label>
+          <v-avatar left>
+            <v-icon>{{ artifactIcon }}</v-icon>
+          </v-avatar>
+          <div v-if="artifact.artifact.type">{{ artifact.artifact.type }}</div>
+        </v-chip>
+      </v-row>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
         {{ artifact.num_reviews }} reviews
@@ -45,21 +33,7 @@
 
       <div v-if="comments">
         <v-container fluid>
-          <v-card outlined tile v-for="(comment, i) in comments" :key="i">
-            <v-card-text>
-              {{ comment.review }}
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                v-if="user_id == comment.reviewer.id"
-                text
-                color="primary"
-                @click="deleteReview(comment.id)"
-              >
-                Delete
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <SingleComment outlined tile v-for="(comment, i) in commentsReordered" :comment="comment" :key="i"></SingleComment>
         </v-container>
       </div>
 
@@ -77,7 +51,6 @@
         <v-btn
           small
           replace
-          color="info"
           :to="`/artifact/${artifact.artifact.id}`"
           nuxt
         >
@@ -90,10 +63,14 @@
 </template>
 
 <script>
+import SingleComment from '@/components/SingleComment'
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
 
 export default {
+  components: {
+    SingleComment,
+  },
   props: {
     artifact: {
       type: Object,
@@ -139,21 +116,24 @@ export default {
         if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact.id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact.id)
       }
+    },
+    artifactIcon () {
+      if (this.artifact.artifact.type == "publication") return "mdi-newspaper-variant-outline"
+      if (this.artifact.artifact.type == "code") return "mdi-code-braces"
+    },
+    artifactColor () {
+      if (this.artifact.artifact.type == "publication") return "info"
+      if (this.artifact.artifact.type == "code") return "purple white--text"
+    },
+    commentsReordered () {
+      let first = []
+      let rest = []
+      for (let comment of this.comments) {
+        if (comment.reviewer.id === this.user_id) first.push(comment)
+        else rest.push(comment)
+      }
+      return first.concat(rest)
     }
-    // relevanceColor: {
-    //   get() {
-    //     if (this.artifact.relevance_score <= 0.4) {
-    //       return 'error'
-    //     } else if (
-    //       this.artifact.relevance_score > 0.4 &&
-    //       this.artifact.relevance_score <= 0.8
-    //     ) {
-    //       return 'warning'
-    //     } else {
-    //       return 'success'
-    //     }
-    //   }
-    // }
   },
   methods:{
     favoriteThis () {
@@ -173,25 +153,6 @@ export default {
           this.$favoritesEndpoint.remove(this.artifact.artifact.id, payload)
         }
       }
-    },
-    async deleteReview (id) {
-      let rating_payload = {
-        api_key: process.env.KG_API_KEY,
-        token: this.$auth.getToken('github'),
-        userid: this.user_id
-      }
-      await this.$ratingsEndpoint.remove(this.artifact.artifact.id, rating_payload)
-      let comment_payload = {
-        api_key: process.env.KG_API_KEY,
-        token: this.$auth.getToken('github'),
-        userid: this.user_id,
-        reviewid: id
-      }
-      await this.$reviewsEndpoint.remove(this.artifact.artifact.id, comment_payload)
-      this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.$route.params.id,
-        source: 'kg'
-      })
     }
   }
 }

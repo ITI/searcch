@@ -7,3 +7,8 @@ Vue.filter('titlecase', function(value) {
     (_, firstChar, rest) => firstChar + rest.toLowerCase()
   )
 })
+
+Vue.filter('htmlbreak', function(value) {
+  if (!value) return ''
+  return value.replace(/(?:\r\n|\r|\n)/g, '<br>')
+})
