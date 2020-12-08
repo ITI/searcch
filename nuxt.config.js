@@ -109,7 +109,7 @@ export default {
   },
   proxy: {
     '/kg/': {
-      target: process.env.PRODUCTION ? 'https://steellab.isi.edu/v1/' : ' https://steellab.isi.edu:4443/v1/', // production : development servers
+      target: process.env.PRODUCTION ? 'https://steellab.isi.edu:4443/v1/' : ' https://steellab.isi.edu:5443/v1/', // production : development servers
       pathRewrite: { '^/kg/': '/' }
     }
   },
