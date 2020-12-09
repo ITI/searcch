@@ -4,7 +4,7 @@
 # modifications to these specific files
 
 # protect any modifications to the expected runtime environment variables
-.env/* @timyardley
+.env* @timyardley
 
 # protect modification of the CODEOWNERS settings
 CODEOWNERS @timyardley
