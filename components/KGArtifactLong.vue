@@ -110,7 +110,8 @@
         cols="12"
         class="ma-2"
         label
-        href="v.url"
+        :href="v.url"
+        target="_blank"
       >
         <v-avatar left>
           <v-icon>mdi-check-decagram</v-icon>
