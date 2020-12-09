@@ -30,7 +30,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title> Artifact Type </v-card-title>
+      <v-card-title class="py-0"> Artifact Type </v-card-title>
 
       <v-chip color="info" class="ma-2" label>
         <v-avatar left>
@@ -42,7 +42,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>Creators</v-card-title>
+      <v-card-title class="py-0">Creators</v-card-title>
 
       <v-chip
         color="primary"
@@ -60,12 +60,13 @@
         </span>
       </v-chip>
 
-      <v-card-title>Keywords</v-card-title>
+      <span v-if="record.artifact.tags.length">
+      <v-card-title class="py-0">Keywords</v-card-title>
 
       <v-chip
         color="primary"
         v-for="(v, k) in record.artifact.tags"
-        :key="`chip${k}`"
+        :key="`tag${k}`"
         cols="12"
         class="ma-2"
         label
@@ -77,16 +78,59 @@
 
         {{ v.tag }}
       </v-chip>
+      </span>
+
+      <span v-if="record.artifact.relationships.length">
+      <v-card-title class="py-0">Related</v-card-title>
+
+      <v-chip
+        color="primary"
+        v-for="(v, k) in record.artifact.relationships"
+        :key="`rel${k}`"
+        cols="12"
+        class="ma-2"
+        label
+        :to="{ path: `/artifact/${v.related_artifact_id}` }"
+      >
+        <v-avatar left>
+          <v-icon>mdi-relation-one-to-one</v-icon>
+        </v-avatar>
+
+        {{ v.relation | titlecase }}: {{ v.related_artifact }}
+      </v-chip>
+      </span>
+
+      <span v-if="badges">
+      <v-card-title class="py-0">Badges</v-card-title>
+
+      <v-chip
+        color="primary"
+        v-for="(v, k) in badges"
+        :key="`bad${k}`"
+        cols="12"
+        class="ma-2"
+        label
+        href="v.url"
+      >
+        <v-avatar left>
+          <v-icon>mdi-check-decagram</v-icon>
+        </v-avatar>
+
+        {{ v.title }}
+      </v-chip>
+      </span>
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>Files</v-card-title>
+      <span v-if="record.artifact.files.length">
+      <v-card-title class="py-0">Files</v-card-title>
 
       <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
         <div>
           <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
         </div>
       </v-card-text>
+      </span>
 
       <v-card-actions>
         <v-btn
@@ -142,6 +186,17 @@ export default {
         if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.record.artifact.id)
       }
+    },
+    badges () {
+      let badges = []
+      let badges_raw = this.record.artifact.meta.filter(m => m.name == "badge")
+      console.log(badges_raw)
+      if (!badges_raw.length) return null
+      for (let b of badges_raw) {
+        badges.push(JSON.parse(b.value))
+      }
+      console.log(badges)
+      return badges
     }
   },
   methods: {
