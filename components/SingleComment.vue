@@ -87,6 +87,7 @@ export default {
         })
       },
       async deleteReview () {
+        if (!confirm("Are you sure you want to delete this review?")) return
         let rating_payload = {
             api_key: process.env.KG_API_KEY,
             token: this.$auth.getToken('github'),

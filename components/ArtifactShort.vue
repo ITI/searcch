@@ -69,7 +69,7 @@
 
         <v-btn
           icon
-          :to="`/artifact/comment/${artifact.id}`"
+          :to="`/artifact/review/${artifact.id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -144,10 +144,12 @@ export default {
     artifactIcon () {
       if (this.artifact.type == "publication") return "mdi-newspaper-variant-outline"
       if (this.artifact.type == "code") return "mdi-code-braces"
+      if (this.artifact.type == "dataset") return "mdi-database"
     },
     artifactColor () {
       if (this.artifact.type == "publication") return "info"
       if (this.artifact.type == "code") return "purple white--text"
+      if (this.artifact.type == "dataset") return "green white--text"
     }
   },
   methods:{

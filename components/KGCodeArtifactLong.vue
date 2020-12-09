@@ -119,7 +119,7 @@
       </span>
 
       <span v-if="stars || watchers">
-      <v-card-title class="py-0">Gtihub Metrics</v-card-title>
+      <v-card-title class="py-0">Github Metrics</v-card-title>
 
       <v-chip
         color="primary"
@@ -162,6 +162,7 @@
         {{ `${record.artifact.importer.name} v${record.artifact.importer.version}` }}
       </v-chip>
 
+      <span v-if="license">
       <v-card-title v-if="license" class="py-0">License</v-card-title>
       <v-chip
       color="primary"
@@ -175,6 +176,7 @@
 
       {{ license }}
     </v-chip>
+    </span>
 
       <v-divider class="mx-4"></v-divider>
 
@@ -200,7 +202,7 @@
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/comment/${record.artifact.id}`" nuxt>
+        <v-btn icon :to="`/artifact/review/${record.artifact.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
       </v-card-actions>

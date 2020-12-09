@@ -32,9 +32,9 @@
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
 
-      <v-chip color="info" class="ma-2" label>
+      <v-chip :color="artifactColor" class="ma-2" label>
         <v-avatar left>
-          <v-icon>mdi-newspaper-variant-outline</v-icon>
+          <v-icon>{{ artifactIcon }}</v-icon>
         </v-avatar>
 
         <div>{{ record.artifact.type }}</div>
@@ -142,7 +142,7 @@
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/comment/${record.artifact.id}`" nuxt>
+        <v-btn icon :to="`/artifact/review/${record.artifact.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
       </v-card-actions>
@@ -198,12 +198,17 @@ export default {
       }
       console.log(badges)
       return badges
+    },
+    artifactIcon () {
+      if (this.record.artifact.type == "publication") return "mdi-newspaper-variant-outline"
+      if (this.record.artifact.type == "dataset") return "mdi-database"
+    },
+    artifactColor () {
+      if (this.record.artifact.type == "publication") return "info"
+      if (this.record.artifact.type == "dataset") return "green white--text"
     }
   },
   methods: {
-    search() {
-      alert('searching')
-    },
     favoriteThis () {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
@@ -227,7 +232,7 @@ export default {
       if (bytes == 0) return '0 Bytes'
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
-    }
+    },
   }
 }
 </script>
