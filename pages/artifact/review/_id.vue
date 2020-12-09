@@ -8,7 +8,7 @@
         <v-col cols="12">
           <material-card
             color="primary"
-            title="Add Comment"
+            title="Add Review"
             text="Provide your input"
           >
             <v-form ref="comment" v-model="valid">
@@ -54,7 +54,7 @@
         <v-col cols="12">
           <material-card
             color="primary"
-            title="Log in to add a comment"
+            title="Log in to add a review"
             nuxt to="/login"
           >
           </material-card>

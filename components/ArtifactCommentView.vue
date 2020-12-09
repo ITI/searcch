@@ -33,7 +33,7 @@
 
       <div v-if="comments">
         <v-container fluid>
-          <SingleComment outlined tile v-for="(comment, i) in commentsReordered" :comment="comment" :key="i"></SingleComment>
+          <SingleComment class="mt-2" outlined tile v-for="(comment, i) in commentsReordered" :comment="comment" :key="i"></SingleComment>
         </v-container>
       </div>
 
@@ -103,10 +103,12 @@ export default {
       } else {
         description = this.artifact.artifact.description
       }
-      return clip(this.$sanitize(description), 2000, {
+      let out = clip(this.$sanitize(description), 2000, {
         html: true,
         maxLines: 40
       })
+      if (out == "null") return "<br>"
+      else return out
     },
     favorite: {
       get () {
@@ -120,10 +122,12 @@ export default {
     artifactIcon () {
       if (this.artifact.artifact.type == "publication") return "mdi-newspaper-variant-outline"
       if (this.artifact.artifact.type == "code") return "mdi-code-braces"
+      if (this.artifact.artifact.type == "dataset") return "mdi-database"
     },
     artifactColor () {
       if (this.artifact.artifact.type == "publication") return "info"
       if (this.artifact.artifact.type == "code") return "purple white--text"
+      if (this.artifact.artifact.type == "dataset") return "green white--text"
     },
     commentsReordered () {
       let first = []
