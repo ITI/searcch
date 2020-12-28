@@ -17,7 +17,6 @@ export default function({ $loginEndpoint, store, $auth }) {
       $auth.logout('github')
     } else {
       let payload = {
-        api_key: process.env.KG_API_KEY,
         strategy: 'github',
         token: $auth.getToken('github'),
       }

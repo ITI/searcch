@@ -110,7 +110,8 @@ export default {
   proxy: {
     '/kg/': {
       target: process.env.PRODUCTION ? 'https://steellab.isi.edu:4443/v1/' : ' https://steellab.isi.edu:5443/v1/', // production : development servers
-      pathRewrite: { '^/kg/': '/' }
+      pathRewrite: { '^/kg/': '/' },
+      headers: { 'X-Api-Key': process.env.KG_API_KEY }
     }
   },
 

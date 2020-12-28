@@ -147,7 +147,6 @@ export default {
         let action = !this.favorite
         this.favorite = !this.favorite
         let payload = {
-          api_key: process.env.KG_API_KEY,
           token: this.$auth.getToken('github'),
           userid: this.user_id
         }

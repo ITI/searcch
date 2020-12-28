@@ -74,7 +74,6 @@ export default {
       async saveReview () {
         this.editing = false
         let comment_payload = {
-            api_key: process.env.KG_API_KEY,
             token: this.$auth.getToken('github'),
             userid: this.user_id,
             reviewid: this.id,
@@ -89,13 +88,11 @@ export default {
       async deleteReview () {
         if (!confirm("Are you sure you want to delete this review?")) return
         let rating_payload = {
-            api_key: process.env.KG_API_KEY,
             token: this.$auth.getToken('github'),
             userid: this.user_id
         }
         await this.$ratingsEndpoint.remove(this.$route.params.id, rating_payload)
         let comment_payload = {
-            api_key: process.env.KG_API_KEY,
             token: this.$auth.getToken('github'),
             userid: this.user_id,
             reviewid: this.id

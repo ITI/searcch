@@ -116,7 +116,6 @@ export default {
       } else {
         if (this.rating) {
           let rating_payload = {
-            api_key: process.env.KG_API_KEY,
             token: this.$auth.getToken('github'),
             userid: this.user_id,
             rating: this.rating
@@ -126,7 +125,6 @@ export default {
         if (this.comment) {
           let comment_payload = {
             review: this.comment,
-            api_key: process.env.KG_API_KEY,
             token: this.$auth.getToken('github'),
             userid: this.user_id
           }
