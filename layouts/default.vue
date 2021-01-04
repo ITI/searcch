@@ -90,6 +90,11 @@ export default {
         //   title: 'Profile',
         //   to: '/profile'
         // })
+        items.push({
+          icon: 'mdi-card-account-details',
+          title: 'Profile',
+          to: '/import'
+        })
       }
       return items
     }
