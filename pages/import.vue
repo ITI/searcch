@@ -9,18 +9,18 @@
     </v-flex>
   </v-layout>
   <v-layout column justify-left align-top>
-    <h1>Profile</h1>
+    <h1>Import</h1>
     <v-divider></v-divider><br>
     <v-form>
         <v-text-field
-            label="Name"
-            placeholder="First Last"
-            outlined
-            full-width
+            label="URL"
+            placeholder="http://github.com/MyProject"
         ></v-text-field>
         <v-btn
             class="primary"
-        >Update</v-btn>
+            :disabled="importing"
+            @click="startImport()"
+        >Start Import</v-btn>
     </v-form>
   </v-layout>
 </span>
@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      limit: 20,
+      importing: false,
     }
   },
   async mounted () {
@@ -46,6 +46,11 @@ export default {
     ...mapState({
       user_id: state => state.user.user_id,
     }),
+  },
+  methods: {
+      startImport () {
+          this.importing = true
+      }
   }
 }
 </script>

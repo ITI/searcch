@@ -91,7 +91,7 @@ export default {
         //   to: '/profile'
         // })
         items.push({
-          icon: 'mdi-card-account-details',
+          icon: 'mdi-database-import',
           title: 'Profile',
           to: '/import'
         })
