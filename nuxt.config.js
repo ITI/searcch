@@ -3,7 +3,6 @@ import colors from 'vuetify/es5/util/colors'
 require('dotenv').config()
 
 export default {
-  mode: 'universal',
   /*
    ** Headers of the page
    */
@@ -109,7 +108,9 @@ export default {
   },
   proxy: {
     '/kg/': {
-      target: process.env.PRODUCTION ? 'https://steellab.isi.edu:4443/v1/' : ' https://steellab.isi.edu:5443/v1/', // production : development servers
+      target: process.env.PRODUCTION
+        ? 'https://steellab.isi.edu:4443/v1/'
+        : ' https://steellab.isi.edu:5443/v1/', // production : development servers
       pathRewrite: { '^/kg/': '/' },
       headers: { 'X-Api-Key': process.env.KG_API_KEY }
     }
@@ -156,7 +157,7 @@ export default {
       github: {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
-        scope: ['read:user','user:email']
+        scope: ['read:user', 'user:email']
       }
     },
     plugins: ['~/plugins/auth.js']
