@@ -28,7 +28,8 @@ export const state = () => ({
   source: '',
   scores: [],
   favorites: [],
-  favoritesIDs: {}
+  favoritesIDs: {},
+  imports: [],
 })
 
 export const getters = {
@@ -53,6 +54,9 @@ export const getters = {
   favoritesIDs: state => {
     return state.favoritesIDs
   },
+  imports: state => {
+    return state.imports
+  }
 }
 
 export const mutations = {
@@ -79,6 +83,9 @@ export const mutations = {
   },
   REMOVE_FAVORITE(state, id) {
     Vue.delete(state.favoritesIDs, id)
+  },
+  SET_IMPORTS(state, imports) {
+    state.imports = imports
   },
 }
 
@@ -140,6 +147,12 @@ export const actions = {
       for (let fav in response.artifacts) {
         commit('ADD_FAVORITE', response.artifacts[fav].id)
       }
+    }
+  },
+  async fetchImports({ commit, state }, payload) {
+    let response = await this.$importsEndpoint.index(payload)
+    if (response.artifact_imports) {
+      commit('SET_IMPORTS', response.artifact_imports)
     }
   }
 }

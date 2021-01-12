@@ -12,27 +12,40 @@
     <h1>Import</h1>
     <v-divider></v-divider><br>
     <v-form>
-        <v-text-field
-            label="URL"
-            placeholder="http://github.com/MyProject"
-        ></v-text-field>
-        <v-btn
-            class="primary"
-            :disabled="importing"
-            @click="startImport()"
-        >Start Import</v-btn>
+      <v-row align="center">
+        <v-col cols="10">
+          <v-text-field
+              label="URL"
+              placeholder="http://github.com/MyProject"
+              outlined
+              hide-details
+          ></v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-btn
+              class="primary"
+              :disabled="importing"
+              @click="startImport()"
+              block
+          >Start Import</v-btn>
+        </v-col>
+      </v-row>
     </v-form>
+    <br><v-divider></v-divider><br>
+    <ImportList :imports="imports"></ImportList>
   </v-layout>
 </span>
 </template>
 
 <script>
+import ImportList from '~/components/ImportList'
 import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
     Logo,
+    ImportList
   },
   data() {
     return {
@@ -40,17 +53,18 @@ export default {
     }
   },
   async mounted () {
-    if (this.user_id) return // this.$store.dispatch('artifacts/fetchFavorites', this.user_id)
+    this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
   },
   computed: {
     ...mapState({
       user_id: state => state.user.user_id,
+      imports: state => state.artifacts.imports,
     }),
   },
   methods: {
-      startImport () {
-          this.importing = true
-      }
-  }
+    startImport () {
+        this.importing = true
+    }
+  },
 }
 </script>
