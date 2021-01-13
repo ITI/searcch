@@ -108,14 +108,14 @@ export default {
   },
   proxy: {
     '/kg/': {
-      target: process.env.PRODUCTION
+      target: process.env.PRODUCTION == "true"
         ? 'https://steellab.isi.edu:4443/v1/'
-        : ' https://steellab.isi.edu:5443/v1/', // production : development servers
+        : 'https://steellab.isi.edu:5443/v1/', // production : development servers
       pathRewrite: { '^/kg/': '/' },
-      headers: { 'X-Api-Key': process.env.KG_API_KEY }
+      headers: { 'X-Api-Key': process.env.PRODUCTION == "true"
+      ? process.env.KG_API_KEY : process.env.KG_DEV_API_KEY }
     }
   },
-
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
