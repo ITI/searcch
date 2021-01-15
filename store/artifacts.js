@@ -150,7 +150,9 @@ export const actions = {
     }
   },
   async fetchImports({ commit, state }, payload) {
-    let response = await this.$importsEndpoint.index(payload)
+    let response = await this.$importsEndpoint.index({
+      ...payload
+    })
     if (response.artifact_imports) {
       commit('SET_IMPORTS', response.artifact_imports)
     }

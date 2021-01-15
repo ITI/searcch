@@ -92,7 +92,7 @@ export default {
         // })
         items.push({
           icon: 'mdi-database-import',
-          title: 'Profile',
+          title: 'Import',
           to: '/import'
         })
       }

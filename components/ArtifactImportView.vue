@@ -1,20 +1,72 @@
 <template>
   <div>
-    <v-card class="mx-auto overflow-hidden" elevation="3">
+    <v-card tile class="mx-auto overflow-hidden" elevation="3">
       <v-row class="px-3">
         <v-card-title class="align-start">
           <div>
-            <span class="headline">{{ artifact.id }}:&nbsp;{{  }}</span>
+            <span class="headline">Import ID {{ artifact.id }}:&nbsp;<a target="_blank" :href="artifact.url">{{ artifactTitle }}</a></span>
           </div>
         </v-card-title>
         <v-spacer></v-spacer>
-        <v-chip v-if="artifact.type" :color="artifactColor" class="ma-2" label>
+        <v-chip :color="artifactColor" class="mr-4 mt-5" label>
           <v-avatar left>
             <v-icon>{{ artifactIcon }}</v-icon>
           </v-avatar>
-          <div v-if="artifact.type">{{ artifact.type }}</div>
+          <div>{{ artifactType }}</div>
         </v-chip>
       </v-row>
+
+      <v-card-text> 
+        <v-progress-linear
+          color="light-blue"
+          height="25"
+          :value="artifact.progress"
+        ><strong>{{ artifact.progress }}%</strong></v-progress-linear>
+        {{ artifact.status }} - {{ artifact.phase }}
+      </v-card-text>
+
+      <v-card-actions>
+        <v-btn
+          v-if="artifact.artifact_id || archived"
+          text
+          @click="archive()"
+        >
+          Archive
+        </v-btn>
+        
+
+        <v-btn
+          v-else
+          text
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          v-if="archived === true"
+          text
+          @click="unarchive()"
+        >
+          Unarchive
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+        <v-btn
+          :disabled="!artifact.artifact_id || published"
+          text
+          @click="publish()"
+        >
+          Publish{{ published ? "ed" : "" }}
+        </v-btn>
+
+        <v-btn
+          :to="`/artifact/${artifact.artifact_id}`"
+          :disabled="!artifact.artifact_id"
+          text
+        >
+          Read More
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -31,65 +83,74 @@ export default {
     }
   },
   data() {
+    return {
+      full_artifact: this.artifact.artifact,
+    }
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
       user_id: state => state.user.user_id,
-      favorites: state => state.artifacts.favoritesIDs
     }),
-    sanitizedDescription: function() {
-      let description = ''
-      if (this.source === 'zenodo') {
-        description = this.artifact.metadata.description
-      } else {
-        description = this.artifact.description
+    artifactType () {
+      if (this.full_artifact) {
+        if (this.full_artifact.type) return this.full_artifact.type
       }
-      return clip(this.$sanitize(description), 2000, {
-        html: true,
-        maxLines: 40
-      })
-    },
-    favorite: {
-      get () {
-        return this.favorites[this.artifact.id] ? true : false
-      },
-      set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
-      }
+      if (this.artifact.type == null) return "Detecting Type..."
+      return this.artifact.type
     },
     artifactIcon () {
-      if (this.artifact.type == "publication") return "mdi-newspaper-variant-outline"
-      if (this.artifact.type == "code") return "mdi-code-braces"
-      if (this.artifact.type == "dataset") return "mdi-database"
-      return "mdi-help"
+      let type = this.artifactType
+      if (type == "publication") return "mdi-newspaper-variant-outline"
+      if (type == "code") return "mdi-code-braces"
+      if (type == "dataset") return "mdi-database"
+      return "mdi-magnify"
     },
     artifactColor () {
-      if (this.artifact.type == "publication") return "info"
-      if (this.artifact.type == "code") return "purple white--text"
-      if (this.artifact.type == "dataset") return "green white--text"
+      let type = this.artifactType
+      if (type == "publication") return "info"
+      if (type == "code") return "purple white--text"
+      if (type == "dataset") return "green white--text"
       return "warning"
-    }
+    },
+    artifactTitle () {
+      if (this.full_artifact) {
+        if (this.full_artifact.title) return this.full_artifact.title
+      }
+      return this.artifact.url
+    },
+    published () {
+      if (this.full_artifact) {
+        if (this.full_artifact.published) return true
+      }
+      return false
+    },
+    archived () {
+      if (this.full_artifact) {
+        if (this.full_artifact.archived) return true
+        else return false
+      }
+      return undefined
+    },
   },
   methods:{
-    favoriteThis () {
-      if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
-      } else {
-        let action = !this.favorite
-        this.favorite = !this.favorite
-        let payload = {
-          token: this.$auth.getToken('github'),
-          userid: this.user_id
-        }
-        if (action) {
-          this.$favoritesEndpoint.update(this.artifact.id, payload)
-        } else {
-          this.$favoritesEndpoint.remove(this.artifact.id, payload)
-        }
-      }
-    }
+    async archive () {
+      let response = await this.$importEndpoint.put(this.artifact.id, {
+        archived: true,
+      })
+      console.log(response)
+    },
+    async unarchive () {
+      let response = await this.$importEndpoint.put(this.artifact.id, {
+        archived: false,
+      })
+      console.log(response)
+    },
+    async publish () {
+      let response = await this.$importEndpoint.put(this.artifact.id, {
+        published: true,
+      })
+      console.log(response)
+    },
   }
 }
 </script>

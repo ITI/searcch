@@ -8,7 +8,7 @@
           </div>
         </v-card-title>
         <v-spacer></v-spacer>
-        <v-chip v-if="artifact.artifact.type" :color="artifactColor" class="ma-2" label>
+        <v-chip v-if="artifact.artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
           <v-avatar left>
             <v-icon>{{ artifactIcon }}</v-icon>
           </v-avatar>
