@@ -31,7 +31,7 @@
           >Start Import</v-btn>
         </v-col>
       </v-row>
-      <v-row>
+      <!-- <v-row>
         <v-col cols="10">
           <v-expansion-panels model="advanced.open">
             <v-expansion-panel  class="rounded-0">
@@ -74,7 +74,7 @@
                     >
                     </v-select>
                   </v-col>
-                  <!-- <v-col cols="3">
+                  <v-col cols="3">
                     <v-select
                       v-model="advanced.importer"
                       :items="importers"
@@ -82,16 +82,17 @@
                       class="rounded-0"
                     >
                     </v-select>
-                  </v-col> -->
+                  </v-col>
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-form>
     <br><v-divider></v-divider><br>
-    <ImportList :imports="imports"></ImportList>
+    <ImportList v-if="imports != []" :imports="imports"></ImportList>
+    <div v-else>No imports loaded</div>
   </v-layout>
 </span>
 </template>
@@ -109,6 +110,7 @@ export default {
   data() {
     return {
       importing: false,
+      polling: null,
       valid: false,
       url: null,
       rules: {
@@ -138,7 +140,7 @@ export default {
     }
   },
   async mounted () {
-     setInterval(function () {
+     this.polling = setInterval(function () {
       this.updateImports()
     }.bind(this), 5000)
   },
@@ -171,6 +173,9 @@ export default {
       // but mounted needs to run when switching pages where the user_id doesn't update
       this.updateImports()
     }
-  }
+  },
+  // beforeRouteLeave (to, from, next) {
+  //   clearInterval(this.polling)
+  // }
 }
 </script>

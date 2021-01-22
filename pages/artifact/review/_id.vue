@@ -96,7 +96,7 @@ export default {
     ...mapState({
       artifact: state => state.artifacts.artifact,
       source: state => state.artifacts.source,
-      comments: state => state.artifacts.artifact.reviews,
+      comments: state => state.artifacts.artifact.rating_review,
       user_id: state => state.user.user_id,
     }),
     formCheck() {
@@ -105,7 +105,7 @@ export default {
     },
     alreadyCommented () {
       if (!this.comments) return false
-      if (this.comments.find(c => c.reviewer.id == this.user_id)) return true
+      if (this.comments.find(c => c.review.reviewer.id == this.user_id)) return true
       return false
     }
   },

@@ -24,6 +24,7 @@ export default function({ $loginEndpoint, store, $auth }) {
         console.log(response)
         if (response.userid) {
           store.commit('user/SET_USER_ID', response.userid)
+          store.commit('user/SET_USERNAME', response.person.name)
           store.dispatch('artifacts/fetchFavorites', response.userid)
         }
       }).catch(error => {

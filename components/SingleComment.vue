@@ -1,6 +1,30 @@
 <template>
     <v-card v-if="comment">
+        <v-card-title>
+            <v-row class="ml-1">
+                <span v-if="user_name != ''">{{ user_name }}</span><span v-else>Anonymous</span>
+                <v-rating
+                    v-model="rating"
+                    v-if="!editing"
+                    color="amber"
+                    dense
+                    readonly
+                    size="18"
+                    class="ml-3"
+                ></v-rating>
+            </v-row>
+        </v-card-title>
         <v-card-text>
+            <v-rating
+                v-model="rating"
+                v-if="editing"
+                label="Rating"
+                color="amber"
+                dense
+                hover
+                size="24"
+                class="ml-3"
+            ></v-rating>
             <pre v-if="!editing">{{ review }}</pre>
             <v-textarea
                 v-else
@@ -10,7 +34,7 @@
             >
             </v-textarea>
         </v-card-text>
-        <v-card-actions v-if="user_id == comment.reviewer.id">
+        <v-card-actions v-if="user_id == comment.review.reviewer.id">
             <v-btn
                 text
                 color="primary"
@@ -61,22 +85,30 @@ export default {
   data () {
     return {
       editing: false,
-      review: this.comment.review,
-      id: this.comment.id,
+      review: this.comment.review.review,
+      rating: this.comment.rating.rating,
+      id: this.comment.review.id,
+
     }
   },
   computed: {
       ...mapState({
       user_id: state => state.user.user_id,
+      user_name: state => state.user.username,
     }),
   },
   methods: {
       async saveReview () {
         this.editing = false
+        let rating_payload = {
+            token: this.$auth.getToken('github'),
+            userid: this.user_id,
+            rating: this.rating,
+        }
+        await this.$ratingsEndpoint.put(this.$route.params.id, rating_payload)
         let comment_payload = {
             token: this.$auth.getToken('github'),
             userid: this.user_id,
-            reviewid: this.id,
             review: this.review
         }
         await this.$reviewsEndpoint.put(this.$route.params.id, comment_payload)
@@ -94,8 +126,7 @@ export default {
         await this.$ratingsEndpoint.remove(this.$route.params.id, rating_payload)
         let comment_payload = {
             token: this.$auth.getToken('github'),
-            userid: this.user_id,
-            reviewid: this.id
+            userid: this.user_id
         }
         await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
         this.$store.dispatch('artifacts/fetchArtifact', {

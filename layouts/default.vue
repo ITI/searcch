@@ -44,7 +44,13 @@
         >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
         National Science Foundation under Grant Numbers 1925773, 1925616,
         1925588, 1925564</span
-      >
+      ><v-spacer></v-spacer>
+      <v-btn
+        color="red lighten-2"
+        dark
+        href="https://forms.gle/nsP4kJVsjAmKKLU86"
+        target="_blank"
+      >Send Us Feedback</v-btn>
     </v-footer>
   </v-app>
 </template>
@@ -59,7 +65,7 @@ export default {
       drawer: true,
       miniVariant: true,
       right: true,
-      title: 'SEARCCH Hub'
+      title: 'SEARCCH Hub',
     }
   },
   computed: {

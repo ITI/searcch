@@ -133,7 +133,7 @@ export default {
       let first = []
       let rest = []
       for (let comment of this.comments) {
-        if (comment.reviewer.id === this.user_id) first.push(comment)
+        if (comment.review.reviewer.id === this.user_id) first.push(comment)
         else rest.push(comment)
       }
       return first.concat(rest)
