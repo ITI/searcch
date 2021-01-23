@@ -9,7 +9,46 @@
     </v-flex>
   </v-layout>
   <v-layout column justify-left align-top>
-    <h1>Import</h1>
+    <v-row><h1>Import</h1>
+      <v-dialog
+        transition="dialog-bottom-transition"
+        max-width="600"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="primary ml-4"
+            fab
+            small
+            v-bind="attrs"
+            v-on="on"
+          ><v-icon>mdi-help</v-icon></v-btn>
+        </template>
+        <template v-slot:default="dialog">
+          <v-card>
+            <v-toolbar
+              color="primary"
+              dark
+            >Import Help</v-toolbar>
+            <v-card-text>
+              <div class="text-h6 pa-12">
+                <p>To start importing, place the URL of an artifact in the input field and click Start Import<p>
+                <p>Once an import has started, it will show up in your imports list, below the URL field</p>
+                <p>The importer will have to process through a few stages to get all of the information scraped and formatted properly. 
+                  Once the progress bar shows the process is complete, you will have the option to view the imported artifact by clicking Read More</p>
+                <p>We have provided an edit button to show what an editor will look like for artifacts, but that feature is not currently available in the beta version</p>
+                <p>Once you are ready to add your artifact to the list of searchable artifacts, you can click Publish. Press Archive to hide a completed import from your list</p>
+              </div>
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn
+                text
+                @click="dialog.value = false"
+              >Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
+    </v-row>
     <v-divider></v-divider><br>
     <v-form v-model="valid">
       <v-row>
@@ -91,7 +130,7 @@
       </v-row> -->
     </v-form>
     <br><v-divider></v-divider><br>
-    <ImportList v-if="imports != []" :imports="imports"></ImportList>
+    <ImportList v-if="imports.length" :imports="imports"></ImportList>
     <div v-else>No imports loaded</div>
   </v-layout>
 </span>
@@ -111,6 +150,7 @@ export default {
     return {
       importing: false,
       polling: null,
+      dialog: false,
       valid: false,
       url: null,
       rules: {
@@ -140,6 +180,7 @@ export default {
     }
   },
   async mounted () {
+    console.log(this.imports)
      this.polling = setInterval(function () {
       this.updateImports()
     }.bind(this), 5000)

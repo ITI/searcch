@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link to="/search">Back</router-link>
+    <a @click="$router.go(-1)">Back</a>
     <ArtifactCommentView :artifact="artifact" :comments="comments"></ArtifactCommentView>
 
     <v-container v-if="$auth.loggedIn && !alreadyCommented" fill-height fluid grid-list-xl>
@@ -114,23 +114,19 @@ export default {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
-        if (this.rating) {
+        if (this.rating && this.comment) {
           let rating_payload = {
             token: this.$auth.getToken('github'),
             userid: this.user_id,
             rating: this.rating
           }
           await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
-        }
-        if (this.comment) {
           let comment_payload = {
             review: this.comment,
             token: this.$auth.getToken('github'),
             userid: this.user_id
           }
           await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
-        }
-        if (this.comment || this.rating) {
           this.$store.dispatch('artifacts/fetchArtifact', {
             id: this.$route.params.id,
             source: 'kg'

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <router-link to="/search">Back</router-link>
-    <ArtifactLong :artifact="artifact" />
+    <a @click="$router.go(-1)">Back</a>
+    <ArtifactLong :artifact="artifact" :edit="editing"/>
   </div>
 </template>
 
@@ -33,7 +33,11 @@ export default {
     ...mapState({
       artifact: state => state.artifacts.artifact,
       source: state => state.artifacts.source
-    })
+    }),
+    editing () {
+      if (this.$route.query.edit == "true") return true
+      return false
+    }
   },
   mounted() {
     if (this.source === '') {

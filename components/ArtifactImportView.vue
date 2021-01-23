@@ -31,16 +31,24 @@
           text
           @click="archive()"
         >
-          Archive
+          Archive 
         </v-btn>
         
-
         <v-btn
           v-else
           text
         >
           Cancel
         </v-btn>
+
+        <v-btn
+          v-if="artifact.artifact_id"
+          :to="{ path: `/artifact/${artifact.artifact_id}`, query: {edit: 'true'} }"
+          text
+        >
+          Edit
+        </v-btn>
+
         <v-btn
           v-if="archived === true"
           text
