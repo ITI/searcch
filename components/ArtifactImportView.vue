@@ -2,18 +2,21 @@
   <div>
     <v-card tile class="mx-auto overflow-hidden" elevation="3">
       <v-row class="px-3">
-        <v-card-title class="align-start">
+        <v-col cols="10">
+        <v-card-title class="align-start" >
           <div>
             <span class="headline">Import ID {{ artifact.id }}:&nbsp;<a target="_blank" :href="artifact.url">{{ artifactTitle }}</a></span>
           </div>
         </v-card-title>
-        <v-spacer></v-spacer>
-        <v-chip :color="artifactColor" class="mr-4 mt-5" label>
-          <v-avatar left>
-            <v-icon>{{ artifactIcon }}</v-icon>
-          </v-avatar>
-          <div>{{ artifactType }}</div>
-        </v-chip>
+        </v-col>
+        <v-col cols="2" class="text-lg-right">
+          <v-chip :color="artifactColor" class="mr-4 mt-5" label>
+            <v-avatar left>
+              <v-icon>{{ artifactIcon }}</v-icon>
+            </v-avatar>
+            <div>{{ artifactType }}</div>
+          </v-chip>
+        </v-col>
       </v-row>
 
       <v-card-text> 
@@ -42,7 +45,7 @@
         </v-btn>
 
         <v-btn
-          v-if="artifact.artifact_id"
+          v-if="artifact.artifact_id && !published"
           :to="{ path: `/artifact/${artifact.artifact_id}`, query: {edit: 'true'} }"
           text
         >
@@ -92,13 +95,16 @@ export default {
   },
   data() {
     return {
-      full_artifact: this.artifact.artifact,
+      publish_local: false,
     }
   },
   computed: {
     ...mapState({
       user_id: state => state.user.user_id,
     }),
+    full_artifact () {
+      return this.artifact.artifact
+    },
     artifactType () {
       if (this.full_artifact) {
         if (this.full_artifact.type) return this.full_artifact.type
@@ -128,7 +134,7 @@ export default {
     },
     published () {
       if (this.full_artifact) {
-        if (this.full_artifact.published) return true
+        if (this.full_artifact.publication || this.publish_local) return true
       }
       return false
     },
@@ -145,20 +151,24 @@ export default {
       let response = await this.$importEndpoint.put(this.artifact.id, {
         archived: true,
       })
-      console.log(response)
     },
     async unarchive () {
       let response = await this.$importEndpoint.put(this.artifact.id, {
         archived: false,
       })
-      console.log(response)
     },
     async publish () {
-      let response = await this.$importEndpoint.put(this.artifact.id, {
-        published: true,
+      let response = await this.$knowledgeGraphRecordRepository.put(this.full_artifact.id, {
+        publication: {},
       })
-      console.log(response)
+      this.publish_local = true
     },
   }
 }
 </script>
+
+<style scoped>
+  .v-card__title {
+    word-break: normal;
+  }
+</style>

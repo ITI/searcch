@@ -7,17 +7,17 @@
         icon-color="red"
         color="yellow darken-2"
     >
-        Editing the fields of the artifacts are unavailable during the beta release. This page has been provided as a possible design for such a feature. <br>
+        Editing the metadata fields of the artifacts are unavailable during the beta release. This page has been provided as a possible design for such a feature. <br>
         All the button and input functionality has been purposely disabled. Please send us feedback on this design.
     </v-banner>
     <h3>
       <a target="_blank" :href="record.artifact.url">  Knowledge Graph Artifact {{ record.artifact.id }} </a>
     </h3>
     <v-card class="mx-auto my-2">
-      <v-card-title><v-text-field label="Title" outlined :value="record.artifact.title" disabled></v-text-field></v-card-title>
+      <v-card-title><v-text-field label="Title" outlined v-model="title_local"></v-text-field></v-card-title>
       
       <v-card-text>
-        <div><v-textarea disabled auto-grow outlined label="Description" v-model="sanitizedDescription"></v-textarea></div>
+        <div><v-textarea auto-grow outlined label="Description" v-model="description_local"></v-textarea></div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
@@ -50,7 +50,7 @@
           <v-icon right>mdi-close</v-icon>
         </span>
       </v-chip>
-      <v-btn class="success ml-2 mb-2" fab small><v-icon>mdi-plus</v-icon></v-btn>
+      <v-btn class="success ml-2 mb-2" fab small disabled><v-icon>mdi-plus</v-icon></v-btn>
 
       <v-divider class="mx-4"></v-divider>
 
@@ -72,7 +72,7 @@
         {{ v.tag }}
       </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small><v-icon>mdi-plus</v-icon></v-btn>
+      <v-btn class="success ml-2 mb-2" fab small disabled><v-icon>mdi-plus</v-icon></v-btn>
 
       <v-divider class="mx-4"></v-divider>
       
@@ -92,7 +92,7 @@
         {{ v.relation | titlecase }}: {{ v.related_artifact }}
       </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small><v-icon>mdi-plus</v-icon></v-btn>
+      <v-btn class="success ml-2 mb-2" fab small disabled><v-icon>mdi-plus</v-icon></v-btn>
 
       <v-divider class="mx-4"></v-divider>
       
@@ -113,7 +113,7 @@
         {{ v.title }}
       </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small><v-icon>mdi-plus</v-icon></v-btn>
+      <v-btn class="success ml-2 mb-2" fab small disabled><v-icon>mdi-plus</v-icon></v-btn>
 
       <v-divider class="mx-4"></v-divider>
 
@@ -129,14 +129,29 @@
       <span class="ml-4 mb-2" v-else>Importer found no files</span>
 
       <v-card-actions>
-        <v-btn text disabled>
+        <v-btn @click="save()" text>
           Save
         </v-btn>
-        <v-btn text>
+        <v-btn @click="publish()" text>
           Publish
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-snackbar
+      v-model="snackbar"
+    >
+      Title and description saved
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
@@ -158,7 +173,15 @@ export default {
   data() {
     return {
       loading: true,
+      publish_local: false,
+      title_local: this.title,
+      description_local: this.description,
+      snackbar: false,
     }
+  },
+  mounted () {
+    // force title and description to refresh on page load
+    if (this.title && this.description) return true
   },
   computed: {
     ...mapState({
@@ -181,12 +204,10 @@ export default {
     badges () {
       let badges = []
       let badges_raw = this.record.artifact.meta.filter(m => m.name == "badge")
-      console.log(badges_raw)
       if (!badges_raw.length) return null
       for (let b of badges_raw) {
         badges.push(JSON.parse(b.value))
       }
-      console.log(badges)
       return badges
     },
     artifactIcon () {
@@ -196,25 +217,37 @@ export default {
     artifactColor () {
       if (this.record.artifact.type == "publication") return "info"
       if (this.record.artifact.type == "dataset") return "green white--text"
+    },
+    published () {
+      if (this.record.artifact.publication) return true
+      return false
+    },
+    title () {
+      this.title_local = this.record.artifact.title
+      return this.record.artifact.title
+    },
+    description () {
+      this.description_local = this.record.artifact.description
+      return this.record.artifact.description
     }
   },
   methods: {
-    favoriteThis () {
-      if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
-      } else {
-        let action = !this.favorite
-        this.favorite = !this.favorite
-        let payload = {
-          token: this.$auth.getToken('github'),
-          userid: this.user_id
-        }
-        if (action) {
-          this.$favoritesEndpoint.update(this.record.artifact.id, payload)
-        } else {
-          this.$favoritesEndpoint.remove(this.record.artifact.id, payload)
-        }
-      }
+    async publish () {
+      let response = await this.$knowledgeGraphRecordRepository.put(this.record.artifact.id, {
+        publication: {},
+      })
+      this.$router.push(`${this.record.artifact.id}`)
+    },
+    async save () {
+      let response = await this.$knowledgeGraphRecordRepository.put(this.record.artifact.id, {
+        title: this.title_local,
+        description: this.description_local,
+      })
+      this.snackbar = true
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        id: this.record.artifact.id,
+        source: 'kg'
+      })
     },
     bytesToSize(bytes) {
       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']

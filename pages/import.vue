@@ -131,7 +131,7 @@
     </v-form>
     <br><v-divider></v-divider><br>
     <ImportList v-if="imports.length" :imports="imports"></ImportList>
-    <div v-else>No imports loaded</div>
+    <div v-else>Loading imports...</div>
   </v-layout>
 </span>
 </template>
@@ -180,8 +180,8 @@ export default {
     }
   },
   async mounted () {
-    console.log(this.imports)
-     this.polling = setInterval(function () {
+    this.updateImports()
+    this.polling = setInterval(function () {
       this.updateImports()
     }.bind(this), 5000)
   },
@@ -195,12 +195,10 @@ export default {
     async startImport () {
       if (!this.valid) return
       this.importing = true
-      console.log(this.url)
       let response = await this.$importsEndpoint.create({
         userid: this.user_id,
         url: this.url,
       })
-      console.log(response)
       this.updateImports()
       this.importing = false
     },
@@ -215,8 +213,9 @@ export default {
       this.updateImports()
     }
   },
-  // beforeRouteLeave (to, from, next) {
-  //   clearInterval(this.polling)
-  // }
+  beforeRouteLeave (to, from, next) {
+    clearInterval(this.polling)
+    next()
+  }
 }
 </script>
