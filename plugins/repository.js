@@ -49,4 +49,16 @@ export default (ctx, inject) => {
     'reviewsEndpoint',
     repositoryWithAxios('kg/' + 'review')
   )
+
+  // imports array view/add API
+  inject(
+    'importsEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/imports')
+  )
+
+  // import view/modify API
+  inject(
+    'importEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/import')
+  )
 }

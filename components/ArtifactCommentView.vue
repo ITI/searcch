@@ -8,7 +8,7 @@
           </div>
         </v-card-title>
         <v-spacer></v-spacer>
-        <v-chip v-if="artifact.artifact.type" :color="artifactColor" class="ma-2" label>
+        <v-chip v-if="artifact.artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
           <v-avatar left>
             <v-icon>{{ artifactIcon }}</v-icon>
           </v-avatar>
@@ -133,7 +133,7 @@ export default {
       let first = []
       let rest = []
       for (let comment of this.comments) {
-        if (comment.reviewer.id === this.user_id) first.push(comment)
+        if (comment.review.reviewer.id === this.user_id) first.push(comment)
         else rest.push(comment)
       }
       return first.concat(rest)

@@ -1,16 +1,40 @@
 <template>
     <v-card v-if="comment">
+        <v-card-title>
+            <v-row class="ml-1">
+                <span v-if="name != ''">{{ name }}</span><span v-else>Anonymous</span>
+                <v-rating
+                    v-model="rating"
+                    v-if="!editing"
+                    color="amber"
+                    dense
+                    readonly
+                    size="18"
+                    class="ml-3"
+                ></v-rating>
+            </v-row>
+        </v-card-title>
         <v-card-text>
+            <v-rating
+                v-model="rating_local"
+                v-if="editing"
+                label="Rating"
+                color="amber"
+                dense
+                hover
+                size="24"
+                class="ml-3"
+            ></v-rating>
             <pre v-if="!editing">{{ review }}</pre>
             <v-textarea
                 v-else
                 label="Review"
                 placeholder="Add review..."
-                v-model="review"
+                v-model="review_local"
             >
             </v-textarea>
         </v-card-text>
-        <v-card-actions v-if="user_id == comment.reviewer.id">
+        <v-card-actions v-if="user_id == comment.review.reviewer.id">
             <v-btn
                 text
                 color="primary"
@@ -61,23 +85,44 @@ export default {
   data () {
     return {
       editing: false,
-      review: this.comment.review,
-      id: this.comment.id,
+      review_local: this.review,
+      rating_local: this.rating,
     }
   },
   computed: {
       ...mapState({
       user_id: state => state.user.user_id,
+      user_name: state => state.user.username,
     }),
+    name () {
+        return this.comment.review.reviewer.person.name
+    },
+    id () {
+        return this.comment.review.id
+    },
+    review () {
+        this.review_local = this.comment.review.review
+        return this.comment.review.review
+    },
+    rating () {
+        this.rating_local = this.comment.rating.rating
+        return this.comment.rating.rating
+    }
   },
   methods: {
       async saveReview () {
         this.editing = false
+        let rating_payload = {
+            token: this.$auth.getToken('github'),
+            userid: this.user_id,
+            rating: this.rating_local,
+        }
+        await this.$ratingsEndpoint.put(this.$route.params.id, rating_payload)
         let comment_payload = {
             token: this.$auth.getToken('github'),
             userid: this.user_id,
+            review: this.review_local,
             reviewid: this.id,
-            review: this.review
         }
         await this.$reviewsEndpoint.put(this.$route.params.id, comment_payload)
         this.$store.dispatch('artifacts/fetchArtifact', {
@@ -94,8 +139,8 @@ export default {
         await this.$ratingsEndpoint.remove(this.$route.params.id, rating_payload)
         let comment_payload = {
             token: this.$auth.getToken('github'),
+            reviewid: this.id,
             userid: this.user_id,
-            reviewid: this.id
         }
         await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
         this.$store.dispatch('artifacts/fetchArtifact', {
