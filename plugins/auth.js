@@ -13,15 +13,15 @@ export default function({ $loginEndpoint, store, $auth }) {
   if (!$auth.loggedIn) {
     return
   } else {
-    if (!validUsers.includes($auth.user.login.toLowerCase())) {
-      $auth.logout('github')
-    } else {
+    // if (!validUsers.includes($auth.user.login.toLowerCase())) {
+    //   $auth.logout('github')
+    // } else {
       let payload = {
         strategy: 'github',
         token: $auth.getToken('github'),
       }
       $loginEndpoint.create(payload).then(response => {
-        console.log(response)
+        // console.log(response)
         if (response.userid) {
           store.commit('user/SET_USER_ID', response.userid)
           store.commit('user/SET_USERNAME', response.person.name)
@@ -30,6 +30,6 @@ export default function({ $loginEndpoint, store, $auth }) {
       }).catch(error => {
         console.log("Login error", error)
       })
-    }
+    // }
   }
 }
