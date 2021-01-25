@@ -21,7 +21,7 @@
             For more information on SEARCCH, check out the
             <a href="https://searcch.cyberexperimentation.org" target="_blank">
               project homepage.
-            </a> Read below for release-specific notes
+            </a>
           </p>
           <p>
             To get started click continue...
