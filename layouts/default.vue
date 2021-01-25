@@ -63,7 +63,7 @@ export default {
     return {
       clipped: true,
       drawer: true,
-      miniVariant: true,
+      miniVariant: false,
       right: true,
       title: 'SEARCCH Hub',
     }
