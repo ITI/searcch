@@ -44,26 +44,39 @@
             Continue
           </v-btn>
         </v-card-actions>
-      </v-card><br><br>
+      </v-card><br>
       <v-card>
         <v-card-title class="headline">
-          Beta Release Features
+          Alpha Release 
         </v-card-title>
         <v-card-text>
           <p>
-            The SEARCCH Hub is currently being developed, but we wanted to share with you the existing features 
-            and get feedback so we can steer devcelopment in the direction that the community would like to see the Hub go.
+            The SEARCCH Hub is now open for alpha testing by invitation only. Once alpha testing is complete, we will move to beta testing.
           </p>
           <p>
-            Currently there are three tabs on the left hand pane you can navigate to: Search, Favorites, and Import.<br>
-            The Search page will allow you to search any keywords to find artifacts that match your needs or interests. 
-            You can click the favorites on any artifact to store it to your favorites page so you have easy access to it next time.<br>
-            Each artifact also has a review button which you can use to add a rating and a review to any artifact, which will be visible to the community 
-            and used by others to determine how good an artifact is at a glance.<br>
-            You can also import your own artifacts on the imports page. Just provide a URL and our intelligent import alogorithms will do the rest.
+            Volunteering to be a beta tester will help the community in providing the critical feedback we need to evolve the hub into a valuable community resource. Alpha testers may also be beta testers. Please contact us if you would like to be a beta tester. 
+          </p>
+        </v-card-text>
+      </v-card><br>
+      <v-card>
+        <v-card-title class="headline">
+          Alpha Features
+        </v-card-title>
+        <v-card-text>
+          <p>
+            There are three navigation tabs on the left hand pane: Search, Favorites, and Import.
           </p>
           <p>
-            Please provide comments and report bugs using the Send Us Feedback buttons at the bottom right.
+            The Search page allows users to perform keyword searches to find artifacts of interest. You may click the favorites icon on any artifact to store it in your favorites list for quick, future recall.
+          </p>
+          <p>
+            Each artifact has a review button which you can use to add a rating and a review to any artifact. Ratings and reviews are visible to the community and used by others to help them decide whether to invest their time in trying to use the reviewed/rated artifact.
+          </p>
+          <p>
+            The Imports page is used to import your own artifacts into the hub. To import an artifact, it must first be published on the Internet. Provide the artifact URL, and our intelligent import tool will prepare the artifact for review and publishing. For the alpha release, github, ACM digital library, ieeexplore, and Zenodo are the only supported internet repositories.
+          </p>
+          <p>
+            Please provide comments and report bugs using the Send Us Feedback button at the bottom right hand side of the page.
           </p>
         </v-card-text>
       </v-card>
