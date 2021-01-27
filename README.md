@@ -26,7 +26,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 ## Using docker-compose
 
-Using docker-compose will allow you to yml file as a configuration for building the searcch frontend without needing to remember various stop/start and container remove steps. Additionally, the provided starter docker-compose file will automatically build the image and tag it if there are changes to the code repo. This will allow the service to always be using the latest code base.
+Using docker-compose will allow you to use a yaml file as a configuration for building the searcch frontend without needing to remember various stop/start and container remove steps. Additionally, the provided starter docker-compose file will automatically build the image and tag it if there are changes to the code repo. This will allow the service to always be using the latest code base.
 
 ### Starting and stopping
 
@@ -42,11 +42,11 @@ Example: `docker-compose --project-name searcch-frontend up -d prod` will start 
 
 To stop containers, use the `down` command with docker-compose.
 
-Example: `docker-compose --projet-name searcch-frontend down prod` will stop the production container
+Example: `docker-compose --project-name searcch-frontend down prod` will stop the production container
 
-### setting environment variables
+### Setting environment variables
 
-searcch-frontend requires various environment variables to be set in a prod-variables.env and dev-variables.env file. You can use the .env file as the source, adding the proper prod and dev environment information.
+searcch-frontend requires various environment variables to be set in a prod-variables.env and dev-variables.env file. You can use the .env file in the searcch repo as a sample starting point and add the proper prod and dev environment information.
 
 ### Using github API key to build the docker image
 
