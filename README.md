@@ -32,11 +32,11 @@ Using docker-compose will allow you to use a yaml file as a configuration for bu
 
 #### Starting
 
-Generally, when running searcch frontend with docker compose, you will use some form of `docker-compose --project-name searcch-frontend up -d`.
+Generally, when running searcch frontend with docker compose, you will use some form of `docker-compose --project-name searcch-frontend up -d`. If the docker image named `search-frontend-production` or `searcch-frontend-development` do not exist, they will be build automatically. If they do exist, they will use the latest image of those by default. If you want to force a rebuild of the image, you will need to use the `--build` flag in your docker-compose command.
 
 To work with just prod or dev, append `prod` or `dev` to the end of the docker-compose line above
 
-Example: `docker-compose --project-name searcch-frontend up -d prod` will start just the production container.
+Example: `docker-compose --project-name searcch-frontend up -d prod` will start just the production container. To force a rebuild of the image first, run `docker-compose --project-name searcch-frontend up --build -d prod`
 
 #### Stopping
 
