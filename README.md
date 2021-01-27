@@ -57,9 +57,9 @@ Running docker-compose with a github API key allows you to always build from the
 
 To use the github API key, replace `githubapitoken` with your api token for the searcch project in github
 
-### Using a local to build the docker image
+### Using a local repo to build the docker image
 
-Running docker-compose with locally sourced files allows you to build the docker images from the local repo you cloned from docker. This is helful if you do not have a github API key for the SEARCCH project.
+Running docker-compose with locally sourced files allows you to build the docker images from the local repo you cloned from docker. This is helpful if you do not have a github API key for the SEARCCH project.
 Replace the `build: ${TOKEN...` line with `build: .`
 
 Using the local repo allows you to:
