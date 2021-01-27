@@ -1,18 +1,18 @@
 version: '3.7'
 services:
   prod:
-    image: searcch:latest-prod
+    image: searcch-frontend-production
     build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git"
     ports:
       - 127.0.0.1:3000:3000
-    container_name: searcch-frontend-prod
+    container_name: searcch-frontend-production
     env_file:
       - prod-variables.env
   dev:
-    image: searcch:latest-dev
+    image: searcch-frontend-development
     build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#dev-branch"
     ports:
       - 127.0.0.1:3001:3000
-    container_name: searcch-frontend-dev
+    container_name: searcch-frontend-development
     env_file:
       - dev-variables.env
