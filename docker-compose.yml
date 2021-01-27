@@ -10,7 +10,7 @@ services:
       - prod-variables.env
   dev:
     image: searcch:latest-dev
-    build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#alpha-fixes"
+    build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#dev-branch"
     ports:
       - 127.0.0.1:3001:3000
     container_name: searcch-frontend-dev
