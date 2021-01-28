@@ -155,7 +155,7 @@
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
-    Loading...
+    {{ loadingMessage }}
   </div>
 </template>
 
@@ -177,11 +177,15 @@ export default {
       title_local: this.title,
       description_local: this.description,
       snackbar: false,
+      loadingMessage: "Loading...",
     }
   },
   mounted () {
     // force title and description to refresh on page load
     if (this.title && this.description) return true
+    setTimeout(() => {
+      this.loadingMessage = "Error loading"
+    }, 5000)
   },
   computed: {
     ...mapState({

@@ -150,7 +150,7 @@
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
-    Loading...
+    {{ loadingMessage }}
   </div>
 </template>
 
@@ -168,7 +168,13 @@ export default {
   data() {
     return {
       loading: true,
+      loadingMessage: "Loading...",
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.loadingMessage = "Error loading"
+    }, 5000)
   },
   computed: {
     ...mapState({

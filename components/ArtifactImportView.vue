@@ -151,17 +151,23 @@ export default {
       let response = await this.$importEndpoint.put(this.artifact.id, {
         archived: true,
       })
+      this.updateImports()
     },
     async unarchive () {
       let response = await this.$importEndpoint.put(this.artifact.id, {
         archived: false,
       })
+      this.updateImports()
     },
     async publish () {
       let response = await this.$knowledgeGraphRecordRepository.put(this.full_artifact.id, {
         publication: {},
       })
       this.publish_local = true
+      this.updateImports()
+    },
+    updateImports () {
+      if (this.user_id) this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
     },
   }
 }

@@ -58,7 +58,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <span v-else>Loading...</span>
+    <span v-else>{{ loadingMessage }}</span>
   </div>
 </template>
 
@@ -83,12 +83,18 @@ export default {
   },
   data() {
     return {
+      loadingMessage: "Loading...",
       expanded: this.comments
         ? Array(this.comments.length)
             .fill(1)
             .map(Number.call, Number)
         : [],
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.loadingMessage = "Error loading"
+    }, 5000)
   },
   computed: {
     ...mapState({
