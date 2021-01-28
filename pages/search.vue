@@ -124,7 +124,7 @@
     <br>
     <v-divider></v-divider>
     <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
-    <span v-if="artifacts.length == 0 && searchLoading == true">Loading...</span>
+    <span v-if="artifacts.length == 0 && searchLoading == true">{{ searchMessage }}</span>
     <span v-if="artifacts.length == 0 && searchLoading == false"><h3>Type a search term into the input above and press Enter</h3></span>
     <v-btn v-if="showScrollToTop != 0" class="primary" id="scrollbtn" @click="scrollToTop()" elevation="10">Back to Top</v-btn>
   </div>
@@ -160,6 +160,7 @@ export default {
       limit: 20,
       search: '',
       searchLoading: false,
+      searchMessage: 'Loading...',
       advanced: {
         open: false,
         types: ['Dataset','Publication','Code'],
@@ -219,9 +220,10 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
-      this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
+    async onSubmit() {
       this.searchLoading = true
+      this.searchMessage = "Loading..."
+      this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
       this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
       let payload
       // comment out advanced query options for first test demo or until API built
@@ -243,6 +245,9 @@ export default {
       //   payload.orginization = this.advanced.query
       // }
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
+      setTimeout(() => { 
+        this.searchMessage = "No results found"
+      }, 5000);
     },
     toggle () {
       this.$nextTick(() => {

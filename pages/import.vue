@@ -9,7 +9,7 @@
     </v-flex>
   </v-layout>
   <v-layout column justify-left align-top>
-    <v-row><h1>Import</h1>
+    <v-row class="ml-1 mb-2"><h1>Import</h1>
       <v-dialog
         transition="dialog-bottom-transition"
         max-width="600"
@@ -131,7 +131,7 @@
     </v-form>
     <br><v-divider></v-divider><br>
     <ImportList v-if="imports.length" :imports="imports"></ImportList>
-    <div v-else>Loading imports...</div>
+    <div v-else>{{ loadingMessage }}</div>
   </v-layout>
 </span>
 </template>
@@ -149,6 +149,7 @@ export default {
   data() {
     return {
       importing: false,
+      importMessage: "Loading imports...",
       polling: null,
       dialog: false,
       valid: false,
@@ -180,7 +181,11 @@ export default {
     }
   },
   async mounted () {
+    this.loadingMessage = "Loading imports..."
     this.updateImports()
+    setTimeout(() => { 
+      this.loadingMessage = "No imports found"
+    }, 3000);
     this.polling = setInterval(function () {
       this.updateImports()
     }.bind(this), 5000)

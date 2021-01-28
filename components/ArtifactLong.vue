@@ -8,7 +8,7 @@
       <KGArtifactEdit :record="artifact"></KGArtifactEdit>
     </span>
   </div>
-  <div v-else>Loading...</div>
+  <div v-else>{{ loadingMessage }}</div>
 </template>
 
 <script>
@@ -34,6 +34,16 @@ export default {
       type: Boolean,
       required: true
     }
+  },
+  data() {
+    return {
+      loadingMessage: "Loading...",
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.loadingMessage = "Error loading"
+    }, 5000)
   },
   computed: {
     ...mapState({
