@@ -1,18 +1,26 @@
 version: '3.7'
 services:
-  prod:
+  searcch-frontend-prod:
     image: searcch-frontend-production
     build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git"
     ports:
       - 127.0.0.1:3000:3000
-    container_name: searcch-frontend-production
+    container_name: searcch-frontend-prod
     env_file:
-      - prod-variables.env
-  dev:
+      - env/searcch-frontend-prod.env
+    volumes:
+      - /data/searcch-frontend-prod/nuxt.config.js:/app/nuxt.config.js
+    networks:
+      - searcch-frontend-prod-net
+  searcch-frontend-dev:
     image: searcch-frontend-development
     build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#dev-branch"
     ports:
       - 127.0.0.1:3001:3000
-    container_name: searcch-frontend-development
+    container_name: searcch-frontend-dev
     env_file:
-      - dev-variables.env
+      - env/searcch-frontend-dev.env
+    volumes:
+      - /data/searcch-frontend-dev/nuxt.config.js:/app/nuxt.config.js
+    networks:
+      - searcch-frontend-dev-net
