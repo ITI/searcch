@@ -1,7 +1,26 @@
 version: '3.7'
 services:
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /data/caddy/data:/data
+      - /data/caddy/config:/config
+      - /data/caddy/ssl/:/etc/ssl/certs/searcch/
+    networks:
+      - searcch-frontend-prod-net
+      - searcch-frontend-dev-net
+
   searcch-frontend-prod:
     image: searcch-frontend-production
+    restart: unless-stopped
     build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git"
     ports:
       - 127.0.0.1:3000:3000
@@ -12,8 +31,10 @@ services:
       - /data/searcch-frontend-prod/nuxt.config.js:/app/nuxt.config.js
     networks:
       - searcch-frontend-prod-net
+
   searcch-frontend-dev:
     image: searcch-frontend-development
+    restart: unless-stopped
     build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#dev-branch"
     ports:
       - 127.0.0.1:3001:3000
