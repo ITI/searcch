@@ -18,7 +18,7 @@
         hide-details
       >
       </v-text-field>
-      <!-- <v-expansion-panels model="advanced.open">
+      <v-expansion-panels model="advanced.open">
         <v-expansion-panel  class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -50,13 +50,14 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-row align="center">
-              <v-col cols="3">
+              <v-col cols="12">
                 <v-select
                   v-model="advanced.types"
                   :items="types"
                   label="Artifact types"
                   multiple
                   class="rounded-0"
+                  hide-details
                 >
                   <template v-slot:prepend-item>
                     <v-list-item
@@ -88,31 +89,34 @@
                   </template>
                 </v-select>
               </v-col>
-              <v-col cols="1"></v-col>
-              <v-col cols="2">
-                <v-select
-                  :items="filters"
-                  v-model="advanced.filter"
-                  class="rounded-0"
-                  label="Filter type"
-                ></v-select>
-              </v-col>
-              <v-col cols="6">
+            </v-row>
+            <v-row align="center">
+              <v-col cols="12">
                 <v-text-field
-                  v-model="advanced.query"
-                  :placeholder="advancedPlaceholder"
-                  label="Enter filter"
+                  v-model="advanced.author"
+                  placeholder="Kevin Bacon, Shaquille O'Neil"
+                  label="Author Name(s)"
                   class="rounded-0"
+                  hide-details
                 >
-                  <template v-slot:prepend>
-                    
-                  </template>
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-row align="center">
+              <v-col cols="12">
+                <v-text-field
+                  v-model="advanced.org"
+                  placeholder="University of Illinois"
+                  label="Orginization"
+                  class="rounded-0"
+                  hide-details
+                >
                 </v-text-field>
               </v-col>
             </v-row>
           </v-expansion-panel-content>
         </v-expansion-panel>
-      </v-expansion-panels> -->
+      </v-expansion-panels>
     </v-form>
     <div hidden>
       <v-select
@@ -158,14 +162,14 @@ export default {
       searchsource: 'kg',
       engines: ['kg', 'zenodo'],
       limit: 20,
-      search: '',
+      search: this.search_init || '',
       searchLoading: false,
       searchMessage: 'Loading...',
       advanced: {
         open: false,
         types: ['Dataset','Publication','Code'],
-        query: '',
-        filter: 'Name',
+        author: '',
+        org: '',
       },
       types: [
         'Dataset',
@@ -201,7 +205,8 @@ export default {
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
-      source: state => state.artifacts.source
+      source: state => state.artifacts.source,
+      search_init: state => state.artifacts.search,
     }),
     allArtifacts () {
       return this.advanced.types.length === this.types.length

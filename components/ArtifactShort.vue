@@ -79,7 +79,6 @@
 
         <v-btn
           small
-          replace
           :to="`/artifact/${artifact.id}`"
           nuxt
         >

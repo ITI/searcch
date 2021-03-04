@@ -92,26 +92,17 @@ export const mutations = {
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
     let a = {}
-    commit('SET_SEARCH', payload.keyword)
-    if (state.source === 'zenodo') {
-      a = await this.$zenodoRecordRepository.index({
-        q: payload.keyword,
-        size: '20'
+    commit('SET_SEARCH', payload.keywords)
+    a = await this.$knowledgeGraphSearchRepository.index({
+      ...payload
+    })
+    commit(
+      'SET_ARTIFACTS',
+      a.artifacts.map(processArtifacts).sort(function(a, b) {
+        return b.relevance_score - a.relevance_score
       })
-      console.log(a)
-      commit('SET_ARTIFACTS', a)
-    } else {
-      a = await this.$knowledgeGraphSearchRepository.index({
-        ...payload
-      })
-      commit(
-        'SET_ARTIFACTS',
-        a.artifacts.map(processArtifacts).sort(function(a, b) {
-          return b.relevance_score - a.relevance_score
-        })
-      )
-      commit('SET_RELEVANCE_SCORES', relevantScores(state.artifacts))
-    }
+    )
+    commit('SET_RELEVANCE_SCORES', relevantScores(state.artifacts))
   },
   async fetchArtifact({ commit, state }, payload) {
     let a = {}
