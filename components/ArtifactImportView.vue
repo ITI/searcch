@@ -160,7 +160,7 @@ export default {
       this.updateImports()
     },
     async publish () {
-      let response = await this.$knowledgeGraphRecordRepository.put(this.full_artifact.id, {
+      let response = await this.$artifactRecordRepository.put(this.full_artifact.id, {
         publication: {},
       })
       this.publish_local = true

@@ -149,7 +149,7 @@ export default {
   data() {
     return {
       importing: false,
-      importMessage: "Loading imports...",
+      loadingMessage: "Loading imports...",
       polling: null,
       dialog: false,
       valid: false,

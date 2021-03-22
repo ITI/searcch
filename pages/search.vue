@@ -87,7 +87,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="advanced.author"
-                  placeholder="Kevin Bacon, Shaquille O'Neil"
+                  placeholder="Tim Yardley"
                   label="Author Name(s)"
                   class="rounded-0"
                   hide-details
@@ -100,7 +100,7 @@
                 <v-text-field
                   v-model="advanced.org"
                   placeholder="University of Illinois"
-                  label="Orginization"
+                  label="Organization"
                   class="rounded-0"
                   hide-details
                 >
@@ -231,11 +231,8 @@ export default {
         keywords: this.search,
         page: this.page,
       }
-      // comment out advanced query options for first test demo or until API built
       if (this.adopen == 0) {
         payload.type = this.advanced.types.map(s => s.toLowerCase())
-        //   payload.author = this.advanced.query
-        //   payload.orginization = this.advanced.query
       }
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => { 
