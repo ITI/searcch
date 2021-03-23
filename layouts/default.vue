@@ -101,6 +101,11 @@ export default {
           title: 'Import',
           to: '/import'
         })
+        items.push({
+          icon: 'mdi-database-plus',
+          title: 'Create',
+          to: '/create'
+        })
       }
       return items
     }
