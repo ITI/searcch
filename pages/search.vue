@@ -9,7 +9,6 @@
       <v-text-field
         light
         solo
-        append-icon="mdi-magnify"
         placeholder="Type keyword..."
         v-model="search"
         loading="true"
@@ -18,7 +17,7 @@
         hide-details
       >
       </v-text-field>
-      <!-- <v-expansion-panels model="advanced.open">
+      <v-expansion-panels v-model="adopen">
         <v-expansion-panel  class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -37,12 +36,6 @@
                     >
                       Select advanced filters for your query
                     </span>
-                    <span
-                      v-else
-                      key="1"
-                    >
-                      {{ advanced.query }}
-                    </span>
                   </v-fade-transition>
                 </v-col>
               </v-row>
@@ -50,13 +43,14 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-row align="center">
-              <v-col cols="3">
+              <v-col cols="12">
                 <v-select
                   v-model="advanced.types"
                   :items="types"
                   label="Artifact types"
                   multiple
                   class="rounded-0"
+                  hide-details
                 >
                   <template v-slot:prepend-item>
                     <v-list-item
@@ -88,41 +82,43 @@
                   </template>
                 </v-select>
               </v-col>
-              <v-col cols="1"></v-col>
-              <v-col cols="2">
-                <v-select
-                  :items="filters"
-                  v-model="advanced.filter"
-                  class="rounded-0"
-                  label="Filter type"
-                ></v-select>
-              </v-col>
-              <v-col cols="6">
+            </v-row>
+            <!-- <v-row align="center">
+              <v-col cols="12">
                 <v-text-field
-                  v-model="advanced.query"
-                  :placeholder="advancedPlaceholder"
-                  label="Enter filter"
+                  v-model="advanced.author"
+                  placeholder="Tim Yardley"
+                  label="Author Name(s)"
                   class="rounded-0"
+                  hide-details
                 >
-                  <template v-slot:prepend>
-                    
-                  </template>
                 </v-text-field>
               </v-col>
             </v-row>
+            <v-row align="center">
+              <v-col cols="12">
+                <v-text-field
+                  v-model="advanced.org"
+                  placeholder="University of Illinois"
+                  label="Organization"
+                  class="rounded-0"
+                  hide-details
+                >
+                </v-text-field>
+              </v-col>
+            </v-row> -->
+            <v-btn @click="onSubmit" class="primary mt-3">Search</v-btn>
           </v-expansion-panel-content>
         </v-expansion-panel>
-      </v-expansion-panels> -->
+      </v-expansion-panels>
     </v-form>
-    <div hidden>
-      <v-select
-        v-model="searchsource"
-        :items="engines"
-        label="Search Engine"
-      ></v-select>
-    </div>
     <br>
     <v-divider></v-divider>
+    <v-pagination
+      v-if="this.searchLoading == true"
+      v-model="page"
+      :length="10"
+    ></v-pagination>
     <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
     <span v-if="artifacts.length == 0 && searchLoading == true">{{ searchMessage }}</span>
     <span v-if="artifacts.length == 0 && searchLoading == false"><h3>Type a search term into the input above and press Enter</h3></span>
@@ -158,14 +154,16 @@ export default {
       searchsource: 'kg',
       engines: ['kg', 'zenodo'],
       limit: 20,
+      page: 1,
       search: '',
       searchLoading: false,
       searchMessage: 'Loading...',
+      searchInterval: null,
+      adopen: false,
       advanced: {
-        open: false,
         types: ['Dataset','Publication','Code'],
-        query: '',
-        filter: 'Name',
+        author: '',
+        org: '',
       },
       types: [
         'Dataset',
@@ -196,12 +194,15 @@ export default {
     if(this.$route.query.keywords) {
       this.search = this.$route.query.keywords
       this.onSubmit()
+    } else {
+      this.search = this.search_init
     }
   },
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
-      source: state => state.artifacts.source
+      source: state => state.artifacts.source,
+      search_init: state => state.artifacts.search,
     }),
     allArtifacts () {
       return this.advanced.types.length === this.types.length
@@ -222,30 +223,19 @@ export default {
   methods: {
     async onSubmit() {
       this.searchLoading = true
+      if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = "Loading..."
       this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
       this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
-      let payload
-      // comment out advanced query options for first test demo or until API built
-      // if (!this.advanced.open) {
-        payload = {
-          keywords: this.search
-        }
-      // } else {
-      //   payload = {
-      //     keywords: this.search,
-      //     type: this.advanced.types,
-      //     author: null,
-      //     orginization: null
-      //   }
-      // }
-      // if (this.advanced.filter == "Name") {
-      //   payload.author = this.advanced.query
-      // } else if (this.advanced.filter == "Organization") {
-      //   payload.orginization = this.advanced.query
-      // }
+      let payload = {
+        keywords: this.search,
+        page: this.page,
+      }
+      if (this.adopen == 0) {
+        payload.type = this.advanced.types.map(s => s.toLowerCase())
+      }
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
-      setTimeout(() => { 
+      this.searchInterval = setTimeout(() => { 
         this.searchMessage = "No results found"
       }, 5000);
     },
@@ -264,7 +254,12 @@ export default {
     handleScroll () {
       this.showScrollToTop = window.scrollY
     }
-  }
+  },
+  watch: {
+    page () {
+      this.onSubmit()
+    }
+  },
 }
 </script>
 

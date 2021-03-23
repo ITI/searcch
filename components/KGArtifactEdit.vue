@@ -237,13 +237,13 @@ export default {
   },
   methods: {
     async publish () {
-      let response = await this.$knowledgeGraphRecordRepository.put(this.record.artifact.id, {
+      let response = await this.$artifactRecordRepository.put(this.record.artifact.id, {
         publication: {},
       })
       this.$router.push(`${this.record.artifact.id}`)
     },
     async save () {
-      let response = await this.$knowledgeGraphRecordRepository.put(this.record.artifact.id, {
+      let response = await this.$artifactRecordRepository.put(this.record.artifact.id, {
         title: this.title_local,
         description: this.description_local,
       })

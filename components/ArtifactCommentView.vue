@@ -50,7 +50,6 @@
 
         <v-btn
           small
-          replace
           :to="`/artifact/${artifact.artifact.id}`"
           nuxt
         >

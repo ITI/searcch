@@ -13,14 +13,6 @@ const processArtifacts = obj => {
   return renameKeys({ doi: 'id' }, obj)
 }
 
-const relevantScores = obj => {
-  let relevanceResult = []
-  obj.forEach(artifact => {
-    relevanceResult.push(artifact.relevance_score)
-  })
-  return relevanceResult
-}
-
 export const state = () => ({
   artifacts: [],
   artifact: {},
@@ -72,9 +64,6 @@ export const mutations = {
   SET_SOURCE(state, source) {
     state.source = source
   },
-  SET_RELEVANCE_SCORES(state, scores) {
-    state.scores = scores
-  },
   SET_FAVORITES(state, favorites) {
     state.favorites = favorites
   },
@@ -92,26 +81,14 @@ export const mutations = {
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
     let a = {}
-    commit('SET_SEARCH', payload.keyword)
-    if (state.source === 'zenodo') {
-      a = await this.$zenodoRecordRepository.index({
-        q: payload.keyword,
-        size: '20'
-      })
-      console.log(a)
-      commit('SET_ARTIFACTS', a)
-    } else {
-      a = await this.$knowledgeGraphSearchRepository.index({
-        ...payload
-      })
-      commit(
-        'SET_ARTIFACTS',
-        a.artifacts.map(processArtifacts).sort(function(a, b) {
-          return b.relevance_score - a.relevance_score
-        })
-      )
-      commit('SET_RELEVANCE_SCORES', relevantScores(state.artifacts))
-    }
+    commit('SET_SEARCH', payload.keywords)
+    a = await this.$artifactSearchRepository.index({
+      ...payload
+    })
+    commit(
+      'SET_ARTIFACTS',
+      a.artifacts
+    )
   },
   async fetchArtifact({ commit, state }, payload) {
     let a = {}
@@ -131,13 +108,7 @@ export const actions = {
       return state.artifact
     } else {
       console.log('fetching entry ' + payload.id)
-      if (state.source === 'zenodo') {
-        a = await this.$zenodoRecordRepository.show(payload.id)
-        commit('SET_ARTIFACT', a)
-      } else {
-        a = await this.$knowledgeGraphRecordRepository.show(payload.id)
-        commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
-      }
+      a = await this.$artifactRecordRepository.show(payload.id)
     }
   },
   async fetchFavorites({ commit, state }, payload) {

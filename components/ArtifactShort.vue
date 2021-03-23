@@ -1,19 +1,22 @@
 <template>
   <div>
     <v-card class="mx-auto overflow-hidden" elevation="3">
-      <v-row class="px-3">
-        <v-card-title class="align-start">
-          <div>
-            <span class="headline">{{ artifact.title | titlecase }}</span>
-          </div>
-        </v-card-title>
-        <v-spacer></v-spacer>
-        <v-chip v-if="artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
-          <v-avatar left>
-            <v-icon>{{ artifactIcon }}</v-icon>
-          </v-avatar>
-          <div v-if="artifact.type">{{ artifact.type }}</div>
-        </v-chip>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title class="align-start">
+            <div>
+              <span class="headline">{{ artifact.title | titlecase }}</span>
+            </div>
+          </v-card-title>
+        </v-col>
+        <v-col cols="2" class="text-lg-right">
+          <v-chip v-if="artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
+            <v-avatar left>
+              <v-icon>{{ artifactIcon }}</v-icon>
+            </v-avatar>
+            <div v-if="artifact.type">{{ artifact.type }}</div>
+          </v-chip>
+        </v-col>
       </v-row>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
@@ -79,7 +82,6 @@
 
         <v-btn
           small
-          replace
           :to="`/artifact/${artifact.id}`"
           nuxt
         >
@@ -173,3 +175,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .v-card__title {
+    word-break: normal;
+  }
+</style>
