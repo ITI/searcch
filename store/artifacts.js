@@ -108,8 +108,7 @@ export const actions = {
       return state.artifact
     } else {
       console.log('fetching entry ' + payload.id)
-      a = await this.$knowledgeGraphRecordRepository.show(payload.id)
-      commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
+      a = await this.$artifactRecordRepository.show(payload.id)
     }
   },
   async fetchFavorites({ commit, state }, payload) {
