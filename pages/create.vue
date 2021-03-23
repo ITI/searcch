@@ -1,15 +1,15 @@
 <template>
   <div>
-    <KGArtifactEdit :record="emptyArtifact"></KGArtifactEdit>
+    <ArtifactCustom :record="emptyArtifact"></ArtifactCustom>
   </div>
 </template>
 
 <script>
-import KGArtifactEdit from '~/components/KGArtifactEdit'
+import ArtifactCustom from '~/components/ArtifactCustom'
 
 export default {
   components: {
-    KGArtifactEdit
+    ArtifactCustom
   },
   data() {
     return {
