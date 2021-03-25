@@ -1,10 +1,12 @@
 <template>
   <div v-if="record.artifact">
     <v-card class="mx-auto my-2">
-      <v-card-title><v-text-field hide-details label="Title" outlined v-model="title_local"></v-text-field></v-card-title>
+      <v-card-title>Custom Artifact Import</v-card-title>
+      <v-card-text class="pb-0"><v-text-field hide-details label="URL" outlined v-model="meta.url"></v-text-field></v-card-text>
+      <v-card-text class="pb-0"><v-text-field hide-details label="Title" outlined v-model="meta.title"></v-text-field></v-card-text>
       
       <v-card-text>
-        <div><v-textarea hide-details auto-grow outlined label="Description" v-model="description_local"></v-textarea></div>
+        <div><v-textarea hide-details auto-grow outlined label="Description" v-model="meta.description"></v-textarea></div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
@@ -184,6 +186,9 @@ export default {
       snackbar: false,
       loadingMessage: "Loading...",
       meta: {
+        url: '',
+        title: '',
+        description: '',
         artifactType: '',
         creators: [],
         keywords: [],
