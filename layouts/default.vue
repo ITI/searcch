@@ -90,7 +90,7 @@ export default {
           to: '/search'
         },
       ]
-      if (this.user_id) {
+      if (this.user_id || 1) { // revent when server issues fixed
         items.push({
           icon: 'mdi-apps',
           title: 'Dashboard',
