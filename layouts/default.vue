@@ -75,20 +75,30 @@ export default {
     items () {
       let items = [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-information',
+          title: 'About',
           to: '/'
         },
         {
+          icon: 'mdi-frequently-asked-questions',
+          title: 'FAQs',
+          to: '/faqs'
+        },
+        {
           icon: 'mdi-cloud-search',
-          title: 'Search',
+          title: 'Search Artifacts',
           to: '/search'
         },
       ]
-      if (this.user_id) {
+      if (this.user_id || 1) { // revent when server issues fixed
+        items.push({
+          icon: 'mdi-apps',
+          title: 'Dashboard',
+          to: '/dashboard'
+        })
         items.push({
           icon: 'mdi-table-heart',
-          title: 'Favorites',
+          title: 'Favorite Artifacts',
           to: '/favorites'
         })
         // items.push({
@@ -98,13 +108,18 @@ export default {
         // })
         items.push({
           icon: 'mdi-database-import',
-          title: 'Import',
+          title: 'Import Artifact',
           to: '/import'
         })
         items.push({
           icon: 'mdi-database-plus',
-          title: 'Create',
+          title: 'Create Artifact',
           to: '/create'
+        })
+        items.push({
+          icon: 'mdi-account-cog',
+          title: 'Manage Account',
+          to: '/profile'
         })
       }
       return items
