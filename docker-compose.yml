@@ -45,8 +45,22 @@ services:
     networks:
       - searcch-frontend-dev-net
 
+  searcch-frontend-local-dev:
+    image: searcch-frontend-local-dev
+    container_name: searcch-frontend-local-dev
+    restart: unless-stopped
+    build: .
+    env_file:
+      - env/searcch-frontend-local-dev.env
+    ports:
+      - 127.0.0.1:3000:3000
+    networks:
+      - searcch-frontend-local-dev-net
+
 networks:
   searcch-frontend-dev-net:
     name: searcch-frontend-dev-net
   searcch-frontend-prod-net:
     name: searcch-frontend-prod-net
+  searcch-frontend-local-dev-net:
+    name: searcch-frontend-local-dev-net
