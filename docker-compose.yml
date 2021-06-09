@@ -1,7 +1,66 @@
 version: '3.7'
 services:
-  app:
-    image: searcch:latest
-    build: .
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
     ports:
-      - 3000:3000
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /data/caddy/data:/data
+      - /data/caddy/config:/config
+      - /data/caddy/ssl/:/etc/ssl/certs/searcch/
+    networks:
+      - searcch-frontend-prod-net
+      - searcch-frontend-dev-net
+
+  searcch-frontend-prod:
+    image: searcch-frontend-production
+    restart: unless-stopped
+    build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git"
+    ports:
+      - 127.0.0.1:3000:3000
+    container_name: searcch-frontend-prod
+    env_file:
+      - env/searcch-frontend-prod.env
+    volumes:
+      - /data/searcch-frontend-prod/nuxt.config.js:/app/nuxt.config.js
+    networks:
+      - searcch-frontend-prod-net
+
+  searcch-frontend-dev:
+    image: searcch-frontend-development
+    restart: unless-stopped
+    build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#dev-branch"
+    ports:
+      - 127.0.0.1:3000:3000
+    container_name: searcch-frontend-dev
+    env_file:
+      - env/searcch-frontend-dev.env
+    volumes:
+      - /data/searcch-frontend-dev/nuxt.config.js:/app/nuxt.config.js
+    networks:
+      - searcch-frontend-dev-net
+
+  searcch-frontend-local-dev:
+    image: searcch-frontend-local-dev
+    container_name: searcch-frontend-local-dev
+    restart: unless-stopped
+    build: .
+    env_file:
+      - env/searcch-frontend-local-dev.env
+    ports:
+      - 127.0.0.1:3000:3000
+    networks:
+      - searcch-frontend-local-dev-net
+
+networks:
+  searcch-frontend-dev-net:
+    name: searcch-frontend-dev-net
+  searcch-frontend-prod-net:
+    name: searcch-frontend-prod-net
+  searcch-frontend-local-dev-net:
+    name: searcch-frontend-local-dev-net
