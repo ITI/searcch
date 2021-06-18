@@ -1,13 +1,15 @@
 import Vue from 'vue'
 
 const renameKeys = (keysMap, obj) =>
-  Object.keys(obj).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...{ [keysMap[key] || key]: obj[key] }
-    }),
-    {}
-  )
+  typeof obj === 'object'
+    ? Object.keys(obj).reduce(
+        (acc, key) => ({
+          ...acc,
+          ...{ [keysMap[key] || key]: obj[key] }
+        }),
+        {}
+      )
+    : obj
 
 const processArtifacts = obj => {
   return renameKeys({ doi: 'id' }, obj)
