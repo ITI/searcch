@@ -10,7 +10,12 @@
           </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip v-if="artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
+          <v-chip
+            v-if="artifact.type"
+            :color="artifactColor"
+            class="ma-2 mt-5"
+            label
+          >
             <v-avatar left>
               <v-icon>{{ artifactIcon }}</v-icon>
             </v-avatar>
@@ -70,21 +75,13 @@
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn
-          icon
-          :to="`/artifact/review/${artifact.id}`"
-          nuxt
-        >
+        <v-btn icon :to="`/artifact/review/${artifact.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn
-          small
-          :to="`/artifact/${artifact.id}`"
-          nuxt
-        >
+        <v-btn small :to="`/artifact/${artifact.id}`" nuxt>
           Read More
         </v-btn>
       </v-card-actions>
@@ -113,7 +110,7 @@ export default {
         ? Array(this.comments.length)
             .fill(1)
             .map(Number.call, Number)
-        : [],
+        : []
     }
   },
   computed: {
@@ -124,38 +121,36 @@ export default {
     }),
     sanitizedDescription: function() {
       let description = ''
-      if (this.source === 'zenodo') {
-        description = this.artifact.metadata.description
-      } else {
-        description = this.artifact.description
-      }
+      description = this.artifact.description
       return clip(this.$sanitize(description), 2000, {
         html: true,
         maxLines: 40
       })
     },
     favorite: {
-      get () {
+      get() {
         return this.favorites[this.artifact.id] ? true : false
       },
-      set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
+      set(value) {
+        if (value)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
       }
     },
-    artifactIcon () {
-      if (this.artifact.type == "publication") return "mdi-newspaper-variant-outline"
-      if (this.artifact.type == "code") return "mdi-code-braces"
-      if (this.artifact.type == "dataset") return "mdi-database"
+    artifactIcon() {
+      if (this.artifact.type == 'publication')
+        return 'mdi-newspaper-variant-outline'
+      if (this.artifact.type == 'code') return 'mdi-code-braces'
+      if (this.artifact.type == 'dataset') return 'mdi-database'
     },
-    artifactColor () {
-      if (this.artifact.type == "publication") return "info"
-      if (this.artifact.type == "code") return "purple white--text"
-      if (this.artifact.type == "dataset") return "green white--text"
+    artifactColor() {
+      if (this.artifact.type == 'publication') return 'info'
+      if (this.artifact.type == 'code') return 'purple white--text'
+      if (this.artifact.type == 'dataset') return 'green white--text'
     }
   },
-  methods:{
-    favoriteThis () {
+  methods: {
+    favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
@@ -177,7 +172,7 @@ export default {
 </script>
 
 <style scoped>
-  .v-card__title {
-    word-break: normal;
-  }
+.v-card__title {
+  word-break: normal;
+}
 </style>

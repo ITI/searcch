@@ -1,8 +1,11 @@
 <template>
   <div v-if="artifact.artifact">
     <span v-if="!edit">
-      <KGCodeArtifactLong v-if="artifact.artifact.type == 'code'" :record="artifact"></KGCodeArtifactLong>
-      <KGArtifactLong v-else :record="artifact"/>
+      <KGCodeArtifactLong
+        v-if="artifact.artifact.type == 'code'"
+        :record="artifact"
+      ></KGCodeArtifactLong>
+      <KGArtifactLong v-else :record="artifact" />
     </span>
     <span v-else>
       <KGArtifactEdit :record="artifact"></KGArtifactEdit>
@@ -12,7 +15,6 @@
 </template>
 
 <script>
-import ZenodoArtifactLong from '@/components/ZenodoArtifactLong'
 import KGArtifactLong from '@/components/KGArtifactLong'
 import { mapState } from 'vuex'
 import KGCodeArtifactLong from './KGCodeArtifactLong.vue'
@@ -20,10 +22,9 @@ import KGArtifactEdit from './KGArtifactEdit.vue'
 
 export default {
   components: {
-    ZenodoArtifactLong,
     KGArtifactLong,
     KGCodeArtifactLong,
-    KGArtifactEdit,
+    KGArtifactEdit
   },
   props: {
     artifact: {
@@ -37,12 +38,12 @@ export default {
   },
   data() {
     return {
-      loadingMessage: "Loading...",
+      loadingMessage: 'Loading...'
     }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
-      this.loadingMessage = "Error loading"
+      this.loadingMessage = 'Error loading'
     }, 5000)
   },
   computed: {

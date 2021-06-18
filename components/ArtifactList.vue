@@ -1,10 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-row
-        v-for="artifact in artifacts"
-        :key="artifact.id"
-      >
+      <v-row v-for="artifact in artifacts" :key="artifact.id">
         <v-col>
           <ArtifactShort :artifact="artifact"></ArtifactShort>
         </v-col>
@@ -38,12 +35,8 @@ export default {
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
-      scores: state => state.artifacts.scores
-    }),
-    sparkScores: function() {
-      return this.scores.slice(0, 20)
-    }
+      source: state => state.artifacts.source
+    })
   }
 }
 </script>
