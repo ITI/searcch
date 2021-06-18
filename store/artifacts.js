@@ -18,10 +18,9 @@ export const state = () => ({
   artifact: {},
   search: '',
   source: '',
-  scores: [],
   favorites: [],
   favoritesIDs: {},
-  imports: [],
+  imports: []
 })
 
 export const getters = {
@@ -36,9 +35,6 @@ export const getters = {
   },
   source: state => {
     return state.source
-  },
-  scores: state => {
-    return state.scores
   },
   favorites: state => {
     return state.favorites
@@ -75,7 +71,7 @@ export const mutations = {
   },
   SET_IMPORTS(state, imports) {
     state.imports = imports
-  },
+  }
 }
 
 export const actions = {
@@ -85,10 +81,7 @@ export const actions = {
     a = await this.$artifactSearchRepository.index({
       ...payload
     })
-    commit(
-      'SET_ARTIFACTS',
-      a.artifacts
-    )
+    commit('SET_ARTIFACTS', a.artifacts)
   },
   async fetchArtifact({ commit, state }, payload) {
     let a = {}
@@ -109,6 +102,7 @@ export const actions = {
     } else {
       console.log('fetching entry ' + payload.id)
       a = await this.$artifactRecordRepository.show(payload.id)
+      commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
     }
   },
   async fetchFavorites({ commit, state }, payload) {
