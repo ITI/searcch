@@ -4,7 +4,7 @@
       <logo />
     </div>
     <h1>Search</h1>
-    <v-divider></v-divider><br>
+    <v-divider></v-divider><br />
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
         light
@@ -18,22 +18,16 @@
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen">
-        <v-expansion-panel  class="rounded-0">
+        <v-expansion-panel class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
               <v-row no-gutters>
                 <v-col cols="4">
                   Advanced
                 </v-col>
-                <v-col
-                  cols="8"
-                  class="text--secondary"
-                >
+                <v-col cols="8" class="text--secondary">
                   <v-fade-transition leave-absolute>
-                    <span
-                      v-if="open"
-                      key="0"
-                    >
+                    <span v-if="open" key="0">
                       Select advanced filters for your query
                     </span>
                   </v-fade-transition>
@@ -53,12 +47,13 @@
                   hide-details
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item
-                      ripple
-                      @click="toggle"
-                    >
+                    <v-list-item ripple @click="toggle">
                       <v-list-item-action>
-                        <v-icon :color="advanced.types.length > 0 ? 'indigo darken-4' : ''">
+                        <v-icon
+                          :color="
+                            advanced.types.length > 0 ? 'indigo darken-4' : ''
+                          "
+                        >
                           {{ aterfactTypeIcon }}
                         </v-icon>
                       </v-list-item-action>
@@ -72,11 +67,8 @@
                   </template>
                   <template v-slot:selection="{ item, index }">
                     <span v-if="index === 0">{{ item }}</span>
-                    <span ></span>
-                    <span
-                      v-if="index === 1"
-                      class="grey--text caption"
-                    >
+                    <span></span>
+                    <span v-if="index === 1" class="grey--text caption">
                       (+{{ advanced.types.length - 1 }} others)
                     </span>
                   </template>
@@ -112,7 +104,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-form>
-    <br>
+    <br />
     <v-divider></v-divider>
     <v-pagination
       v-if="this.searchLoading == true"
@@ -120,9 +112,20 @@
       :length="10"
     ></v-pagination>
     <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
-    <span v-if="artifacts.length == 0 && searchLoading == true">{{ searchMessage }}</span>
-    <span v-if="artifacts.length == 0 && searchLoading == false"><h3>Type a search term into the input above and press Enter</h3></span>
-    <v-btn v-if="showScrollToTop != 0" class="primary" id="scrollbtn" @click="scrollToTop()" elevation="10">Back to Top</v-btn>
+    <span v-if="artifacts.length == 0 && searchLoading == true">{{
+      searchMessage
+    }}</span>
+    <span v-if="artifacts.length == 0 && searchLoading == false"
+      ><h3>Type a search term into the input above and press Enter</h3></span
+    >
+    <v-btn
+      v-if="showScrollToTop != 0"
+      class="primary"
+      id="scrollbtn"
+      @click="scrollToTop()"
+      elevation="10"
+      >Back to Top</v-btn
+    >
   </div>
 </template>
 
@@ -161,9 +164,9 @@ export default {
       searchInterval: null,
       adopen: false,
       advanced: {
-        types: ['Dataset','Publication','Code'],
+        types: ['Dataset', 'Publication', 'Code'],
         author: '',
-        org: '',
+        org: ''
       },
       types: [
         'Dataset',
@@ -175,23 +178,20 @@ export default {
         'Hypothesis',
         'Domain',
         'Supporting Info',
-        'Prior Work',
+        'Prior Work'
       ],
-      filters: [
-        'Name',
-        'Organization',
-      ],
-      showScrollToTop: 0,
+      filters: ['Name', 'Organization'],
+      showScrollToTop: 0
     }
   },
-  beforeMount () {
-    window.addEventListener('scroll', this.handleScroll);
+  beforeMount() {
+    window.addEventListener('scroll', this.handleScroll)
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   },
-  mounted () {
-    if(this.$route.query.keywords) {
+  mounted() {
+    if (this.$route.query.keywords) {
       this.search = this.$route.query.keywords
       this.onSubmit()
     } else {
@@ -202,44 +202,44 @@ export default {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
       source: state => state.artifacts.source,
-      search_init: state => state.artifacts.search,
+      search_init: state => state.artifacts.search
     }),
-    allArtifacts () {
+    allArtifacts() {
       return this.advanced.types.length === this.types.length
     },
-    someArtifacts () {
+    someArtifacts() {
       return this.advanced.types.length > 0 && !this.allArtifacts
     },
-    aterfactTypeIcon () {
+    aterfactTypeIcon() {
       if (this.allArtifacts) return 'mdi-close-box'
       if (this.someArtifacts) return 'mdi-minus-box'
       return 'mdi-checkbox-blank-outline'
     },
-    advancedPlaceholder () {
-      if (this.advanced.filter === "Name") return "First or Last name"
-      if (this.advanced.filter === "Organization") return "Organization name"
-    },
+    advancedPlaceholder() {
+      if (this.advanced.filter === 'Name') return 'First or Last name'
+      if (this.advanced.filter === 'Organization') return 'Organization name'
+    }
   },
   methods: {
     async onSubmit() {
       this.searchLoading = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
-      this.searchMessage = "Loading..."
+      this.searchMessage = 'Loading...'
       this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
       this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
       let payload = {
         keywords: this.search,
-        page: this.page,
+        page: this.page
       }
       if (this.adopen == 0) {
         payload.type = this.advanced.types.map(s => s.toLowerCase())
       }
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
-      this.searchInterval = setTimeout(() => { 
-        this.searchMessage = "No results found"
-      }, 5000);
+      this.searchInterval = setTimeout(() => {
+        this.searchMessage = 'No results found'
+      }, 5000)
     },
-    toggle () {
+    toggle() {
       this.$nextTick(() => {
         if (this.allArtifacts) {
           this.advanced.types = []
@@ -247,32 +247,33 @@ export default {
           this.advanced.types = this.types.slice()
         }
       })
-    }, 
-    scrollToTop () {
+    },
+    scrollToTop() {
       goTo(0)
     },
-    handleScroll () {
+    handleScroll() {
       this.showScrollToTop = window.scrollY
     }
   },
   watch: {
-    page () {
+    page() {
       this.onSubmit()
     }
-  },
+  }
 }
 </script>
 
 <style scoped>
-  .v-application--is-ltr .v-input__prepend-outer {
-    margin-right: 0px;
-  }
-  .v-text-field--outlined .v-input__prepend-outer, .v-text-field--outlined .v-input__append-outer {
-    margin-top: 4px;
-  }
-  #scrollbtn {
-    position: fixed;
-    bottom: 80px;
-    right: 30px;
+.v-application--is-ltr .v-input__prepend-outer {
+  margin-right: 0px;
+}
+.v-text-field--outlined .v-input__prepend-outer,
+.v-text-field--outlined .v-input__append-outer {
+  margin-top: 4px;
+}
+#scrollbtn {
+  position: fixed;
+  bottom: 80px;
+  right: 30px;
 }
 </style>
