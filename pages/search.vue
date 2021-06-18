@@ -155,7 +155,7 @@ export default {
   data() {
     return {
       searchsource: 'kg',
-      engines: ['kg', 'zenodo'],
+      engines: ['kg'],
       limit: 20,
       page: 1,
       search: '',
@@ -229,7 +229,8 @@ export default {
       this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
       let payload = {
         keywords: this.search,
-        page: this.page
+        page: this.page,
+        entity: 'artifact'
       }
       if (this.adopen == 0) {
         payload.type = this.advanced.types.map(s => s.toLowerCase())
