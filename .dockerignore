@@ -1,6 +1,8 @@
 .nuxt/
 node_modules/
 .git/
+.github/
+.vscode/
 dist
 docker-compose.yml
 Dockerfile
