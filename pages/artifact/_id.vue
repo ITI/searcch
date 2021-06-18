@@ -1,7 +1,7 @@
 <template>
   <div>
     <a @click="$router.go(-1)">Back</a>
-    <ArtifactLong :artifact="artifact" :edit="editing"/>
+    <ArtifactLong :artifact="artifact" :edit="editing" />
   </div>
 </template>
 
@@ -34,8 +34,8 @@ export default {
       artifact: state => state.artifacts.artifact,
       source: state => state.artifacts.source
     }),
-    editing () {
-      if (this.$route.query.edit == "true") return true
+    editing() {
+      if (this.$route.query.edit == 'true') return true
       return false
     }
   },
@@ -46,17 +46,10 @@ export default {
     if (typeof this.$route.query.source !== 'undefined') {
       this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
     }
-    if (this.source === 'zenodo' || this.$route.query.source === 'zenodo') {
-      this.$axios.setToken(this.$store.state.app.ZENODO_API_KEY, 'Bearer', [
-        'post',
-        'delete'
-      ])
-    }
     this.$store.dispatch('artifacts/fetchArtifact', {
       id: this.$route.params.id,
       source: this.$route.query.source ? this.$route.query.source : this.source
     })
-    console.log("Artifact", this.artifact)
   }
 }
 </script>
