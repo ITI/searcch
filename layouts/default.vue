@@ -23,6 +23,23 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-divider></v-divider>
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in footerItems"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-btn icon @click.stop="miniVariant = !miniVariant">
@@ -31,7 +48,9 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <span v-if="$auth.loggedIn" class="mr-2">Logged in</span>
-      <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()">Logout</v-btn>
+      <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
+        >Logout</v-btn
+      >
       <v-btn v-else class="primary" nuxt to="/login">Login</v-btn>
     </v-app-bar>
     <v-main>
@@ -50,7 +69,8 @@
         dark
         href="https://forms.gle/nsP4kJVsjAmKKLU86"
         target="_blank"
-      >Send Us Feedback</v-btn>
+        >Send Us Feedback</v-btn
+      >
     </v-footer>
   </v-app>
 </template>
@@ -65,32 +85,22 @@ export default {
       drawer: true,
       miniVariant: false,
       right: true,
-      title: 'SEARCCH Hub',
+      title: 'SEARCCH Hub'
     }
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.user_id,
+      user_id: state => state.user.user_id
     }),
-    items () {
+    items() {
       let items = [
-        {
-          icon: 'mdi-information',
-          title: 'About',
-          to: '/'
-        },
-        {
-          icon: 'mdi-frequently-asked-questions',
-          title: 'FAQs',
-          to: '/faqs'
-        },
         {
           icon: 'mdi-cloud-search',
           title: 'Search Artifacts',
           to: '/search'
-        },
+        }
       ]
-      if (this.user_id || 1) { // revent when server issues fixed
+      if (this.user_id) {
         items.push({
           icon: 'mdi-apps',
           title: 'Dashboard',
@@ -123,12 +133,27 @@ export default {
         })
       }
       return items
+    },
+    footerItems() {
+      let footerItems = [
+        {
+          icon: 'mdi-information',
+          title: 'About',
+          to: '/'
+        },
+        {
+          icon: 'mdi-frequently-asked-questions',
+          title: 'FAQs',
+          to: '/faqs'
+        }
+      ]
+      return footerItems
     }
   },
   methods: {
-    async logout () {
-      if (confirm("Log out of SEARCCH?")) {
-        console.log("Logging out")
+    async logout() {
+      if (confirm('Log out of SEARCCH?')) {
+        console.log('Logging out')
         this.$store.commit('user/SET_USER_ID', null)
         this.$auth.logout()
       }
