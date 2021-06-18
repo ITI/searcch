@@ -164,7 +164,7 @@ export default {
       searchInterval: null,
       adopen: false,
       advanced: {
-        types: ['Dataset', 'Publication', 'Code'],
+        types: ['Dataset', 'Code'],
         author: '',
         org: ''
       },
