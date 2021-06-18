@@ -1,10 +1,12 @@
 <template>
   <div v-if="record.artifact">
-    <h3>
-      <a target="_blank" :href="record.artifact.url">  Knowledge Graph Artifact {{ record.artifact.id }} </a>
-    </h3>
     <v-card class="mx-auto my-2">
       <v-card-title> {{ record.artifact.title }} </v-card-title>
+      <v-card-text>
+        <a target="_blank" :href="record.artifact.url">
+          {{ record.artifact.url }}
+        </a>
+      </v-card-text>
 
       <v-card-text>
         <v-row align="center" class="mx-0">
@@ -61,76 +63,81 @@
       </v-chip>
 
       <span v-if="record.artifact.tags.length">
-      <v-card-title class="py-0">Keywords</v-card-title>
+        <v-card-title class="py-0">Keywords</v-card-title>
 
-      <v-chip
-        color="primary"
-        v-for="(v, k) in record.artifact.tags"
-        :key="`tag${k}`"
-        cols="12"
-        class="ma-2"
-        label
-        :to="{ path: `/search?keywords=${v.tag}` }"
-      >
-        <v-avatar left>
-          <v-icon>mdi-tag-outline</v-icon>
-        </v-avatar>
+        <v-chip
+          color="primary"
+          v-for="(v, k) in record.artifact.tags"
+          :key="`tag${k}`"
+          cols="12"
+          class="ma-2"
+          label
+          :to="{ path: `/search?keywords=${v.tag}` }"
+        >
+          <v-avatar left>
+            <v-icon>mdi-tag-outline</v-icon>
+          </v-avatar>
 
-        {{ v.tag }}
-      </v-chip>
+          {{ v.tag }}
+        </v-chip>
       </span>
 
       <span v-if="record.artifact.relationships.length">
-      <v-card-title class="py-0">Related</v-card-title>
+        <v-card-title class="py-0">Related</v-card-title>
 
-      <v-chip
-        color="primary"
-        v-for="(v, k) in record.artifact.relationships"
-        :key="`rel${k}`"
-        cols="12"
-        class="ma-2"
-        label
-        :to="{ path: `/artifact/${v.related_artifact_id}` }"
-      >
-        <v-avatar left>
-          <v-icon>mdi-relation-one-to-one</v-icon>
-        </v-avatar>
+        <v-chip
+          color="primary"
+          v-for="(v, k) in record.artifact.relationships"
+          :key="`rel${k}`"
+          cols="12"
+          class="ma-2"
+          label
+          :to="{ path: `/artifact/${v.related_artifact_id}` }"
+        >
+          <v-avatar left>
+            <v-icon>mdi-relation-one-to-one</v-icon>
+          </v-avatar>
 
-        {{ v.relation | titlecase }}: {{ v.related_artifact }}
-      </v-chip>
+          {{ v.relation | titlecase }}: {{ v.related_artifact }}
+        </v-chip>
       </span>
 
       <span v-if="badges">
-      <v-card-title class="py-0">Badges</v-card-title>
+        <v-card-title class="py-0">Badges</v-card-title>
 
-      <v-chip
-        color="primary"
-        v-for="(v, k) in badges"
-        :key="`bad${k}`"
-        cols="12"
-        class="ma-2"
-        label
-        :href="v.url"
-        target="_blank"
-      >
-        <v-avatar left>
-          <v-icon>mdi-check-decagram</v-icon>
-        </v-avatar>
+        <v-chip
+          color="primary"
+          v-for="(v, k) in badges"
+          :key="`bad${k}`"
+          cols="12"
+          class="ma-2"
+          label
+          :href="v.url"
+          target="_blank"
+        >
+          <v-avatar left>
+            <v-icon>mdi-check-decagram</v-icon>
+          </v-avatar>
 
-        {{ v.title }}
-      </v-chip>
+          {{ v.title }}
+        </v-chip>
       </span>
 
       <v-divider class="mx-4"></v-divider>
 
       <span v-if="record.artifact.files.length">
-      <v-card-title class="py-0">Files</v-card-title>
+        <v-card-title class="py-0">Files</v-card-title>
 
-      <v-card-text v-for="(v, k) in record.artifact.files" :key="`file${k}`" cols="12">
-        <div>
-          <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
-        </div>
-      </v-card-text>
+        <v-card-text
+          v-for="(v, k) in record.artifact.files"
+          :key="`file${k}`"
+          cols="12"
+        >
+          <div>
+            <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type:
+            {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+          </div>
+        </v-card-text>
       </span>
 
       <v-card-actions>
@@ -168,12 +175,12 @@ export default {
   data() {
     return {
       loading: true,
-      loadingMessage: "Loading...",
+      loadingMessage: 'Loading...'
     }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
-      this.loadingMessage = "Error loading"
+      this.loadingMessage = 'Error loading'
     }, 5000)
   },
   computed: {
@@ -186,17 +193,22 @@ export default {
       return this.$sanitize(this.record.artifact.description)
     },
     favorite: {
-      get () {
+      get() {
         return this.favorites[this.record.artifact.id] ? true : false
       },
-      set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.record.artifact.id)
+      set(value) {
+        if (value)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
+        else
+          this.$store.commit(
+            'artifacts/REMOVE_FAVORITE',
+            this.record.artifact.id
+          )
       }
     },
-    badges () {
+    badges() {
       let badges = []
-      let badges_raw = this.record.artifact.meta.filter(m => m.name == "badge")
+      let badges_raw = this.record.artifact.meta.filter(m => m.name == 'badge')
       console.log(badges_raw)
       if (!badges_raw.length) return null
       for (let b of badges_raw) {
@@ -205,17 +217,18 @@ export default {
       console.log(badges)
       return badges
     },
-    artifactIcon () {
-      if (this.record.artifact.type == "publication") return "mdi-newspaper-variant-outline"
-      if (this.record.artifact.type == "dataset") return "mdi-database"
+    artifactIcon() {
+      if (this.record.artifact.type == 'publication')
+        return 'mdi-newspaper-variant-outline'
+      if (this.record.artifact.type == 'dataset') return 'mdi-database'
     },
-    artifactColor () {
-      if (this.record.artifact.type == "publication") return "info"
-      if (this.record.artifact.type == "dataset") return "green white--text"
+    artifactColor() {
+      if (this.record.artifact.type == 'publication') return 'info'
+      if (this.record.artifact.type == 'dataset') return 'green white--text'
     }
   },
   methods: {
-    favoriteThis () {
+    favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
@@ -237,7 +250,7 @@ export default {
       if (bytes == 0) return '0 Bytes'
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
-    },
+    }
   }
 }
 </script>
