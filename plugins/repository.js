@@ -4,57 +4,33 @@ export default (ctx, inject) => {
   // And in the Vue instances (this.$repository in your components)
   const repositoryWithAxios = createRepository(ctx.$axios)
 
-  // knowledge graph searching
-  inject(
-    'artifactSearchRepository',
-    repositoryWithAxios('kg/' + 'artifacts')
-  )
+  // backend searching
+  inject('artifactSearchRepository', repositoryWithAxios('kg/' + 'artifacts'))
 
-  // knowledge graph record retrieval
-  inject(
-    'artifactRecordRepository',
-    repositoryWithAxios('kg/' + 'artifact')
-  )
+  // backend record retrieval
+  inject('artifactRecordRepository', repositoryWithAxios('kg/' + 'artifact'))
 
-  // knowledge graph record retrieval
-  inject(
-    'loginEndpoint',
-    repositoryWithAxios('kg/' + 'login')
-  )
+  // backend login credentials
+  inject('loginEndpoint', repositoryWithAxios('kg/' + 'login'))
 
-  // favorites lookup API
-  inject(
-    'findFavoritesEndpoint',
-    repositoryWithAxios('kg/' + 'favorites')
-  )
+  // favorites lookup
+  inject('findFavoritesEndpoint', repositoryWithAxios('kg/' + 'favorites'))
 
   // favorites modify API
-  inject(
-    'favoritesEndpoint',
-    repositoryWithAxios('kg/' + 'favorite')
-  )
+  inject('favoritesEndpoint', repositoryWithAxios('kg/' + 'favorite'))
+
+  // ratings modify API
+  inject('ratingsEndpoint', repositoryWithAxios('kg/' + 'rating'))
 
   // reviews modify API
-  inject(
-    'ratingsEndpoint',
-    repositoryWithAxios('kg/' + 'rating')
-  )
-
-  // reviews modify API
-  inject(
-    'reviewsEndpoint',
-    repositoryWithAxios('kg/' + 'review')
-  )
+  inject('reviewsEndpoint', repositoryWithAxios('kg/' + 'review'))
 
   // imports array view/add API
-  inject(
-    'importsEndpoint',
-    repositoryWithAxios('kg/' + 'artifact/imports')
-  )
+  inject('importsEndpoint', repositoryWithAxios('kg/' + 'artifact/imports'))
 
   // import view/modify API
-  inject(
-    'importEndpoint',
-    repositoryWithAxios('kg/' + 'artifact/import')
-  )
+  inject('importEndpoint', repositoryWithAxios('kg/' + 'artifact/import'))
+
+  // user API
+  inject('userEndpoint', repositoryWithAxios('kg/' + 'user'))
 }
