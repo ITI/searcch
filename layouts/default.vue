@@ -47,7 +47,7 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <span v-if="$auth.loggedIn" class="mr-2">Logged in</span>
+      <span v-if="$auth.loggedIn" class="mr-2" v-text="$auth.user.name"></span>
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
         >Logout</v-btn
       >
