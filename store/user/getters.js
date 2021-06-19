@@ -1,12 +1,11 @@
 export default {
   getUser(state) {
-    return state
+    return state.user
   },
 
-  getFullname(state) {
-    return state.firstname + ' ' + state.lastname
+  getName(state) {
+    return state.user.person.name
   },
-
   getUserId(state) {
     return state.user_id
   }

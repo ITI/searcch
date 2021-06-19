@@ -1,25 +1,21 @@
 <template>
   <v-layout column justify-left align-top>
     <h1>Profile</h1>
-    <v-divider></v-divider><br>
+    <v-divider></v-divider><br />
     <v-form>
       <v-container>
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12">
             <v-text-field
-                label="First Name"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-                label="Last Name"
+              label="Name"
+              v-model="this.person.name"
             ></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12">
             <v-combobox
-              label="Orginization(s)"
+              label="Organization(s)"
               multiple
               small-chips
               deletable-chips
@@ -44,9 +40,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-btn
-              class="primary mt-4 ml-3"
-          >Update</v-btn>
+          <v-btn class="primary mt-4 ml-3">Update</v-btn>
         </v-row>
       </v-container>
     </v-form>
@@ -54,23 +48,23 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 
 export default {
-  components: {
-    Logo,
-  },
-  async mounted () {
-    if (this.user_id) return // this.$store.dispatch('artifacts/fetchFavorites', this.user_id)
+  components: {},
+  async mounted() {
+    this.$store.dispatch('user/fetchUser')
+    console.log(this.user)
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.user_id,
-    }),
+      person: state => state.user.user.person,
+      org: state => state.user.user.organization
+    })
   },
   data() {
     return {
+      // TODO: FIXME
       // these lists should be provided dynamically from back-end by querying db for unique existing values
       // also entries need aliases
       orgs: [
@@ -78,7 +72,7 @@ export default {
         'SRI',
         'University of Utah',
         'University of South Carolina',
-        'University of Illinois',
+        'University of Illinois'
       ],
       interests: [
         'Cybersecurity',
