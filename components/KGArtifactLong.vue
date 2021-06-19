@@ -209,12 +209,10 @@ export default {
     badges() {
       let badges = []
       let badges_raw = this.record.artifact.meta.filter(m => m.name == 'badge')
-      console.log(badges_raw)
       if (!badges_raw.length) return null
       for (let b of badges_raw) {
         badges.push(JSON.parse(b.value))
       }
-      console.log(badges)
       return badges
     },
     artifactIcon() {
