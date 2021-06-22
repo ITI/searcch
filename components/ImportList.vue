@@ -1,10 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-row
-        v-for="artifact in imports"
-        :key="artifact.id"
-      >
+      <v-row v-for="artifact in imports" :key="artifact.id">
         <v-col>
           <ArtifactImportView :artifact="artifact"></ArtifactImportView>
         </v-col>
@@ -30,6 +27,6 @@ export default {
       type: Number,
       required: false
     }
-  },
+  }
 }
 </script>

@@ -43,40 +43,57 @@
           <v-btn color="primary" nuxt to="/search">
             Continue
           </v-btn>
-        </v-card-actions>
-      </v-card><br>
+        </v-card-actions> </v-card
+      ><br />
       <v-card>
         <v-card-title class="headline">
-          Alpha Release 
+          Alpha Release
         </v-card-title>
         <v-card-text>
           <p>
-            The SEARCCH Hub is now open for alpha testing by invitation only. Once alpha testing is complete, we will move to beta testing.
+            The SEARCCH Hub is now open for alpha testing by invitation only.
+            Once alpha testing is complete, we will move to beta testing.
           </p>
           <p>
-            Volunteering to be a beta tester will help the community in providing the critical feedback we need to evolve the hub into a valuable community resource. Alpha testers may also be beta testers. Please contact us if you would like to be a beta tester. 
+            Volunteering to be a beta tester will help the community in
+            providing the critical feedback we need to evolve the hub into a
+            valuable community resource. Alpha testers may also be beta testers.
+            Please contact us if you would like to be a beta tester.
           </p>
-        </v-card-text>
-      </v-card><br>
+        </v-card-text> </v-card
+      ><br />
       <v-card>
         <v-card-title class="headline">
           Alpha Features
         </v-card-title>
         <v-card-text>
           <p>
-            There are three navigation tabs on the left hand pane: Search, Favorites, and Import.
+            There are three navigation tabs on the left hand pane: Search,
+            Favorites, and Import.
           </p>
           <p>
-            The Search page allows users to perform keyword searches to find artifacts of interest. You may click the favorites icon on any artifact to store it in your favorites list for quick, future recall.
+            The Search page allows users to perform keyword searches to find
+            artifacts of interest. You may click the favorites icon on any
+            artifact to store it in your favorites list for quick, future
+            recall.
           </p>
           <p>
-            Each artifact has a review button which you can use to add a rating and a review to any artifact. Ratings and reviews are visible to the community and used by others to help them decide whether to invest their time in trying to use the reviewed/rated artifact.
+            Each artifact has a review button which you can use to add a rating
+            and a review to any artifact. Ratings and reviews are visible to the
+            community and used by others to help them decide whether to invest
+            their time in trying to use the reviewed/rated artifact.
           </p>
           <p>
-            The Imports page is used to import your own artifacts into the hub. To import an artifact, it must first be published on the Internet. Provide the artifact URL, and our intelligent import tool will prepare the artifact for review and publishing. For the alpha release, github, ACM digital library, ieeexplore, and Zenodo are the only supported internet repositories.
+            The Imports page is used to import your own artifacts into the hub.
+            To import an artifact, it must first be published on the Internet.
+            Provide the artifact URL, and our intelligent import tool will
+            prepare the artifact for review and publishing. For the alpha
+            release, github, ACM digital library, ieeexplore, and Zenodo are the
+            only supported internet repositories.
           </p>
           <p>
-            Please provide comments and report bugs using the Send Us Feedback button at the bottom right hand side of the page.
+            Please provide comments and report bugs using the Send Us Feedback
+            button at the bottom right hand side of the page.
           </p>
         </v-card-text>
       </v-card>
@@ -91,7 +108,7 @@ export default {
   components: {
     Logo
   },
-  async mounted () {
+  async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")
   }
 }

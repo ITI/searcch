@@ -473,7 +473,7 @@ export default {
           country: 3,
           city: '564',
           salary: '1'
-        },
+        }
       ],
       tabs: 0,
       list: {

@@ -13,14 +13,14 @@ export default {
   },
   data() {
     return {
-        emptyArtifact: {
-            artifact: {
-                tags: [],
-                relationships: [],
-                files: [],
-                meta: [],
-            }
+      emptyArtifact: {
+        artifact: {
+          tags: [],
+          relationships: [],
+          files: [],
+          meta: []
         }
+      }
     }
   }
 }
