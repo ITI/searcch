@@ -8,24 +8,6 @@
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
-              <v-card-text>
-                <v-form @submit="userLogin">
-                  <!--
-                    <v-text-field
-                    prepend-icon="mdi-account"
-                    v-model="login.username"
-                    autocomplete="username"
-                    type="text"
-                  />
-                  <v-text-field
-                    v-model="login.password"
-                    prepend-icon="mdi-lock"
-                    autocomplete="current-password"
-                    type="password"
-                  />
-                  -->
-                </v-form>
-              </v-card-text>
               <v-card-actions>
                 <v-spacer />
                 <v-btn color="primary" @click="userLogin">GitHub Login</v-btn>
