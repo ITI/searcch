@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.2.0",
   "description": "SEARCCH Hub",
-  "author": "Tim Yardley & Teesh",
+  "author": "Tim Yardley & Teesh Shahi",
   "private": true,
   "scripts": {
     "dev": "cross-env NUXT_HOST=localhost NUXT_PORT=3000 nuxt",
