@@ -174,6 +174,6 @@ export default {
         scope: ['read:user', 'user:email']
       }
     },
-    plugins: ['~/plugins/auth.js']
+    plugins: ['~/plugins/auth.js', '~/plugins/axios.js']
   }
 }

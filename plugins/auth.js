@@ -25,8 +25,9 @@ export default function({ $loginEndpoint, store, $auth }) {
       .then(response => {
         // console.log(response)
         if (response.userid) {
-          store.commit('user/SET_USER_ID', response.userid)
+          store.commit('user/SET_USER_TOKEN', payload.token)
           store.commit('user/SET_USER', response.person)
+          store.commit('user/SET_USER_ID', response.userid)
           store.dispatch('artifacts/fetchFavorites', response.userid)
         }
       })
