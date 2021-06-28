@@ -7,8 +7,9 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
+              v-if="this.user"
               label="Name"
-              v-model="this.person.name"
+              v-model="this.user.name"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -54,12 +55,10 @@ export default {
   components: {},
   async mounted() {
     this.$store.dispatch('user/fetchUser')
-    console.log(this.user)
   },
   computed: {
     ...mapState({
-      person: state => state.user.user.person,
-      org: state => state.user.user.organization
+      user: state => state.user.user
     })
   },
   data() {
