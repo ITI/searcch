@@ -13,6 +13,6 @@ export default {
     commit('SET_USERNAME', user.person.name)
   },
   async setUserId({ commit }, user_id) {
-    commit('SET_USERID', user_id)
+    commit('SET_USER_ID', user_id)
   }
 }
