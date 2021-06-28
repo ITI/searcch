@@ -57,6 +57,7 @@
         </v-dialog>
       </v-row>
       <v-divider></v-divider><br />
+      Submit the URL below where you artifact is located at:
       <v-form v-model="valid">
         <v-row>
           <v-col cols="10">
@@ -78,65 +79,12 @@
             >
           </v-col>
         </v-row>
-        <!-- <v-row>
-        <v-col cols="10">
-          <v-expansion-panels model="advanced.open">
-            <v-expansion-panel  class="rounded-0">
-              <v-expansion-panel-header>
-                <template v-slot:default="{ open }">
-                  <v-row no-gutters>
-                    <v-col cols="4">
-                      Advanced
-                    </v-col>
-                    <v-col
-                      cols="8"
-                      class="text--secondary"
-                    >
-                      <v-fade-transition leave-absolute>
-                        <span
-                          v-if="open"
-                          key="0"
-                        >
-                          Select advanced filters for your query
-                        </span>
-                        <span
-                          v-else
-                          key="1"
-                        >
-                          {{ advanced.query }}
-                        </span>
-                      </v-fade-transition>
-                    </v-col>
-                  </v-row>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row align="center">
-                  <v-col cols="3">
-                    <v-select
-                      v-model="advanced.type"
-                      :items="types"
-                      label="Artifact type"
-                      class="rounded-0"
-                    >
-                    </v-select>
-                  </v-col>
-                  <v-col cols="3">
-                    <v-select
-                      v-model="advanced.importer"
-                      :items="importers"
-                      label="Importer version"
-                      class="rounded-0"
-                    >
-                    </v-select>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row> -->
       </v-form>
+      <br />
+      <v-row class="ml-1 mb-2">
+        If you would like to enter your artifact information manually, please
+        &nbsp; <a href="/create">click here.</a>
+      </v-row>
       <br /><v-divider></v-divider><br />
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
       <div v-else>{{ loadingMessage }}</div>
@@ -193,6 +141,7 @@ export default {
     this.updateImports()
     setTimeout(() => {
       this.loadingMessage = 'No imports found'
+      clearInterval(this.polling)
     }, 3000)
     this.polling = setInterval(
       function() {
