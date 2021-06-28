@@ -101,30 +101,20 @@ export default {
         }
       ]
       if (this.user_id) {
-        items.push({
-          icon: 'mdi-apps',
-          title: 'Dashboard',
-          to: '/dashboard'
-        })
+        // items.push({
+        //   icon: 'mdi-apps',
+        //   title: 'Dashboard',
+        //   to: '/dashboard'
+        // })
         items.push({
           icon: 'mdi-table-heart',
           title: 'Favorite Artifacts',
           to: '/favorites'
         })
-        // items.push({
-        //   icon: 'mdi-card-account-details',
-        //   title: 'Profile',
-        //   to: '/profile'
-        // })
         items.push({
           icon: 'mdi-database-import',
-          title: 'Import Artifact',
+          title: 'Submit Artifact',
           to: '/import'
-        })
-        items.push({
-          icon: 'mdi-database-plus',
-          title: 'Create Artifact',
-          to: '/create'
         })
         items.push({
           icon: 'mdi-account-cog',
@@ -154,7 +144,7 @@ export default {
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
         console.log('Logging out')
-        this.$store.commit('user/SET_USER_ID', null)
+        this.$store.commit('user/LOGOUT')
         this.$auth.logout()
       }
     }
