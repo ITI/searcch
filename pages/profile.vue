@@ -7,9 +7,30 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
-              v-if="this.user"
+              v-if="user"
               label="Name"
-              v-model="this.user.name"
+              :value="user.name"
+              @input="updateName"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-if="user"
+              label="Email"
+              v-model="user.email"
+              disabled
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-if="user"
+              label="Website"
+              :value="user.website"
+              @input="updateWebsite"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -24,7 +45,7 @@
               clearable
               v-if="orgs"
               :items="orgNames"
-              v-model="user.organization"
+              v-model="currentOrganization"
               hint="Select applicable orgs from the list or type in your own"
             ></v-combobox>
           </v-col>
@@ -39,13 +60,13 @@
               persistent-hint
               v-if="user"
               :items="hardcodedInterests"
-              v-model="user.research_interests"
+              v-model="researchInterests"
               hint="Select applicable items from the list or type in your own"
             ></v-combobox>
           </v-col>
         </v-row>
         <v-row>
-          <v-btn class="primary mt-4 ml-3">Update</v-btn>
+          <v-btn class="primary mt-4 ml-3" @click="updateProfile">Update</v-btn>
         </v-row>
       </v-container>
     </v-form>
@@ -68,8 +89,29 @@ export default {
       orgs: state => state.user.orgs,
       interests: state => state.user.interests
     }),
-    orgNames: function() {
-      return this.orgs.map(m => m.name)
+    orgNames: {
+      get: function() {
+        return this.orgs.map(m => m.name)
+      },
+      set: function(newValue) {
+        this.$store.commit('user/SET_ORGS', newValue)
+      }
+    },
+    researchInterests: {
+      get: function() {
+        return this.interests ? this.interests.split(',') : ''
+      },
+      set: function(newValue) {
+        this.$store.commit('user/SET_USER_INTERESTS', newValue.join(','))
+      }
+    },
+    currentOrganization: {
+      get: function() {
+        return this.user.organization
+      },
+      set: function(newValue) {
+        this.$store.commit('user/SET_ORG', newValue)
+      }
     }
   },
   data() {
@@ -95,6 +137,32 @@ export default {
         'Software Development',
         'Testbeds'
       ]
+    }
+  },
+  methods: {
+    updateProfile() {
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        // update interests
+        const data = {
+          name: this.user.name,
+          research_interests: this.user.research_interests,
+          website: this.user.website,
+          profile_photo: this.user.profile_photo
+        }
+        // FIXME: remove when ready to update endpoint
+        console.log(data)
+        //this.$userEndpoint.update(this.user.user.id, data)
+        // update organizations
+        // TODO
+      }
+    },
+    updateName(e) {
+      this.$store.commit('user/SET_NAME', e)
+    },
+    updateWebsite(e) {
+      this.$store.commit('user/SET_WEBSITE', e)
     }
   }
 }
