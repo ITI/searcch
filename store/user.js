@@ -37,6 +37,15 @@ export const mutations = {
   SET_USER(state, user) {
     state.user = user
   },
+  SET_NAME(state, name) {
+    state.user.name = name
+  },
+  SET_WEBSITE(state, website) {
+    state.user.website = website
+  },
+  SET_USER_INTERESTS(state, interests) {
+    state.user.research_interests = interests
+  },
   SET_USER_ORG(state, org) {
     state.organization = org
   },
