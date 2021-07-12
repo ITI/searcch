@@ -36,4 +36,7 @@ export default (ctx, inject) => {
 
   // organization API
   inject('organizationEndpoint', repositoryWithAxios('kg/' + 'organizations'))
+
+  // interests API
+  inject('interestsEndpoint', repositoryWithAxios('kg/' + 'interests'))
 }

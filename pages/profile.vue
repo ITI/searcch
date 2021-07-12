@@ -32,12 +32,14 @@
         <v-row>
           <v-col cols="12">
             <v-combobox
-              label="Fields and Interests"
+              label="Interests"
               multiple
               small-chips
               deletable-chips
               persistent-hint
-              :items="interests"
+              v-if="user"
+              :items="hardcodedInterests"
+              v-model="user.research_interests"
               hint="Select applicable items from the list or type in your own"
             ></v-combobox>
           </v-col>
@@ -58,11 +60,13 @@ export default {
   async mounted() {
     this.$store.dispatch('user/fetchUser')
     this.$store.dispatch('user/fetchOrgs')
+    // this.$store.dispatch('user/fetchInterests')
   },
   computed: {
     ...mapState({
       user: state => state.user.user,
-      orgs: state => state.user.orgs
+      orgs: state => state.user.orgs,
+      interests: state => state.user.interests
     }),
     orgNames: function() {
       return this.orgs.map(m => m.name)
@@ -73,11 +77,23 @@ export default {
       // TODO: FIXME
       // these lists should be provided dynamically from back-end by querying db for unique existing values
       // also entries need aliases
-      interests: [
+      hardcodedInterests: [
+        'Applications Security',
+        'Artificial Intelligence',
+        'Biometrics',
+        'Cloud Computing',
         'Cybersecurity',
+        'Data Security',
+        'Human-based Behavior',
+        'Internet of Things',
         'Machine Learning',
-        'AI',
-        'Software Development'
+        'Mobile',
+        'Organizational Security Management',
+        'Policy',
+        'Privacy',
+        'Secure Development',
+        'Software Development',
+        'Testbeds'
       ]
     }
   }

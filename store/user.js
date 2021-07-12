@@ -5,7 +5,8 @@ export const state = () => ({
   user_id: 6,
   organization: null,
   orgs: null,
-  user_token: null
+  user_token: null,
+  interests: null
 })
 
 export const getters = {
@@ -15,6 +16,9 @@ export const getters = {
   organization: state => {
     return state.organization
   },
+  orgs: state => {
+    return state.orgs
+  },
   name: state => {
     return state.user.name
   },
@@ -23,6 +27,9 @@ export const getters = {
   },
   user_id: state => {
     return state.user_id
+  },
+  interests: state => {
+    return state.interests
   }
 }
 
@@ -42,10 +49,14 @@ export const mutations = {
   SET_ORGS(state, orgs) {
     state.orgs = orgs
   },
+  SET_INTERESTS(state, interests) {
+    state.interests = interests
+  },
   LOGOUT(state) {
     state.user = null
     state.organization = null
     state.orgs = null
+    state.interests = null
     state.user_token = null
     state.user_id = null
   }
@@ -72,5 +83,15 @@ export const actions = {
     }
     a = await this.$organizationEndpoint.index(payload)
     commit('SET_ORGS', a.organizations)
+  },
+  async fetchInterests({ commit, state }) {
+    let a = {}
+    console.log('fetching interests')
+    let payload = {
+      all: 1,
+      verified: 1
+    }
+    a = await this.$interestsEndpoint.index(payload)
+    commit('SET_INTERESTS', a.interests)
   }
 }
