@@ -33,4 +33,7 @@ export default (ctx, inject) => {
 
   // user API
   inject('userEndpoint', repositoryWithAxios('kg/' + 'user'))
+
+  // organization API
+  inject('organizationEndpoint', repositoryWithAxios('kg/' + 'organizations'))
 }

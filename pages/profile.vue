@@ -22,7 +22,9 @@
               deletable-chips
               persistent-hint
               clearable
-              :items="orgs"
+              v-if="orgs"
+              :items="orgNames"
+              v-model="user.organization"
               hint="Select applicable orgs from the list or type in your own"
             ></v-combobox>
           </v-col>
@@ -55,24 +57,22 @@ export default {
   components: {},
   async mounted() {
     this.$store.dispatch('user/fetchUser')
+    this.$store.dispatch('user/fetchOrgs')
   },
   computed: {
     ...mapState({
-      user: state => state.user.user
-    })
+      user: state => state.user.user,
+      orgs: state => state.user.orgs
+    }),
+    orgNames: function() {
+      return this.orgs.map(m => m.name)
+    }
   },
   data() {
     return {
       // TODO: FIXME
       // these lists should be provided dynamically from back-end by querying db for unique existing values
       // also entries need aliases
-      orgs: [
-        'ITI',
-        'SRI',
-        'University of Utah',
-        'University of South Carolina',
-        'University of Illinois'
-      ],
       interests: [
         'Cybersecurity',
         'Machine Learning',
