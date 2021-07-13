@@ -53,6 +53,8 @@
                             icon
                             v-bind="attrs"
                             v-on="on"
+                            :to="`/artifact/${item.id}`"
+                            nuxt
                           >
                             <v-icon color="primary">
                               mdi-arrow-top-right-thick
@@ -87,23 +89,9 @@
                             v-bind="attrs"
                             v-on="on"
                             v-text="item.rating"
+                            :to="`/artifact/review/${item.artifact_id}`"
+                            nuxt
                           >
-                          </v-btn>
-                        </template>
-                        <span>Rating</span>
-                      </v-tooltip>
-                      <v-tooltip top content-class="top">
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            class="v-btn--simple"
-                            color="primary"
-                            icon
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            <v-icon color="primary">
-                              mdi-arrow-top-right-thick
-                            </v-icon>
                           </v-btn>
                         </template>
                         <span>Goto Rating</span>
