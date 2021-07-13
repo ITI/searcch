@@ -54,7 +54,7 @@
                             advanced.types.length > 0 ? 'indigo darken-4' : ''
                           "
                         >
-                          {{ aterfactTypeIcon }}
+                          {{ artifactTypeIcon }}
                         </v-icon>
                       </v-list-item-action>
                       <v-list-item-content>
@@ -107,9 +107,10 @@
     <br />
     <v-divider></v-divider>
     <v-pagination
-      v-if="this.searchLoading == true"
+      v-if="artifacts"
       v-model="page"
       :length="10"
+      circle
     ></v-pagination>
     <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
     <span v-if="artifacts.length == 0 && searchLoading == true">{{
@@ -210,7 +211,7 @@ export default {
     someArtifacts() {
       return this.advanced.types.length > 0 && !this.allArtifacts
     },
-    aterfactTypeIcon() {
+    artifactTypeIcon() {
       if (this.allArtifacts) return 'mdi-close-box'
       if (this.someArtifacts) return 'mdi-minus-box'
       return 'mdi-checkbox-blank-outline'
@@ -218,6 +219,9 @@ export default {
     advancedPlaceholder() {
       if (this.advanced.filter === 'Name') return 'First or Last name'
       if (this.advanced.filter === 'Organization') return 'Organization name'
+    },
+    dynamicLength() {
+      return this.artifacts.length ? Math.ceil(this.artifacts.length / 20) : 1
     }
   },
   methods: {
@@ -238,6 +242,7 @@ export default {
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
         this.searchMessage = 'No results found'
+        this.searchLoading = false
       }, 5000)
     },
     toggle() {
@@ -276,5 +281,6 @@ export default {
   position: fixed;
   bottom: 80px;
   right: 30px;
+  scroll-margin-bottom: 5rem;
 }
 </style>
