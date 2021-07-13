@@ -12,7 +12,6 @@
 
 <script>
 import ArtifactImportView from '~/components/ArtifactImportView'
-import { mapState } from 'vuex'
 
 export default {
   components: {
