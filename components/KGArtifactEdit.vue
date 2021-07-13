@@ -60,21 +60,23 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0">Keywords</v-card-title>
-      <span v-if="record.artifact.tags.length">
+      <span v-if="tags">
+        <v-card-title class="py-0">Keywords</v-card-title>
+
         <v-chip
           color="primary"
-          v-for="(v, k) in record.artifact.tags"
-          :key="`tag${k}`"
+          v-for="t in tags"
+          :key="t"
           cols="12"
           class="ma-2"
           label
-          :to="{ path: `/search?keywords=${v.tag}` }"
+          :to="{ path: `/search?keywords=${t}` }"
         >
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
-          {{ v.tag }}
+
+          {{ t }}
         </v-chip>
       </span>
       <v-btn class="success ml-2 mb-2" fab small
@@ -227,6 +229,17 @@ export default {
         badges.push(JSON.parse(b.value))
       }
       return badges
+    },
+    tags() {
+      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
+      if (!topics) {
+        if (this.record.artifact.tags) {
+          return this.record.artifact.tags.map(e => e.tag)
+        }
+        return null
+      }
+      let tags = JSON.parse(topics.value).map(e => e[0])
+      return tags
     },
     published() {
       if (this.record.artifact.publication) return true
