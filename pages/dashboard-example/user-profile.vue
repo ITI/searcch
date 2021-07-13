@@ -79,17 +79,17 @@
               src="https://demos.creative-tim.com/vue-material-dashboard/img/marc.aba54d65.jpg"
             />
           </v-avatar>
-          <v-card-text class="text-center">
+          <v-card-text v-if="user" class="text-center">
             <h6 class="overline mb-3">
-              {{ user.function }}
+              {{ user.id }}
             </h6>
 
             <h4 class="font-weight-light">
-              {{ fullname }}
+              {{ user.name }}
             </h4>
 
             <p class="font-weight-light">
-              {{ user.description }}
+              {{ user.email }}
             </p>
 
             <v-btn color="success">
@@ -103,15 +103,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   layout: 'dashboard',
   computed: {
-    ...mapGetters({
-      user: 'user/getUser',
-      fullname: 'user/getFullname'
+    ...mapState({
+      user: state => state.user.user
     })
+  },
+  mounted() {
+    this.$store.dispatch('user/fetchUser')
   }
 }
 </script>
