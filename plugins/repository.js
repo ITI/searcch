@@ -39,4 +39,7 @@ export default (ctx, inject) => {
 
   // interests API
   inject('interestsEndpoint', repositoryWithAxios('kg/' + 'interests'))
+
+  // dashboard API
+  inject('dashboardEndpoint', repositoryWithAxios('kg/' + 'dashboard'))
 }
