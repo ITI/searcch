@@ -106,7 +106,8 @@ export default {
     return {
       importing: false,
       loadingMessage: 'Loading imports...',
-      polling: null,
+      pollingID: null,
+      timeoutID: null,
       dialog: false,
       valid: false,
       url: null,
@@ -139,20 +140,20 @@ export default {
   async mounted() {
     this.loadingMessage = 'Loading imports...'
     this.updateImports()
-    setTimeout(() => {
+    this.timeoutID = setTimeout(() => {
       this.loadingMessage = 'No imports found'
-      clearInterval(this.polling)
-    }, 3000)
-    this.polling = setInterval(
+      clearInterval(this.pollingID)
+    }, 5000)
+    this.pollingID = setInterval(
       function() {
         this.updateImports()
       }.bind(this),
-      5000
+      3000
     )
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid,
       imports: state => state.artifacts.imports
     })
   },
@@ -161,26 +162,38 @@ export default {
       if (!this.valid) return
       this.importing = true
       let response = await this.$importsEndpoint.create({
-        userid: this.user_id,
+        userid: this.userid,
         url: this.url
       })
       this.updateImports()
+      clearInterval(this.pollingID)
+      this.pollingID = setInterval(
+        function() {
+          this.updateImports()
+        }.bind(this),
+        3000
+      )
       this.importing = false
     },
     updateImports() {
-      if (this.user_id)
-        this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
+      if (this.userid) {
+        this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
+      }
+      if (this.imports.every(m => m.progress == 100)) {
+        clearInterval(this.pollingID)
+      }
     }
   },
   watch: {
-    user_id() {
-      // had to make this because on refresh, user_id doesn't update until after the mounted has already run,
-      // but mounted needs to run when switching pages where the user_id doesn't update
+    userid() {
+      // had to make this because on refresh, userid doesn't update until after the mounted has already run,
+      // but mounted needs to run when switching pages where the userid doesn't update
       this.updateImports()
     }
   },
   beforeRouteLeave(to, from, next) {
-    clearInterval(this.polling)
+    clearInterval(this.pollingID)
+    clearTimeout(this.timeoutID)
     next()
   }
 }
