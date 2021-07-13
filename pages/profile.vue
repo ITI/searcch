@@ -1,5 +1,104 @@
 <template>
   <v-layout column justify-left align-top>
+    <v-container fill-height fluid>
+      <v-row justify="center">
+        <v-col cols="12" md="8">
+          <material-card
+            color="primary"
+            title="Edit Profile"
+            text="Complete your profile"
+          >
+            <v-form>
+              <v-container class="py-0">
+                <v-row v-if="user">
+                  <v-col cols="12" md="8">
+                    <v-text-field
+                      label="Name"
+                      class="primary-input"
+                      :value="user.name"
+                      @input="updateName"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      label="Email Address"
+                      class="primary-input"
+                      :value="user.email"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="12">
+                    <v-text-field
+                      label="Website"
+                      class="primary-input"
+                      :value="user.website"
+                      @input="updateWebsite"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="6">
+                    <v-combobox
+                      label="Organization(s)"
+                      multiple
+                      small-chips
+                      deletable-chips
+                      persistent-hint
+                      clearable
+                      v-if="orgs"
+                      :items="orgNames"
+                      v-model="currentOrganization"
+                      hint="Select applicable orgs from the list or type in your own"
+                    ></v-combobox>
+                  </v-col>
+
+                  <v-col cols="12" md="6">
+                    <v-combobox
+                      label="Interests"
+                      multiple
+                      small-chips
+                      deletable-chips
+                      persistent-hint
+                      v-if="user"
+                      :items="hardcodedInterests"
+                      v-model="researchInterests"
+                      hint="Select applicable items from the list or type in your own"
+                    ></v-combobox>
+                  </v-col>
+
+                  <v-col cols="12" class="text-right">
+                    <v-btn color="success" @click="updateProfile">
+                      Update Profile
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </material-card>
+        </v-col>
+        <v-col cols="12" md="4" v-if="user">
+          <material-card class="v-card-profile">
+            <v-avatar
+              slot="offset"
+              class="mx-auto d-block elevation-6"
+              size="130"
+            >
+              <v-img :src="gravatarImage(user.email)" />
+            </v-avatar>
+            <v-card-text v-if="user" class="text-center">
+              <h6 class="overline mb-3">
+                {{ user.name }}
+              </h6>
+
+              <p class="font-weight-light">
+                {{ user.email }}
+              </p>
+            </v-card-text>
+          </material-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <v-container fluid>
       <v-row>
         <v-col cols="12" lg="12">
@@ -42,6 +141,13 @@
                   :key="i"
                 >
                   <v-list-item>
+                    <v-chip :color="iconColor(item.type)" class="ma-2" label>
+                      <v-avatar left>
+                        <v-icon>{{ iconImage(item.type) }}</v-icon>
+                      </v-avatar>
+                      <div>{{ item.type }}</div>
+                    </v-chip>
+
                     <v-list-item-title v-text="item.title" />
 
                     <div class="d-flex">
@@ -77,22 +183,30 @@
                   :key="i"
                 >
                   <v-list-item>
-                    <!-- FIXME: change to title when API changes -->
-                    <v-list-item-title v-text="item.artifact_id" />
+                    <v-chip :color="iconColor(item.type)" class="ma-2" label>
+                      <v-avatar left>
+                        <v-icon>{{ iconImage(item.type) }}</v-icon>
+                      </v-avatar>
+                      <div>{{ item.type }}</div>
+                    </v-chip>
+
+                    <v-list-item-title v-text="item.title" />
 
                     <div class="d-flex">
                       <v-tooltip top content-class="top">
                         <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            class="v-btn--simple"
-                            text
-                            v-bind="attrs"
-                            v-on="on"
-                            v-text="item.rating"
-                            :to="`/artifact/review/${item.artifact_id}`"
+                          <v-chip
+                            color="amber"
+                            class="ma-2"
+                            label
+                            :to="`/artifact/review/${item.id}`"
                             nuxt
                           >
-                          </v-btn>
+                            <v-avatar left>
+                              <v-icon> mdi-star </v-icon>
+                            </v-avatar>
+                            <div>{{ item.rating }}</div>
+                          </v-chip>
                         </template>
                         <span>Goto Rating</span>
                       </v-tooltip>
@@ -106,7 +220,7 @@
                 <v-list
                   three-line
                   class="py-0"
-                  v-for="(item, i) in dashboard.favourite_artifacts"
+                  v-for="(item, i) in dashboard.favorite_artifacts"
                   :key="i"
                 >
                   <v-list-item>
@@ -147,78 +261,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <h1>Profile</h1>
-    <v-divider></v-divider><br />
-
-    <v-form>
-      <v-container>
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-if="user"
-              label="Name"
-              :value="user.name"
-              @input="updateName"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-if="user"
-              label="Email"
-              v-model="user.email"
-              disabled
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-if="user"
-              label="Website"
-              :value="user.website"
-              @input="updateWebsite"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-combobox
-              label="Organization(s)"
-              multiple
-              small-chips
-              deletable-chips
-              persistent-hint
-              clearable
-              v-if="orgs"
-              :items="orgNames"
-              v-model="currentOrganization"
-              hint="Select applicable orgs from the list or type in your own"
-            ></v-combobox>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-combobox
-              label="Interests"
-              multiple
-              small-chips
-              deletable-chips
-              persistent-hint
-              v-if="user"
-              :items="hardcodedInterests"
-              v-model="researchInterests"
-              hint="Select applicable items from the list or type in your own"
-            ></v-combobox>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-btn class="primary mt-4 ml-3" @click="updateProfile">Update</v-btn>
-        </v-row>
-      </v-container>
-    </v-form>
   </v-layout>
 </template>
 
@@ -299,12 +341,13 @@ export default {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
-        // update interests
+        // update profile
         const data = {
           name: this.user.name,
           research_interests: this.user.research_interests,
           website: this.user.website,
           profile_photo: this.user.profile_photo
+          // profile_photo: this.fetchGravatar(this.user.email)
         }
         // FIXME: remove when ready to update endpoint
         console.log(data)
@@ -324,6 +367,20 @@ export default {
     },
     iconImage(type) {
       return artifactIcon(type)
+    },
+    gravatarImage(email) {
+      var md5 = require('md5')
+      const url =
+        'https://www.gravatar.com/avatar/' +
+        md5(email.toLowerCase().trim()) +
+        '?size=130'
+      return url
+    },
+    async fetchGravatar(email) {
+      let image = await this.$axios.get(
+        '/avatar/' + this.gravatarImage(this.user.email).split('/')[4]
+      )
+      return btoa(encodeURI(image.data))
     }
   }
 }
