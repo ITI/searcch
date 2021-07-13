@@ -122,7 +122,8 @@ export default {
             ? process.env.KG_API_KEY
             : process.env.KG_DEV_API_KEY
       }
-    }
+    },
+    '/avatar/': { target: 'https://www.gravatar.com/' }
   },
   /*
    ** vuetify module configuration
