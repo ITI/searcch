@@ -305,7 +305,7 @@ export default {
         return this.user.organization
       },
       set: function(newValue) {
-        this.$store.commit('user/SET_ORG', newValue)
+        this.$store.commit('user/SET_USER_ORG', newValue)
       }
     }
   },
