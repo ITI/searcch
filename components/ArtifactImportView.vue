@@ -16,9 +16,9 @@
           </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip :color="artifactColor" class="mr-4 mt-5" label>
+          <v-chip :color="iconColor(artifactType)" class="mr-4 mt-5" label>
             <v-avatar left>
-              <v-icon>{{ artifactIcon(artifact.type) }}</v-icon>
+              <v-icon>{{ iconImage(artifactType) }}</v-icon>
             </v-avatar>
             <div>{{ artifactType }}</div>
           </v-chip>
@@ -158,29 +158,11 @@ export default {
       if (this.user_id)
         this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
     },
-    artifactIcon(type) {
-      switch (type) {
-        case 'publication':
-          return 'mdi-newspaper-variant-outline'
-        case 'dataset':
-          return 'mdi-database'
-        case 'code':
-          return 'mdi-code-braces'
-        default:
-          return 'mdi-help'
-      }
+    iconColor(type) {
+      return artifactColor(type)
     },
-    artifactColor(type) {
-      switch (type) {
-        case 'publication':
-          return 'info'
-        case 'dataset':
-          return 'green white--text'
-        case 'code':
-          return 'purple white--text'
-        default:
-          return 'info'
-      }
+    iconImage(type) {
+      return artifactIcon(type)
     }
   }
 }

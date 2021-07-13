@@ -42,9 +42,9 @@
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
 
-      <v-chip :color="artifactColor" class="ma-2" label>
+      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
         <v-avatar left>
-          <v-icon>{{ artifactIcon(record.artifact.type) }}</v-icon>
+          <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
         </v-avatar>
 
         <div>{{ record.artifact.type }}</div>
@@ -151,7 +151,7 @@
         >
           <div>
             <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type:
-            {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+            {{ v.filetype }}, size: {{ convertSize(v.size) }})
           </div>
         </v-card-text>
       </span>
@@ -183,6 +183,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 
 export default {
   name: 'KGArtifactLong',
@@ -278,35 +279,14 @@ export default {
         source: 'kg'
       })
     },
-    bytesToSize(bytes) {
-      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes == 0) return '0 Bytes'
-      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
-      return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
+    iconColor(type) {
+      return artifactColor(type)
     },
-    artifactIcon(type) {
-      switch (type) {
-        case 'publication':
-          return 'mdi-newspaper-variant-outline'
-        case 'dataset':
-          return 'mdi-database'
-        case 'code':
-          return 'mdi-code-braces'
-        default:
-          return 'mdi-help'
-      }
+    iconImage(type) {
+      return artifactIcon(type)
     },
-    artifactColor(type) {
-      switch (type) {
-        case 'publication':
-          return 'info'
-        case 'dataset':
-          return 'green white--text'
-        case 'code':
-          return 'purple white--text'
-        default:
-          return 'info'
-      }
+    convertSize(size) {
+      return bytesToSize(size)
     }
   }
 }

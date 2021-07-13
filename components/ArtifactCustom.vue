@@ -126,6 +126,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   name: 'ArtifactCustom',
@@ -205,29 +206,11 @@ export default {
         source: 'kg'
       })
     },
-    artifactIcon(type) {
-      switch (type) {
-        case 'publication':
-          return 'mdi-newspaper-variant-outline'
-        case 'dataset':
-          return 'mdi-database'
-        case 'code':
-          return 'mdi-code-braces'
-        default:
-          return 'mdi-help'
-      }
+    iconColor(type) {
+      return artifactColor(type)
     },
-    artifactColor(type) {
-      switch (type) {
-        case 'publication':
-          return 'info'
-        case 'dataset':
-          return 'green white--text'
-        case 'code':
-          return 'purple white--text'
-        default:
-          return 'info'
-      }
+    iconImage(type) {
+      return artifactIcon(type)
     }
   }
 }

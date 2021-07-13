@@ -49,9 +49,9 @@
 
       <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
 
-      <v-chip color="purple white--text" class="ma-2" label>
+      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
         <v-avatar left>
-          <v-icon>mdi-code-braces</v-icon>
+          <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
         </v-avatar>
 
         <div>{{ record.artifact.type }}</div>
@@ -106,7 +106,7 @@
           label
         >
           <v-avatar left>
-            <v-icon>mdi-code-brackets</v-icon>
+            <v-icon>{{ iconImage('code') }}</v-icon>
           </v-avatar>
 
           {{ v }}
@@ -188,13 +188,13 @@
         <v-list-group :value="true" no-action sub-group>
           <template v-slot:activator>
             <a @click.stop target="_blank" :href="v.url">{{ v.url }}</a> &nbsp;
-            (type: {{ v.filetype }}, size: {{ bytesToSize(v.size) }})
+            (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
           </template>
           <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
             <a target="_blank" :href="vm.html_url || vm.download_url">{{
               vm.pathname || vm.name || vm.html_url || vm.download_url
             }}</a>
-            &nbsp; (type: {{ vm.filetype }}, size: {{ bytesToSize(vm.size) }})
+            &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
           </v-list-item>
         </v-list-group>
       </v-list-item>
@@ -223,6 +223,7 @@
 <script>
 import { mapState } from 'vuex'
 import VueMarkdown from 'vue-markdown'
+import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 
 export default {
   name: 'KGArtifactLong',
@@ -361,11 +362,14 @@ export default {
         }
       }
     },
-    bytesToSize(bytes) {
-      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes == 0 || bytes == null) return '0 Bytes'
-      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
-      return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
+    iconColor(type) {
+      return artifactColor(type)
+    },
+    iconImage(type) {
+      return artifactIcon(type)
+    },
+    convertSize(size) {
+      return bytesToSize(size)
     }
   }
 }

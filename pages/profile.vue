@@ -110,13 +110,9 @@
                   :key="i"
                 >
                   <v-list-item>
-                    <v-chip
-                      :color="artifactColor(item.type)"
-                      class="ma-2"
-                      label
-                    >
+                    <v-chip :color="iconColor(item.type)" class="ma-2" label>
                       <v-avatar left>
-                        <v-icon>{{ artifactIcon(item.type) }}</v-icon>
+                        <v-icon>{{ iconImage(item.type) }}</v-icon>
                       </v-avatar>
                       <div>{{ item.type }}</div>
                     </v-chip>
@@ -228,6 +224,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   components: {},
@@ -322,29 +319,11 @@ export default {
     updateWebsite(e) {
       this.$store.commit('user/SET_WEBSITE', e)
     },
-    artifactIcon(type) {
-      switch (type) {
-        case 'publication':
-          return 'mdi-newspaper-variant-outline'
-        case 'dataset':
-          return 'mdi-database'
-        case 'code':
-          return 'mdi-code-braces'
-        default:
-          return 'mdi-help'
-      }
+    iconColor(type) {
+      return artifactColor(type)
     },
-    artifactColor(type) {
-      switch (type) {
-        case 'publication':
-          return 'info'
-        case 'dataset':
-          return 'green white--text'
-        case 'code':
-          return 'purple white--text'
-        default:
-          return 'info'
-      }
+    iconImage(type) {
+      return artifactIcon(type)
     }
   }
 }

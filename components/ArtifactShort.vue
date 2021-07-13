@@ -12,12 +12,12 @@
         <v-col cols="2" class="text-lg-right">
           <v-chip
             v-if="artifact.type"
-            :color="artifactColor"
+            :color="iconColor(artifact.type)"
             class="ma-2 mt-5"
             label
           >
             <v-avatar left>
-              <v-icon>{{ artifactIcon(artifact.type) }}</v-icon>
+              <v-icon>{{ iconImage(artifact.type) }}</v-icon>
             </v-avatar>
             <div v-if="artifact.type">{{ artifact.type }}</div>
           </v-chip>
@@ -92,6 +92,7 @@
 <script>
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   props: {
@@ -156,29 +157,11 @@ export default {
         }
       }
     },
-    artifactIcon(type) {
-      switch (type) {
-        case 'publication':
-          return 'mdi-newspaper-variant-outline'
-        case 'dataset':
-          return 'mdi-database'
-        case 'code':
-          return 'mdi-code-braces'
-        default:
-          return 'mdi-help'
-      }
+    iconColor(type) {
+      return artifactColor(type)
     },
-    artifactColor(type) {
-      switch (type) {
-        case 'publication':
-          return 'info'
-        case 'dataset':
-          return 'green white--text'
-        case 'code':
-          return 'purple white--text'
-        default:
-          return 'info'
-      }
+    iconImage(type) {
+      return artifactIcon(type)
     }
   }
 }
