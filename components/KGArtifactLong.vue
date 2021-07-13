@@ -68,17 +68,17 @@
         <v-chip
           color="primary"
           v-for="t in tags"
-          :key="t[0]"
+          :key="t"
           cols="12"
           class="ma-2"
           label
-          :to="{ path: `/search?keywords=${t[0]}` }"
+          :to="{ path: `/search?keywords=${t}` }"
         >
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
 
-          {{ t[0] }}
+          {{ t }}
         </v-chip>
       </span>
 
@@ -218,8 +218,14 @@ export default {
     },
     tags() {
       let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
-      if (!topics) return null
-      return JSON.parse(topics.value)
+      if (!topics) {
+        if (this.record.artifact.tags) {
+          return this.record.artifact.tags.map(e => e.tag)
+        }
+        return null
+      }
+      let tags = JSON.parse(topics.value).map(e => e[0])
+      return tags
     }
   },
   methods: {
