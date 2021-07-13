@@ -1,18 +1,5 @@
 <template>
   <div v-if="record.artifact">
-    <v-banner
-      class="my-4"
-      elevation="6"
-      icon="mdi-alert-circle"
-      icon-color="red"
-      color="yellow darken-2"
-    >
-      Editing the metadata fields of the artifacts are unavailable during the
-      beta release. This page has been provided as a possible design for such a
-      feature. <br />
-      All the button and input functionality has been purposely disabled. Please
-      send us feedback on this design.
-    </v-banner>
     <h3>
       <a target="_blank" :href="record.artifact.url">
         Knowledge Graph Artifact {{ record.artifact.id }}
@@ -46,7 +33,6 @@
         <v-avatar left>
           <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
         </v-avatar>
-
         <div>{{ record.artifact.type }}</div>
       </v-chip>
 
@@ -68,7 +54,7 @@
           <v-icon right>mdi-close</v-icon>
         </span>
       </v-chip>
-      <v-btn class="success ml-2 mb-2" fab small disabled
+      <v-btn class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
       >
 
@@ -88,11 +74,10 @@
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
-
           {{ v.tag }}
         </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small disabled
+      <v-btn class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
       >
 
@@ -114,7 +99,7 @@
           {{ v.relation | titlecase }}: {{ v.related_artifact }}
         </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small disabled
+      <v-btn class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
       >
 
@@ -136,7 +121,7 @@
           {{ v.title }}
         </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small disabled
+      <v-btn class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
       >
 
@@ -200,7 +185,8 @@ export default {
       title_local: this.title,
       description_local: this.description,
       snackbar: false,
-      loadingMessage: 'Loading...'
+      loadingMessage: 'Loading...',
+      artifact_local: {}
     }
   },
   mounted() {
@@ -266,6 +252,11 @@ export default {
       this.$router.push(`${this.record.artifact.id}`)
     },
     async save() {
+      let data = JSON.parse(JSON.stringify(this.record.artifact))
+      data['title'] = this.title_local
+      data['description'] = this.description_local
+      console.log(data)
+      return
       let response = await this.$artifactRecordRepository.put(
         this.record.artifact.id,
         {
