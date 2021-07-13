@@ -47,24 +47,7 @@
       ><br />
       <v-card>
         <v-card-title class="headline">
-          Alpha Release
-        </v-card-title>
-        <v-card-text>
-          <p>
-            The SEARCCH Hub is now open for alpha testing by invitation only.
-            Once alpha testing is complete, we will move to beta testing.
-          </p>
-          <p>
-            Volunteering to be a beta tester will help the community in
-            providing the critical feedback we need to evolve the hub into a
-            valuable community resource. Alpha testers may also be beta testers.
-            Please contact us if you would like to be a beta tester.
-          </p>
-        </v-card-text> </v-card
-      ><br />
-      <v-card>
-        <v-card-title class="headline">
-          Alpha Features
+          Current Features
         </v-card-title>
         <v-card-text>
           <p>
