@@ -62,23 +62,23 @@
         </span>
       </v-chip>
 
-      <span v-if="record.artifact.tags.length">
+      <span v-if="tags">
         <v-card-title class="py-0">Keywords</v-card-title>
 
         <v-chip
           color="primary"
-          v-for="(v, k) in record.artifact.tags"
-          :key="`tag${k}`"
+          v-for="t in tags"
+          :key="t[0]"
           cols="12"
           class="ma-2"
           label
-          :to="{ path: `/search?keywords=${v.tag}` }"
+          :to="{ path: `/search?keywords=${t[0]}` }"
         >
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
 
-          {{ v.tag }}
+          {{ t[0] }}
         </v-chip>
       </span>
 
@@ -215,6 +215,11 @@ export default {
         badges.push(JSON.parse(b.value))
       }
       return badges
+    },
+    tags() {
+      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
+      if (!topics) return null
+      return JSON.parse(topics.value)
     }
   },
   methods: {
