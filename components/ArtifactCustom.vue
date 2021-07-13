@@ -180,15 +180,6 @@ export default {
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
-    },
-    artifactIcon() {
-      if (this.record.artifact.type == 'publication')
-        return 'mdi-newspaper-variant-outline'
-      if (this.record.artifact.type == 'dataset') return 'mdi-database'
-    },
-    artifactColor() {
-      if (this.record.artifact.type == 'publication') return 'info'
-      if (this.record.artifact.type == 'dataset') return 'green white--text'
     }
   },
   methods: {
@@ -213,6 +204,30 @@ export default {
         id: this.record.artifact.id,
         source: 'kg'
       })
+    },
+    artifactIcon(type) {
+      switch (type) {
+        case 'publication':
+          return 'mdi-newspaper-variant-outline'
+        case 'dataset':
+          return 'mdi-database'
+        case 'code':
+          return 'mdi-code-braces'
+        default:
+          return 'mdi-help'
+      }
+    },
+    artifactColor(type) {
+      switch (type) {
+        case 'publication':
+          return 'info'
+        case 'dataset':
+          return 'green white--text'
+        case 'code':
+          return 'purple white--text'
+        default:
+          return 'info'
+      }
     }
   }
 }

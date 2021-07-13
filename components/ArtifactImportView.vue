@@ -3,60 +3,59 @@
     <v-card tile class="mx-auto overflow-hidden" elevation="3">
       <v-row class="px-3">
         <v-col cols="10">
-        <v-card-title class="align-start" >
-          <div>
-            <span class="headline">Import ID {{ artifact.id }}:&nbsp;<a target="_blank" :href="artifact.url">{{ artifactTitle }}</a></span>
-          </div>
-        </v-card-title>
+          <v-card-title class="align-start">
+            <div>
+              <span class="headline"
+                >Import ID {{ artifact.id }}:&nbsp;<a
+                  target="_blank"
+                  :href="artifact.url"
+                  >{{ artifactTitle }}</a
+                ></span
+              >
+            </div>
+          </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
           <v-chip :color="artifactColor" class="mr-4 mt-5" label>
             <v-avatar left>
-              <v-icon>{{ artifactIcon }}</v-icon>
+              <v-icon>{{ artifactIcon(artifact.type) }}</v-icon>
             </v-avatar>
             <div>{{ artifactType }}</div>
           </v-chip>
         </v-col>
       </v-row>
 
-      <v-card-text> 
+      <v-card-text>
         <v-progress-linear
           color="light-blue"
           height="25"
           :value="artifact.progress"
-        ><strong>{{ artifact.progress }}%</strong></v-progress-linear>
+          ><strong>{{ artifact.progress }}%</strong></v-progress-linear
+        >
         {{ artifact.status }} - {{ artifact.phase }}
       </v-card-text>
 
       <v-card-actions>
-        <v-btn
-          v-if="artifact.artifact_id || archived"
-          text
-          @click="archive()"
-        >
-          Archive 
+        <v-btn v-if="artifact.artifact_id || archived" text @click="archive()">
+          Archive
         </v-btn>
-        
-        <v-btn
-          v-else
-          text
-        >
+
+        <v-btn v-else text>
           Cancel
         </v-btn>
 
         <v-btn
           v-if="artifact.artifact_id && !published"
-          :to="{ path: `/artifact/${artifact.artifact_id}`, query: {edit: 'true'} }"
+          :to="{
+            path: `/artifact/${artifact.artifact_id}`,
+            query: { edit: 'true' }
+          }"
           text
         >
           Edit
         </v-btn>
 
-        <v-btn
-          v-if="archived === true"
-          text
-          @click="unarchive()"
-        >
+        <v-btn v-if="archived === true" text @click="unarchive()">
           Unarchive
         </v-btn>
 
@@ -67,7 +66,7 @@
           text
           @click="publish()"
         >
-          Publish{{ published ? "ed" : "" }}
+          Publish{{ published ? 'ed' : '' }}
         </v-btn>
 
         <v-btn
@@ -95,86 +94,100 @@ export default {
   },
   data() {
     return {
-      publish_local: false,
+      publish_local: false
     }
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.user_id,
+      user_id: state => state.user.user_id
     }),
-    full_artifact () {
+    full_artifact() {
       return this.artifact.artifact
     },
-    artifactType () {
+    artifactType() {
       if (this.full_artifact) {
         if (this.full_artifact.type) return this.full_artifact.type
       }
-      if (this.artifact.type == null) return "Detecting Type..."
+      if (this.artifact.type == null) return 'Detecting Type...'
       return this.artifact.type
     },
-    artifactIcon () {
-      let type = this.artifactType
-      if (type == "publication") return "mdi-newspaper-variant-outline"
-      if (type == "code") return "mdi-code-braces"
-      if (type == "dataset") return "mdi-database"
-      return "mdi-magnify"
-    },
-    artifactColor () {
-      let type = this.artifactType
-      if (type == "publication") return "info"
-      if (type == "code") return "purple white--text"
-      if (type == "dataset") return "green white--text"
-      return "warning"
-    },
-    artifactTitle () {
+    artifactTitle() {
       if (this.full_artifact) {
         if (this.full_artifact.title) return this.full_artifact.title
       }
       return this.artifact.url
     },
-    published () {
+    published() {
       if (this.full_artifact) {
         if (this.full_artifact.publication || this.publish_local) return true
       }
       return false
     },
-    archived () {
+    archived() {
       if (this.full_artifact) {
         if (this.full_artifact.archived) return true
         else return false
       }
       return undefined
-    },
+    }
   },
-  methods:{
-    async archive () {
+  methods: {
+    async archive() {
       let response = await this.$importEndpoint.put(this.artifact.id, {
-        archived: true,
+        archived: true
       })
       this.updateImports()
     },
-    async unarchive () {
+    async unarchive() {
       let response = await this.$importEndpoint.put(this.artifact.id, {
-        archived: false,
+        archived: false
       })
       this.updateImports()
     },
-    async publish () {
-      let response = await this.$artifactRecordRepository.put(this.full_artifact.id, {
-        publication: {},
-      })
+    async publish() {
+      let response = await this.$artifactRecordRepository.put(
+        this.full_artifact.id,
+        {
+          publication: {}
+        }
+      )
       this.publish_local = true
       this.updateImports()
     },
-    updateImports () {
-      if (this.user_id) this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
+    updateImports() {
+      if (this.user_id)
+        this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
     },
+    artifactIcon(type) {
+      switch (type) {
+        case 'publication':
+          return 'mdi-newspaper-variant-outline'
+        case 'dataset':
+          return 'mdi-database'
+        case 'code':
+          return 'mdi-code-braces'
+        default:
+          return 'mdi-help'
+      }
+    },
+    artifactColor(type) {
+      switch (type) {
+        case 'publication':
+          return 'info'
+        case 'dataset':
+          return 'green white--text'
+        case 'code':
+          return 'purple white--text'
+        default:
+          return 'info'
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-  .v-card__title {
-    word-break: normal;
-  }
+.v-card__title {
+  word-break: normal;
+}
 </style>

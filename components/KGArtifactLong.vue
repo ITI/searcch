@@ -36,7 +36,7 @@
 
       <v-chip :color="artifactColor" class="ma-2" label>
         <v-avatar left>
-          <v-icon>{{ artifactIcon }}</v-icon>
+          <v-icon>{{ artifactIcon(record.artifact.type) }}</v-icon>
         </v-avatar>
 
         <div>{{ record.artifact.type }}</div>
@@ -214,15 +214,6 @@ export default {
         badges.push(JSON.parse(b.value))
       }
       return badges
-    },
-    artifactIcon() {
-      if (this.record.artifact.type == 'publication')
-        return 'mdi-newspaper-variant-outline'
-      if (this.record.artifact.type == 'dataset') return 'mdi-database'
-    },
-    artifactColor() {
-      if (this.record.artifact.type == 'publication') return 'info'
-      if (this.record.artifact.type == 'dataset') return 'green white--text'
     }
   },
   methods: {
@@ -248,6 +239,30 @@ export default {
       if (bytes == 0) return '0 Bytes'
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
+    },
+    artifactIcon(type) {
+      switch (type) {
+        case 'publication':
+          return 'mdi-newspaper-variant-outline'
+        case 'dataset':
+          return 'mdi-database'
+        case 'code':
+          return 'mdi-code-braces'
+        default:
+          return 'mdi-help'
+      }
+    },
+    artifactColor(type) {
+      switch (type) {
+        case 'publication':
+          return 'info'
+        case 'dataset':
+          return 'green white--text'
+        case 'code':
+          return 'purple white--text'
+        default:
+          return 'info'
+      }
     }
   }
 }
