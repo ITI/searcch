@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export const state = () => ({
   user: null,
-  user_id: 6,
+  userid: null,
   organization: null,
   orgs: null,
   user_token: null,
@@ -25,8 +25,8 @@ export const getters = {
   user_token: state => {
     return state.user_token
   },
-  user_id: state => {
-    return state.user_id
+  userid: state => {
+    return state.userid
   },
   interests: state => {
     return state.interests
@@ -52,8 +52,8 @@ export const mutations = {
   SET_USER_TOKEN(state, user_token) {
     state.user_token = user_token
   },
-  SET_USER_ID(state, user_id) {
-    state.user_id = user_id
+  SET_USERID(state, userid) {
+    state.userid = userid
   },
   SET_ORGS(state, orgs) {
     state.orgs = orgs
@@ -67,7 +67,7 @@ export const mutations = {
     state.orgs = null
     state.interests = null
     state.user_token = null
-    state.user_id = null
+    state.userid = null
   }
 }
 
@@ -77,7 +77,7 @@ export const actions = {
     console.log('fetching user')
     a = await this.$userEndpoint.index()
     commit('SET_USER', a.user.person)
-    commit('SET_USER_ID', a.user.id)
+    commit('SET_USERID', a.user.id)
     commit('SET_USER_ORG', a.user.organization)
   },
   async setUserToken({ commit }, user_token) {

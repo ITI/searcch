@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.user_id
+      userid: state => state.user.userid
     }),
     full_artifact() {
       return this.artifact.artifact
@@ -156,8 +156,8 @@ export default {
       this.updateImports()
     },
     updateImports() {
-      if (this.user_id)
-        this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
+      if (this.userid)
+        this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
     },
     iconColor(type) {
       return artifactColor(type)

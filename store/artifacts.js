@@ -92,7 +92,6 @@ export const actions = {
       state.source !== payload.source
     ) {
       // override state.source if forced from function call
-      console.log('overriding source')
       commit('SET_SOURCE', payload.source)
     }
     if (

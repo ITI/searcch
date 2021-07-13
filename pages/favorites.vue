@@ -32,13 +32,13 @@ export default {
     }
   },
   async mounted() {
-    if (this.user_id)
-      this.$store.dispatch('artifacts/fetchFavorites', this.user_id)
+    if (this.userid)
+      this.$store.dispatch('artifacts/fetchFavorites', this.userid)
   },
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.favorites,
-      user_id: state => state.user.user_id
+      userid: state => state.user.userid
     })
   }
 }

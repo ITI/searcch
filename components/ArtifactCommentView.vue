@@ -113,7 +113,7 @@ export default {
   computed: {
     ...mapState({
       source: state => state.artifacts.source,
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
@@ -147,7 +147,7 @@ export default {
       let first = []
       let rest = []
       for (let comment of this.comments) {
-        if (comment.review.reviewer.id === this.user_id) first.push(comment)
+        if (comment.review.reviewer.id === this.userid) first.push(comment)
         else rest.push(comment)
       }
       return first.concat(rest)
@@ -162,7 +162,7 @@ export default {
         this.favorite = !this.favorite
         let payload = {
           token: this.$auth.getToken('github'),
-          userid: this.user_id
+          userid: this.userid
         }
         if (action) {
           this.$favoritesEndpoint.update(this.artifact.artifact.id, payload)

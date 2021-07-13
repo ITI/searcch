@@ -117,7 +117,7 @@ export default {
   computed: {
     ...mapState({
       source: state => state.artifacts.source,
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
@@ -148,7 +148,7 @@ export default {
         this.favorite = !this.favorite
         let payload = {
           token: this.$auth.getToken('github'),
-          userid: this.user_id
+          userid: this.userid
         }
         if (action) {
           this.$favoritesEndpoint.update(this.artifact.id, payload)

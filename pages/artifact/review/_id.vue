@@ -1,9 +1,17 @@
 <template>
   <div>
     <a @click="$router.go(-1)">Back</a>
-    <ArtifactCommentView :artifact="artifact" :comments="comments"></ArtifactCommentView>
+    <ArtifactCommentView
+      :artifact="artifact"
+      :comments="comments"
+    ></ArtifactCommentView>
 
-    <v-container v-if="$auth.loggedIn && !alreadyCommented" fill-height fluid grid-list-xl>
+    <v-container
+      v-if="$auth.loggedIn && !alreadyCommented"
+      fill-height
+      fluid
+      grid-list-xl
+    >
       <v-row justify="center">
         <v-col cols="12">
           <material-card
@@ -38,7 +46,11 @@
                     </v-textarea>
                   </v-col>
                   <v-col cols="12" class="text-right">
-                    <v-btn color="success" @click="onSubmit" :disabled="!formCheck">
+                    <v-btn
+                      color="success"
+                      @click="onSubmit"
+                      :disabled="!formCheck"
+                    >
                       Add Review
                     </v-btn>
                   </v-col>
@@ -55,7 +67,8 @@
           <material-card
             color="primary"
             title="Log in to add a review"
-            nuxt to="/login"
+            nuxt
+            to="/login"
           >
           </material-card>
         </v-col>
@@ -97,15 +110,16 @@ export default {
       artifact: state => state.artifacts.artifact,
       source: state => state.artifacts.source,
       comments: state => state.artifacts.artifact.rating_review,
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid
     }),
     formCheck() {
       if (this.rating == 0 && this.comment == '') return false
       return true
     },
-    alreadyCommented () {
+    alreadyCommented() {
       if (!this.comments) return false
-      if (this.comments.find(c => c.review.reviewer.id == this.user_id)) return true
+      if (this.comments.find(c => c.review.reviewer.id == this.userid))
+        return true
       return false
     }
   },
@@ -117,16 +131,22 @@ export default {
         if (this.rating && this.comment) {
           let rating_payload = {
             token: this.$auth.getToken('github'),
-            userid: this.user_id,
+            userid: this.userid,
             rating: this.rating
           }
-          await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
+          await this.$ratingsEndpoint.put(
+            this.artifact.artifact.id,
+            rating_payload
+          )
           let comment_payload = {
             review: this.comment,
             token: this.$auth.getToken('github'),
-            userid: this.user_id
+            userid: this.userid
           }
-          await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
+          await this.$reviewsEndpoint.update(
+            this.artifact.artifact.id,
+            comment_payload
+          )
           this.$store.dispatch('artifacts/fetchArtifact', {
             id: this.$route.params.id,
             source: 'kg'

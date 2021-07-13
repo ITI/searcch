@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.user_id
+      userid: state => state.user.userid
     }),
     items() {
       let items = [
@@ -100,7 +100,7 @@ export default {
           to: '/search'
         }
       ]
-      if (this.user_id) {
+      if (this.userid) {
         // items.push({
         //   icon: 'mdi-apps',
         //   title: 'Dashboard',
