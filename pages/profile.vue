@@ -135,7 +135,7 @@
               <v-tab-item>
                 <!-- artifacts -->
                 <v-list
-                  three-line
+                  single-line
                   class="py-0"
                   v-for="(item, i) in dashboard.owned_artifacts"
                   :key="i"
@@ -177,7 +177,7 @@
               <v-tab-item>
                 <!-- ratings -->
                 <v-list
-                  three-line
+                  single-line
                   class="py-0"
                   v-for="(item, i) in dashboard.given_ratings"
                   :key="i"
@@ -218,7 +218,7 @@
               <v-tab-item>
                 <!-- favorites -->
                 <v-list
-                  three-line
+                  single-line
                   class="py-0"
                   v-for="(item, i) in dashboard.favorite_artifacts"
                   :key="i"
