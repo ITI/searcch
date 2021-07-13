@@ -84,6 +84,7 @@
 <script>
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   props: {
