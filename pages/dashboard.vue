@@ -483,6 +483,10 @@ export default {
       }
     }
   },
+  async mounted() {
+    let response = await this.$dashboardEndpoint.index()
+    console.log(response)
+  },
   methods: {
     complete(index) {
       this.list[index] = !this.list[index]
