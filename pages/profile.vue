@@ -1,7 +1,172 @@
 <template>
   <v-layout column justify-left align-top>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12" lg="12">
+          <material-card class="card-tabs" color="primary">
+            <template v-slot:header>
+              <v-tabs
+                v-model="tabs"
+                background-color="transparent"
+                slider-color="white"
+                class="ml-4"
+              >
+                <v-tab class="mr-3">
+                  <v-icon class="mr-2">
+                    mdi-database
+                  </v-icon>
+                  Artifacts
+                </v-tab>
+                <v-tab class="mr-3">
+                  <v-icon class="mr-2">
+                    mdi-star
+                  </v-icon>
+                  Ratings
+                </v-tab>
+                <v-tab>
+                  <v-icon class="mr-2">
+                    mdi-heart
+                  </v-icon>
+                  Favorites
+                </v-tab>
+              </v-tabs>
+            </template>
+
+            <v-tabs-items v-model="tabs">
+              <v-tab-item>
+                <!-- artifacts -->
+                <v-list
+                  three-line
+                  class="py-0"
+                  v-for="(item, i) in dashboard.owned_artifacts"
+                  :key="i"
+                >
+                  <v-list-item>
+                    <v-list-item-title v-text="item.title" />
+
+                    <div class="d-flex">
+                      <v-tooltip top content-class="top">
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            class="v-btn--simple"
+                            color="primary"
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            <v-icon color="primary">
+                              mdi-arrow-top-right-thick
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Goto Artifact</span>
+                      </v-tooltip>
+                    </div>
+                  </v-list-item>
+                  <v-divider />
+                </v-list>
+              </v-tab-item>
+              <v-tab-item>
+                <!-- ratings -->
+                <v-list
+                  three-line
+                  class="py-0"
+                  v-for="(item, i) in dashboard.given_ratings"
+                  :key="i"
+                >
+                  <v-list-item>
+                    <!-- FIXME: change to title when API changes -->
+                    <v-list-item-title v-text="item.artifact_id" />
+
+                    <div class="d-flex">
+                      <v-tooltip top content-class="top">
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            class="v-btn--simple"
+                            text
+                            v-bind="attrs"
+                            v-on="on"
+                            v-text="item.rating"
+                          >
+                          </v-btn>
+                        </template>
+                        <span>Rating</span>
+                      </v-tooltip>
+                      <v-tooltip top content-class="top">
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            class="v-btn--simple"
+                            color="primary"
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            <v-icon color="primary">
+                              mdi-arrow-top-right-thick
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Goto Rating</span>
+                      </v-tooltip>
+                    </div>
+                  </v-list-item>
+                  <v-divider />
+                </v-list>
+              </v-tab-item>
+              <v-tab-item>
+                <!-- favorites -->
+                <v-list
+                  three-line
+                  class="py-0"
+                  v-for="(item, i) in dashboard.favourite_artifacts"
+                  :key="i"
+                >
+                  <v-list-item>
+                    <v-chip
+                      :color="artifactColor(item.type)"
+                      class="ma-2"
+                      label
+                    >
+                      <v-avatar left>
+                        <v-icon>{{ artifactIcon(item.type) }}</v-icon>
+                      </v-avatar>
+                      <div>{{ item.type }}</div>
+                    </v-chip>
+                    <v-list-item-title v-text="item.title" />
+
+                    <div class="d-flex">
+                      <v-tooltip top content-class="top">
+                        <template v-slot:activator="{ attrs, on }">
+                          <v-btn
+                            class="v-btn--simple"
+                            color="primary"
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                            :to="`/artifact/${item.id}`"
+                            nuxt
+                          >
+                            <v-icon color="primary">
+                              mdi-arrow-top-right-thick
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Goto Artifact</span>
+                      </v-tooltip>
+                    </div>
+                  </v-list-item>
+                  <v-divider />
+                </v-list>
+              </v-tab-item>
+            </v-tabs-items>
+          </material-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <h1>Profile</h1>
     <v-divider></v-divider><br />
+
     <v-form>
       <v-container>
         <v-row>
@@ -82,6 +247,9 @@ export default {
     this.$store.dispatch('user/fetchUser')
     this.$store.dispatch('user/fetchOrgs')
     // this.$store.dispatch('user/fetchInterests')
+    let response = await this.$dashboardEndpoint.index()
+    this.dashboard = response
+    console.log(this.dashboard)
   },
   computed: {
     ...mapState({
@@ -136,7 +304,9 @@ export default {
         'Secure Development',
         'Software Development',
         'Testbeds'
-      ]
+      ],
+      tabs: 0,
+      dashboard: {}
     }
   },
   methods: {
@@ -153,7 +323,7 @@ export default {
         }
         // FIXME: remove when ready to update endpoint
         console.log(data)
-        //this.$userEndpoint.update(this.user.user.id, data)
+        // this.$userEndpoint.update(this.user.user.id, data)
         // update organizations
         // TODO
       }
@@ -163,6 +333,30 @@ export default {
     },
     updateWebsite(e) {
       this.$store.commit('user/SET_WEBSITE', e)
+    },
+    artifactIcon(type) {
+      switch (type) {
+        case 'publication':
+          return 'mdi-newspaper-variant-outline'
+        case 'dataset':
+          return 'mdi-database'
+        case 'code':
+          return 'mdi-code-braces'
+        default:
+          return 'mdi-help'
+      }
+    },
+    artifactColor(type) {
+      switch (type) {
+        case 'publication':
+          return 'info'
+        case 'dataset':
+          return 'green white--text'
+        case 'code':
+          return 'purple white--text'
+        default:
+          return 'info'
+      }
     }
   }
 }
