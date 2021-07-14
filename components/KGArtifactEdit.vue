@@ -181,17 +181,45 @@
       <v-card-title class="py-0">Files</v-card-title>
       <span v-if="artifact_local.files">
         <v-card-text
-          v-for="(v, k) in artifact_local.files"
-          :key="`file${k}`"
+          v-for="(f, index) in artifact_local.files"
+          :key="`file${index}`"
           cols="12"
         >
           <div>
-            <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type:
-            {{ v.filetype }}, size: {{ convertSize(v.size) }})
+            <v-icon left>mdi-file</v-icon>
+            <a target="_blank" :href="f.url">{{ f.url }}</a>
+            &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
+            {{ f.size ? convertSize(f.size) : 'unknown' }})
+            <v-icon @click="artifact_local.files.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
           </div>
         </v-card-text>
+        <v-card-text
+          v-for="(f, index) in meta.files"
+          :key="`newfile${index}`"
+          cols="12"
+        >
+          <v-textarea
+            outlined
+            height="10"
+            label="File URL"
+            placeholder="Enter File URL"
+            v-model="f.url"
+            prepend-icon="mdi-file"
+            append-outer-icon="mdi-close"
+            @click:append-outer="meta.files.splice(index, 1)"
+          ></v-textarea>
+        </v-card-text>
+        <v-btn
+          @click="meta.files.push({ url: '' })"
+          class="success ml-2 mb-2"
+          fab
+          small
+          ><v-icon>mdi-plus</v-icon></v-btn
+        >
       </span>
-      <span class="ml-4 mb-2" v-else>Importer found no files</span>
+      <span class="ml-4 mb-2" v-else>No files found by importer</span>
 
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -254,7 +282,8 @@ export default {
       artifact_local: {},
       meta: {
         creators: [],
-        keywords: []
+        keywords: [],
+        files: []
       },
       schema: {},
       schemaLoaded: false
@@ -346,8 +375,14 @@ export default {
         array = getArray(zip)
 
       this.artifact_local['tags'] = this.artifact_local['tags'].concat(array)
+      this.artifact_local['files'] = this.artifact_local['files'].concat(
+        this.meta.files
+      )
+
       console.log(this.artifact_local)
       this.meta.keywords = []
+      this.meta.files = []
+
       return
       let response = await this.$artifactRecordRepository.put(
         this.artifact_local.id,
