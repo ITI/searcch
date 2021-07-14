@@ -1,8 +1,8 @@
 <template>
-  <div v-if="record.artifact">
+  <div v-if="artifact_local">
     <h3>
-      <a target="_blank" :href="record.artifact.url">
-        Artifact {{ record.artifact.id }}
+      <a target="_blank" :href="artifact_local.url">
+        Artifact {{ artifact_local.id }}
       </a>
     </h3>
     <v-card class="mx-auto my-2">
@@ -10,7 +10,7 @@
         ><v-text-field
           label="Title"
           outlined
-          v-model="title_local"
+          v-model="artifact_local.title"
         ></v-text-field
       ></v-card-title>
       <v-card-text>
@@ -19,7 +19,7 @@
             auto-grow
             outlined
             label="Description"
-            v-model="description_local"
+            v-model="artifact_local.description"
           ></v-textarea>
         </div>
       </v-card-text>
@@ -27,11 +27,11 @@
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
-      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
+      <v-chip :color="iconColor(artifact_local.type)" class="ma-2" label>
         <v-avatar left>
-          <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
+          <v-icon>{{ iconImage(artifact_local.type) }}</v-icon>
         </v-avatar>
-        <div>{{ record.artifact.type }}</div>
+        <div>{{ artifact_local.type }}</div>
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
@@ -40,16 +40,18 @@
 
       <v-chip
         color="primary"
-        v-for="(c, i) in record.artifact.affiliations"
-        :key="c.id"
+        v-for="(a, index) in artifact_local.affiliations"
+        :key="a.id"
         cols="12"
         class="ma-2"
         label
       >
-        <span v-if="c.affiliation.roles == 'Author'">
+        <span v-if="a.affiliation.roles == 'Author'">
           <v-icon left>mdi-account-circle</v-icon>
-          {{ c.affiliation.person.name }}
-          <v-icon @click="c.splice(i, 1)" right>mdi-close</v-icon>
+          {{ a.affiliation.person.name }}
+          <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
         </span>
       </v-chip>
 
@@ -72,7 +74,7 @@
           background-color="#00476B"
           >{{ meta.creators[index] }}</v-text-field
         >
-        <v-icon @click="meta.creators.splice(i, 1)" right>mdi-close</v-icon>
+        <v-icon @click="meta.creators.splice(index, 1)" right>mdi-close</v-icon>
       </v-chip>
       <v-btn @click="meta.creators.push('')" class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
@@ -128,10 +130,10 @@
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0">Related</v-card-title>
-      <span v-if="record.artifact.relationships.length">
+      <span v-if="artifact_local.relationships">
         <v-chip
           color="primary"
-          v-for="(v, k) in record.artifact.relationships"
+          v-for="(v, k) in artifact_local.relationships"
           :key="`rel${k}`"
           cols="12"
           class="ma-2"
@@ -172,9 +174,9 @@
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0">Files</v-card-title>
-      <span v-if="record.artifact.files.length">
+      <span v-if="artifact_local.files">
         <v-card-text
-          v-for="(v, k) in record.artifact.files"
+          v-for="(v, k) in artifact_local.files"
           :key="`file${k}`"
           cols="12"
         >
@@ -228,8 +230,6 @@ export default {
     return {
       loading: true,
       publish_local: false,
-      title_local: this.title,
-      description_local: this.description,
       snackbar: false,
       loadingMessage: 'Loading...',
       artifact_local: {},
@@ -240,6 +240,8 @@ export default {
     }
   },
   mounted() {
+    this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
+    console.log(this.artifact_local)
     // force title and description to refresh on page load
     if (this.title && this.description) return true
     setTimeout(() => {
@@ -253,26 +255,28 @@ export default {
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
-      return this.$sanitize(this.record.artifact.description)
+      return this.$sanitize(this.artifact_local.description)
     },
     favorite: {
       get() {
-        return this.favorites[this.record.artifact.id] ? true : false
+        return this.favorites[this.artifact_local.id] ? true : false
       },
       set(value) {
         if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact_local.id)
         else
           this.$store.commit(
             'artifacts/REMOVE_FAVORITE',
-            this.record.artifact.id
+            this.artifact_local.id
           )
       }
     },
     badges() {
       let badges = []
-      let badges_raw = this.record.artifact.meta.filter(m => m.name == 'badge')
-      if (!badges_raw.length) return null
+      let badges_raw = this.artifact_local.meta
+        ? this.artifact_local.meta.filter(m => m.name == 'badge')
+        : null
+      if (!badges_raw) return null
       for (let b of badges_raw) {
         badges.push(JSON.parse(b.value))
       }
@@ -280,55 +284,47 @@ export default {
     },
     tags() {
       let tags = []
-      if (this.record.artifact.tags) {
-        tags = this.record.artifact.tags.map(e => e.tag)
+      if (this.artifact_local.tags) {
+        tags = this.artifact_local.tags.map(e => e.tag)
       }
-      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
+      let topics = this.artifact_local.meta
+        ? this.artifact_local.meta.find(o => o.name == 'top_keywords')
+        : null
       if (topics) {
         tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
       }
       return tags.filter((value, index, self) => self.indexOf(value) === index)
     },
     published() {
-      if (this.record.artifact.publication) return true
+      if (this.artifact_local.publication) return true
       return false
-    },
-    title() {
-      this.title_local = this.record.artifact.title
-      return this.record.artifact.title
-    },
-    description() {
-      this.description_local = this.record.artifact.description
-      return this.record.artifact.description
     }
   },
   methods: {
     async publish() {
       let response = await this.$artifactRecordRepository.put(
-        this.record.artifact.id,
+        this.artifact_local.id,
         {
           publication: {}
         }
       )
-      this.$router.push(`${this.record.artifact.id}`)
+      this.$router.push(`${this.artifact_local.id}`)
     },
     async save() {
       let zip = [['tag']]
-      this.meta.creators.map(e => zip.push([e]))
-      console.log(this.meta.creators)
+      this.meta.keywords.map(e => zip.push([e]))
+      console.log(this.meta.keywords)
       const mapWith = keys => values =>
           Object.fromEntries(keys.map((k, i) => [k, values[i]])),
         getArray = ([keys, ...zip]) => zip.map(mapWith(keys)),
         array = getArray(zip)
 
-      let data = JSON.parse(JSON.stringify(this.record.artifact))
-      data['title'] = this.title_local
-      data['description'] = this.description_local
-      data['tags'] = array
-      console.log(data)
+      this.artifact_local['tags'] = array
+      console.log(this.artifact_local)
+      this.meta.keywords = []
       return
       let response = await this.$artifactRecordRepository.put(
-        this.record.artifact.id,
+        this.artifact_local.id,
         {
           title: this.title_local,
           description: this.description_local
@@ -336,7 +332,7 @@ export default {
       )
       this.snackbar = true
       this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.record.artifact.id,
+        id: this.artifact_local.id,
         source: 'kg'
       })
     },
