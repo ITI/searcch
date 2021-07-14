@@ -87,18 +87,19 @@
 
         <v-chip
           color="primary"
-          v-for="t in tags"
+          v-for="(t, index) in tags"
           :key="t"
           cols="12"
           class="ma-2"
           label
-          :to="{ path: `/search?keywords=${t}` }"
         >
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
-
           {{ t }}
+          <v-icon @click="artifact_local.tags.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
         </v-chip>
       </span>
 
@@ -319,7 +320,7 @@ export default {
         getArray = ([keys, ...zip]) => zip.map(mapWith(keys)),
         array = getArray(zip)
 
-      this.artifact_local['tags'] = array
+      this.artifact_local['tags'] = this.artifact_local['tags'].concat(array)
       console.log(this.artifact_local)
       this.meta.keywords = []
       return
