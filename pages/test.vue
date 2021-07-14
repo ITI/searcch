@@ -4,6 +4,7 @@
       <div class="text-center">
         <logo />
       </div>
+      <pretty-print :value="rawSchema"></pretty-print>
     </v-flex>
   </v-layout>
 </template>
@@ -12,12 +13,14 @@
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import Logo from '~/components/Logo.vue'
+import PrettyPrint from '~/components/pretty-print'
 
 export default {
-  components: { Logo },
+  components: { Logo, PrettyPrint },
   data: () => ({
     schema: {},
-    model: {}
+    model: {},
+    rawSchema: schemaWithPointers
   }),
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
