@@ -47,8 +47,8 @@
 
       <v-chip
         color="primary"
-        v-for="(c, i) in meta.creators"
-        :key="`c${i}`"
+        v-for="(item, index) in meta.creators"
+        :key="`c${index}`"
         cols="12"
         class="ma-2"
         label
@@ -58,11 +58,11 @@
           solo
           dark
           placeholder="Enter Creator Name"
-          v-model="meta.creators[i]"
+          v-model="meta.creators[index]"
           hide-details
           class="m-0"
           background-color="#00476B"
-          >{{ c }}</v-text-field
+          >{{ meta.creators[index] }}</v-text-field
         >
         <v-icon @click="meta.creators.splice(i, 1)" right>mdi-close</v-icon>
       </v-chip>
@@ -76,8 +76,8 @@
 
       <v-chip
         color="primary"
-        v-for="(c, i) in meta.keywords"
-        :key="`k${i}`"
+        v-for="(item, index) in meta.keywords"
+        :key="`k${index}`"
         cols="12"
         class="ma-2"
         label
@@ -87,13 +87,13 @@
           solo
           dark
           placeholder="Enter Keyword"
-          v-model="meta.keywords[i]"
+          v-model="meta.keywords[index]"
           hide-details
           class="m-0"
           background-color="#00476B"
-          >{{ c }}</v-text-field
+          >{{ meta.keywords[index] }}</v-text-field
         >
-        <v-icon @click="meta.keywords.splice(i, 1)" right>mdi-close</v-icon>
+        <v-icon @click="meta.keywords.splice(index, 1)" right>mdi-close</v-icon>
       </v-chip>
       <v-btn @click="meta.keywords.push('')" class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
@@ -127,6 +127,8 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
+import $RefParser from 'json-schema-ref-parser'
+import schemaWithPointers from '~/schema/artifact.json'
 
 export default {
   name: 'ArtifactCustom',
@@ -152,20 +154,22 @@ export default {
         creators: [],
         keywords: []
       },
-      types: [
-        'Dataset',
-        'Publication',
-        'Code',
-        'Executable',
-        'Methodology',
-        'Metrics',
-        'Hypothesis',
-        'Domain',
-        'Supporting Info',
-        'Prior Work'
-      ],
-      id: null
+      id: null,
+      schema: {},
+      schemaLoaded: false
     }
+  },
+  created() {
+    $RefParser.dereference(schemaWithPointers, (err, schema) => {
+      if (err) {
+        console.error(err)
+      } else {
+        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+        // including referenced files, combined into a single object
+        this.schema = schema
+        this.schemaLoaded = true
+      }
+    })
   },
   mounted() {
     // force title and description to refresh on page load
@@ -181,6 +185,11 @@ export default {
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
+    },
+    types: function() {
+      if (this.schemaLoaded) {
+        return this.schema.properties.type.enum
+      } else return []
     }
   },
   methods: {
@@ -194,6 +203,8 @@ export default {
       })
     },
     async save() {
+      console.log(this.meta)
+      return
       let response = await this.$artifactSearchRepository.create({
         title: this.title_local,
         description: this.description_local,
