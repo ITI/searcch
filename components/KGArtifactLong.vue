@@ -217,15 +217,15 @@ export default {
       return badges
     },
     tags() {
-      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
-      if (!topics) {
-        if (this.record.artifact.tags) {
-          return this.record.artifact.tags.map(e => e.tag)
-        }
-        return null
+      let tags = []
+      if (this.record.artifact.tags) {
+        tags = this.record.artifact.tags.map(e => e.tag)
       }
-      let tags = JSON.parse(topics.value).map(e => e[0])
-      return tags
+      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
+      if (topics) {
+        tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
+      }
+      return tags.filter((value, index, self) => self.indexOf(value) === index)
     }
   },
   methods: {
