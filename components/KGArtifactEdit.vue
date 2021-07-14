@@ -26,13 +26,17 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0"> Artifact Type </v-card-title>
-      <v-chip :color="iconColor(artifact_local.type)" class="ma-2" label>
-        <v-avatar left>
-          <v-icon>{{ iconImage(artifact_local.type) }}</v-icon>
-        </v-avatar>
-        <div>{{ artifact_local.type }}</div>
-      </v-chip>
+      <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
+
+      <v-select
+        :items="types"
+        label="Select Artifact Type"
+        class="mx-4"
+        chips
+        v-model="artifact_local.type"
+        :prepend-icon="iconImage(artifact_local.type)"
+        :color="iconColor(artifact_local.type)"
+      ></v-select>
 
       <v-divider class="mx-4"></v-divider>
 
@@ -218,6 +222,8 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
+import $RefParser from 'json-schema-ref-parser'
+import schemaWithPointers from '~/schema/artifact.json'
 
 export default {
   name: 'KGArtifactLong',
@@ -226,6 +232,18 @@ export default {
       type: Object,
       required: true
     }
+  },
+  created() {
+    $RefParser.dereference(schemaWithPointers, (err, schema) => {
+      if (err) {
+        console.error(err)
+      } else {
+        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+        // including referenced files, combined into a single object
+        this.schema = schema
+        this.schemaLoaded = true
+      }
+    })
   },
   data() {
     return {
@@ -237,7 +255,9 @@ export default {
       meta: {
         creators: [],
         keywords: []
-      }
+      },
+      schema: {},
+      schemaLoaded: false
     }
   },
   mounted() {
@@ -295,6 +315,11 @@ export default {
         tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
       }
       return tags.filter((value, index, self) => self.indexOf(value) === index)
+    },
+    types() {
+      if (this.schemaLoaded) {
+        return this.schema.properties.type.enum
+      } else return []
     },
     published() {
       if (this.artifact_local.publication) return true
