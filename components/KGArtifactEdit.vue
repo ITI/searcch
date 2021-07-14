@@ -2,7 +2,7 @@
   <div v-if="record.artifact">
     <h3>
       <a target="_blank" :href="record.artifact.url">
-        Knowledge Graph Artifact {{ record.artifact.id }}
+        Artifact {{ record.artifact.id }}
       </a>
     </h3>
     <v-card class="mx-auto my-2">
@@ -13,7 +13,6 @@
           v-model="title_local"
         ></v-text-field
       ></v-card-title>
-
       <v-card-text>
         <div>
           <v-textarea
@@ -28,7 +27,6 @@
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
-
       <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
         <v-avatar left>
           <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
@@ -42,7 +40,7 @@
 
       <v-chip
         color="primary"
-        v-for="c in record.artifact.affiliations"
+        v-for="(c, i) in record.artifact.affiliations"
         :key="c.id"
         cols="12"
         class="ma-2"
@@ -51,10 +49,32 @@
         <span v-if="c.affiliation.roles == 'Author'">
           <v-icon left>mdi-account-circle</v-icon>
           {{ c.affiliation.person.name }}
-          <v-icon right>mdi-close</v-icon>
+          <v-icon @click="c.splice(i, 1)" right>mdi-close</v-icon>
         </span>
       </v-chip>
-      <v-btn class="success ml-2 mb-2" fab small
+
+      <v-chip
+        color="primary"
+        v-for="(item, index) in meta.creators"
+        :key="`c${index}`"
+        cols="12"
+        class="ma-2"
+        label
+      >
+        <v-icon left>mdi-account-circle</v-icon>
+        <v-text-field
+          solo
+          dark
+          placeholder="Enter Creator Name"
+          v-model="meta.creators[index]"
+          hide-details
+          class="m-0"
+          background-color="#00476B"
+          >{{ meta.creators[index] }}</v-text-field
+        >
+        <v-icon @click="meta.creators.splice(i, 1)" right>mdi-close</v-icon>
+      </v-chip>
+      <v-btn @click="meta.creators.push('')" class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
       >
 
@@ -79,7 +99,29 @@
           {{ t }}
         </v-chip>
       </span>
-      <v-btn class="success ml-2 mb-2" fab small
+
+      <v-chip
+        color="primary"
+        v-for="(item, index) in meta.keywords"
+        :key="`k${index}`"
+        cols="12"
+        class="ma-2"
+        label
+      >
+        <v-icon left>mdi-tag-outline</v-icon>
+        <v-text-field
+          solo
+          dark
+          placeholder="Enter Keyword"
+          v-model="meta.keywords[index]"
+          hide-details
+          class="m-0"
+          background-color="#00476B"
+          >{{ meta.keywords[index] }}</v-text-field
+        >
+        <v-icon @click="meta.keywords.splice(index, 1)" right>mdi-close</v-icon>
+      </v-chip>
+      <v-btn @click="meta.keywords.push('')" class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
       >
 
@@ -145,10 +187,12 @@
       <span class="ml-4 mb-2" v-else>Importer found no files</span>
 
       <v-card-actions>
-        <v-btn @click="save()" text>
+        <v-spacer></v-spacer>
+        <v-btn small color="green" dark @click="save()">
           Save
         </v-btn>
-        <v-btn @click="publish()" text>
+
+        <v-btn small color="blue" dark @click="publish()">
           Publish
         </v-btn>
       </v-card-actions>
@@ -188,7 +232,11 @@ export default {
       description_local: this.description,
       snackbar: false,
       loadingMessage: 'Loading...',
-      artifact_local: {}
+      artifact_local: {},
+      meta: {
+        creators: [],
+        keywords: []
+      }
     }
   },
   mounted() {
@@ -231,15 +279,15 @@ export default {
       return badges
     },
     tags() {
-      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
-      if (!topics) {
-        if (this.record.artifact.tags) {
-          return this.record.artifact.tags.map(e => e.tag)
-        }
-        return null
+      let tags = []
+      if (this.record.artifact.tags) {
+        tags = this.record.artifact.tags.map(e => e.tag)
       }
-      let tags = JSON.parse(topics.value).map(e => e[0])
-      return tags
+      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
+      if (topics) {
+        tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
+      }
+      return tags.filter((value, index, self) => self.indexOf(value) === index)
     },
     published() {
       if (this.record.artifact.publication) return true
@@ -265,9 +313,18 @@ export default {
       this.$router.push(`${this.record.artifact.id}`)
     },
     async save() {
+      let zip = [['tag']]
+      this.meta.creators.map(e => zip.push([e]))
+      console.log(this.meta.creators)
+      const mapWith = keys => values =>
+          Object.fromEntries(keys.map((k, i) => [k, values[i]])),
+        getArray = ([keys, ...zip]) => zip.map(mapWith(keys)),
+        array = getArray(zip)
+
       let data = JSON.parse(JSON.stringify(this.record.artifact))
       data['title'] = this.title_local
       data['description'] = this.description_local
+      data['tags'] = array
       console.log(data)
       return
       let response = await this.$artifactRecordRepository.put(
