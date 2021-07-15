@@ -197,8 +197,9 @@
         "type": {
           "enum": [
             "Institution",
-            "Institute",
+            "Company",
             "ResearchGroup",
+            "Institute",
             "Sponsor",
             "Other"
           ],
