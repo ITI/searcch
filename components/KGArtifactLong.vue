@@ -104,23 +104,13 @@
 
       <span v-if="badges">
         <v-card-title class="py-0">Badges</v-card-title>
-
-        <v-chip
-          color="primary"
-          v-for="(v, k) in badges"
-          :key="`bad${k}`"
-          cols="12"
-          class="ma-2"
-          label
-          :href="v.url"
-          target="_blank"
-        >
-          <v-avatar left>
-            <v-icon>mdi-check-decagram</v-icon>
-          </v-avatar>
-
-          {{ v.title }}
-        </v-chip>
+        <v-img
+          v-for="(b, index) in badges"
+          :key="`badge${index}`"
+          max-height="100"
+          max-width="100"
+          :src="b.value"
+        />
       </span>
 
       <v-divider class="mx-4"></v-divider>
@@ -207,13 +197,7 @@ export default {
       }
     },
     badges() {
-      let badges = []
-      let badges_raw = this.record.artifact.meta.filter(m => m.name == 'badge')
-      if (!badges_raw.length) return null
-      for (let b of badges_raw) {
-        badges.push(JSON.parse(b.value))
-      }
-      return badges
+      return this.record.artifact.meta.filter(m => m.name == 'badge')
     },
     tags() {
       let tags = []

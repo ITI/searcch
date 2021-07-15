@@ -161,19 +161,14 @@
 
       <v-card-title class="py-0">Badges</v-card-title>
       <span v-if="badges">
-        <v-chip
-          color="primary"
-          v-for="(v, k) in badges"
-          :key="`bad${k}`"
-          cols="12"
-          class="ma-2"
-          label
-          :href="v.url"
-          target="_blank"
-        >
-          <v-icon left>mdi-check-decagram</v-icon>
-          {{ v.title }}
-        </v-chip>
+        <v-card-title class="py-0">Badges</v-card-title>
+        <v-img
+          v-for="(b, index) in badges"
+          :key="`badge${index}`"
+          max-height="100"
+          max-width="100"
+          :src="b.value"
+        />
       </span>
       <v-btn class="success ml-2 mb-2" fab small
         ><v-icon>mdi-plus</v-icon></v-btn
@@ -311,15 +306,7 @@ export default {
       return this.$sanitize(this.artifact_local.description)
     },
     badges() {
-      let badges = []
-      let badges_raw = this.artifact_local.meta
-        ? this.artifact_local.meta.filter(m => m.name == 'badge')
-        : null
-      if (!badges_raw) return null
-      for (let b of badges_raw) {
-        badges.push(JSON.parse(b.value))
-      }
-      return badges
+      return this.record.artifact.meta.filter(m => m.name == 'badge')
     },
     tags() {
       let tags = []
