@@ -102,7 +102,6 @@ export default {
         }
       ]
       if (this.$auth.loggedIn) {
-        console.log('logged in menu')
         // items.push({
         //   icon: 'mdi-apps',
         //   title: 'Dashboard',
