@@ -44,21 +44,21 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0">Creators</v-card-title>
+      <v-card-title class="py-0">Roles</v-card-title>
 
       <v-chip
         color="primary"
-        v-for="c in record.artifact.affiliations"
-        :key="c.id"
+        v-for="a in record.artifact.affiliations"
+        :key="a.id"
         cols="12"
         class="ma-2"
         label
       >
-        <span v-if="c.affiliation.roles == 'Author'">
+        <span>
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          {{ c.affiliation.person.name }}
+          {{ a.affiliation.person.name }} ({{ a.roles }})
         </span>
       </v-chip>
 

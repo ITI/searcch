@@ -43,7 +43,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0">Creators</v-card-title>
+      <v-card-title class="py-0">Roles</v-card-title>
 
       <v-chip
         color="primary"
@@ -55,7 +55,7 @@
       >
         <span v-if="a.affiliation.roles == 'Author'">
           <v-icon left>mdi-account-circle</v-icon>
-          {{ a.affiliation.person.name }}
+          {{ a.affiliation.person.name }} ({{ a.roles }})
           <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
             >mdi-close</v-icon
           >
