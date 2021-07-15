@@ -1,7 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
 
-require('dotenv').config()
-
 export default {
   /*
    ** Headers of the page
@@ -76,7 +74,6 @@ export default {
    */
   buildModules: [
     '@nuxtjs/vuetify',
-    '@nuxtjs/dotenv',
     [
       '@nuxtjs/google-analytics',
       {
