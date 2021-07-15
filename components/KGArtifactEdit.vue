@@ -53,8 +53,10 @@
         class="ma-2"
         label
       >
-        <span v-if="a.affiliation.roles == 'Author'">
-          <v-icon left>mdi-account-circle</v-icon>
+        <span>
+          <v-avatar left>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
           {{ a.affiliation.person.name }} ({{ a.roles }})
           <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
             >mdi-close</v-icon
@@ -74,7 +76,7 @@
         <v-text-field
           solo
           dark
-          placeholder="Enter Creator Name"
+          placeholder="Enter Name"
           v-model="meta.creators[index]"
           hide-details
           class="m-0"
@@ -159,7 +161,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <span v-if="badges.length">
+      <span>
         <v-card-title class="py-0">Badges</v-card-title>
         <v-img
           v-for="(b, index) in badges"
