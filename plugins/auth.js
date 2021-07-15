@@ -23,7 +23,6 @@ export default function({ $loginEndpoint, store, $auth }) {
     $loginEndpoint
       .create(payload)
       .then(response => {
-        console.log(response)
         if (response.userid) {
           store.commit('user/SET_USER_TOKEN', payload.token)
           store.commit('user/SET_USER', response.person)
