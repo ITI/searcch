@@ -74,7 +74,6 @@ export default {
    */
   buildModules: [
     '@nuxtjs/vuetify',
-    'nuxt-purgecss',
     [
       '@nuxtjs/google-analytics',
       {
