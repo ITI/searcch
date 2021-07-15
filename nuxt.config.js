@@ -96,7 +96,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    '@nuxtjs/sentry'
   ],
   /*
    ** Axios module configuration
@@ -143,6 +144,14 @@ export default {
   privateRuntimeConfig: {
     gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
     gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET || 'undefined'
+  },
+  sentry: {
+    dsn:
+      'https://1a579031c2804545b60f2e72d2429b01@o920909.ingest.sentry.io/5866963',
+    config: {
+      logErrors: true,
+      tracing: true
+    }
   },
   /*
    ** Build configuration
