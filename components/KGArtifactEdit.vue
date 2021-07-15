@@ -139,6 +139,26 @@
 
       <v-divider class="mx-4"></v-divider>
 
+      <span v-if="languages">
+        <v-card-title class="py-0">Languages</v-card-title>
+
+        <v-chip
+          color="primary"
+          v-for="(v, k) in languages"
+          :key="`lang${k}`"
+          cols="12"
+          class="ma-2"
+          label
+        >
+          <v-avatar left>
+            <v-icon>{{ iconImage('code') }}</v-icon>
+          </v-avatar>
+
+          {{ v }}
+        </v-chip>
+        <v-divider class="mx-4"></v-divider>
+      </span>
+
       <v-card-title class="py-0">Related</v-card-title>
       <span v-if="artifact_local.relationships">
         <v-chip
@@ -176,6 +196,52 @@
       >
 
       <v-divider class="mx-4"></v-divider>
+
+      <div v-if="artifact_local.type == 'code'">
+        <span v-if="stars || watchers">
+          <v-card-title class="py-0">Github Metrics</v-card-title>
+
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon color="yellow">mdi-star</v-icon>
+            </v-avatar>
+
+            {{ stars }}
+          </v-chip>
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-eye</v-icon>
+            </v-avatar>
+
+            {{ watchers }}
+          </v-chip>
+        </span>
+
+        <v-card-title class="py-0">Importer</v-card-title>
+
+        <v-chip color="primary" cols="12" class="ma-2" label>
+          <v-avatar left>
+            <v-icon>mdi-file-download-outline</v-icon>
+          </v-avatar>
+          <span v-if="record.artifact.importer">
+            {{
+              `${record.artifact.importer.name} v${record.artifact.importer.version}`
+            }}
+          </span>
+        </v-chip>
+
+        <span v-if="license">
+          <v-card-title v-if="license" class="py-0">License</v-card-title>
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-scale-balance</v-icon>
+            </v-avatar>
+
+            {{ license }}
+          </v-chip>
+        </span>
+        <v-divider class="mx-4"></v-divider>
+      </div>
 
       <v-card-title class="py-0">Files</v-card-title>
       <span v-if="artifact_local.files">
@@ -308,6 +374,35 @@ export default {
     },
     badges() {
       return this.record.artifact.meta.filter(m => m.name == 'badge')
+    },
+    languages() {
+      let csv = this.artifact_local.meta.find(o => o.name == 'languages')
+      if (!csv) return null
+      return csv.value.split(',')
+    },
+    homepage() {
+      let hp = this.artifact_local.meta.find(o => o.name == 'homepage')
+      if (!hp) return null
+      return hp.value
+    },
+    stars() {
+      let stars = this.artifact_local.meta.find(
+        o => o.name == 'stargazers_count'
+      )
+      if (!stars) return null
+      return stars.value
+    },
+    watchers() {
+      let watchers = this.artifact_local.meta.find(
+        o => o.name == 'watchers_count'
+      )
+      if (!watchers) return null
+      return watchers.value
+    },
+    license() {
+      let license = this.artifact_local.license
+      if (!license) return null
+      return license.long_name
     },
     tags() {
       let tags = []
