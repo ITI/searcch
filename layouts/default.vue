@@ -69,6 +69,7 @@
         dark
         href="https://forms.gle/nsP4kJVsjAmKKLU86"
         target="_blank"
+        rel="noopener"
         >Send Us Feedback</v-btn
       >
     </v-footer>
@@ -79,6 +80,7 @@
 import { mapState } from 'vuex'
 
 export default {
+  components: {},
   data() {
     return {
       clipped: true,

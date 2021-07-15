@@ -3,7 +3,9 @@
     <v-container>
       <v-row v-for="artifact in artifacts" :key="artifact.id">
         <v-col>
-          <ArtifactShort :artifact="artifact"></ArtifactShort>
+          <LazyHydrate when-visible>
+            <ArtifactShort :artifact="artifact"></ArtifactShort>
+          </LazyHydrate>
         </v-col>
       </v-row>
     </v-container>
@@ -13,10 +15,12 @@
 <script>
 import ArtifactShort from '@/components/ArtifactShort'
 import { mapState } from 'vuex'
+import LazyHydrate from 'vue-lazy-hydration'
 
 export default {
   components: {
-    ArtifactShort
+    ArtifactShort,
+    LazyHydrate
   },
   props: {
     artifacts: {

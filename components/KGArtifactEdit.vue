@@ -1,250 +1,268 @@
 <template>
-  <div v-if="artifact_local">
-    <h3>
-      <a target="_blank" :href="artifact_local.url">
-        Artifact {{ artifact_local.id }}
-      </a>
-    </h3>
-    <v-card class="mx-auto my-2">
-      <v-card-title
-        ><v-text-field
-          label="Title"
-          outlined
-          v-model="artifact_local.title"
-        ></v-text-field
-      ></v-card-title>
-      <v-card-text>
-        <div>
-          <v-textarea
-            auto-grow
-            outlined
-            label="Description"
-            v-model="artifact_local.description"
-          ></v-textarea>
-        </div>
-      </v-card-text>
+  <LazyHydrate when-visible>
+    <div>
+      <div v-if="artifact_local">
+        <h3>
+          <a target="_blank" :href="artifact_local.url">
+            Artifact {{ artifact_local.id }}
+          </a>
+        </h3>
+        <v-card class="mx-auto my-2">
+          <v-card-title
+            ><v-text-field
+              label="Title"
+              outlined
+              v-model="artifact_local.title"
+            ></v-text-field
+          ></v-card-title>
+          <v-card-text>
+            <div>
+              <v-textarea
+                auto-grow
+                outlined
+                label="Description"
+                v-model="artifact_local.description"
+              ></v-textarea>
+            </div>
+          </v-card-text>
 
-      <v-divider class="mx-4"></v-divider>
+          <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
+          <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
 
-      <v-select
-        :items="types"
-        label="Select Artifact Type"
-        class="mx-4"
-        chips
-        v-model="artifact_local.type"
-        :prepend-icon="iconImage(artifact_local.type)"
-        :color="iconColor(artifact_local.type)"
-      ></v-select>
+          <v-select
+            :items="types"
+            label="Select Artifact Type"
+            class="mx-4"
+            chips
+            v-model="artifact_local.type"
+            :prepend-icon="iconImage(artifact_local.type)"
+            :color="iconColor(artifact_local.type)"
+          ></v-select>
 
-      <v-divider class="mx-4"></v-divider>
+          <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0">Creators</v-card-title>
+          <v-card-title class="py-0">Creators</v-card-title>
 
-      <v-chip
-        color="primary"
-        v-for="(a, index) in artifact_local.affiliations"
-        :key="a.id"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <span v-if="a.affiliation.roles == 'Author'">
-          <v-icon left>mdi-account-circle</v-icon>
-          {{ a.affiliation.person.name }}
-          <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
-            >mdi-close</v-icon
+          <v-chip
+            color="primary"
+            v-for="(a, index) in artifact_local.affiliations"
+            :key="a.id"
+            cols="12"
+            class="ma-2"
+            label
           >
-        </span>
-      </v-chip>
+            <span v-if="a.affiliation.roles == 'Author'">
+              <v-icon left>mdi-account-circle</v-icon>
+              {{ a.affiliation.person.name }}
+              <v-icon
+                @click="artifact_local.affiliations.splice(index, 1)"
+                right
+                >mdi-close</v-icon
+              >
+            </span>
+          </v-chip>
 
-      <v-chip
-        color="primary"
-        v-for="(item, index) in meta.creators"
-        :key="`c${index}`"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <v-icon left>mdi-account-circle</v-icon>
-        <v-text-field
-          solo
-          dark
-          placeholder="Enter Creator Name"
-          v-model="meta.creators[index]"
-          hide-details
-          class="m-0"
-          background-color="#00476B"
-          >{{ meta.creators[index] }}</v-text-field
-        >
-        <v-icon @click="meta.creators.splice(index, 1)" right>mdi-close</v-icon>
-      </v-chip>
-      <v-btn @click="meta.creators.push('')" class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <span v-if="tags">
-        <v-card-title class="py-0">Keywords</v-card-title>
-
-        <v-chip
-          color="primary"
-          v-for="(t, index) in tags"
-          :key="t"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-avatar left>
-            <v-icon>mdi-tag-outline</v-icon>
-          </v-avatar>
-          {{ t }}
-          <v-icon @click="artifact_local.tags.splice(index, 1)" right
-            >mdi-close</v-icon
+          <v-chip
+            color="primary"
+            v-for="(item, index) in meta.creators"
+            :key="`c${index}`"
+            cols="12"
+            class="ma-2"
+            label
           >
-        </v-chip>
-      </span>
-
-      <v-chip
-        color="primary"
-        v-for="(item, index) in meta.keywords"
-        :key="`k${index}`"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <v-icon left>mdi-tag-outline</v-icon>
-        <v-text-field
-          solo
-          dark
-          placeholder="Enter Keyword"
-          v-model="meta.keywords[index]"
-          hide-details
-          class="m-0"
-          background-color="#00476B"
-          >{{ meta.keywords[index] }}</v-text-field
-        >
-        <v-icon @click="meta.keywords.splice(index, 1)" right>mdi-close</v-icon>
-      </v-chip>
-      <v-btn @click="meta.keywords.push('')" class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0">Related</v-card-title>
-      <span v-if="artifact_local.relationships">
-        <v-chip
-          color="primary"
-          v-for="(v, k) in artifact_local.relationships"
-          :key="`rel${k}`"
-          cols="12"
-          class="ma-2"
-          label
-          :to="{ path: `/artifact/${v.related_artifact_id}` }"
-        >
-          <v-icon left>mdi-relation-one-to-one</v-icon>
-
-          {{ v.relation | titlecase }}: {{ v.related_artifact }}
-        </v-chip>
-      </span>
-      <v-btn class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0">Badges</v-card-title>
-      <span v-if="badges">
-        <v-chip
-          color="primary"
-          v-for="(v, k) in badges"
-          :key="`bad${k}`"
-          cols="12"
-          class="ma-2"
-          label
-          :href="v.url"
-          target="_blank"
-        >
-          <v-icon left>mdi-check-decagram</v-icon>
-          {{ v.title }}
-        </v-chip>
-      </span>
-      <v-btn class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0">Files</v-card-title>
-      <span v-if="artifact_local.files">
-        <v-card-text
-          v-for="(f, index) in artifact_local.files"
-          :key="`file${index}`"
-          cols="12"
-        >
-          <div>
-            <v-icon left>mdi-file</v-icon>
-            <a target="_blank" :href="f.url">{{ f.url }}</a>
-            &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
-            {{ f.size ? convertSize(f.size) : 'unknown' }})
-            <v-icon @click="artifact_local.files.splice(index, 1)" right
+            <v-icon left>mdi-account-circle</v-icon>
+            <v-text-field
+              solo
+              dark
+              placeholder="Enter Creator Name"
+              v-model="meta.creators[index]"
+              hide-details
+              class="m-0"
+              background-color="#00476B"
+              >{{ meta.creators[index] }}</v-text-field
+            >
+            <v-icon @click="meta.creators.splice(index, 1)" right
               >mdi-close</v-icon
             >
-          </div>
-        </v-card-text>
-        <v-card-text
-          v-for="(f, index) in meta.files"
-          :key="`newfile${index}`"
-          cols="12"
-        >
-          <v-textarea
-            outlined
-            height="10"
-            label="File URL"
-            placeholder="Enter File URL"
-            v-model="f.url"
-            prepend-icon="mdi-file"
-            append-outer-icon="mdi-close"
-            @click:append-outer="meta.files.splice(index, 1)"
-          ></v-textarea>
-        </v-card-text>
-        <v-btn
-          @click="meta.files.push({ url: '' })"
-          class="success ml-2 mb-2"
-          fab
-          small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
-      </span>
-      <span class="ml-4 mb-2" v-else>No files found by importer</span>
+          </v-chip>
+          <v-btn
+            @click="meta.creators.push('')"
+            class="success ml-2 mb-2"
+            fab
+            small
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn small color="green" dark @click="save()">
-          Save
-        </v-btn>
+          <v-divider class="mx-4"></v-divider>
 
-        <v-btn small color="blue" dark @click="publish()">
-          Publish
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-snackbar v-model="snackbar">
-      Title and description saved
-      <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
-  </div>
-  <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
-  <div v-else>
-    {{ loadingMessage }}
-  </div>
+          <span v-if="tags">
+            <v-card-title class="py-0">Keywords</v-card-title>
+
+            <v-chip
+              color="primary"
+              v-for="(t, index) in tags"
+              :key="t"
+              cols="12"
+              class="ma-2"
+              label
+            >
+              <v-avatar left>
+                <v-icon>mdi-tag-outline</v-icon>
+              </v-avatar>
+              {{ t }}
+              <v-icon @click="artifact_local.tags.splice(index, 1)" right
+                >mdi-close</v-icon
+              >
+            </v-chip>
+          </span>
+
+          <v-chip
+            color="primary"
+            v-for="(item, index) in meta.keywords"
+            :key="`k${index}`"
+            cols="12"
+            class="ma-2"
+            label
+          >
+            <v-icon left>mdi-tag-outline</v-icon>
+            <v-text-field
+              solo
+              dark
+              placeholder="Enter Keyword"
+              v-model="meta.keywords[index]"
+              hide-details
+              class="m-0"
+              background-color="#00476B"
+              >{{ meta.keywords[index] }}</v-text-field
+            >
+            <v-icon @click="meta.keywords.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-chip>
+          <v-btn
+            @click="meta.keywords.push('')"
+            class="success ml-2 mb-2"
+            fab
+            small
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
+
+          <v-divider class="mx-4"></v-divider>
+
+          <v-card-title class="py-0">Related</v-card-title>
+          <span v-if="artifact_local.relationships">
+            <v-chip
+              color="primary"
+              v-for="(v, k) in artifact_local.relationships"
+              :key="`rel${k}`"
+              cols="12"
+              class="ma-2"
+              label
+              :to="{ path: `/artifact/${v.related_artifact_id}` }"
+            >
+              <v-icon left>mdi-relation-one-to-one</v-icon>
+
+              {{ v.relation | titlecase }}: {{ v.related_artifact }}
+            </v-chip>
+          </span>
+          <v-btn class="success ml-2 mb-2" fab small
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
+
+          <v-divider class="mx-4"></v-divider>
+
+          <v-card-title class="py-0">Badges</v-card-title>
+          <span v-if="badges">
+            <v-chip
+              color="primary"
+              v-for="(v, k) in badges"
+              :key="`bad${k}`"
+              cols="12"
+              class="ma-2"
+              label
+              :href="v.url"
+              target="_blank"
+            >
+              <v-icon left>mdi-check-decagram</v-icon>
+              {{ v.title }}
+            </v-chip>
+          </span>
+          <v-btn class="success ml-2 mb-2" fab small
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
+
+          <v-divider class="mx-4"></v-divider>
+
+          <v-card-title class="py-0">Files</v-card-title>
+          <span v-if="artifact_local.files">
+            <v-card-text
+              v-for="(f, index) in artifact_local.files"
+              :key="`file${index}`"
+              cols="12"
+            >
+              <div>
+                <v-icon left>mdi-file</v-icon>
+                <a target="_blank" :href="f.url">{{ f.url }}</a>
+                &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
+                {{ f.size ? convertSize(f.size) : 'unknown' }})
+                <v-icon @click="artifact_local.files.splice(index, 1)" right
+                  >mdi-close</v-icon
+                >
+              </div>
+            </v-card-text>
+            <v-card-text
+              v-for="(f, index) in meta.files"
+              :key="`newfile${index}`"
+              cols="12"
+            >
+              <v-textarea
+                outlined
+                height="10"
+                label="File URL"
+                placeholder="Enter File URL"
+                v-model="f.url"
+                prepend-icon="mdi-file"
+                append-outer-icon="mdi-close"
+                @click:append-outer="meta.files.splice(index, 1)"
+              ></v-textarea>
+            </v-card-text>
+            <v-btn
+              @click="meta.files.push({ url: '' })"
+              class="success ml-2 mb-2"
+              fab
+              small
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
+          </span>
+          <span class="ml-4 mb-2" v-else>No files found by importer</span>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn small color="green" dark @click="save()">
+              Save
+            </v-btn>
+
+            <v-btn small color="blue" dark @click="publish()">
+              Publish
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-snackbar v-model="snackbar">
+          Title and description saved
+          <template v-slot:action="{ attrs }">
+            <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </div>
+      <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
+      <div v-else>
+        {{ loadingMessage }}
+      </div>
+    </div>
+  </LazyHydrate>
 </template>
 
 <script>
@@ -252,6 +270,7 @@ import { mapState } from 'vuex'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
+import LazyHydrate from 'vue-lazy-hydration'
 
 export default {
   name: 'KGArtifactLong',

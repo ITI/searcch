@@ -3,98 +3,102 @@
     <v-container fill-height fluid>
       <v-row justify="center">
         <v-col cols="12" md="8">
-          <material-card
-            color="primary"
-            title="Edit Profile"
-            text="Complete your profile"
-          >
-            <v-form>
-              <v-container class="py-0">
-                <v-row v-if="user">
-                  <v-col cols="12" md="8">
-                    <v-text-field
-                      label="Name"
-                      class="primary-input"
-                      :value="user.name"
-                      @input="updateName"
-                    />
-                  </v-col>
+          <LazyHydrate when-visible>
+            <material-card
+              color="primary"
+              title="Edit Profile"
+              text="Complete your profile"
+            >
+              <v-form>
+                <v-container class="py-0">
+                  <v-row v-if="user">
+                    <v-col cols="12" md="8">
+                      <v-text-field
+                        label="Name"
+                        class="primary-input"
+                        :value="user.name"
+                        @input="updateName"
+                      />
+                    </v-col>
 
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                      label="Email Address"
-                      class="primary-input"
-                      :value="user.email"
-                    />
-                  </v-col>
+                    <v-col cols="12" md="4">
+                      <v-text-field
+                        label="Email Address"
+                        class="primary-input"
+                        :value="user.email"
+                      />
+                    </v-col>
 
-                  <v-col cols="12" md="12">
-                    <v-text-field
-                      label="Website"
-                      class="primary-input"
-                      :value="user.website"
-                      @input="updateWebsite"
-                    />
-                  </v-col>
+                    <v-col cols="12" md="12">
+                      <v-text-field
+                        label="Website"
+                        class="primary-input"
+                        :value="user.website"
+                        @input="updateWebsite"
+                      />
+                    </v-col>
 
-                  <v-col cols="12" md="6">
-                    <v-combobox
-                      label="Organization(s)"
-                      multiple
-                      small-chips
-                      deletable-chips
-                      persistent-hint
-                      clearable
-                      v-if="orgs"
-                      :items="orgNames"
-                      v-model="currentOrganization"
-                      hint="Select applicable orgs from the list or type in your own"
-                    ></v-combobox>
-                  </v-col>
+                    <v-col cols="12" md="6">
+                      <v-combobox
+                        label="Organization(s)"
+                        multiple
+                        small-chips
+                        deletable-chips
+                        persistent-hint
+                        clearable
+                        v-if="orgs"
+                        :items="orgNames"
+                        v-model="currentOrganization"
+                        hint="Select applicable orgs from the list or type in your own"
+                      ></v-combobox>
+                    </v-col>
 
-                  <v-col cols="12" md="6">
-                    <v-combobox
-                      label="Interests"
-                      multiple
-                      small-chips
-                      deletable-chips
-                      persistent-hint
-                      v-if="user"
-                      :items="hardcodedInterests"
-                      v-model="researchInterests"
-                      hint="Select applicable items from the list or type in your own"
-                    ></v-combobox>
-                  </v-col>
+                    <v-col cols="12" md="6">
+                      <v-combobox
+                        label="Interests"
+                        multiple
+                        small-chips
+                        deletable-chips
+                        persistent-hint
+                        v-if="user"
+                        :items="hardcodedInterests"
+                        v-model="researchInterests"
+                        hint="Select applicable items from the list or type in your own"
+                      ></v-combobox>
+                    </v-col>
 
-                  <v-col cols="12" class="text-right">
-                    <v-btn color="success" @click="updateProfile">
-                      Update Profile
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-form>
-          </material-card>
+                    <v-col cols="12" class="text-right">
+                      <v-btn color="success" @click="updateProfile">
+                        Update Profile
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </material-card>
+          </LazyHydrate>
         </v-col>
         <v-col cols="12" md="4" v-if="user">
-          <material-card class="v-card-profile">
-            <v-avatar
-              slot="offset"
-              class="mx-auto d-block elevation-6"
-              size="130"
-            >
-              <v-img :src="gravatarImage(user.email)" />
-            </v-avatar>
-            <v-card-text v-if="user" class="text-center">
-              <h6 class="overline mb-3">
-                {{ user.name }}
-              </h6>
+          <LazyHydrate never>
+            <material-card class="v-card-profile">
+              <v-avatar
+                slot="offset"
+                class="mx-auto d-block elevation-6"
+                size="130"
+              >
+                <v-img :src="gravatarImage(user.email)" />
+              </v-avatar>
+              <v-card-text v-if="user" class="text-center">
+                <h6 class="overline mb-3">
+                  {{ user.name }}
+                </h6>
 
-              <p class="font-weight-light">
-                {{ user.email }}
-              </p>
-            </v-card-text>
-          </material-card>
+                <p class="font-weight-light">
+                  {{ user.email }}
+                </p>
+              </v-card-text>
+            </material-card>
+          </LazyHydrate>
         </v-col>
       </v-row>
     </v-container>
@@ -102,162 +106,164 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" lg="12">
-          <material-card class="card-tabs" color="primary">
-            <template v-slot:header>
-              <v-tabs
-                v-model="tabs"
-                background-color="transparent"
-                slider-color="white"
-                class="ml-4"
-              >
-                <v-tab class="mr-3">
-                  <v-icon class="mr-2">
-                    mdi-database
-                  </v-icon>
-                  Artifacts
-                </v-tab>
-                <v-tab class="mr-3">
-                  <v-icon class="mr-2">
-                    mdi-star
-                  </v-icon>
-                  Ratings
-                </v-tab>
-                <v-tab>
-                  <v-icon class="mr-2">
-                    mdi-heart
-                  </v-icon>
-                  Favorites
-                </v-tab>
-              </v-tabs>
-            </template>
-
-            <v-tabs-items v-model="tabs">
-              <v-tab-item>
-                <!-- artifacts -->
-                <v-list
-                  single-line
-                  class="py-0"
-                  v-for="(item, i) in dashboard.owned_artifacts"
-                  :key="i"
+          <LazyHydrate when-visible>
+            <material-card class="card-tabs" color="primary">
+              <template v-slot:header>
+                <v-tabs
+                  v-model="tabs"
+                  background-color="transparent"
+                  slider-color="white"
+                  class="ml-4"
                 >
-                  <v-list-item>
-                    <v-chip :color="iconColor(item.type)" class="ma-2" label>
-                      <v-avatar left>
-                        <v-icon>{{ iconImage(item.type) }}</v-icon>
-                      </v-avatar>
-                      <div>{{ item.type }}</div>
-                    </v-chip>
+                  <v-tab class="mr-3">
+                    <v-icon class="mr-2">
+                      mdi-database
+                    </v-icon>
+                    Artifacts
+                  </v-tab>
+                  <v-tab class="mr-3">
+                    <v-icon class="mr-2">
+                      mdi-star
+                    </v-icon>
+                    Ratings
+                  </v-tab>
+                  <v-tab>
+                    <v-icon class="mr-2">
+                      mdi-heart
+                    </v-icon>
+                    Favorites
+                  </v-tab>
+                </v-tabs>
+              </template>
 
-                    <v-list-item-title v-text="item.title" />
+              <v-tabs-items v-model="tabs">
+                <v-tab-item>
+                  <!-- artifacts -->
+                  <v-list
+                    single-line
+                    class="py-0"
+                    v-for="(item, i) in dashboard.owned_artifacts"
+                    :key="i"
+                  >
+                    <v-list-item>
+                      <v-chip :color="iconColor(item.type)" class="ma-2" label>
+                        <v-avatar left>
+                          <v-icon>{{ iconImage(item.type) }}</v-icon>
+                        </v-avatar>
+                        <div>{{ item.type }}</div>
+                      </v-chip>
 
-                    <div class="d-flex">
-                      <v-tooltip top content-class="top">
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            class="v-btn--simple"
-                            color="primary"
-                            icon
-                            v-bind="attrs"
-                            v-on="on"
-                            :to="`/artifact/${item.id}`"
-                            nuxt
-                          >
-                            <v-icon color="primary">
-                              mdi-arrow-top-right-thick
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Goto Artifact</span>
-                      </v-tooltip>
-                    </div>
-                  </v-list-item>
-                  <v-divider />
-                </v-list>
-              </v-tab-item>
-              <v-tab-item>
-                <!-- ratings -->
-                <v-list
-                  single-line
-                  class="py-0"
-                  v-for="(item, i) in dashboard.given_ratings"
-                  :key="i"
-                >
-                  <v-list-item>
-                    <v-chip :color="iconColor(item.type)" class="ma-2" label>
-                      <v-avatar left>
-                        <v-icon>{{ iconImage(item.type) }}</v-icon>
-                      </v-avatar>
-                      <div>{{ item.type }}</div>
-                    </v-chip>
+                      <v-list-item-title v-text="item.title" />
 
-                    <v-list-item-title v-text="item.title" />
+                      <div class="d-flex">
+                        <v-tooltip top content-class="top">
+                          <template v-slot:activator="{ attrs, on }">
+                            <v-btn
+                              class="v-btn--simple"
+                              color="primary"
+                              icon
+                              v-bind="attrs"
+                              v-on="on"
+                              :to="`/artifact/${item.id}`"
+                              nuxt
+                            >
+                              <v-icon color="primary">
+                                mdi-arrow-top-right-thick
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Goto Artifact</span>
+                        </v-tooltip>
+                      </div>
+                    </v-list-item>
+                    <v-divider />
+                  </v-list>
+                </v-tab-item>
+                <v-tab-item>
+                  <!-- ratings -->
+                  <v-list
+                    single-line
+                    class="py-0"
+                    v-for="(item, i) in dashboard.given_ratings"
+                    :key="i"
+                  >
+                    <v-list-item>
+                      <v-chip :color="iconColor(item.type)" class="ma-2" label>
+                        <v-avatar left>
+                          <v-icon>{{ iconImage(item.type) }}</v-icon>
+                        </v-avatar>
+                        <div>{{ item.type }}</div>
+                      </v-chip>
 
-                    <div class="d-flex">
-                      <v-tooltip top content-class="top">
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-chip
-                            color="amber"
-                            class="ma-2"
-                            label
-                            :to="`/artifact/review/${item.id}`"
-                            nuxt
-                          >
-                            <v-avatar left>
-                              <v-icon> mdi-star </v-icon>
-                            </v-avatar>
-                            <div>{{ item.rating }}</div>
-                          </v-chip>
-                        </template>
-                        <span>Goto Rating</span>
-                      </v-tooltip>
-                    </div>
-                  </v-list-item>
-                  <v-divider />
-                </v-list>
-              </v-tab-item>
-              <v-tab-item>
-                <!-- favorites -->
-                <v-list
-                  single-line
-                  class="py-0"
-                  v-for="(item, i) in dashboard.favorite_artifacts"
-                  :key="i"
-                >
-                  <v-list-item>
-                    <v-chip :color="iconColor(item.type)" class="ma-2" label>
-                      <v-avatar left>
-                        <v-icon>{{ iconImage(item.type) }}</v-icon>
-                      </v-avatar>
-                      <div>{{ item.type }}</div>
-                    </v-chip>
-                    <v-list-item-title v-text="item.title" />
+                      <v-list-item-title v-text="item.title" />
 
-                    <div class="d-flex">
-                      <v-tooltip top content-class="top">
-                        <template v-slot:activator="{ attrs, on }">
-                          <v-btn
-                            class="v-btn--simple"
-                            color="primary"
-                            icon
-                            v-bind="attrs"
-                            v-on="on"
-                            :to="`/artifact/${item.id}`"
-                            nuxt
-                          >
-                            <v-icon color="primary">
-                              mdi-arrow-top-right-thick
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Goto Artifact</span>
-                      </v-tooltip>
-                    </div>
-                  </v-list-item>
-                  <v-divider />
-                </v-list>
-              </v-tab-item>
-            </v-tabs-items>
-          </material-card>
+                      <div class="d-flex">
+                        <v-tooltip top content-class="top">
+                          <template v-slot:activator="{ attrs, on }">
+                            <v-chip
+                              color="amber"
+                              class="ma-2"
+                              label
+                              :to="`/artifact/review/${item.id}`"
+                              nuxt
+                            >
+                              <v-avatar left>
+                                <v-icon> mdi-star </v-icon>
+                              </v-avatar>
+                              <div>{{ item.rating }}</div>
+                            </v-chip>
+                          </template>
+                          <span>Goto Rating</span>
+                        </v-tooltip>
+                      </div>
+                    </v-list-item>
+                    <v-divider />
+                  </v-list>
+                </v-tab-item>
+                <v-tab-item>
+                  <!-- favorites -->
+                  <v-list
+                    single-line
+                    class="py-0"
+                    v-for="(item, i) in dashboard.favorite_artifacts"
+                    :key="i"
+                  >
+                    <v-list-item>
+                      <v-chip :color="iconColor(item.type)" class="ma-2" label>
+                        <v-avatar left>
+                          <v-icon>{{ iconImage(item.type) }}</v-icon>
+                        </v-avatar>
+                        <div>{{ item.type }}</div>
+                      </v-chip>
+                      <v-list-item-title v-text="item.title" />
+
+                      <div class="d-flex">
+                        <v-tooltip top content-class="top">
+                          <template v-slot:activator="{ attrs, on }">
+                            <v-btn
+                              class="v-btn--simple"
+                              color="primary"
+                              icon
+                              v-bind="attrs"
+                              v-on="on"
+                              :to="`/artifact/${item.id}`"
+                              nuxt
+                            >
+                              <v-icon color="primary">
+                                mdi-arrow-top-right-thick
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Goto Artifact</span>
+                        </v-tooltip>
+                      </div>
+                    </v-list-item>
+                    <v-divider />
+                  </v-list>
+                </v-tab-item>
+              </v-tabs-items>
+            </material-card>
+          </LazyHydrate>
         </v-col>
       </v-row>
     </v-container>
@@ -267,9 +273,12 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
+import LazyHydrate from 'vue-lazy-hydration'
 
 export default {
-  components: {},
+  components: {
+    LazyHydrate
+  },
   async mounted() {
     this.$store.dispatch('user/fetchUser')
     this.$store.dispatch('user/fetchOrgs')
