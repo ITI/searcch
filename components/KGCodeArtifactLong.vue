@@ -76,22 +76,25 @@
         </v-chip>
       </span>
 
-      <span v-if="authors">
-        <v-card-title class="py-0">Creators</v-card-title>
+      <span v-if="record.artifact.affiliations">
+        <v-card-title class="py-0">Roles</v-card-title>
 
         <v-chip
           color="primary"
-          v-for="a in authors"
+          v-for="a in record.artifact.affiliations"
           :key="a.id"
           cols="12"
           class="ma-2"
           label
         >
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          {{ a.affiliation.person.name }}
+          <span>
+            <v-avatar left>
+              <v-icon>mdi-account-circle</v-icon>
+            </v-avatar>
+            {{ a.affiliation.person.name }} ({{ a.roles }})
+          </span>
         </v-chip>
+        <v-divider class="mx-4"></v-divider>
       </span>
 
       <span v-if="languages">
@@ -271,14 +274,6 @@ export default {
           )
       }
     },
-    authors() {
-      let authors = []
-      for (let a of this.record.artifact.affiliations) {
-        if (a.affiliation.roles == 'Author') authors.push(a)
-      }
-      if (!authors.length) return null
-      return authors
-    },
     languages() {
       let csv = this.record.artifact.meta.find(o => o.name == 'languages')
       if (!csv) return null
@@ -321,11 +316,14 @@ export default {
       return tags
     },
     markdown() {
-      let readme = this.record.artifact.files.some(f => {
-        readme = f.members.find(f => f.name == 'README.md')
-        if (readme) return true
-      })
-      return readme.content
+      let readmes = {}
+      if (
+        this.record.artifact.files.map(f => {
+          readmes = f.members.find(m => m.name.toUpperCase() == 'README.MD')
+        })
+      )
+        return readmes.content
+      else return ''
     },
     hideOverflow() {
       return {
