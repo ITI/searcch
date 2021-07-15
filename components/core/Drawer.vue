@@ -74,37 +74,37 @@ export default {
   data: () => ({
     links: [
       {
-        to: '/dashboard/',
+        to: '/dashboard-example/',
         icon: 'mdi-view-dashboard',
         text: 'Dashboard'
       },
       {
-        to: '/dashboard/user-profile',
+        to: '/dashboard-example/user-profile',
         icon: 'mdi-account',
         text: 'User Profile'
       },
       {
-        to: '/dashboard/table-list',
+        to: '/dashboard-example/table-list',
         icon: 'mdi-clipboard-outline',
         text: 'Table List'
       },
       {
-        to: '/dashboard/typography',
+        to: '/dashboard-example/typography',
         icon: 'mdi-format-font',
         text: 'Typography'
       },
       {
-        to: '/dashboard/icons',
+        to: '/dashboard-example/icons',
         icon: 'mdi-chart-bubble',
         text: 'Icons'
       },
       {
-        to: '/dashboard/maps',
+        to: '/dashboard-example/maps',
         icon: 'mdi-map-marker',
         text: 'Maps'
       },
       {
-        to: '/dashboard/notifications',
+        to: '/dashboard-example/notifications',
         icon: 'mdi-bell',
         text: 'Notifications'
       }
