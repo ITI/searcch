@@ -323,7 +323,7 @@ export default {
         })
       )
         return readmes.content
-      else return ''
+      else return this.record.artifact.description
     },
     hideOverflow() {
       return {
