@@ -6,13 +6,11 @@
 </template>
 
 <script>
-import ArtifactLong from '~/components/ArtifactLong'
-
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    ArtifactLong
+    ArtifactLong: () => import('@/components/ArtifactLong')
   },
   head() {
     return {
@@ -31,24 +29,15 @@ export default {
   },
   computed: {
     ...mapState({
-      artifact: state => state.artifacts.artifact,
-      source: state => state.artifacts.source
+      artifact: state => state.artifacts.artifact
     }),
     editing() {
-      if (this.$route.query.edit == 'true') return true
-      return false
+      return this.$route.query.edit == 'true' ? true : false
     }
   },
   mounted() {
-    if (this.source === '') {
-      this.$store.commit('artifacts/SET_SOURCE', 'kg')
-    }
-    if (typeof this.$route.query.source !== 'undefined') {
-      this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
-    }
     this.$store.dispatch('artifacts/fetchArtifact', {
-      id: this.$route.params.id,
-      source: this.$route.query.source ? this.$route.query.source : this.source
+      id: this.$route.params.id
     })
   }
 }

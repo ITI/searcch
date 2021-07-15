@@ -93,14 +93,12 @@
 </template>
 
 <script>
-import ImportList from '~/components/ImportList'
-import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    Logo,
-    ImportList
+    Logo: () => import('@/components/Logo'),
+    ImportList: () => import('@/components/ImportList')
   },
   data() {
     return {

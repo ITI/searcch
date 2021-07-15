@@ -11,15 +11,10 @@ const renameKeys = (keysMap, obj) =>
       )
     : obj
 
-const processArtifacts = obj => {
-  return renameKeys({ doi: 'id' }, obj)
-}
-
 export const state = () => ({
   artifacts: [],
   artifact: {},
   search: '',
-  source: '',
   favorites: [],
   favoritesIDs: {},
   imports: []
@@ -34,9 +29,6 @@ export const getters = {
   },
   search: state => {
     return state.search
-  },
-  source: state => {
-    return state.source
   },
   favorites: state => {
     return state.favorites
@@ -59,9 +51,6 @@ export const mutations = {
   SET_SEARCH(state, search) {
     state.search = search
   },
-  SET_SOURCE(state, source) {
-    state.source = source
-  },
   SET_FAVORITES(state, favorites) {
     state.favorites = favorites
   },
@@ -78,33 +67,16 @@ export const mutations = {
 
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
-    let a = {}
     commit('SET_SEARCH', payload.keywords)
-    a = await this.$artifactSearchRepository.index({
+    let a = await this.$artifactSearchRepository.index({
       ...payload
     })
     commit('SET_ARTIFACTS', a.artifacts)
   },
   async fetchArtifact({ commit, state }, payload) {
-    let a = {}
-    if (
-      typeof payload.source !== 'undefined' &&
-      state.source !== payload.source
-    ) {
-      // override state.source if forced from function call
-      commit('SET_SOURCE', payload.source)
-    }
-    if (
-      typeof state.artifact.id !== 'undefined' &&
-      state.artifact.id === payload.id
-    ) {
-      console.log('returning cached entry ' + payload.id)
-      return state.artifact
-    } else {
-      console.log('fetching entry ' + payload.id)
-      a = await this.$artifactRecordRepository.show(payload.id)
-      commit('SET_ARTIFACT', renameKeys({ doi: 'id' }, a))
-    }
+    console.log('fetching entry ' + payload.id)
+    let a = await this.$artifactRecordRepository.show(payload.id)
+    commit('SET_ARTIFACT', a)
   },
   async fetchFavorites({ commit, state }, payload) {
     let response = await this.$findFavoritesEndpoint.show(payload)

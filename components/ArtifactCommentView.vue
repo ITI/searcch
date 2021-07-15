@@ -76,14 +76,13 @@
 </template>
 
 <script>
-import SingleComment from '@/components/SingleComment'
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   components: {
-    SingleComment
+    SingleComment: () => import('@/components/SingleComment')
   },
   props: {
     artifact: {
@@ -112,7 +111,6 @@ export default {
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
       userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),

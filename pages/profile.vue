@@ -273,11 +273,10 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
-import LazyHydrate from 'vue-lazy-hydration'
 
 export default {
   components: {
-    LazyHydrate
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   async mounted() {
     this.$store.dispatch('user/fetchUser')

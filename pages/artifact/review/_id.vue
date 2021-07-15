@@ -78,13 +78,11 @@
 </template>
 
 <script>
-import ArtifactCommentView from '~/components/ArtifactCommentView'
-
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    ArtifactCommentView
+    ArtifactCommentView: () => import('@/components/ArtifactCommentView')
   },
   head() {
     return {
@@ -108,7 +106,6 @@ export default {
   computed: {
     ...mapState({
       artifact: state => state.artifacts.artifact,
-      source: state => state.artifacts.source,
       comments: state => state.artifacts.artifact.rating_review,
       userid: state => state.user.userid
     }),
@@ -148,8 +145,7 @@ export default {
             comment_payload
           )
           this.$store.dispatch('artifacts/fetchArtifact', {
-            id: this.$route.params.id,
-            source: 'kg'
+            id: this.$route.params.id
           })
         }
         this.$refs.comment.reset()
@@ -158,15 +154,8 @@ export default {
     }
   },
   mounted() {
-    if (this.source === '') {
-      this.$store.commit('artifacts/SET_SOURCE', 'kg')
-    }
-    if (typeof this.$route.query.source !== 'undefined') {
-      this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
-    }
     this.$store.dispatch('artifacts/fetchArtifact', {
-      id: this.$route.params.id,
-      source: 'kg'
+      id: this.$route.params.id
     })
   }
 }

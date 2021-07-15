@@ -186,7 +186,6 @@ export default {
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
       userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),

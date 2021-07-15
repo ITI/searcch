@@ -80,7 +80,6 @@
 import { mapState } from 'vuex'
 
 export default {
-  components: {},
   data() {
     return {
       clipped: true,

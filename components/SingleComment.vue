@@ -1,74 +1,69 @@
 <template>
-  <LazyHydrate when-visible>
-    <div>
-      <v-card v-if="comment">
-        <v-card-title>
-          <v-row class="ml-1">
-            <span v-if="name != ''">{{ name }}</span
-            ><span v-else>Anonymous</span>
-            <v-rating
-              v-model="rating"
-              v-if="!editing"
-              color="amber"
-              dense
-              readonly
-              size="18"
-              class="ml-3"
-            ></v-rating>
-          </v-row>
-        </v-card-title>
-        <v-card-text>
-          <v-rating
-            v-model="rating_local"
-            v-if="editing"
-            label="Rating"
-            color="amber"
-            dense
-            hover
-            size="24"
-            class="ml-3"
-          ></v-rating>
-          <pre v-if="!editing">{{ review }}</pre>
-          <v-textarea
-            v-else
-            label="Review"
-            placeholder="Add review..."
-            v-model="review_local"
-          >
-          </v-textarea>
-        </v-card-text>
-        <v-card-actions v-if="userid == comment.review.reviewer.id">
-          <v-btn text color="primary" @click="editing = true" v-if="!editing">
-            Edit
-          </v-btn>
-          <v-btn
-            text
-            color="primary"
-            @click="saveReview()"
-            disable="this.review == ''"
-            v-if="editing"
-          >
-            Save
-          </v-btn>
-          <v-btn text color="primary" @click="deleteReview()" v-if="!editing">
-            Delete
-          </v-btn>
-          <v-btn text color="primary" @click="editing = false" v-if="editing">
-            Cancel
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-      <v-card v-else>Loading...</v-card>
-    </div>
-  </LazyHydrate>
+  <v-card v-if="comment">
+    <v-card-title>
+      <v-row class="ml-1">
+        <span v-if="name != ''">{{ name }}</span
+        ><span v-else>Anonymous</span>
+        <v-rating
+          v-model="rating"
+          v-if="!editing"
+          color="amber"
+          dense
+          readonly
+          size="18"
+          class="ml-3"
+        ></v-rating>
+      </v-row>
+    </v-card-title>
+    <v-card-text>
+      <v-rating
+        v-model="rating_local"
+        v-if="editing"
+        label="Rating"
+        color="amber"
+        dense
+        hover
+        size="24"
+        class="ml-3"
+      ></v-rating>
+      <pre v-if="!editing">{{ review }}</pre>
+      <v-textarea
+        v-else
+        label="Review"
+        placeholder="Add review..."
+        v-model="review_local"
+      >
+      </v-textarea>
+    </v-card-text>
+    <v-card-actions v-if="userid == comment.review.reviewer.id">
+      <v-btn text color="primary" @click="editing = true" v-if="!editing">
+        Edit
+      </v-btn>
+      <v-btn
+        text
+        color="primary"
+        @click="saveReview()"
+        disable="this.review == ''"
+        v-if="editing"
+      >
+        Save
+      </v-btn>
+      <v-btn text color="primary" @click="deleteReview()" v-if="!editing">
+        Delete
+      </v-btn>
+      <v-btn text color="primary" @click="editing = false" v-if="editing">
+        Cancel
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+  <v-card v-else>Loading...</v-card>
 </template>
 <script>
 import { mapState } from 'vuex'
-import LazyHydrate from 'vue-lazy-hydration'
 
 export default {
   components: {
-    LazyHydrate
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   props: {
     comment: {
@@ -120,8 +115,7 @@ export default {
       }
       await this.$reviewsEndpoint.put(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.$route.params.id,
-        source: 'kg'
+        id: this.$route.params.id
       })
     },
     async deleteReview() {
@@ -138,8 +132,7 @@ export default {
       }
       await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.$route.params.id,
-        source: 'kg'
+        id: this.$route.params.id
       })
     }
   }

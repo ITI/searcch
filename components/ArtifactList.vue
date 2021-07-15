@@ -13,14 +13,10 @@
 </template>
 
 <script>
-import ArtifactShort from '@/components/ArtifactShort'
-import { mapState } from 'vuex'
-import LazyHydrate from 'vue-lazy-hydration'
-
 export default {
   components: {
-    ArtifactShort,
-    LazyHydrate
+    ArtifactShort: () => import('@/components/ArtifactShort'),
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   props: {
     artifacts: {
@@ -36,11 +32,6 @@ export default {
     return {
       relevanceResult: []
     }
-  },
-  computed: {
-    ...mapState({
-      source: state => state.artifacts.source
-    })
   }
 }
 </script>

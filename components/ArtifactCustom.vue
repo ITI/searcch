@@ -180,7 +180,6 @@ export default {
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
       userid: state => state.user.userid
     }),
     sanitizedDescription: function() {
@@ -213,8 +212,7 @@ export default {
       this.id = response.id
       this.snackbar = true
       this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.record.artifact.id,
-        source: 'kg'
+        id: this.record.artifact.id
       })
     },
     iconColor(type) {

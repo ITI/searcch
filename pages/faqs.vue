@@ -31,13 +31,10 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import LazyHydrate from 'vue-lazy-hydration'
-
 export default {
   components: {
-    Logo,
-    LazyHydrate
+    Logo: () => import('@/components/Logo'),
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")

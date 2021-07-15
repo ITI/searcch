@@ -222,13 +222,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import VueMarkdown from 'vue-markdown'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 
 export default {
-  name: 'KGArtifactLong',
+  name: 'KGCodeArtifactLong',
   components: {
-    VueMarkdown
+    VueMarkdown: () => import('vue-markdown')
   },
   props: {
     record: {
@@ -252,7 +251,6 @@ export default {
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
       userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),

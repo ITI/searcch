@@ -13,13 +13,10 @@
 </template>
 
 <script>
-import ArtifactImportView from '~/components/ArtifactImportView'
-import LazyHydrate from 'vue-lazy-hydration'
-
 export default {
   components: {
-    ArtifactImportView,
-    LazyHydrate
+    ArtifactImportView: () => import('@/components/ArtifactImportView'),
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   props: {
     imports: {

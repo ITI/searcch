@@ -12,11 +12,12 @@
 <script>
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
-import Logo from '~/components/Logo.vue'
-import PrettyPrint from '~/components/pretty-print'
 
 export default {
-  components: { Logo, PrettyPrint },
+  components: {
+    Logo: () => import('@/components/Logo'),
+    PrettyPrint: () => import('@/components/pretty-print')
+  },
   data: () => ({
     schema: {},
     model: {},

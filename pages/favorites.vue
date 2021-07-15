@@ -17,14 +17,12 @@
 </template>
 
 <script>
-import ArtifactList from '~/components/ArtifactList'
-import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    Logo,
-    ArtifactList
+    Logo: () => import('@/components/Logo'),
+    ArtifactList: () => import('@/components/ArtifactList')
   },
   data() {
     return {

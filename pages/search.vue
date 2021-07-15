@@ -131,15 +131,13 @@
 </template>
 
 <script>
-import ArtifactList from '~/components/ArtifactList'
-import Logo from '~/components/Logo.vue'
 import { mapState } from 'vuex'
 import goTo from 'vuetify/es5/services/goto'
 
 export default {
   components: {
-    Logo,
-    ArtifactList
+    Logo: () => import('@/components/Logo'),
+    ArtifactList: () => import('@/components/ArtifactList')
   },
   head() {
     return {
@@ -155,8 +153,6 @@ export default {
   },
   data() {
     return {
-      searchsource: 'kg',
-      engines: ['kg'],
       limit: 20,
       page: 1,
       search: '',
@@ -202,7 +198,6 @@ export default {
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
-      source: state => state.artifacts.source,
       search_init: state => state.artifacts.search
     }),
     allArtifacts() {
@@ -230,7 +225,6 @@ export default {
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Loading...'
       this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
-      this.$store.commit('artifacts/SET_SOURCE', this.searchsource)
       let payload = {
         keywords: this.search,
         page: this.page,

@@ -22,9 +22,6 @@
 
 <script>
 export default {
-  props: {
-    source: String
-  },
   data() {
     return {
       login: {
