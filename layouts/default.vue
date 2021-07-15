@@ -10,7 +10,7 @@
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
-          :key="i"
+          :key="`main${i}`"
           :to="item.to"
           router
           exact
@@ -27,7 +27,7 @@
       <v-list>
         <v-list-item
           v-for="(item, i) in footerItems"
-          :key="i"
+          :key="`footer${i}`"
           :to="item.to"
           router
           exact
@@ -100,7 +100,8 @@ export default {
           to: '/search'
         }
       ]
-      if (this.userid) {
+      if (this.$auth.loggedIn) {
+        console.log('logged in menu')
         // items.push({
         //   icon: 'mdi-apps',
         //   title: 'Dashboard',
