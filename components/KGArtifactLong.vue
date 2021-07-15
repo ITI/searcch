@@ -44,27 +44,29 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0">Roles</v-card-title>
+      <span v-if="record.artifact.affiliations">
+        <v-card-title class="py-0">Roles</v-card-title>
 
-      <v-chip
-        color="primary"
-        v-for="a in record.artifact.affiliations"
-        :key="a.id"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <span>
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          {{ a.affiliation.person.name }} ({{ a.roles }})
-        </span>
-      </v-chip>
+        <v-chip
+          color="primary"
+          v-for="a in record.artifact.affiliations"
+          :key="a.id"
+          cols="12"
+          class="ma-2"
+          label
+        >
+          <span>
+            <v-avatar left>
+              <v-icon>mdi-account-circle</v-icon>
+            </v-avatar>
+            {{ a.affiliation.person.name }} ({{ a.roles }})
+          </span>
+        </v-chip>
+        <v-divider class="mx-4"></v-divider>
+      </span>
 
       <span v-if="tags">
         <v-card-title class="py-0">Keywords</v-card-title>
-
         <v-chip
           color="primary"
           v-for="t in tags"
@@ -77,9 +79,9 @@
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
-
           {{ t }}
         </v-chip>
+        <v-divider class="mx-4"></v-divider>
       </span>
 
       <span v-if="record.artifact.relationships.length">
@@ -100,9 +102,10 @@
 
           {{ v.relation | titlecase }}: {{ v.related_artifact }}
         </v-chip>
+        <v-divider class="mx-4"></v-divider>
       </span>
 
-      <span v-if="badges">
+      <span v-if="badges.length">
         <v-card-title class="py-0">Badges</v-card-title>
         <v-img
           v-for="(b, index) in badges"
@@ -111,9 +114,8 @@
           max-width="100"
           :src="b.value"
         />
+        <v-divider class="mx-4"></v-divider>
       </span>
-
-      <v-divider class="mx-4"></v-divider>
 
       <span v-if="record.artifact.files.length">
         <v-card-title class="py-0">Files</v-card-title>
@@ -128,6 +130,7 @@
             {{ v.filetype }}, size: {{ convertSize(v.size) }})
           </div>
         </v-card-text>
+        <v-divider class="mx-4"></v-divider>
       </span>
 
       <v-card-actions>

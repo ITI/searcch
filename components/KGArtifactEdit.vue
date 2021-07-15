@@ -159,8 +159,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0">Badges</v-card-title>
-      <span v-if="badges">
+      <span v-if="badges.length">
         <v-card-title class="py-0">Badges</v-card-title>
         <v-img
           v-for="(b, index) in badges"
