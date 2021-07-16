@@ -8,21 +8,9 @@
         },
         "person": {
           "$ref": "#/definitions/Person"
-        },
-        "roles": {
-          "enum": [
-            "Author",
-            "ProjectManager",
-            "Researcher",
-            "ContactPerson",
-            "PrincipalInvestigator",
-            "CoPrincipalInvestigator",
-            "Other"
-          ],
-          "type": "string"
         }
       },
-      "required": ["roles"],
+      "required": [],
       "type": "object"
     },
     "ArtifactAffiliation": {
@@ -30,9 +18,13 @@
       "properties": {
         "affiliation": {
           "$ref": "#/definitions/Affiliation"
+        },
+        "roles": {
+          "enum": ["Author", "ContactPerson", "Other"],
+          "type": "string"
         }
       },
-      "required": [],
+      "required": ["roles"],
       "type": "object"
     },
     "ArtifactFile": {
@@ -157,7 +149,7 @@
           "type": "string"
         }
       },
-      "required": ["tag"],
+      "required": ["tag", "source"],
       "type": "object"
     },
     "License": {
@@ -198,15 +190,18 @@
           "enum": [
             "Institution",
             "Company",
-            "ResearchGroup",
             "Institute",
+            "ResearchGroup",
             "Sponsor",
             "Other"
           ],
           "type": "string"
+        },
+        "verified": {
+          "type": "string"
         }
       },
-      "required": ["name", "type"],
+      "required": ["name", "type", "verified"],
       "type": "object"
     },
     "Person": {
