@@ -83,7 +83,7 @@
       <br />
       <v-row class="ml-1 mb-2">
         If you would like to enter your artifact information manually, please
-        &nbsp; <a href="/create">click here.</a>
+        &nbsp; <NuxtLink to="/create">click here.</NuxtLink>
       </v-row>
       <br /><v-divider></v-divider><br />
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
@@ -160,7 +160,9 @@ export default {
       if (this.userid) {
         this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
       }
-      if (this.imports.every(m => m.status !== 'running')) {
+      if (
+        !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
+      ) {
         clearInterval(this.pollingID)
       }
     }
