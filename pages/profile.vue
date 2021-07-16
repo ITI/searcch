@@ -170,45 +170,6 @@
                       </div>
                     </v-timeline-item>
                   </v-timeline>
-                  <!-- <v-list
-                    single-line
-                    class="py-0"
-                    v-for="(item, i) in dashboard.owned_artifacts"
-                    :key="i"
-                  >
-                    <v-list-item>
-                      <v-chip :color="iconColor(item.type)" class="ma-2" label>
-                        <v-avatar left>
-                          <v-icon>{{ iconImage(item.type) }}</v-icon>
-                        </v-avatar>
-                        <div>{{ item.type }}</div>
-                      </v-chip>
-
-                      <v-list-item-title v-text="item.title" />
-
-                      <div class="d-flex">
-                        <v-tooltip top content-class="top">
-                          <template v-slot:activator="{ attrs, on }">
-                            <v-btn
-                              class="v-btn--simple"
-                              color="primary"
-                              icon
-                              v-bind="attrs"
-                              v-on="on"
-                              :to="`/artifact/${item.id}`"
-                              nuxt
-                            >
-                              <v-icon color="primary">
-                                mdi-arrow-top-right-thick
-                              </v-icon>
-                            </v-btn>
-                          </template>
-                          <span>Goto Artifact</span>
-                        </v-tooltip>
-                      </div>
-                    </v-list-item>
-                    <v-divider></v-divider>
-                  </v-list> -->
                 </v-tab-item>
                 <v-tab-item>
                   <!-- ratings -->
@@ -298,44 +259,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <!-- <v-container fill-height fluid>
-      <v-row justify="space-around">
-        <v-card width="400">
-          <v-img
-            height="100px"
-            src="https://cdn.pixabay.com/photo/2018/05/14/16/54/cyber-3400789_960_720.jpg"
-          >
-            <v-app-bar flat color="rgba(0, 0, 0, 0)">
-              <v-toolbar-title class="text-h6 white--text pl-0">
-                Artifact Timeline
-              </v-toolbar-title>
-            </v-app-bar>
-          </v-img>
-
-          <v-card-text>
-            <div class="font-weight-bold ml-8 mb-2">
-              Today
-            </div>
-
-            <v-timeline align-top dense>
-              <v-timeline-item
-                v-for="a in owned_artifacts"
-                :key="a.ctime"
-                :color="primary"
-                small
-              >
-                <div>
-                  <div class="font-weight-normal">
-                    <strong>{{ a.title }}</strong> @{{ a.type }}
-                  </div>
-                </div>
-              </v-timeline-item>
-            </v-timeline>
-          </v-card-text>
-        </v-card>
-      </v-row>
-    </v-container> -->
   </v-layout>
 </template>
 
