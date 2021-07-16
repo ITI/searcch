@@ -139,13 +139,13 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <span v-if="languages">
+      <span v-if="meta.languages.length">
         <v-card-title class="py-0">Languages</v-card-title>
 
         <v-chip
           color="primary"
-          v-for="(v, k) in languages"
-          :key="`lang${k}`"
+          v-for="(l, index) in meta.languages"
+          :key="`lang${index}`"
           cols="12"
           class="ma-2"
           label
@@ -153,8 +153,10 @@
           <v-avatar left>
             <v-icon>{{ iconImage('code') }}</v-icon>
           </v-avatar>
-
-          {{ v }}
+          {{ l }}
+          <v-icon @click="meta.languages.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
         </v-chip>
         <v-divider class="mx-4"></v-divider>
       </span>
@@ -341,6 +343,8 @@ export default {
       }
     })
     this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
+    let csv = this.artifact_local.meta.find(o => o.name == 'languages')
+    this.meta.languages = csv ? csv.value.split(',') : []
   },
   data() {
     return {
@@ -352,7 +356,8 @@ export default {
       meta: {
         creators: [],
         keywords: [],
-        files: []
+        files: [],
+        languages: []
       },
       schema: {},
       schemaLoaded: false
@@ -374,11 +379,6 @@ export default {
     },
     badges() {
       return this.artifact_local.meta.filter(m => m.name == 'badge')
-    },
-    languages() {
-      let csv = this.artifact_local.meta.find(o => o.name == 'languages')
-      if (!csv) return null
-      return csv.value.split(',')
     },
     homepage() {
       let hp = this.artifact_local.meta.find(o => o.name == 'homepage')
@@ -430,6 +430,8 @@ export default {
   watch: {
     record(val) {
       this.artifact_local = JSON.parse(JSON.stringify(val.artifact))
+      let csv = this.artifact_local.meta.find(o => o.name == 'languages')
+      this.meta.languages = csv ? csv.value.split(',') : []
     }
   },
   methods: {
@@ -455,6 +457,9 @@ export default {
       this.artifact_local['files'] = this.artifact_local['files'].concat(
         this.meta.files
       )
+      this.artifact_local.meta.find(
+        o => o.name == 'languages'
+      ).value = this.meta.languages.join(',')
 
       console.log(this.artifact_local)
       this.meta.keywords = []
