@@ -2,6 +2,32 @@
   <v-layout column justify-left align-top>
     <v-container fill-height fluid>
       <v-row justify="center">
+        <v-col cols="12" md="4" v-if="user">
+          <LazyHydrate never>
+            <material-card class="v-card-profile">
+              <v-avatar
+                slot="offset"
+                class="mx-auto d-block elevation-6"
+                size="130"
+              >
+                <v-img :src="gravatarImage(user.email)" />
+              </v-avatar>
+              <v-card-text v-if="user" class="text-center">
+                <h6 class="overline mb-3">
+                  {{ user.name }}
+                </h6>
+                <h6 class="overline mb-3">
+                  {{ currentOrganization }}
+                </h6>
+
+                <p class="font-weight-light">
+                  {{ user.email }}
+                </p>
+              </v-card-text>
+            </material-card>
+          </LazyHydrate>
+        </v-col>
+
         <v-col cols="12" md="8">
           <LazyHydrate when-visible>
             <material-card
@@ -37,23 +63,7 @@
                         @input="updateWebsite"
                       />
                     </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-combobox
-                        label="Organization(s)"
-                        multiple
-                        small-chips
-                        deletable-chips
-                        persistent-hint
-                        clearable
-                        v-if="orgs"
-                        :items="orgNames"
-                        v-model="currentOrganization"
-                        hint="Select applicable orgs from the list or type in your own"
-                      ></v-combobox>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
+                    <v-col cols="12" md="12">
                       <v-combobox
                         label="Interests"
                         multiple
@@ -67,6 +77,21 @@
                       ></v-combobox>
                     </v-col>
 
+                    <v-col cols="12" md="12">
+                      <v-combobox
+                        label="Affiliations(s)"
+                        multiple
+                        small-chips
+                        deletable-chips
+                        persistent-hint
+                        clearable
+                        v-if="orgs"
+                        :items="orgNames"
+                        v-model="currentOrganization"
+                        hint="Select applicable orgs from the list or type in your own"
+                      ></v-combobox>
+                    </v-col>
+
                     <v-col cols="12" class="text-right">
                       <v-btn color="success" @click="updateProfile">
                         Update Profile
@@ -75,28 +100,6 @@
                   </v-row>
                 </v-container>
               </v-form>
-            </material-card>
-          </LazyHydrate>
-        </v-col>
-        <v-col cols="12" md="4" v-if="user">
-          <LazyHydrate never>
-            <material-card class="v-card-profile">
-              <v-avatar
-                slot="offset"
-                class="mx-auto d-block elevation-6"
-                size="130"
-              >
-                <v-img :src="gravatarImage(user.email)" />
-              </v-avatar>
-              <v-card-text v-if="user" class="text-center">
-                <h6 class="overline mb-3">
-                  {{ user.name }}
-                </h6>
-
-                <p class="font-weight-light">
-                  {{ user.email }}
-                </p>
-              </v-card-text>
             </material-card>
           </LazyHydrate>
         </v-col>
