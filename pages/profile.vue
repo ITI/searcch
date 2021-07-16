@@ -139,7 +139,38 @@
               <v-tabs-items v-model="tabs">
                 <v-tab-item>
                   <!-- artifacts -->
-                  <v-list
+                  <v-timeline align-top dense>
+                    <v-timeline-item
+                      v-for="item in owned_artifacts"
+                      :key="item.ctime"
+                      :color="iconColor(item.type)"
+                      :icon="iconImage(item.type)"
+                      small
+                    >
+                      <div>
+                        <div class="font-weight-normal">
+                          <strong>{{ Date(item.ctime) }}</strong>
+                        </div>
+                        <div>
+                          {{ item.title }}
+                          <v-btn
+                            class="v-btn--simple"
+                            color="primary"
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                            :to="`/artifact/${item.id}`"
+                            nuxt
+                          >
+                            <v-icon color="primary">
+                              mdi-arrow-top-right-thick
+                            </v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </v-timeline-item>
+                  </v-timeline>
+                  <!-- <v-list
                     single-line
                     class="py-0"
                     v-for="(item, i) in dashboard.owned_artifacts"
@@ -176,8 +207,8 @@
                         </v-tooltip>
                       </div>
                     </v-list-item>
-                    <v-divider />
-                  </v-list>
+                    <v-divider></v-divider>
+                  </v-list> -->
                 </v-tab-item>
                 <v-tab-item>
                   <!-- ratings -->
@@ -267,6 +298,44 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- <v-container fill-height fluid>
+      <v-row justify="space-around">
+        <v-card width="400">
+          <v-img
+            height="100px"
+            src="https://cdn.pixabay.com/photo/2018/05/14/16/54/cyber-3400789_960_720.jpg"
+          >
+            <v-app-bar flat color="rgba(0, 0, 0, 0)">
+              <v-toolbar-title class="text-h6 white--text pl-0">
+                Artifact Timeline
+              </v-toolbar-title>
+            </v-app-bar>
+          </v-img>
+
+          <v-card-text>
+            <div class="font-weight-bold ml-8 mb-2">
+              Today
+            </div>
+
+            <v-timeline align-top dense>
+              <v-timeline-item
+                v-for="a in owned_artifacts"
+                :key="a.ctime"
+                :color="primary"
+                small
+              >
+                <div>
+                  <div class="font-weight-normal">
+                    <strong>{{ a.title }}</strong> @{{ a.type }}
+                  </div>
+                </div>
+              </v-timeline-item>
+            </v-timeline>
+          </v-card-text>
+        </v-card>
+      </v-row>
+    </v-container> -->
   </v-layout>
 </template>
 
@@ -278,52 +347,13 @@ export default {
   components: {
     LazyHydrate: () => import('vue-lazy-hydration')
   },
-  async mounted() {
-    this.$store.dispatch('user/fetchUser')
-    this.$store.dispatch('user/fetchOrgs')
-    // this.$store.dispatch('user/fetchInterests')
-    let response = await this.$dashboardEndpoint.index()
-    this.dashboard = response
-    console.log(this.dashboard)
-  },
-  computed: {
-    ...mapState({
-      user: state => state.user.user,
-      orgs: state => state.user.orgs,
-      interests: state => state.user.interests
-    }),
-    orgNames: {
-      get: function() {
-        return this.orgs.map(m => m.name)
-      },
-      set: function(newValue) {
-        this.$store.commit('user/SET_ORGS', newValue)
-      }
-    },
-    researchInterests: {
-      get: function() {
-        return this.interests ? this.interests.split(',') : ''
-      },
-      set: function(newValue) {
-        this.$store.commit('user/SET_USER_INTERESTS', newValue.join(','))
-      }
-    },
-    currentOrganization: {
-      get: function() {
-        return this.user.organization
-      },
-      set: function(newValue) {
-        this.$store.commit('user/SET_USER_ORG', newValue)
-      }
-    }
-  },
   data() {
     return {
       // TODO: FIXME
       // these lists should be provided dynamically from back-end by querying db for unique existing values
       // also entries need aliases
       hardcodedInterests: [
-        'Applications Security',
+        'Application Security',
         'Artificial Intelligence',
         'Biometrics',
         'Cloud Computing',
@@ -341,9 +371,53 @@ export default {
         'Testbeds'
       ],
       tabs: 0,
-      dashboard: {}
+      dashboard: {},
+      owned_artifacts: []
     }
   },
+  computed: {
+    ...mapState({
+      user: state => state.user.user,
+      orgs: state => state.user.orgs,
+      interests: state => state.user.interests
+    }),
+    orgNames: {
+      get: function() {
+        return this.orgs.map(m => m.name)
+      },
+      set: function(newValue) {
+        this.$store.commit('user/SET_ORGS', newValue)
+      }
+    },
+    researchInterests: {
+      get: function() {
+        return this.user.research_interests
+          ? this.user.research_interests.split(',')
+          : ''
+      },
+      set: function(newValue) {
+        this.$store.commit('user/SET_USER_INTERESTS', newValue.join(','))
+      }
+    },
+    currentOrganization: {
+      get: function() {
+        return this.user.organization
+      },
+      set: function(newValue) {
+        this.$store.commit('user/SET_USER_ORG', newValue)
+      }
+    }
+  },
+  async mounted() {
+    this.$store.dispatch('user/fetchUser')
+    this.$store.dispatch('user/fetchOrgs')
+    this.$store.dispatch('user/fetchInterests')
+    let response = await this.$dashboardEndpoint.index()
+    this.dashboard = response
+    response = await this.$userArtifactsEndpoint.index()
+    this.owned_artifacts = response.owned_artifacts
+  },
+
   methods: {
     updateProfile() {
       if (!this.$auth.loggedIn) {

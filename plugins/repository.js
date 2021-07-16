@@ -10,6 +10,12 @@ export default (ctx, inject) => {
   // backend record retrieval
   inject('artifactRecordRepository', repositoryWithAxios('kg/' + 'artifact'))
 
+  // imports array view/add API
+  inject('importsEndpoint', repositoryWithAxios('kg/' + 'artifact/imports'))
+
+  // import view/modify API
+  inject('importEndpoint', repositoryWithAxios('kg/' + 'artifact/import'))
+
   // backend login credentials
   inject('loginEndpoint', repositoryWithAxios('kg/' + 'login'))
 
@@ -25,14 +31,11 @@ export default (ctx, inject) => {
   // reviews modify API
   inject('reviewsEndpoint', repositoryWithAxios('kg/' + 'review'))
 
-  // imports array view/add API
-  inject('importsEndpoint', repositoryWithAxios('kg/' + 'artifact/imports'))
-
-  // import view/modify API
-  inject('importEndpoint', repositoryWithAxios('kg/' + 'artifact/import'))
-
   // user API
   inject('userEndpoint', repositoryWithAxios('kg/' + 'user'))
+
+  // user owned artifacts API
+  inject('userArtifactsEndpoint', repositoryWithAxios('kg/' + 'user/artifacts'))
 
   // organization API
   inject('organizationEndpoint', repositoryWithAxios('kg/' + 'organizations'))

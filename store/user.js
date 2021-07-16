@@ -87,7 +87,6 @@ export const actions = {
     let a = {}
     console.log('fetching organizations')
     let payload = {
-      all: 1,
       verified: 1
     }
     a = await this.$organizationEndpoint.index(payload)
@@ -97,10 +96,9 @@ export const actions = {
     let a = {}
     console.log('fetching interests')
     let payload = {
-      all: 1,
-      verified: 1
+      all: 1
     }
     a = await this.$interestsEndpoint.index(payload)
-    commit('SET_INTERESTS', a.interests)
+    commit('SET_INTERESTS', a.research_interests)
   }
 }
