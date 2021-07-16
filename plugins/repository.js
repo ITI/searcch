@@ -4,10 +4,16 @@ export default (ctx, inject) => {
   // And in the Vue instances (this.$repository in your components)
   const repositoryWithAxios = createRepository(ctx.$axios)
 
-  // backend searching
+  // affiliations
+  inject(
+    'userAffiliationsEndpoint',
+    repositoryWithAxios('kg/' + 'user/affiliations')
+  )
+
+  // artifact searching
   inject('artifactSearchRepository', repositoryWithAxios('kg/' + 'artifacts'))
 
-  // backend record retrieval
+  // artifact retrieval
   inject('artifactRecordRepository', repositoryWithAxios('kg/' + 'artifact'))
 
   // imports array view/add API
