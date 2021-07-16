@@ -157,8 +157,6 @@
                             class="v-btn--simple"
                             color="primary"
                             icon
-                            v-bind="attrs"
-                            v-on="on"
                             :to="`/artifact/${item.id}`"
                             nuxt
                           >
