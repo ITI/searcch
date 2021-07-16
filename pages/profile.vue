@@ -144,7 +144,7 @@
                   <!-- artifacts -->
                   <v-timeline align-top dense>
                     <v-timeline-item
-                      v-for="item in owned_artifacts"
+                      v-for="item in dashboard.owned_artifacts"
                       :key="item.ctime"
                       :color="iconColor(item.type)"
                       :icon="iconImage(item.type)"
@@ -298,7 +298,7 @@ export default {
       ],
       tabs: 0,
       dashboard: {},
-      owned_artifacts: [],
+      // owned_artifacts: [],
       schema: {},
       schemaLoaded: false
     }
@@ -347,8 +347,8 @@ export default {
     this.$store.dispatch('user/fetchInterests')
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
-    response = await this.$userArtifactsEndpoint.index()
-    this.owned_artifacts = response.owned_artifacts
+    // response = await this.$userArtifactsEndpoint.index()
+    // this.owned_artifacts = response.owned_artifacts
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -406,7 +406,7 @@ export default {
       let image = await this.$axios.get(
         '/avatar/' + this.gravatarImage(this.user.email).split('/')[4]
       )
-      return btoa(encodeURI(image.data))
+      return Buffer.from(encodeURI(image.data), 'base64')
     }
   }
 }
