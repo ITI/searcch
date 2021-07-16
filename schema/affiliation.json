@@ -1,0 +1,77 @@
+{
+  "definitions": {
+    "Organization": {
+      "description": "Organization",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "Institution",
+            "Company",
+            "Institute",
+            "ResearchGroup",
+            "Sponsor",
+            "Other"
+          ],
+          "type": "string"
+        },
+        "verified": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "type", "verified"],
+      "type": "object"
+    },
+    "Person": {
+      "description": "Person",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "profile_photo": {
+          "type": "string"
+        },
+        "research_interests": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "description": "Affiliation",
+  "id": "https://hub.cyberexperimentation.org/v1/schema/Affiliation.schema.json",
+  "properties": {
+    "org": {
+      "$ref": "#/definitions/Organization"
+    },
+    "person": {
+      "$ref": "#/definitions/Person"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
