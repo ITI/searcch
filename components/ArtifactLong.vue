@@ -2,11 +2,7 @@
   <div v-if="artifact.artifact">
     <span v-if="!edit">
       <LazyHydrate when-visible>
-        <KGCodeArtifactLong
-          v-if="artifact.artifact.type == 'code'"
-          :record="artifact"
-        />
-        <KGArtifactLong v-else :record="artifact" />
+        <KGArtifactLong :record="artifact" />
       </LazyHydrate>
     </span>
     <span v-else>
@@ -22,7 +18,6 @@
 export default {
   components: {
     KGArtifactLong: () => import('@/components/KGArtifactLong'),
-    KGCodeArtifactLong: () => import('@/components/KGCodeArtifactLong'),
     KGArtifactEdit: () => import('@/components/KGArtifactEdit'),
     LazyHydrate: () => import('vue-lazy-hydration')
   },

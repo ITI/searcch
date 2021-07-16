@@ -373,7 +373,7 @@ export default {
       return this.$sanitize(this.artifact_local.description)
     },
     badges() {
-      return this.record.artifact.meta.filter(m => m.name == 'badge')
+      return this.artifact_local.meta.filter(m => m.name == 'badge')
     },
     languages() {
       let csv = this.artifact_local.meta.find(o => o.name == 'languages')

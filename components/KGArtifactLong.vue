@@ -24,12 +24,26 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title> Description </v-card-title>
+      <v-card-title>
+        <v-row class="mx-1"
+          >Description<v-spacer></v-spacer
+          ><v-btn v-if="isOverflow" @click="expanded = !expanded">{{
+            !expanded ? 'Expand' : 'Collapse'
+          }}</v-btn></v-row
+        >
+      </v-card-title>
 
-      <v-card-text>
-        <div v-html="sanitizedDescription"></div>
+      <v-card-text ref="descDiv" :class="hideOverflow">
+        <vue-markdown :source="markdown"></vue-markdown>
       </v-card-text>
-
+      <v-btn
+        elevation="0"
+        tile
+        v-if="isOverflow"
+        @click="expanded = !expanded"
+        block
+        ><v-icon>{{ overflowIcon }}</v-icon></v-btn
+      >
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
@@ -84,6 +98,26 @@
         <v-divider class="mx-4"></v-divider>
       </span>
 
+      <span v-if="languages">
+        <v-card-title class="py-0">Languages</v-card-title>
+
+        <v-chip
+          color="primary"
+          v-for="(v, k) in languages"
+          :key="`lang${k}`"
+          cols="12"
+          class="ma-2"
+          label
+        >
+          <v-avatar left>
+            <v-icon>{{ iconImage('code') }}</v-icon>
+          </v-avatar>
+
+          {{ v }}
+        </v-chip>
+        <v-divider class="mx-4"></v-divider>
+      </span>
+
       <span v-if="record.artifact.relationships.length">
         <v-card-title class="py-0">Related</v-card-title>
 
@@ -117,19 +151,74 @@
         <v-divider class="mx-4"></v-divider>
       </span>
 
+      <div v-if="record.artifact.type == 'code'">
+        <span v-if="stars || watchers">
+          <v-card-title class="py-0">Github Metrics</v-card-title>
+
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon color="yellow">mdi-star</v-icon>
+            </v-avatar>
+
+            {{ stars }}
+          </v-chip>
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-eye</v-icon>
+            </v-avatar>
+
+            {{ watchers }}
+          </v-chip>
+        </span>
+
+        <v-card-title class="py-0">Importer</v-card-title>
+
+        <v-chip color="primary" cols="12" class="ma-2" label>
+          <v-avatar left>
+            <v-icon>mdi-file-download-outline</v-icon>
+          </v-avatar>
+          <span v-if="record.artifact.importer">
+            {{
+              `${record.artifact.importer.name} v${record.artifact.importer.version}`
+            }}
+          </span>
+        </v-chip>
+
+        <span v-if="license">
+          <v-card-title v-if="license" class="py-0">License</v-card-title>
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-scale-balance</v-icon>
+            </v-avatar>
+
+            {{ license }}
+          </v-chip>
+        </span>
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
       <span v-if="record.artifact.files.length">
         <v-card-title class="py-0">Files</v-card-title>
 
-        <v-card-text
+        <v-list-item
           v-for="(v, k) in record.artifact.files"
           :key="`file${k}`"
-          cols="12"
+          dense
         >
-          <div>
-            <a target="_blank" :href="v.url">{{ v.url }}</a> &nbsp; (type:
-            {{ v.filetype }}, size: {{ convertSize(v.size) }})
-          </div>
-        </v-card-text>
+          <v-list-group :value="true" no-action sub-group>
+            <template v-slot:activator>
+              <a @click.stop target="_blank" :href="v.url">{{ v.url }}</a>
+              &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
+            </template>
+            <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
+              <a target="_blank" :href="vm.html_url || vm.download_url">{{
+                vm.pathname || vm.name || vm.html_url || vm.download_url
+              }}</a>
+              &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
+            </v-list-item>
+          </v-list-group>
+        </v-list-item>
+
         <v-divider class="mx-4"></v-divider>
       </span>
 
@@ -166,9 +255,14 @@ export default {
       required: true
     }
   },
+  components: {
+    VueMarkdown: () => import('vue-markdown')
+  },
   data() {
     return {
       loading: true,
+      loaded: false,
+      expanded: false,
       loadingMessage: 'Loading...'
     }
   },
@@ -212,6 +306,57 @@ export default {
         tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
       }
       return tags.filter((value, index, self) => self.indexOf(value) === index)
+    },
+    languages() {
+      let csv = this.record.artifact.meta.find(o => o.name == 'languages')
+      if (!csv) return null
+      return csv.value.split(',')
+    },
+    homepage() {
+      let hp = this.record.artifact.meta.find(o => o.name == 'homepage')
+      if (!hp) return null
+      return hp.value
+    },
+    stars() {
+      let stars = this.record.artifact.meta.find(
+        o => o.name == 'stargazers_count'
+      )
+      if (!stars) return null
+      return stars.value
+    },
+    watchers() {
+      let watchers = this.record.artifact.meta.find(
+        o => o.name == 'watchers_count'
+      )
+      if (!watchers) return null
+      return watchers.value
+    },
+    license() {
+      let license = this.record.artifact.license
+      if (!license) return null
+      return license.long_name
+    },
+    markdown() {
+      let readmes = {}
+      this.record.artifact.files.map(f => {
+        readmes = f.members.find(m => m.name.toUpperCase() == 'README.MD')
+      })
+      if (typeof readmes !== 'undefined') return readmes.content
+      else return this.sanitizedDescription
+    },
+    hideOverflow() {
+      return {
+        hideoverflow: !this.expanded
+      }
+    },
+    isOverflow() {
+      if (!this.loaded) return false
+      let element = this.$refs['descDiv']
+      return element.offsetHeight >= 700
+    },
+    overflowIcon() {
+      if (!this.expanded) return 'mdi-chevron-down'
+      else return 'mdi-chevron-up'
     }
   },
   methods: {
@@ -244,3 +389,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.hideoverflow {
+  max-height: 700px;
+  overflow: hidden;
+}
+</style>
