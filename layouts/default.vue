@@ -65,8 +65,9 @@
         1925588, 1925564</span
       ><v-spacer></v-spacer>
       <v-btn
-        color="red lighten-2"
+        color="error"
         dark
+        raised
         href="https://forms.gle/nsP4kJVsjAmKKLU86"
         target="_blank"
         rel="noopener"
