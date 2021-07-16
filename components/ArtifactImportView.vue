@@ -48,8 +48,8 @@
           Archive
         </v-btn>
 
-        <v-btn v-else text>
-          Cancel
+        <v-btn v-else text @click="cancel()">
+          Delete
         </v-btn>
 
         <v-btn
@@ -140,6 +140,10 @@ export default {
     }
   },
   methods: {
+    async cancel() {
+      let response = await this.$importEndpoint.delete(this.artifact.id)
+      this.updateImports()
+    },
     async archive() {
       let response = await this.$importEndpoint.put(this.artifact.id, {
         archived: true
