@@ -266,6 +266,8 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
+import $RefParser from 'json-schema-ref-parser'
+import schemaWithPointers from '~/schema/affiliation.json'
 
 export default {
   components: {
@@ -296,7 +298,9 @@ export default {
       ],
       tabs: 0,
       dashboard: {},
-      owned_artifacts: []
+      owned_artifacts: [],
+      schema: {},
+      schemaLoaded: false
     }
   },
   computed: {
@@ -330,6 +334,11 @@ export default {
       set: function(newValue) {
         this.$store.commit('user/SET_USER_ORG', newValue)
       }
+    },
+    types: function() {
+      if (this.schemaLoaded) {
+        return this.schema.properties.type.enum
+      } else return []
     }
   },
   async mounted() {
@@ -341,7 +350,18 @@ export default {
     response = await this.$userArtifactsEndpoint.index()
     this.owned_artifacts = response.owned_artifacts
   },
-
+  created() {
+    $RefParser.dereference(schemaWithPointers, (err, schema) => {
+      if (err) {
+        console.error(err)
+      } else {
+        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+        // including referenced files, combined into a single object
+        this.schema = schema
+        this.schemaLoaded = true
+      }
+    })
+  },
   methods: {
     updateProfile() {
       if (!this.$auth.loggedIn) {
