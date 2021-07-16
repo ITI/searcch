@@ -34,7 +34,15 @@
         >
         {{ artifact.status }} - {{ artifact.phase }}
       </v-card-text>
-
+      <v-row v-if="artifact.status === 'failed'" class="px-3">
+        <v-col cols="10">
+          <v-card-text>
+            message:
+            {{ artifact.message }}
+          </v-card-text>
+          <v-card-text> log: {{ artifact.log }} </v-card-text>
+        </v-col>
+      </v-row>
       <v-card-actions>
         <v-btn v-if="artifact.artifact_id || archived" text @click="archive()">
           Archive
@@ -82,7 +90,6 @@
 </template>
 
 <script>
-import clip from 'text-clipper'
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
 

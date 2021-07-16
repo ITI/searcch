@@ -64,7 +64,7 @@
             <v-text-field
               label="URL"
               v-model="url"
-              placeholder="http://github.com/MyProject"
+              placeholder="http://github.com/iti/project"
               outlined
               :rules="[rules.required, rules.url]"
             ></v-text-field>
@@ -115,24 +115,7 @@ export default {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
         }
-      },
-      advanced: {
-        open: false,
-        type: null
-      },
-      types: [
-        { text: 'Dataset', value: 'dataset' },
-        { text: 'Publication', value: 'publication' },
-        { text: 'Code', value: 'code' },
-        { text: 'Executable', value: 'executable' },
-        { text: 'Methodology', value: 'methodology' },
-        { text: 'Metrics', value: 'metrics' },
-        { text: 'Hypothesis', value: 'hypothesis' },
-        { text: 'Domain', value: 'domain' },
-        { text: 'Supporting Info', value: 'supportinginfo' },
-        { text: 'Prior Work', value: 'priorwork' }
-      ],
-      importers: []
+      }
     }
   },
   async mounted() {
@@ -177,7 +160,7 @@ export default {
       if (this.userid) {
         this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
       }
-      if (this.imports.every(m => m.progress == 100)) {
+      if (this.imports.every(m => m.status !== 'running')) {
         clearInterval(this.pollingID)
       }
     }
