@@ -197,7 +197,7 @@
             {{ v.relation | titlecase }}: {{ v.related_artifact }}
           </v-chip>
         </span>
-        <v-btn class="success ml-2 mb-2" fab small
+        <v-btn class="success ml-2 mb-2" fab small disabled
           ><v-icon>mdi-plus</v-icon></v-btn
         >
 
@@ -213,7 +213,7 @@
             :src="b.value"
           />
         </span>
-        <v-btn class="success ml-2 mb-2" fab small
+        <v-btn class="success ml-2 mb-2" fab small disabled
           ><v-icon>mdi-plus</v-icon></v-btn
         >
 
