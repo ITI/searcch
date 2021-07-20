@@ -1,7 +1,7 @@
 var qs = require('qs')
 // Provide nuxt-axios instance to use same configuration across the whole project
 // I've used typical CRUD method names and actions here
-export default $axios => resource => ({
+export default $axios => (resource, error) => ({
   index(payload) {
     return $axios
       .$get(`${resource}`, {
@@ -10,128 +10,134 @@ export default $axios => resource => ({
           return qs.stringify(params, { arrayFormat: 'repeat' })
         }
       })
-      .catch(function(error) {
-        if (error.response) {
+      .catch(function(e) {
+        if (e.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else if (error.request) {
+          console.log(e.response.data)
+          console.log(e.response.status)
+          console.log(e.response.headers)
+        } else if (e.request) {
           // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.log(error.request)
+          console.log(e.request)
         } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message)
+          // Something happened in setting up the request that triggered an e
+          console.log('e', e.message)
         }
-        console.log(error.config)
+        console.log(e.config)
+        $nuxt.error(e)
       })
   },
 
   show(id) {
-    return $axios.$get(`${resource}/${id}`).catch(function(error) {
-      if (error.response) {
+    return $axios.$get(`${resource}/${id}`).catch(function(e) {
+      if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      } else if (error.request) {
+        console.log(e.response.data)
+        console.log(e.response.status)
+        console.log(e.response.headers)
+      } else if (e.request) {
         // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request)
+        console.log(e.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
+        // Something happened in setting up the request that triggered an e
+        console.log('e', e.message)
       }
-      console.log(error.config)
+      console.log(e.config)
+      $nuxt.error(e)
     })
   },
 
   create(payload) {
-    return $axios.$post(`${resource}`, payload).catch(function(error) {
-      if (error.response) {
+    return $axios.$post(`${resource}`, payload).catch(function(e) {
+      if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      } else if (error.request) {
+        console.log(e.response.data)
+        console.log(e.response.status)
+        console.log(e.response.headers)
+      } else if (e.request) {
         // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request)
+        console.log(e.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
+        // Something happened in setting up the request that triggered an e
+        console.log('e', e.message)
       }
-      console.log(error.config)
+      console.log(e.config)
+      $nuxt.error(e)
     })
   },
 
   update(id, payload) {
-    return $axios.$post(`${resource}/${id}`, payload).catch(function(error) {
-      if (error.response) {
+    return $axios.$post(`${resource}/${id}`, payload).catch(function(e) {
+      if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      } else if (error.request) {
+        console.log(e.response.data)
+        console.log(e.response.status)
+        console.log(e.response.headers)
+      } else if (e.request) {
         // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request)
+        console.log(e.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
+        // Something happened in setting up the request that triggered an e
+        console.log('e', e.message)
       }
-      console.log(error.config)
+      console.log(e.config)
+      $nuxt.error(e)
     })
   },
 
   put(id, payload) {
-    return $axios.$put(`${resource}/${id}`, payload).catch(function(error) {
-      if (error.response) {
+    return $axios.$put(`${resource}/${id}`, payload).catch(function(e) {
+      if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      } else if (error.request) {
+        console.log(e.response.data)
+        console.log(e.response.status)
+        console.log(e.response.headers)
+      } else if (e.request) {
         // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request)
+        console.log(e.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
+        // Something happened in setting up the request that triggered an e
+        console.log('e', e.message)
       }
-      console.log(error.config)
+      console.log(e.config)
+      $nuxt.error(e)
     })
   },
 
   delete(id) {
-    return $axios.$delete(`${resource}/${id}`).catch(function(error) {
-      if (error.response) {
+    return $axios.$delete(`${resource}/${id}`).catch(function(e) {
+      if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      } else if (error.request) {
+        console.log(e.response.data)
+        console.log(e.response.status)
+        console.log(e.response.headers)
+      } else if (e.request) {
         // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request)
+        console.log(e.request)
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
+        // Something happened in setting up the request that triggered an e
+        console.log('e', e.message)
       }
-      console.log(error.config)
+      console.log(e.config)
+      $nuxt.error(e)
     })
   },
 
@@ -140,23 +146,24 @@ export default $axios => resource => ({
       .$delete(`${resource}/${id}`, {
         params: payload
       })
-      .catch(function(error) {
-        if (error.response) {
+      .catch(function(e) {
+        if (e.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else if (error.request) {
+          console.log(e.response.data)
+          console.log(e.response.status)
+          console.log(e.response.headers)
+        } else if (e.request) {
           // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // `e.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.log(error.request)
+          console.log(e.request)
         } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message)
+          // Something happened in setting up the request that triggered an e
+          console.log('e', e.message)
         }
-        console.log(error.config)
+        console.log(e.config)
+        $nuxt.error(e)
       })
   }
 })
