@@ -79,16 +79,14 @@
 
                     <v-col cols="12" md="12">
                       <v-combobox
-                        label="Affiliations(s)"
-                        multiple
+                        label="Affiliation"
                         small-chips
-                        deletable-chips
                         persistent-hint
                         clearable
                         v-if="orgs"
                         :items="orgNames"
                         v-model="currentOrganization"
-                        hint="Select applicable orgs from the list or type in your own"
+                        hint="Select applicable org from the list or type in your own"
                       ></v-combobox>
                     </v-col>
 
@@ -312,9 +310,6 @@ export default {
     orgNames: {
       get: function() {
         return this.orgs.map(m => m.name)
-      },
-      set: function(newValue) {
-        this.$store.commit('user/SET_ORGS', newValue)
       }
     },
     researchInterests: {
@@ -332,7 +327,11 @@ export default {
         return this.user.organization
       },
       set: function(newValue) {
-        this.$store.commit('user/SET_USER_ORG', newValue)
+        let org = this.orgs.find(o => o.name === newValue[0])
+        if (!org) {
+          org = { name: newValue, type: 'Institution' }
+        }
+        this.$store.commit('user/SET_USER_ORG', org)
       }
     },
     types: function() {
@@ -347,8 +346,6 @@ export default {
     this.$store.dispatch('user/fetchInterests')
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
-    // response = await this.$userArtifactsEndpoint.index()
-    // this.owned_artifacts = response.owned_artifacts
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -377,7 +374,10 @@ export default {
         }
         // FIXME: remove when ready to update endpoint
         console.log(data)
-        // this.$userEndpoint.update(this.user.user.id, data)
+        this.$userEndpoint.update(this.user.user.id, data)
+        this.$userAffiliationsEndpoint.create(
+          this.orgs.find(o => o.name === currentOrganization)
+        )
         // update organizations
         // TODO
       }
