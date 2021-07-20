@@ -4,300 +4,323 @@
       <v-card-title> {{ artifact_local.title }} </v-card-title>
       <v-card-text>
         <a target="_blank" :href="artifact_local.url">
-          {{ record.artifact.url }}
+          {{ artifact_local.url }}
         </a>
       </v-card-text>
     </v-card>
-    <v-card class="mx-auto my-2">
-      <v-card-title
-        ><v-text-field
-          label="Title"
-          outlined
-          v-model="artifact_local.title"
-        ></v-text-field
-      ></v-card-title>
-      <v-card-text>
-        <div>
-          <v-textarea
-            auto-grow
+    <v-form v-model="valid">
+      <v-card class="mx-auto my-2">
+        <v-card-title
+          ><v-text-field
+            label="Title"
             outlined
-            label="Description"
-            v-model="artifact_local.description"
-          ></v-textarea>
-        </div>
-      </v-card-text>
+            v-model="artifact_local.title"
+          ></v-text-field
+        ></v-card-title>
+        <v-card-text>
+          <div>
+            <v-textarea
+              auto-grow
+              outlined
+              label="Description"
+              v-model="artifact_local.description"
+            ></v-textarea>
+          </div>
+        </v-card-text>
+        <v-card-title
+          ><v-text-field
+            label="URL"
+            outlined
+            v-model="artifact_local.url"
+            :rules="[rules.required, rules.url]"
+          ></v-text-field
+        ></v-card-title>
 
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
-
-      <v-select
-        :items="types"
-        label="Select Artifact Type"
-        class="mx-4"
-        chips
-        v-model="artifact_local.type"
-        :prepend-icon="iconImage(artifact_local.type)"
-        :color="iconColor(artifact_local.type)"
-      ></v-select>
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0">Roles</v-card-title>
-
-      <v-chip
-        color="primary"
-        v-for="(a, index) in artifact_local.affiliations"
-        :key="a.id"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <span>
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          {{ a.affiliation.person.name }} ({{ a.roles }})
-          <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </span>
-      </v-chip>
-
-      <v-chip
-        color="primary"
-        v-for="(item, index) in meta.creators"
-        :key="`c${index}`"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <v-icon left>mdi-account-circle</v-icon>
-        <v-text-field
-          solo
-          dark
-          placeholder="Enter Name"
-          v-model="meta.creators[index]"
-          hide-details
-          class="m-0"
-          background-color="#00476B"
-          >{{ meta.creators[index] }}</v-text-field
-        >
-        <v-icon @click="meta.creators.splice(index, 1)" right>mdi-close</v-icon>
-      </v-chip>
-      <v-btn @click="meta.creators.push('')" class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0">Keywords</v-card-title>
-      <span v-if="artifact_local.tags.length">
-        <v-chip
-          color="primary"
-          v-for="(t, index) in artifact_local.tags"
-          :key="`tag${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-avatar left>
-            <v-icon>mdi-tag-outline</v-icon>
-          </v-avatar>
-          {{ t.tag }}
-          <v-icon @click="artifact_local.tags.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </v-chip>
-      </span>
-
-      <v-chip
-        color="primary"
-        v-for="(item, index) in meta.keywords"
-        :key="`k${index}`"
-        cols="12"
-        class="ma-2"
-        label
-      >
-        <v-icon left>mdi-tag-outline</v-icon>
-        <v-text-field
-          solo
-          dark
-          placeholder="Enter Keyword"
-          v-model="meta.keywords[index]"
-          hide-details
-          class="m-0"
-          background-color="#00476B"
-          >{{ meta.keywords[index] }}</v-text-field
-        >
-        <v-icon @click="meta.keywords.splice(index, 1)" right>mdi-close</v-icon>
-      </v-chip>
-      <v-btn @click="meta.keywords.push('')" class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <span v-if="meta.languages.length">
-        <v-card-title class="py-0">Languages</v-card-title>
-
-        <v-chip
-          color="primary"
-          v-for="(l, index) in meta.languages"
-          :key="`lang${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-avatar left>
-            <v-icon>{{ iconImage('code') }}</v-icon>
-          </v-avatar>
-          {{ l }}
-          <v-icon @click="meta.languages.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </v-chip>
         <v-divider class="mx-4"></v-divider>
-      </span>
 
-      <v-card-title class="py-0">Related</v-card-title>
-      <span v-if="artifact_local.relationships">
+        <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
+
+        <v-select
+          :items="types"
+          label="Select Artifact Type"
+          class="mx-4"
+          chips
+          v-model="artifact_local.type"
+          :prepend-icon="iconImage(artifact_local.type)"
+          :color="iconColor(artifact_local.type)"
+        ></v-select>
+
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-title class="py-0">Roles</v-card-title>
+
         <v-chip
           color="primary"
-          v-for="(v, k) in artifact_local.relationships"
-          :key="`rel${k}`"
+          v-for="(a, index) in artifact_local.affiliations"
+          :key="a.id"
           cols="12"
           class="ma-2"
           label
-          :to="{ path: `/artifact/${v.related_artifact_id}` }"
         >
-          <v-icon left>mdi-relation-one-to-one</v-icon>
-
-          {{ v.relation | titlecase }}: {{ v.related_artifact }}
-        </v-chip>
-      </span>
-      <v-btn class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <span>
-        <v-card-title class="py-0">Badges</v-card-title>
-        <v-img
-          v-for="(b, index) in badges"
-          :key="`badge${index}`"
-          max-height="100"
-          max-width="100"
-          :src="b.value"
-        />
-      </span>
-      <v-btn class="success ml-2 mb-2" fab small
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
-
-      <v-divider class="mx-4"></v-divider>
-
-      <div v-if="artifact_local.type == 'code'">
-        <span v-if="stars || watchers">
-          <v-card-title class="py-0">Github Metrics</v-card-title>
-
-          <v-chip color="primary" cols="12" class="ma-2" label>
+          <span>
             <v-avatar left>
-              <v-icon color="yellow">mdi-star</v-icon>
+              <v-icon>mdi-account-circle</v-icon>
             </v-avatar>
-
-            {{ stars }}
-          </v-chip>
-          <v-chip color="primary" cols="12" class="ma-2" label>
-            <v-avatar left>
-              <v-icon>mdi-eye</v-icon>
-            </v-avatar>
-
-            {{ watchers }}
-          </v-chip>
-        </span>
-
-        <v-card-title class="py-0">Importer</v-card-title>
-
-        <v-chip color="primary" cols="12" class="ma-2" label>
-          <v-avatar left>
-            <v-icon>mdi-file-download-outline</v-icon>
-          </v-avatar>
-          <span v-if="record.artifact.importer">
-            {{
-              `${record.artifact.importer.name} v${record.artifact.importer.version}`
-            }}
+            {{ a.affiliation.person.name }} ({{ a.roles }})
+            <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
           </span>
         </v-chip>
 
-        <span v-if="license">
-          <v-card-title v-if="license" class="py-0">License</v-card-title>
-          <v-chip color="primary" cols="12" class="ma-2" label>
-            <v-avatar left>
-              <v-icon>mdi-scale-balance</v-icon>
-            </v-avatar>
-
-            {{ license }}
-          </v-chip>
-        </span>
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <v-card-title class="py-0">Files</v-card-title>
-      <span v-if="artifact_local.files">
-        <v-card-text
-          v-for="(f, index) in artifact_local.files"
-          :key="`file${index}`"
+        <v-chip
+          color="primary"
+          v-for="(item, index) in meta.creators"
+          :key="`c${index}`"
           cols="12"
+          class="ma-2"
+          label
         >
-          <div>
-            <v-icon left>mdi-file</v-icon>
-            <a target="_blank" :href="f.url">{{ f.url }}</a>
-            &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
-            {{ f.size ? convertSize(f.size) : 'unknown' }})
-            <v-icon @click="artifact_local.files.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </div>
-        </v-card-text>
-        <v-card-text
-          v-for="(f, index) in meta.files"
-          :key="`newfile${index}`"
-          cols="12"
-        >
-          <v-textarea
-            outlined
-            height="10"
-            label="File URL"
-            placeholder="Enter File URL"
-            v-model="f.url"
-            prepend-icon="mdi-file"
-            append-outer-icon="mdi-close"
-            @click:append-outer="meta.files.splice(index, 1)"
-          ></v-textarea>
-        </v-card-text>
+          <v-icon left>mdi-account-circle</v-icon>
+          <v-text-field
+            solo
+            dark
+            placeholder="Enter Name"
+            v-model="meta.creators[index]"
+            hide-details
+            class="m-0"
+            background-color="#00476B"
+            >{{ meta.creators[index] }}</v-text-field
+          >
+          <v-icon @click="meta.creators.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
+        </v-chip>
         <v-btn
-          @click="meta.files.push({ url: '' })"
+          @click="meta.creators.push('')"
           class="success ml-2 mb-2"
           fab
           small
           ><v-icon>mdi-plus</v-icon></v-btn
         >
-      </span>
-      <span class="ml-4 mb-2" v-else>No files found by importer</span>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn small color="green" dark @click="save()">
-          Save
-        </v-btn>
+        <v-divider class="mx-4"></v-divider>
 
-        <v-btn small color="blue" dark @click="publish()">
-          Publish
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+        <v-card-title class="py-0">Keywords</v-card-title>
+        <span v-if="artifact_local.tags.length">
+          <v-chip
+            color="primary"
+            v-for="(t, index) in artifact_local.tags"
+            :key="`tag${index}`"
+            cols="12"
+            class="ma-2"
+            label
+          >
+            <v-avatar left>
+              <v-icon>mdi-tag-outline</v-icon>
+            </v-avatar>
+            {{ t.tag }}
+            <v-icon @click="artifact_local.tags.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-chip>
+        </span>
+
+        <v-chip
+          color="primary"
+          v-for="(item, index) in meta.keywords"
+          :key="`k${index}`"
+          cols="12"
+          class="ma-2"
+          label
+        >
+          <v-icon left>mdi-tag-outline</v-icon>
+          <v-text-field
+            solo
+            dark
+            placeholder="Enter Keyword"
+            v-model="meta.keywords[index]"
+            hide-details
+            class="m-0"
+            background-color="#00476B"
+            >{{ meta.keywords[index] }}</v-text-field
+          >
+          <v-icon @click="meta.keywords.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
+        </v-chip>
+        <v-btn
+          @click="meta.keywords.push('')"
+          class="success ml-2 mb-2"
+          fab
+          small
+          ><v-icon>mdi-plus</v-icon></v-btn
+        >
+
+        <v-divider class="mx-4"></v-divider>
+
+        <span v-if="meta.languages.length">
+          <v-card-title class="py-0">Languages</v-card-title>
+
+          <v-chip
+            color="primary"
+            v-for="(l, index) in meta.languages"
+            :key="`lang${index}`"
+            cols="12"
+            class="ma-2"
+            label
+          >
+            <v-avatar left>
+              <v-icon>{{ iconImage('code') }}</v-icon>
+            </v-avatar>
+            {{ l }}
+            <v-icon @click="meta.languages.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-chip>
+          <v-divider class="mx-4"></v-divider>
+        </span>
+
+        <v-card-title class="py-0">Related</v-card-title>
+        <span v-if="artifact_local.relationships">
+          <v-chip
+            color="primary"
+            v-for="(v, k) in artifact_local.relationships"
+            :key="`rel${k}`"
+            cols="12"
+            class="ma-2"
+            label
+            :to="{ path: `/artifact/${v.related_artifact_id}` }"
+          >
+            <v-icon left>mdi-relation-one-to-one</v-icon>
+
+            {{ v.relation | titlecase }}: {{ v.related_artifact }}
+          </v-chip>
+        </span>
+        <v-btn class="success ml-2 mb-2" fab small
+          ><v-icon>mdi-plus</v-icon></v-btn
+        >
+
+        <v-divider class="mx-4"></v-divider>
+
+        <span>
+          <v-card-title class="py-0">Badges</v-card-title>
+          <v-img
+            v-for="(b, index) in badges"
+            :key="`badge${index}`"
+            max-height="100"
+            max-width="100"
+            :src="b.value"
+          />
+        </span>
+        <v-btn class="success ml-2 mb-2" fab small
+          ><v-icon>mdi-plus</v-icon></v-btn
+        >
+
+        <v-divider class="mx-4"></v-divider>
+
+        <div v-if="artifact_local.type == 'code'">
+          <span v-if="stars || watchers">
+            <v-card-title class="py-0">Github Metrics</v-card-title>
+
+            <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-avatar left>
+                <v-icon color="yellow">mdi-star</v-icon>
+              </v-avatar>
+
+              {{ stars }}
+            </v-chip>
+            <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-avatar left>
+                <v-icon>mdi-eye</v-icon>
+              </v-avatar>
+
+              {{ watchers }}
+            </v-chip>
+          </span>
+
+          <v-card-title class="py-0">Importer</v-card-title>
+
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-file-download-outline</v-icon>
+            </v-avatar>
+            <span v-if="record.artifact.importer">
+              {{
+                `${record.artifact.importer.name} v${record.artifact.importer.version}`
+              }}
+            </span>
+          </v-chip>
+
+          <span v-if="license">
+            <v-card-title v-if="license" class="py-0">License</v-card-title>
+            <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-avatar left>
+                <v-icon>mdi-scale-balance</v-icon>
+              </v-avatar>
+
+              {{ license }}
+            </v-chip>
+          </span>
+          <v-divider class="mx-4"></v-divider>
+        </div>
+
+        <v-card-title class="py-0">Files</v-card-title>
+        <span v-if="artifact_local.files">
+          <v-card-text
+            v-for="(f, index) in artifact_local.files"
+            :key="`file${index}`"
+            cols="12"
+          >
+            <div>
+              <v-icon left>mdi-file</v-icon>
+              <a target="_blank" :href="f.url">{{ f.url }}</a>
+              &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
+              {{ f.size ? convertSize(f.size) : 'unknown' }})
+              <v-icon @click="artifact_local.files.splice(index, 1)" right
+                >mdi-close</v-icon
+              >
+            </div>
+          </v-card-text>
+          <v-card-text
+            v-for="(f, index) in meta.files"
+            :key="`newfile${index}`"
+            cols="12"
+          >
+            <v-textarea
+              outlined
+              height="10"
+              label="File URL"
+              placeholder="Enter File URL"
+              v-model="f.url"
+              prepend-icon="mdi-file"
+              append-outer-icon="mdi-close"
+              @click:append-outer="meta.files.splice(index, 1)"
+            ></v-textarea>
+          </v-card-text>
+          <v-btn
+            @click="meta.files.push({ url: '' })"
+            class="success ml-2 mb-2"
+            fab
+            small
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
+        </span>
+        <span class="ml-4 mb-2" v-else>No files found by importer</span>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn small color="green" dark @click="save()">
+            Save
+          </v-btn>
+
+          <v-btn small color="blue" dark @click="publish()">
+            Publish
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
+
     <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
       <template v-slot:action="{ attrs }">
@@ -325,6 +348,10 @@ export default {
     record: {
       type: Object,
       required: true
+    },
+    create: {
+      type: Boolean,
+      required: false
     }
   },
   components: {
@@ -344,7 +371,15 @@ export default {
         languages: []
       },
       schema: {},
-      schemaLoaded: false
+      schemaLoaded: false,
+      valid: false,
+      rules: {
+        required: value => !!value || 'URL required',
+        url: value => {
+          let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
+          return pattern.test(value) || 'Invalid URL'
+        }
+      }
     }
   },
   created() {
@@ -424,6 +459,8 @@ export default {
   },
   methods: {
     async publish() {
+      if (!this.valid) return
+
       let response = await this.$artifactRecordRepository.put(
         this.artifact_local.id,
         {
@@ -433,6 +470,7 @@ export default {
       this.$router.push(`${this.artifact_local.id}`)
     },
     async save() {
+      if (!this.valid) return
       let zip = [['tag']]
       this.meta.keywords.map(e => zip.push([e]))
       const mapWith = keys => values =>
@@ -450,20 +488,23 @@ export default {
       console.log('local artifact')
       console.log(this.artifact_local)
 
-      let response = await this.$artifactRecordRepository.put(
-        this.artifact_local.id,
-        this.artifact_local
-      )
+      let response = null
+      if (this.create) {
+        console.log('creating new artifact')
+        response = await this.$artifactsRepository.create(this.artifact_local)
+      } else {
+        console.log('curating')
+        response = await this.$artifactRecordRepository.put(
+          this.artifact_local.id,
+          this.artifact_local
+        )
+      }
       console.log('response artifact')
       console.log(response)
       if (response) this.artifact_local = response.artifact
       this.snackbar = true
       this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
-
-      // this.$store.dispatch('artifacts/fetchArtifact', {
-      //   id: this.artifact_local.id
-      // })
     },
     iconColor(type) {
       return artifactColor(type)
@@ -492,9 +533,7 @@ export default {
       // return only unique
       let t = [...new Set(tags)]
       t = t.filter(el => !this.artifact_local.tags.map(e => e.tag).includes(el))
-      console.log(t)
       return t
-      return tags.filter((value, index, self) => self.indexOf(value) === index)
     }
   }
 }
