@@ -1,9 +1,9 @@
 <template>
   <div v-if="artifact_local">
     <v-card class="mx-auto my-2">
-      <v-card-title> {{ record.artifact.title }} </v-card-title>
+      <v-card-title> {{ artifact_local.title }} </v-card-title>
       <v-card-text>
-        <a target="_blank" :href="record.artifact.url">
+        <a target="_blank" :href="artifact_local.url">
           {{ record.artifact.url }}
         </a>
       </v-card-text>
@@ -300,7 +300,7 @@
       </v-card-actions>
     </v-card>
     <v-snackbar v-model="snackbar">
-      Title and description saved
+      Artifact Saved
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
           Close
@@ -447,7 +447,6 @@ export default {
     async save() {
       let zip = [['tag']]
       this.meta.keywords.map(e => zip.push([e]))
-      console.log(this.meta.keywords)
       const mapWith = keys => values =>
           Object.fromEntries(keys.map((k, i) => [k, values[i]])),
         getArray = ([keys, ...zip]) => zip.map(mapWith(keys)),
@@ -457,26 +456,26 @@ export default {
       this.artifact_local['files'] = this.artifact_local['files'].concat(
         this.meta.files
       )
-      this.artifact_local.meta.find(
-        o => o.name == 'languages'
-      ).value = this.meta.languages.join(',')
+      let langs = this.artifact_local.meta.find(o => o.name == 'languages')
+      if (langs) langs.value = this.meta.languages.join(',')
 
+      console.log('local artifact')
       console.log(this.artifact_local)
+
+      let response = await this.$artifactRecordRepository.put(
+        this.artifact_local.id,
+        this.artifact_local
+      )
+      console.log('response artifact')
+      console.log(response)
+      this.artifact_local = response.artifact
+      this.snackbar = true
       this.meta.keywords = []
       this.meta.files = []
 
-      return
-      let response = await this.$artifactRecordRepository.put(
-        this.artifact_local.id,
-        {
-          title: this.title_local,
-          description: this.description_local
-        }
-      )
-      this.snackbar = true
-      this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.artifact_local.id
-      })
+      // this.$store.dispatch('artifacts/fetchArtifact', {
+      //   id: this.artifact_local.id
+      // })
     },
     iconColor(type) {
       return artifactColor(type)
