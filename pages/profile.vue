@@ -375,9 +375,7 @@ export default {
         // FIXME: remove when ready to update endpoint
         console.log(data)
         this.$userEndpoint.update(this.user.user.id, data)
-        this.$userAffiliationsEndpoint.create(
-          this.orgs.find(o => o.name === currentOrganization)
-        )
+        this.$userAffiliationsEndpoint.create(currentOrganization)
         // update organizations
         // TODO
       }
