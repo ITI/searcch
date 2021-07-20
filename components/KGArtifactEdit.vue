@@ -91,9 +91,8 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <span v-if="artifact_local.tags">
-        <v-card-title class="py-0">Keywords</v-card-title>
-
+      <v-card-title class="py-0">Keywords</v-card-title>
+      <span v-if="artifact_local.tags.length">
         <v-chip
           color="primary"
           v-for="(t, index) in artifact_local.tags"
@@ -420,6 +419,7 @@ export default {
       this.artifact_local = JSON.parse(JSON.stringify(val.artifact))
       let csv = this.artifact_local.meta.find(o => o.name == 'languages')
       this.meta.languages = csv ? csv.value.split(',') : []
+      this.meta.keywords = this.getPossibleTags()
     }
   },
   methods: {
@@ -441,7 +441,6 @@ export default {
         array = getArray(zip)
 
       this.artifact_local.tags = this.artifact_local.tags.concat(array)
-
       this.artifact_local.files = this.artifact_local.files.concat(
         this.meta.files
       )
@@ -459,7 +458,7 @@ export default {
       console.log(response)
       if (response) this.artifact_local = response.artifact
       this.snackbar = true
-      this.meta.keywords = []
+      this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
 
       // this.$store.dispatch('artifacts/fetchArtifact', {
@@ -477,6 +476,7 @@ export default {
     },
     getPossibleTags() {
       let tags = []
+      if (this.artifact_local.tags.length > 0) return []
       let top = this.artifact_local.meta
         ? this.artifact_local.meta.find(o => o.name == 'top_keywords')
         : null
