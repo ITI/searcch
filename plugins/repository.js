@@ -43,6 +43,12 @@ export default (ctx, inject) => {
   // user owned artifacts API
   inject('userArtifactsEndpoint', repositoryWithAxios('kg/' + 'user/artifacts'))
 
+  // user affiliations
+  inject(
+    'userAffiliationsEndpoint',
+    repositoryWithAxios('kg/' + 'user/affiliations')
+  )
+
   // organization API
   inject('organizationEndpoint', repositoryWithAxios('kg/' + 'organizations'))
 
