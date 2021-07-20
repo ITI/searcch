@@ -457,7 +457,7 @@ export default {
       )
       console.log('response artifact')
       console.log(response)
-      this.artifact_local = response.artifact
+      if (response) this.artifact_local = response.artifact
       this.snackbar = true
       this.meta.keywords = []
       this.meta.files = []
