@@ -91,13 +91,13 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <span v-if="tags">
+      <span v-if="artifact_local.tags">
         <v-card-title class="py-0">Keywords</v-card-title>
 
         <v-chip
           color="primary"
-          v-for="(t, index) in tags"
-          :key="t"
+          v-for="(t, index) in artifact_local.tags"
+          :key="`tag${index}`"
           cols="12"
           class="ma-2"
           label
@@ -105,7 +105,7 @@
           <v-avatar left>
             <v-icon>mdi-tag-outline</v-icon>
           </v-avatar>
-          {{ t }}
+          {{ t.tag }}
           <v-icon @click="artifact_local.tags.splice(index, 1)" right
             >mdi-close</v-icon
           >
@@ -299,7 +299,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-snackbar v-model="snackbar">
+    <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
@@ -331,21 +331,6 @@ export default {
   components: {
     LazyHydrate: () => import('vue-lazy-hydration')
   },
-  created() {
-    $RefParser.dereference(schemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.schema = schema
-        this.schemaLoaded = true
-      }
-    })
-    this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
-    let csv = this.artifact_local.meta.find(o => o.name == 'languages')
-    this.meta.languages = csv ? csv.value.split(',') : []
-  },
   data() {
     return {
       loading: true,
@@ -362,6 +347,22 @@ export default {
       schema: {},
       schemaLoaded: false
     }
+  },
+  created() {
+    $RefParser.dereference(schemaWithPointers, (err, schema) => {
+      if (err) {
+        console.error(err)
+      } else {
+        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+        // including referenced files, combined into a single object
+        this.schema = schema
+        this.schemaLoaded = true
+      }
+    })
+    this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
+    let csv = this.artifact_local.meta.find(o => o.name == 'languages')
+    this.meta.languages = csv ? csv.value.split(',') : []
+    this.meta.keywords = this.getPossibleTags()
   },
   mounted() {
     // force title and description to refresh on page load
@@ -404,19 +405,6 @@ export default {
       if (!license) return null
       return license.long_name
     },
-    tags() {
-      let tags = []
-      if (this.artifact_local.tags) {
-        tags = this.artifact_local.tags.map(e => e.tag)
-      }
-      let topics = this.artifact_local.meta
-        ? this.artifact_local.meta.find(o => o.name == 'top_keywords')
-        : null
-      if (topics) {
-        tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
-      }
-      return tags.filter((value, index, self) => self.indexOf(value) === index)
-    },
     types() {
       if (this.schemaLoaded) {
         return this.schema.properties.type.enum
@@ -452,8 +440,9 @@ export default {
         getArray = ([keys, ...zip]) => zip.map(mapWith(keys)),
         array = getArray(zip)
 
-      this.artifact_local['tags'] = this.artifact_local['tags'].concat(array)
-      this.artifact_local['files'] = this.artifact_local['files'].concat(
+      this.artifact_local.tags = this.artifact_local.tags.concat(array)
+
+      this.artifact_local.files = this.artifact_local.files.concat(
         this.meta.files
       )
       let langs = this.artifact_local.meta.find(o => o.name == 'languages')
@@ -485,6 +474,27 @@ export default {
     },
     convertSize(size) {
       return bytesToSize(size)
+    },
+    getPossibleTags() {
+      let tags = []
+      let top = this.artifact_local.meta
+        ? this.artifact_local.meta.find(o => o.name == 'top_keywords')
+        : null
+      if (top) {
+        tags = tags.concat(JSON.parse(top.value).map(e => e[0]))
+      }
+      top = this.artifact_local.meta
+        ? this.artifact_local.meta.find(o => o.name == 'top_ngram_keywords')
+        : null
+      if (top) {
+        tags = tags.concat(JSON.parse(top.value).map(e => e[0]))
+      }
+      // return only unique
+      let t = [...new Set(tags)]
+      t = t.filter(el => !this.artifact_local.tags.map(e => e.tag).includes(el))
+      console.log(t)
+      return t
+      return tags.filter((value, index, self) => self.indexOf(value) === index)
     }
   }
 }
