@@ -204,7 +204,7 @@ export default {
     async save() {
       console.log(this.meta)
       return
-      let response = await this.$artifactSearchRepository.create({
+      let response = await this.$artifactsRepository.create({
         title: this.title_local,
         description: this.description_local,
         meta: this.meta

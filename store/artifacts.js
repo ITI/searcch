@@ -68,7 +68,7 @@ export const mutations = {
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
     commit('SET_SEARCH', payload.keywords)
-    let a = await this.$artifactSearchRepository.index({
+    let a = await this.$artifactsRepository.index({
       ...payload
     })
     commit('SET_ARTIFACTS', a.artifacts)

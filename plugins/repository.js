@@ -11,7 +11,7 @@ export default (ctx, inject) => {
   )
 
   // artifact searching
-  inject('artifactSearchRepository', repositoryWithAxios('kg/' + 'artifacts'))
+  inject('artifactsRepository', repositoryWithAxios('kg/' + 'artifacts'))
 
   // artifact retrieval
   inject('artifactRecordRepository', repositoryWithAxios('kg/' + 'artifact'))
