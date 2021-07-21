@@ -14,12 +14,12 @@
     </h2>
 
     <pretty-print
-      v-if="error.request.data"
+      v-if="error.request"
       :value="error.request.data"
     ></pretty-print>
 
     <pretty-print
-      v-if="error.request.response"
+      v-if="error.request"
       :value="error.request.response"
     ></pretty-print>
 
@@ -56,7 +56,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.error)
+    // console.log(this.error)
   }
 }
 </script>
