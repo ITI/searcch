@@ -75,14 +75,32 @@
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/review/${artifact.id}`" nuxt>
+        <v-btn
+          icon
+          v-if="!related"
+          :to="`/artifact/review/${artifact.id}`"
+          nuxt
+        >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
 
         <v-spacer></v-spacer>
-
-        <v-btn small :to="`/artifact/${artifact.id}`" nuxt>
+        <v-select
+          v-if="related"
+          label="Relationship Type"
+          :items="relations"
+          v-model="relation"
+        ></v-select>
+        <v-btn v-if="!related" small :to="`/artifact/${artifact.id}`" nuxt>
           Read More
+        </v-btn>
+        <v-btn
+          v-else
+          small
+          color="success"
+          @click="addRelated(artifact.id, relation)"
+        >
+          Add Related
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -93,6 +111,7 @@
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
+import { EventBus } from '@/helpers/event-bus.js'
 
 export default {
   props: {
@@ -103,6 +122,10 @@ export default {
     comments: {
       type: Array,
       required: false
+    },
+    related: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -111,7 +134,17 @@ export default {
         ? Array(this.comments.length)
             .fill(1)
             .map(Number.call, Number)
-        : []
+        : [],
+      relations: [
+        'cites',
+        'supplements',
+        'continues',
+        'references',
+        'documents',
+        'compiles',
+        'publishes'
+      ],
+      relation: ''
     }
   },
   computed: {
@@ -161,6 +194,16 @@ export default {
     },
     iconImage(type) {
       return artifactIcon(type)
+    },
+    addRelated(id, relation) {
+      this.$store.dispatch('artifacts/setRelated', {
+        id: id,
+        relation: relation
+      })
+      EventBus.$emit('close', 'artifactdialog')
+
+      return
+      this.$parent.$options.methods.addRelated(id)
     }
   }
 }

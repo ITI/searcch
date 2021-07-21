@@ -83,7 +83,11 @@
       :length="10"
       circle
     ></v-pagination>
-    <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
+    <ArtifactList
+      :artifacts="artifacts"
+      :limit="limit"
+      v-bind:related="related"
+    ></ArtifactList>
     <span v-if="artifacts.length == 0 && searchLoading == true">{{
       searchMessage
     }}</span>
@@ -113,7 +117,7 @@ export default {
   props: {
     related: {
       type: Boolean,
-      reqiured: false
+      required: false
     }
   },
   head() {

@@ -267,15 +267,9 @@
               <v-card-title>
                 <span class="text-h5">Search for Related Artifacts</span>
               </v-card-title>
-              <SearchCard :search="search" />
+              <SearchCard :search="search" related />
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  @click="artifactdialog.value = false"
-                  class="success ml-2 mb-2"
-                  text
-                  >Add</v-btn
-                >
                 <v-btn
                   class="error ml-2 mb-2"
                   text
@@ -429,6 +423,7 @@ import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
+import { EventBus } from '@/helpers/event-bus.js'
 
 export default {
   name: 'KGArtifactEdit',
@@ -457,7 +452,8 @@ export default {
         creators: [],
         keywords: [],
         files: [],
-        languages: []
+        languages: [],
+        relations: []
       },
       affiliation: {
         affiliation: {
@@ -520,6 +516,7 @@ export default {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
+    EventBus.$on('close', this.closeHandler)
   },
   computed: {
     ...mapState({
@@ -632,6 +629,9 @@ export default {
       this.meta.files = []
       this.meta.creators = []
     },
+    async addRelated(id) {
+      console.log('adding related artifact id' + id)
+    },
     iconColor(type) {
       return artifactColor(type)
     },
@@ -660,6 +660,13 @@ export default {
       let t = [...new Set(tags)]
       t = t.filter(el => !this.artifact_local.tags.map(e => e.tag).includes(el))
       return t
+    },
+    closeHandler(dialog) {
+      switch (dialog) {
+        case 'artifactdialog': {
+          this.artifactdialog = false
+        }
+      }
     }
   }
 }

@@ -94,5 +94,15 @@ export const actions = {
     if (response.artifact_imports) {
       commit('SET_IMPORTS', response.artifact_imports)
     }
+  },
+  async setRelated({ commit, state }, payload) {
+    console.log(
+      payload.id + ' ' + payload.relation + ' ' + state.artifact.artifact.id
+    )
+    let response = await this.$relationshipsEndpoint.create({
+      artifact_id: state.artifact.artifact.id,
+      related_artifact_id: payload.id,
+      relation: payload.relation
+    })
   }
 }

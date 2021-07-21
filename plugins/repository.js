@@ -22,6 +22,12 @@ export default (ctx, inject) => {
   // import view/modify API
   inject('importEndpoint', repositoryWithAxios('kg/' + 'artifact/import'))
 
+  // add relationship
+  inject(
+    'relationshipsEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/relationships')
+  )
+
   // backend login credentials
   inject('loginEndpoint', repositoryWithAxios('kg/' + 'login'))
 
