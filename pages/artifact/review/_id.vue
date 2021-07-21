@@ -131,7 +131,7 @@ export default {
             userid: this.userid,
             rating: this.rating
           }
-          await this.$ratingsEndpoint.put(
+          await this.$ratingsEndpoint.update(
             this.artifact.artifact.id,
             rating_payload
           )

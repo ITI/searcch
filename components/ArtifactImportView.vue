@@ -148,19 +148,19 @@ export default {
       this.updateImports()
     },
     async archive() {
-      let response = await this.$importEndpoint.put(this.artifact.id, {
+      let response = await this.$importEndpoint.update(this.artifact.id, {
         archived: true
       })
       this.updateImports()
     },
     async unarchive() {
-      let response = await this.$importEndpoint.put(this.artifact.id, {
+      let response = await this.$importEndpoint.update(this.artifact.id, {
         archived: false
       })
       this.updateImports()
     },
     async publish() {
-      let response = await this.$artifactRecordRepository.put(
+      let response = await this.$artifactRecordRepository.update(
         this.full_artifact.id,
         {
           publication: {}

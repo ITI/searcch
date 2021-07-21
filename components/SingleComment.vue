@@ -106,14 +106,14 @@ export default {
         userid: this.userid,
         rating: this.rating_local
       }
-      await this.$ratingsEndpoint.put(this.$route.params.id, rating_payload)
+      await this.$ratingsEndpoint.update(this.$route.params.id, rating_payload)
       let comment_payload = {
         token: this.$auth.getToken('github'),
         userid: this.userid,
         review: this.review_local,
         reviewid: this.id
       }
-      await this.$reviewsEndpoint.put(this.$route.params.id, comment_payload)
+      await this.$reviewsEndpoint.update(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {
         id: this.$route.params.id
       })
