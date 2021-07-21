@@ -252,9 +252,42 @@
             {{ v.relation | titlecase }}: {{ v.related_artifact }}
           </v-chip>
         </span>
-        <v-btn class="success ml-2 mb-2" fab small disabled
-          ><v-icon>mdi-plus</v-icon></v-btn
+        <v-dialog
+          transition="dialog-bottom-transition"
+          persistent
+          fullscreen
+          v-model="artifactdialog"
         >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn class="success ml-2 mb-2" fab small v-bind="attrs" v-on="on">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default="artifactdialog">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Search for Related Artifacts</span>
+              </v-card-title>
+              <SearchCard :search="search" />
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  @click="artifactdialog.value = false"
+                  class="success ml-2 mb-2"
+                  text
+                  >Add</v-btn
+                >
+                <v-btn
+                  class="error ml-2 mb-2"
+                  text
+                  @click="artifactdialog.value = false"
+                >
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
 
         <v-divider class="mx-4"></v-divider>
 
@@ -411,7 +444,8 @@ export default {
     }
   },
   components: {
-    LazyHydrate: () => import('vue-lazy-hydration')
+    LazyHydrate: () => import('vue-lazy-hydration'),
+    SearchCard: () => import('@/components/SearchCard')
   },
   data() {
     return {
@@ -444,6 +478,8 @@ export default {
       schemaLoaded: false,
       valid: false,
       dialog: false,
+      artifactdialog: false,
+      search: '',
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
