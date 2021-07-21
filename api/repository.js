@@ -76,7 +76,7 @@ export default $axios => (resource, error) => ({
   },
 
   update(id, payload) {
-    return $axios.$post(`${resource}/${id}`, payload).catch(function(e) {
+    return $axios.$put(`${resource}/${id}`, payload).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -97,8 +97,8 @@ export default $axios => (resource, error) => ({
     })
   },
 
-  put(id, payload) {
-    return $axios.$put(`${resource}/${id}`, payload).catch(function(e) {
+  put(payload) {
+    return $axios.$put(`${resource}`, payload).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
