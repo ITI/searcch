@@ -16,7 +16,7 @@
                 <h6 class="overline mb-3">
                   {{ user.name }}
                 </h6>
-                <h6 class="overline mb-3">
+                <h6 class="overline mb-3" v-if="userAffiliation">
                   {{ userAffiliation }}
                 </h6>
 
@@ -74,7 +74,21 @@
                         :items="hardcodedInterests"
                         v-model="researchInterests"
                         hint="Select applicable items from the list or type in your own"
-                      ></v-combobox>
+                        :search-input.sync="search"
+                      >
+                        <template v-slot:no-data>
+                          <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                No results matching "<strong>{{
+                                  search
+                                }}</strong
+                                >". Press <kbd>enter</kbd> to create a new one
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </template>
+                      </v-combobox>
                     </v-col>
 
                     <v-col cols="12" md="12">
@@ -87,7 +101,21 @@
                         :items="orgNames"
                         v-model="userAffiliation"
                         hint="Select applicable org from the list or type in your own"
-                      ></v-combobox>
+                        :search-input.sync="search"
+                      >
+                        <template v-slot:no-data>
+                          <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                No results matching "<strong>{{
+                                  search
+                                }}</strong
+                                >". Press <kbd>enter</kbd> to create a new one
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </template>
+                      </v-combobox>
                     </v-col>
 
                     <v-col cols="12" class="text-right">
@@ -299,14 +327,14 @@ export default {
       // owned_artifacts: [],
       schema: {},
       schemaLoaded: false,
-      userAffiliation: [],
+      userAffiliation: null,
       search: null
     }
   },
   computed: {
     ...mapState({
       user: state => state.user.user,
-      organization: state => state.organization,
+      organization: state => state.user.organization,
       userid: state => state.user.userid,
       orgs: state => state.user.orgs,
       interests: state => state.user.interests
@@ -338,7 +366,7 @@ export default {
     this.$store.dispatch('user/fetchInterests')
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
-    this.userAffiliation = this.organization ? [this.organization.name] : null
+    this.userAffiliation = this.organization ? this.organization[0].name : null
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -368,18 +396,19 @@ export default {
         }
         console.log(data)
 
-        let org = this.userAffiliation
+        let org = this.userAffiliation.length
           ? this.orgs.find(o => o.name === this.userAffiliation)
           : null
         if (!org) {
-          org = { name: this.userAffiliation, type: 'Institution' }
+          org = this.userAffiliation.length
+            ? { name: this.userAffiliation, type: 'Institution' }
+            : {}
         }
-        this.$store.commit('user/SET_USER_ORG', org)
+        this.$store.commit('user/SET_USER_ORG', [org])
 
-        console.log(org)
         // FIXME: currently use put directly here rather than update, due to API non-compliance
         this.$userEndpoint.put(data)
-        if (org) this.$userAffiliationsEndpoint.create(org)
+        if (org) this.$userAffiliationsEndpoint.create({ org: org })
       }
     },
     updateName(e) {
