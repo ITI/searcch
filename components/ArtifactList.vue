@@ -29,9 +29,7 @@ export default {
     }
   },
   data() {
-    return {
-      relevanceResult: []
-    }
+    return {}
   }
 }
 </script>
