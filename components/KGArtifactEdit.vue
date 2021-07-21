@@ -39,7 +39,6 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
-
         <v-select
           :items="types"
           label="Select Artifact Type"
@@ -631,6 +630,7 @@ export default {
       this.snackbar = true
       this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
+      this.meta.creators = []
     },
     iconColor(type) {
       return artifactColor(type)
