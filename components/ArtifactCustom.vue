@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     async publish() {
-      let response = await this.$artifactRecordEndpoint.put(this.id, {
+      let response = await this.$artifactRecordEndpoint.update(this.id, {
         publication: {}
       })
       this.$router.push({

@@ -461,7 +461,7 @@ export default {
     async publish() {
       if (!this.valid) return
 
-      let response = await this.$artifactRecordEndpoint.put(
+      let response = await this.$artifactRecordEndpoint.update(
         this.artifact_local.id,
         {
           publication: {}
