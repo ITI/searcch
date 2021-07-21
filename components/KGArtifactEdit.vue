@@ -461,7 +461,7 @@ export default {
     async publish() {
       if (!this.valid) return
 
-      let response = await this.$artifactRecordRepository.put(
+      let response = await this.$artifactRecordEndpoint.put(
         this.artifact_local.id,
         {
           publication: {}
@@ -491,10 +491,10 @@ export default {
       let response = null
       if (this.create) {
         console.log('creating new artifact')
-        response = await this.$artifactsRepository.create(this.artifact_local)
+        response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
         console.log('curating')
-        response = await this.$artifactRecordRepository.put(
+        response = await this.$artifactRecordEndpoint.update(
           this.artifact_local.id,
           this.artifact_local
         )

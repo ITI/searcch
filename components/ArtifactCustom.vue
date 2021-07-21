@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     async publish() {
-      let response = await this.$artifactRecordRepository.put(this.id, {
+      let response = await this.$artifactRecordEndpoint.put(this.id, {
         publication: {}
       })
       this.$router.push({
@@ -204,7 +204,7 @@ export default {
     async save() {
       console.log(this.meta)
       return
-      let response = await this.$artifactsRepository.create({
+      let response = await this.$artifactsEndpoint.create({
         title: this.title_local,
         description: this.description_local,
         meta: this.meta

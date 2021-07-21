@@ -160,7 +160,7 @@ export default {
       this.updateImports()
     },
     async publish() {
-      let response = await this.$artifactRecordRepository.update(
+      let response = await this.$artifactRecordEndpoint.update(
         this.full_artifact.id,
         {
           publication: {}

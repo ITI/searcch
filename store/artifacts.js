@@ -68,14 +68,14 @@ export const mutations = {
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
     commit('SET_SEARCH', payload.keywords)
-    let a = await this.$artifactsRepository.index({
+    let a = await this.$artifactsEndpoint.index({
       ...payload
     })
     commit('SET_ARTIFACTS', a.artifacts)
   },
   async fetchArtifact({ commit, state }, payload) {
     console.log('fetching entry ' + payload.id)
-    let a = await this.$artifactRecordRepository.show(payload.id)
+    let a = await this.$artifactRecordEndpoint.show(payload.id)
     commit('SET_ARTIFACT', a)
   },
   async fetchFavorites({ commit, state }, payload) {
