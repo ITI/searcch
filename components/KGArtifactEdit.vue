@@ -81,28 +81,83 @@
           class="ma-2"
           label
         >
-          <v-icon left>mdi-account-circle</v-icon>
-          <v-text-field
-            solo
-            dark
-            placeholder="Enter Name"
-            v-model="meta.creators[index]"
-            hide-details
-            class="m-0"
-            background-color="#00476B"
-            >{{ meta.creators[index] }}</v-text-field
-          >
-          <v-icon @click="meta.creators.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
+          <span>
+            <v-avatar left>
+              <v-icon>mdi-account-circle</v-icon>
+            </v-avatar>
+            {{ meta.creators[index].affiliation.person.name }} ({{
+              meta.creators[index].roles
+            }})
+            <v-icon @click="meta.creators.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </span>
         </v-chip>
-        <v-btn
-          @click="meta.creators.push('')"
-          class="success ml-2 mb-2"
-          fab
-          small
-          ><v-icon>mdi-plus</v-icon></v-btn
+        <v-dialog
+          transition="dialog-bottom-transition"
+          max-width="600px"
+          persistent
+          v-model="dialog"
         >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn class="success ml-2 mb-2" fab small v-bind="attrs" v-on="on">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default="dialog">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Add Author</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Organization Name"
+                        v-model="affiliation.affiliation.org.name"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Author Name"
+                        v-model="affiliation.affiliation.person.name"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Email Address"
+                        v-model="affiliation.affiliation.person.email"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  @click="
+                    meta.creators.push(affiliation)
+                    dialog.value = false
+                  "
+                  class="success ml-2 mb-2"
+                  text
+                  >Add</v-btn
+                >
+                <v-btn
+                  class="error ml-2 mb-2"
+                  text
+                  @click="dialog.value = false"
+                >
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
 
         <v-divider class="mx-4"></v-divider>
 
@@ -341,6 +396,7 @@ import { mapState } from 'vuex'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
+import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 
 export default {
   name: 'KGArtifactEdit',
@@ -370,9 +426,24 @@ export default {
         files: [],
         languages: []
       },
+      affiliation: {
+        affiliation: {
+          org: {
+            name: '',
+            type: 'Institution'
+          },
+          person: {
+            email: '',
+            name: ''
+          }
+        },
+        roles: 'Author'
+      },
       schema: {},
+      affiliationSchema: {},
       schemaLoaded: false,
       valid: false,
+      dialog: false,
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
@@ -390,6 +461,16 @@ export default {
         // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
         // including referenced files, combined into a single object
         this.schema = schema
+        this.schemaLoaded = true
+      }
+    })
+    $RefParser.dereference(affiliationSchemaWithPointers, (err, schema) => {
+      if (err) {
+        console.error(err)
+      } else {
+        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+        // including referenced files, combined into a single object
+        this.affiliationSchema = schema
         this.schemaLoaded = true
       }
     })
@@ -444,6 +525,12 @@ export default {
         return this.schema.properties.type.enum
       } else return []
     },
+    orgTypes() {
+      if (this.schemaLoaded) {
+        return this.affiliationSchema.org.properties.type.enum
+      } else return []
+    },
+
     published() {
       if (this.artifact_local.publication) return true
       return false
@@ -481,6 +568,9 @@ export default {
       this.artifact_local.tags = this.artifact_local.tags.concat(array)
       this.artifact_local.files = this.artifact_local.files.concat(
         this.meta.files
+      )
+      this.artifact_local.affiliations = this.artifact_local.affiliations.concat(
+        this.meta.creators
       )
       let langs = this.artifact_local.meta.find(o => o.name == 'languages')
       if (langs) langs.value = this.meta.languages.join(',')
