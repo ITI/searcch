@@ -387,7 +387,6 @@ export default {
       } else {
         // update profile
         const data = {
-          userid: this.userid,
           name: this.user.name,
           research_interests: this.user.research_interests,
           website: this.user.website,
@@ -406,8 +405,7 @@ export default {
         }
         this.$store.commit('user/SET_USER_ORG', [org])
 
-        // FIXME: currently use put directly here rather than update, due to API non-compliance
-        this.$userEndpoint.put(data)
+        this.$userEndpoint.update(this.userid, data)
         if (org) this.$userAffiliationsEndpoint.create({ org: org })
       }
     },
