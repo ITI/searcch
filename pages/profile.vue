@@ -17,7 +17,7 @@
                   {{ user.name }}
                 </h6>
                 <h6 class="overline mb-3">
-                  {{ currentOrganization }}
+                  {{ userAffiliation }}
                 </h6>
 
                 <p class="font-weight-light">
@@ -85,7 +85,7 @@
                         clearable
                         v-if="orgs"
                         :items="orgNames"
-                        v-model="currentOrganization"
+                        v-model="userAffiliation"
                         hint="Select applicable org from the list or type in your own"
                       ></v-combobox>
                     </v-col>
@@ -298,12 +298,16 @@ export default {
       dashboard: {},
       // owned_artifacts: [],
       schema: {},
-      schemaLoaded: false
+      schemaLoaded: false,
+      userAffiliation: [],
+      search: null
     }
   },
   computed: {
     ...mapState({
       user: state => state.user.user,
+      organization: state => state.organization,
+      userid: state => state.user.userid,
       orgs: state => state.user.orgs,
       interests: state => state.user.interests
     }),
@@ -322,18 +326,6 @@ export default {
         this.$store.commit('user/SET_USER_INTERESTS', newValue.join(','))
       }
     },
-    currentOrganization: {
-      get: function() {
-        return this.user.organization
-      },
-      set: function(newValue) {
-        let org = this.orgs.find(o => o.name === newValue[0])
-        if (!org) {
-          org = { name: newValue, type: 'Institution' }
-        }
-        this.$store.commit('user/SET_USER_ORG', org)
-      }
-    },
     types: function() {
       if (this.schemaLoaded) {
         return this.schema.properties.type.enum
@@ -346,6 +338,7 @@ export default {
     this.$store.dispatch('user/fetchInterests')
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
+    this.userAffiliation = this.organization ? [this.organization.name] : null
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -366,18 +359,27 @@ export default {
       } else {
         // update profile
         const data = {
+          userid: this.userid,
           name: this.user.name,
           research_interests: this.user.research_interests,
           website: this.user.website,
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-        // FIXME: remove when ready to update endpoint
         console.log(data)
-        this.$userEndpoint.update(this.user.user.id, data)
-        this.$userAffiliationsEndpoint.create(currentOrganization)
-        // update organizations
-        // TODO
+
+        let org = this.userAffiliation
+          ? this.orgs.find(o => o.name === this.userAffiliation)
+          : null
+        if (!org) {
+          org = { name: this.userAffiliation, type: 'Institution' }
+        }
+        this.$store.commit('user/SET_USER_ORG', org)
+
+        console.log(org)
+        // FIXME: currently use put directly here rather than update, due to API non-compliance
+        this.$userEndpoint.put(data)
+        if (org) this.$userAffiliationsEndpoint.create(org)
       }
     },
     updateName(e) {
