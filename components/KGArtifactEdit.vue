@@ -297,14 +297,11 @@
         </span>
 
         <v-chip
-          color="primary"
           v-for="(item, index) in meta.badges"
           :key="`newbadge${index}`"
           cols="12"
           class="ma-2"
           label
-          text-color="white"
-          persistent-hint
         >
           <v-icon left>mdi-tag-outline</v-icon>
 
