@@ -372,18 +372,19 @@
             </v-chip>
           </span>
 
-          <v-card-title class="py-0">Importer</v-card-title>
+          <span v-if="record.artifact.importer">
+            <v-card-title class="py-0">Importer</v-card-title>
 
-          <v-chip color="primary" cols="12" class="ma-2" label>
-            <v-avatar left>
-              <v-icon>mdi-file-download-outline</v-icon>
-            </v-avatar>
-            <span v-if="record.artifact.importer">
+            <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-avatar left>
+                <v-icon>mdi-file-download-outline</v-icon>
+              </v-avatar>
               {{
                 `${record.artifact.importer.name} v${record.artifact.importer.version}`
               }}
-            </span>
-          </v-chip>
+            </v-chip>
+            <v-divider class="mx-4"></v-divider>
+          </span>
         </div>
 
         <v-card-title class="py-0">License</v-card-title>
