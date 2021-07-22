@@ -13,6 +13,79 @@
       "required": [],
       "type": "object"
     },
+    "Artifact": {
+      "description": "Artifact",
+      "properties": {
+        "affiliations": {
+          "items": {
+            "$ref": "#/definitions/ArtifactAffiliation"
+          },
+          "type": "array"
+        },
+        "badges": {
+          "items": {
+            "$ref": "#/definitions/ArtifactBadge"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/definitions/ArtifactFile"
+          },
+          "type": "array"
+        },
+        "license": {
+          "$ref": "#/definitions/License"
+        },
+        "meta": {
+          "items": {
+            "$ref": "#/definitions/ArtifactMetadata"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "releases": {
+          "items": {
+            "$ref": "#/definitions/ArtifactRelease"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "$ref": "#/definitions/ArtifactTag"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "dataset",
+            "executable",
+            "methodology",
+            "metrics",
+            "priorwork",
+            "publication",
+            "hypothesis",
+            "code",
+            "domain",
+            "supportinginfo"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": ["url", "title"],
+      "type": "object"
+    },
     "ArtifactAffiliation": {
       "description": "ArtifactAffiliation",
       "properties": {
@@ -25,6 +98,16 @@
         }
       },
       "required": ["roles"],
+      "type": "object"
+    },
+    "ArtifactBadge": {
+      "description": "ArtifactBadge",
+      "properties": {
+        "badge": {
+          "$ref": "#/definitions/Badge"
+        }
+      },
+      "required": [],
       "type": "object"
     },
     "ArtifactFile": {
@@ -152,6 +235,43 @@
       "required": ["tag", "source"],
       "type": "object"
     },
+    "Badge": {
+      "description": "Badge",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "doi": {
+          "type": "string"
+        },
+        "image_url": {
+          "type": "string"
+        },
+        "issue_time": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "venue": {
+          "type": "string"
+        },
+        "verified": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "url", "version", "organization", "verified"],
+      "type": "object"
+    },
     "License": {
       "description": "License",
       "properties": {
@@ -160,9 +280,15 @@
         },
         "short_name": {
           "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "verified": {
+          "type": "string"
         }
       },
-      "required": ["short_name"],
+      "required": ["long_name", "url", "verified"],
       "type": "object"
     },
     "Organization": {
@@ -233,6 +359,12 @@
     "affiliations": {
       "items": {
         "$ref": "#/definitions/ArtifactAffiliation"
+      },
+      "type": "array"
+    },
+    "badges": {
+      "items": {
+        "$ref": "#/definitions/ArtifactBadge"
       },
       "type": "array"
     },

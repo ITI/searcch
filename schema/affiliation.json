@@ -1,5 +1,18 @@
 {
   "definitions": {
+    "Affiliation": {
+      "description": "Affiliation",
+      "properties": {
+        "org": {
+          "$ref": "#/definitions/Organization"
+        },
+        "person": {
+          "$ref": "#/definitions/Person"
+        }
+      },
+      "required": [],
+      "type": "object"
+    },
     "Organization": {
       "description": "Organization",
       "properties": {
