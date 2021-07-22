@@ -140,15 +140,17 @@
       </span>
 
       <span v-if="badges.length">
-        <v-card-title class="py-0">Badges</v-card-title>
-        <v-img
-          v-for="(b, index) in badges"
-          :key="`badge${index}`"
-          max-height="100"
-          max-width="100"
-          :src="b.value"
-        />
-        <v-divider class="mx-4"></v-divider>
+        <span v-for="(b, index) in record.artifact.badges">
+          <a :href="b.badge.url" target="_blank">
+            <v-img
+              :key="`badgeimg${index}`"
+              max-height="100"
+              max-width="100"
+              :src="b.badge.image_url"
+            />
+            {{ b.badge.title }}
+          </a>
+        </span>
       </span>
 
       <div v-if="record.artifact.type == 'code'">
