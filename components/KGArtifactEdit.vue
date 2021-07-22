@@ -283,22 +283,54 @@
         </v-dialog>
 
         <v-divider class="mx-4"></v-divider>
-
-        <span>
-          <v-card-title class="py-0">Badges</v-card-title>
-          <span v-for="(b, index) in artifact_local.badges">
-            <a :href="b.badge.url" target="_blank">
-              <v-img
-                :key="`badgeimg${index}`"
-                max-height="100"
-                max-width="100"
-                :src="b.badge.image_url"
-              />
-              {{ b.badge.title }}
-            </a>
-          </span>
+        <v-card-title class="py-0">Badges</v-card-title>
+        <span v-for="(b, index) in artifact_local.badges">
+          <a :href="b.badge.url" target="_blank">
+            <v-img
+              :key="`badgeimg${index}`"
+              max-height="100"
+              max-width="100"
+              :src="b.badge.image_url"
+            />
+            {{ b.badge.title }}
+          </a>
         </span>
-        <v-btn class="success ml-2 mb-2" fab small disabled
+
+        <v-chip
+          color="primary"
+          v-for="(item, index) in meta.badges"
+          :key="`newbadge${index}`"
+          cols="12"
+          class="ma-2"
+          label
+          text-color="white"
+          persistent-hint
+        >
+          <v-icon left>mdi-tag-outline</v-icon>
+
+          <v-select
+            label="Badges"
+            v-bind:items="possibleBadges"
+            v-model="meta.badges[index]"
+            item-text="id"
+            item-value="title"
+            return-object
+          >
+            <template slot="item" slot-scope="data">
+              <v-list-item-content>
+                <v-list-item-title
+                  v-html="`${data.item.organization} - ${data.item.title}`"
+                >
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <template slot="selection" slot-scope="data">
+              {{ data.item.organization }} - {{ data.item.title }}
+            </template>
+          </v-select>
+          <v-icon @click="meta.badges.splice(index, 1)" right>mdi-close</v-icon>
+        </v-chip>
+        <v-btn @click="meta.badges.push('')" class="success ml-2 mb-2" fab small
           ><v-icon>mdi-plus</v-icon></v-btn
         >
 
@@ -457,7 +489,8 @@ export default {
         keywords: [],
         files: [],
         languages: [],
-        relations: []
+        relations: [],
+        badges: []
       },
       affiliation: {
         affiliation: {
@@ -479,6 +512,7 @@ export default {
       dialog: false,
       artifactdialog: false,
       search: '',
+      possibleBadges: [],
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
@@ -488,7 +522,7 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
       if (err) {
         console.error(err)
@@ -513,6 +547,9 @@ export default {
     let csv = this.artifact_local.meta.find(o => o.name == 'languages')
     this.meta.languages = csv ? csv.value.split(',') : []
     this.meta.keywords = this.getPossibleTags()
+    let response = await this.$badgesEndpoint.index({ verified: 1 })
+    this.possibleBadges = response.badges
+    console.log(this.possibleBadges)
   },
   mounted() {
     // force title and description to refresh on page load
@@ -529,8 +566,8 @@ export default {
     sanitizedDescription: function() {
       return this.$sanitize(this.artifact_local.description)
     },
-    badges() {
-      return this.artifact_local.meta.filter(m => m.name == 'badge')
+    conference() {
+      return this.artifact_local.meta.filter(m => m.name == 'conference')
     },
     homepage() {
       let hp = this.artifact_local.meta.find(o => o.name == 'homepage')
@@ -608,6 +645,10 @@ export default {
       this.artifact_local.affiliations = this.artifact_local.affiliations.concat(
         this.meta.creators
       )
+      this.artifact_local.badges = this.artifact_local.badges.concat(
+        this.meta.badges
+      )
+
       let langs = this.artifact_local.meta.find(o => o.name == 'languages')
       if (langs) langs.value = this.meta.languages.join(',')
 
@@ -632,6 +673,7 @@ export default {
       this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
       this.meta.creators = []
+      this.meta.badges = []
     },
     async addRelated(id) {
       console.log('adding related artifact id' + id)

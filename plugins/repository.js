@@ -28,6 +28,9 @@ export default (ctx, inject) => {
     repositoryWithAxios('kg/' + 'artifact/relationships')
   )
 
+  // badges
+  inject('badgesEndpoint', repositoryWithAxios('kg/' + 'badges'))
+
   // backend login credentials
   inject('loginEndpoint', repositoryWithAxios('kg/' + 'login'))
 
