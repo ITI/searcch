@@ -1,7 +1,7 @@
 <template>
   <div v-if="record.artifact">
     <v-card class="mx-auto my-2">
-      <v-card-title> {{ record.artifact.title }} </v-card-title>
+      <v-card-title> {{ record.artifact.title | titlecase }} </v-card-title>
       <v-card-text>
         <a target="_blank" :href="record.artifact.url">
           {{ record.artifact.url }}
@@ -34,7 +34,11 @@
       </v-card-title>
 
       <v-card-text ref="descDiv" :class="hideOverflow">
-        <vue-markdown :source="markdown"></vue-markdown>
+        <vue-markdown
+          v-if="record.artifact.type === 'code'"
+          :source="markdown"
+        ></vue-markdown>
+        <div v-else v-html="sanitizedDescription"></div>
       </v-card-text>
       <v-btn
         elevation="0"
@@ -53,7 +57,7 @@
           <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
         </v-avatar>
 
-        <div>{{ record.artifact.type }}</div>
+        <div>{{ record.artifact.type | titlecase }}</div>
       </v-chip>
 
       <v-divider class="mx-4"></v-divider>
@@ -79,12 +83,12 @@
         <v-divider class="mx-4"></v-divider>
       </span>
 
-      <span v-if="tags">
+      <span v-if="tags.length">
         <v-card-title class="py-0">Keywords</v-card-title>
         <v-chip
           color="primary"
-          v-for="t in tags"
-          :key="t"
+          v-for="(t, index) in tags"
+          :key="`tag${index}`"
           cols="12"
           class="ma-2"
           label
@@ -134,23 +138,26 @@
             <v-icon>mdi-relation-one-to-one</v-icon>
           </v-avatar>
 
-          {{ v.relation | titlecase }}: {{ v.related_artifact }}
+          {{ v.relation | titlecase }}: {{ v.related_artifact_id }}
         </v-chip>
         <v-divider class="mx-4"></v-divider>
       </span>
 
-      <span v-if="badges.length">
+      <span v-if="record.artifact.badges">
+        <v-card-title class="py-0">Badges</v-card-title>
+
         <span v-for="(b, index) in record.artifact.badges">
+          <v-img
+            :key="`badgeimg${index}`"
+            max-height="100"
+            max-width="100"
+            :src="b.badge.image_url"
+          />
           <a :href="b.badge.url" target="_blank">
-            <v-img
-              :key="`badgeimg${index}`"
-              max-height="100"
-              max-width="100"
-              :src="b.badge.image_url"
-            />
             {{ b.badge.title }}
           </a>
         </span>
+        <v-divider class="mx-4"></v-divider>
       </span>
 
       <div v-if="record.artifact.type == 'code'">
@@ -193,7 +200,7 @@
               <v-icon>mdi-scale-balance</v-icon>
             </v-avatar>
 
-            {{ license }}
+            <a :href="record.artifact.license.url">{{ license }}</a>
           </v-chip>
         </span>
         <v-divider class="mx-4"></v-divider>
@@ -295,9 +302,6 @@ export default {
           )
       }
     },
-    badges() {
-      return this.record.artifact.meta.filter(m => m.name == 'badge')
-    },
     tags() {
       let tags = []
       if (this.record.artifact.tags) {
@@ -336,7 +340,7 @@ export default {
     license() {
       let license = this.record.artifact.license
       if (!license) return null
-      return license.long_name
+      return license.short_name + ' (' + license.long_name + ')'
     },
     markdown() {
       let readmes = {}

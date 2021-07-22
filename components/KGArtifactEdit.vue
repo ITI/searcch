@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
     <v-card class="mx-auto my-2">
-      <v-card-title> {{ artifact_local.title }} </v-card-title>
+      <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
       <v-card-text>
         <a target="_blank" :href="artifact_local.url">
           {{ artifact_local.url }}
@@ -267,7 +267,7 @@
           >
             <v-icon left>mdi-relation-one-to-one</v-icon>
 
-            {{ v.relation | titlecase }}: {{ v.related_artifact }}
+            {{ v.relation | titlecase }}: {{ v.related_artifact_id }}
           </v-chip>
         </span>
         <v-dialog
@@ -304,13 +304,13 @@
         <v-divider class="mx-4"></v-divider>
         <v-card-title class="py-0">Badges</v-card-title>
         <span v-for="(b, index) in artifact_local.badges">
+          <v-img
+            :key="`badgeimg${index}`"
+            max-height="100"
+            max-width="100"
+            :src="b.badge.image_url"
+          />
           <a :href="b.badge.url" target="_blank">
-            <v-img
-              :key="`badgeimg${index}`"
-              max-height="100"
-              max-width="100"
-              :src="b.badge.image_url"
-            />
             {{ b.badge.title }}
           </a>
         </span>
@@ -384,19 +384,34 @@
               }}
             </span>
           </v-chip>
-
-          <span v-if="license">
-            <v-card-title v-if="license" class="py-0">License</v-card-title>
-            <v-chip color="primary" cols="12" class="ma-2" label>
-              <v-avatar left>
-                <v-icon>mdi-scale-balance</v-icon>
-              </v-avatar>
-
-              {{ license }}
-            </v-chip>
-          </span>
-          <v-divider class="mx-4"></v-divider>
         </div>
+
+        <v-card-title class="py-0">License</v-card-title>
+        <v-chip cols="12" class="ma-2" label>
+          <v-icon left>mdi-scale-balance</v-icon>
+
+          <v-autocomplete
+            label="License"
+            :items="possibleLicenses"
+            v-model="artifact_local.license"
+            item-text="short_name"
+            item-value="long_name"
+            return-object
+          >
+            <template slot="item" slot-scope="data">
+              <v-list-item-content>
+                <v-list-item-title
+                  v-html="`${data.item.short_name} (${data.item.long_name})`"
+                >
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <template slot="selection" slot-scope="data">
+              {{ data.item.short_name }} ({{ data.item.long_name }})
+            </template>
+          </v-autocomplete>
+        </v-chip>
+        <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Files</v-card-title>
         <span v-if="artifact_local.files">
@@ -530,6 +545,7 @@ export default {
       artifactdialog: false,
       search: '',
       possibleBadges: [],
+      possibleLicenses: [],
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
@@ -566,6 +582,8 @@ export default {
     this.meta.keywords = this.getPossibleTags()
     let response = await this.$badgesEndpoint.index({ verified: 1 })
     this.possibleBadges = response.badges
+    response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
+    this.possibleLicenses = response.licenses
   },
   mounted() {
     // force title and description to refresh on page load
@@ -614,7 +632,7 @@ export default {
     license() {
       let license = this.artifact_local.license
       if (!license) return null
-      return license.long_name
+      return license.short_name + ' (' + license.long_name + ')'
     },
     types() {
       if (this.schemaLoaded) {
