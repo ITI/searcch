@@ -179,6 +179,9 @@ export default {
     } else {
       this.search = this.search_init
     }
+    if (this.all) {
+      this.advanced.types = this.types
+    }
   },
   computed: {
     ...mapState({
@@ -213,11 +216,9 @@ export default {
       let payload = {
         keywords: this.search,
         page: this.page,
-        entity: 'artifact'
+        entity: 'artifact',
+        type: this.advanced.types
       }
-      payload.type = this.all
-        ? this.types.map(s => s.toLowerCase())
-        : this.advanced.types.map(s => s.toLowerCase())
 
       console.log(payload.type)
 
