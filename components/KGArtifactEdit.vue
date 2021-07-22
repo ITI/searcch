@@ -112,11 +112,30 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
-                      <v-text-field
+                      <v-combobox
                         label="Organization Name"
+                        small-chips
+                        persistent-hint
+                        clearable
+                        v-if="orgs"
+                        :items="orgNames"
                         v-model="affiliation.affiliation.org.name"
-                        required
-                      ></v-text-field>
+                        hint="Select applicable org from the list or type in your own"
+                        :search-input.sync="search"
+                      >
+                        <template v-slot:no-data>
+                          <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                No results matching "<strong>{{
+                                  search
+                                }}</strong
+                                >". Press <kbd>enter</kbd> to create a new one
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </template>
+                      </v-combobox>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -457,6 +476,7 @@ import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { EventBus } from '@/helpers/event-bus.js'
+import { zipArray } from '@/helpers'
 
 export default {
   name: 'KGArtifactEdit',
@@ -546,7 +566,6 @@ export default {
     this.meta.keywords = this.getPossibleTags()
     let response = await this.$badgesEndpoint.index({ verified: 1 })
     this.possibleBadges = response.badges
-    console.log(this.possibleBadges)
   },
   mounted() {
     // force title and description to refresh on page load
@@ -555,11 +574,18 @@ export default {
       this.loadingMessage = 'Error loading'
     }, 5000)
     EventBus.$on('close', this.closeHandler)
+    this.$store.dispatch('user/fetchOrgs')
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid
+      userid: state => state.user.userid,
+      orgs: state => state.user.orgs
     }),
+    orgNames: {
+      get: function() {
+        return this.orgs.map(m => m.name)
+      }
+    },
     sanitizedDescription: function() {
       return this.$sanitize(this.artifact_local.description)
     },
@@ -628,14 +654,9 @@ export default {
     },
     async save() {
       if (!this.valid) return
-      let zip = [['tag']]
-      this.meta.keywords.map(e => zip.push([e]))
-      const mapWith = keys => values =>
-          Object.fromEntries(keys.map((k, i) => [k, values[i]])),
-        getArray = ([keys, ...zip]) => zip.map(mapWith(keys)),
-        array = getArray(zip)
-
-      this.artifact_local.tags = this.artifact_local.tags.concat(array)
+      this.artifact_local.tags = this.artifact_local.tags.concat(
+        zipArray('tag', this.meta.keywords)
+      )
       this.artifact_local.files = this.artifact_local.files.concat(
         this.meta.files
       )
@@ -643,7 +664,7 @@ export default {
         this.meta.creators
       )
       this.artifact_local.badges = this.artifact_local.badges.concat(
-        this.meta.badges
+        zipArray('badge', this.meta.badges)
       )
 
       let langs = this.artifact_local.meta.find(o => o.name == 'languages')
