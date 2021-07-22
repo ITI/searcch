@@ -393,8 +393,6 @@ export default {
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-        console.log(data)
-
         let org = this.userAffiliation.length
           ? this.orgs.find(o => o.name === this.userAffiliation)
           : null
