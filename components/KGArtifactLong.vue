@@ -192,19 +192,22 @@
             }}
           </span>
         </v-chip>
+        <v-divider class="mx-4"></v-divider>
+      </div>
 
-        <span v-if="license">
-          <v-card-title v-if="license" class="py-0">License</v-card-title>
+      <span v-if="license">
+        <v-card-title class="py-0">License</v-card-title>
+        <a :href="record.artifact.license.url">
           <v-chip color="primary" cols="12" class="ma-2" label>
             <v-avatar left>
               <v-icon>mdi-scale-balance</v-icon>
             </v-avatar>
 
-            <a :href="record.artifact.license.url">{{ license }}</a>
+            {{ license }}
           </v-chip>
-        </span>
+        </a>
         <v-divider class="mx-4"></v-divider>
-      </div>
+      </span>
 
       <span v-if="record.artifact.files.length">
         <v-card-title class="py-0">Files</v-card-title>
@@ -338,9 +341,12 @@ export default {
       return watchers.value
     },
     license() {
-      let license = this.record.artifact.license
-      if (!license) return null
-      return license.short_name + ' (' + license.long_name + ')'
+      return typeof this.record.artifact.license !== 'undefined'
+        ? this.record.artifact.license.short_name +
+            ' (' +
+            this.record.artifact.license.long_name +
+            ')'
+        : ''
     },
     markdown() {
       let readmes = {}
