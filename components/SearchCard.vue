@@ -118,6 +118,10 @@ export default {
     related: {
       type: Boolean,
       required: false
+    },
+    all: {
+      type: Boolean,
+      required: false
     }
   },
   head() {
@@ -142,21 +146,21 @@ export default {
       searchInterval: null,
       adopen: false,
       advanced: {
-        types: ['Dataset', 'Code'],
+        types: ['dataset', 'code'],
         author: '',
         org: ''
       },
       types: [
-        'Dataset',
-        'Publication',
-        'Code',
-        'Executable',
-        'Methodology',
-        'Metrics',
-        'Hypothesis',
-        'Domain',
-        'Supporting Info',
-        'Prior Work'
+        'dataset',
+        'executable',
+        'methodology',
+        'metrics',
+        'priorwork',
+        'publication',
+        'hypothesis',
+        'code',
+        'domain',
+        'supportinginfo'
       ],
       filters: ['Name', 'Organization'],
       showScrollToTop: 0
@@ -211,9 +215,12 @@ export default {
         page: this.page,
         entity: 'artifact'
       }
-      if (this.adopen == 0) {
-        payload.type = this.advanced.types.map(s => s.toLowerCase())
-      }
+      payload.type = this.all
+        ? this.types.map(s => s.toLowerCase())
+        : this.advanced.types.map(s => s.toLowerCase())
+
+      console.log(payload.type)
+
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
         this.searchMessage = 'No results found'

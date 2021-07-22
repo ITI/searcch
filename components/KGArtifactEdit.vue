@@ -286,7 +286,7 @@
               <v-card-title>
                 <span class="text-h5">Search for Related Artifacts</span>
               </v-card-title>
-              <SearchCard :search="search" related />
+              <SearchCard :search="search" related all />
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
