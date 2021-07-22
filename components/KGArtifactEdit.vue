@@ -313,6 +313,9 @@
           <a :href="b.badge.url" target="_blank">
             {{ b.badge.title }}
           </a>
+          <v-icon @click="artifact_local.badges.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
         </span>
 
         <v-chip
@@ -448,7 +451,7 @@
             ></v-textarea>
           </v-card-text>
           <v-btn
-            @click="meta.files.push({ url: '' })"
+            @click="meta.files.push({ url: '', filetype: 'unknown' })"
             class="success ml-2 mb-2"
             fab
             small
