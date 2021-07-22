@@ -286,13 +286,17 @@
 
         <span>
           <v-card-title class="py-0">Badges</v-card-title>
-          <v-img
-            v-for="(b, index) in badges"
-            :key="`badge${index}`"
-            max-height="100"
-            max-width="100"
-            :src="b.value"
-          />
+          <span v-for="(b, index) in artifact_local.badges">
+            <a :href="b.badge.url" target="_blank">
+              <v-img
+                :key="`badgeimg${index}`"
+                max-height="100"
+                max-width="100"
+                :src="b.badge.image_url"
+              />
+              {{ b.badge.title }}
+            </a>
+          </span>
         </span>
         <v-btn class="success ml-2 mb-2" fab small disabled
           ><v-icon>mdi-plus</v-icon></v-btn
