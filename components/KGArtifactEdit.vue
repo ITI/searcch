@@ -742,6 +742,10 @@ export default {
       this.meta.files = []
       this.meta.creators = []
       this.meta.badges = []
+      if (this.create) {
+        this.create = false
+        this.$router.push(`/artifact/${this.artifact_local.id}?edit=true`)
+      }
     },
     iconColor(type) {
       return artifactColor(type)

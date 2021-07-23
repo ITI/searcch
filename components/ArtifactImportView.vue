@@ -142,9 +142,6 @@ export default {
         else return false
       }
       return undefined
-    },
-    logMessage() {
-      return this.artifact.log.replace(/\n|\r|\n\r|\r/g, '<br />')
     }
   },
   methods: {
