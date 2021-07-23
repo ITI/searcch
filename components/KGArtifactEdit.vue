@@ -706,26 +706,26 @@ export default {
     async save() {
       if (!this.valid) return
       this.artifact_local.tags =
-        typeof this.artifact_local.tags !== 'undefined'
+        this.artifact_local.tags !== null
           ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
           : []
       this.artifact_local.files =
-        typeof this.artifact_local.files !== 'undefined'
+        this.artifact_local.files !== null
           ? this.artifact_local.files.concat(this.meta.files)
           : []
       this.artifact_local.affiliations =
-        typeof this.artifact_local.affiliations !== 'undefined'
+        this.artifact_local.affiliations !== null
           ? this.artifact_local.affiliations.concat(this.meta.creators)
           : []
       this.artifact_local.badges =
-        typeof this.artifact_local.badges !== 'undefined'
+        this.artifact_local.badges !== null
           ? this.artifact_local.badges.concat(
               zipArray('badge', this.meta.badges)
             )
           : []
 
       let langs =
-        typeof this.artifact_local.meta !== 'undefined'
+        this.artifact_local.meta !== null
           ? this.artifact_local.meta.find(o => o.name == 'languages')
           : null
       if (langs) langs.value = this.meta.languages.join(',')

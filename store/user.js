@@ -84,6 +84,9 @@ export const actions = {
     commit('SET_USER_TOKEN', user_token)
   },
   async fetchOrgs({ commit, state }) {
+    if (state.orgs !== null && state.orgs.length > 0) {
+      return
+    }
     let a = {}
     console.log('fetching organizations')
     let payload = {
