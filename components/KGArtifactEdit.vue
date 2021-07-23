@@ -691,6 +691,7 @@ export default {
   methods: {
     async publish() {
       if (!this.valid) return
+      if (!confirm('Are you sure you want to publish this artifact?')) return
 
       if (this.create) {
         await this.save()

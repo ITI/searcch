@@ -162,6 +162,8 @@ export default {
       this.updateImports()
     },
     async publish() {
+      if (!confirm('Are you sure you want to publish this artifact?')) return
+
       let response = await this.$artifactRecordEndpoint.update(
         this.full_artifact.id,
         {
