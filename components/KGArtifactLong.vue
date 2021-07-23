@@ -116,7 +116,6 @@
           <v-avatar left>
             <v-icon>{{ iconImage('code') }}</v-icon>
           </v-avatar>
-
           {{ v }}
         </v-chip>
         <v-divider class="mx-4"></v-divider>
@@ -143,7 +142,7 @@
         <v-divider class="mx-4"></v-divider>
       </span>
 
-      <span v-if="record.artifact.badges">
+      <span v-if="badgesPresent">
         <v-card-title class="py-0">Badges</v-card-title>
 
         <span v-for="(b, index) in record.artifact.badges">
@@ -316,6 +315,13 @@ export default {
       }
       return tags.filter((value, index, self) => self.indexOf(value) === index)
     },
+    badgesPresent() {
+      return (
+        typeof this.record.artifact.badges !== 'undefined' &&
+        this.record.artifact.badges.length > 0
+      )
+    },
+
     languages() {
       let csv = this.record.artifact.meta.find(o => o.name == 'languages')
       if (!csv) return null
@@ -341,7 +347,7 @@ export default {
       return watchers.value
     },
     license() {
-      return typeof this.record.artifact.license !== 'undefined'
+      return this.record.artifact.license
         ? this.record.artifact.license.short_name +
             ' (' +
             this.record.artifact.license.long_name +

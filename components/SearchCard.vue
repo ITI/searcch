@@ -220,8 +220,6 @@ export default {
         type: this.advanced.types
       }
 
-      console.log(payload.type)
-
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
         this.searchMessage = 'No results found'

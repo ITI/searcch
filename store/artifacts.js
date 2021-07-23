@@ -95,7 +95,7 @@ export const actions = {
       commit('SET_IMPORTS', response.artifact_imports)
     }
   },
-  async setRelated({ commit, state }, payload) {
+  async setRelated({ commit, state, dispatch }, payload) {
     console.log(
       payload.id + ' ' + payload.relation + ' ' + state.artifact.artifact.id
     )
@@ -104,5 +104,6 @@ export const actions = {
       related_artifact_id: payload.id,
       relation: payload.relation
     })
+    dispatch('fetchArtifact', { id: state.artifact.artifact.id })
   }
 }

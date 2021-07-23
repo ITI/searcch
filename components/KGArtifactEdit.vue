@@ -232,27 +232,42 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <span v-if="meta.languages.length">
-          <v-card-title class="py-0">Languages</v-card-title>
+        <v-card-title class="py-0">Languages</v-card-title>
 
-          <v-chip
-            color="primary"
-            v-for="(l, index) in meta.languages"
-            :key="`lang${index}`"
-            cols="12"
-            class="ma-2"
-            label
+        <v-chip
+          color="primary"
+          v-for="(l, index) in meta.languages"
+          :key="`lang${index}`"
+          cols="12"
+          class="ma-2"
+          label
+        >
+          <v-avatar left>
+            <v-icon>{{ iconImage('code') }}</v-icon>
+          </v-avatar>
+          <v-text-field
+            solo
+            dark
+            placeholder="Enter Keyword"
+            v-model="meta.languages[index]"
+            hide-details
+            class="m-0"
+            background-color="#00476B"
+            >{{ meta.languages[index] }}</v-text-field
           >
-            <v-avatar left>
-              <v-icon>{{ iconImage('code') }}</v-icon>
-            </v-avatar>
-            {{ l }}
-            <v-icon @click="meta.languages.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </v-chip>
-          <v-divider class="mx-4"></v-divider>
-        </span>
+          <v-icon @click="meta.languages.splice(index, 1)" right
+            >mdi-close</v-icon
+          >
+        </v-chip>
+        <v-btn
+          @click="meta.languages.push('')"
+          class="success ml-2 mb-2"
+          fab
+          small
+          ><v-icon>mdi-plus</v-icon></v-btn
+        >
+
+        <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Related</v-card-title>
         <span v-if="artifact_local.relationships">
@@ -667,57 +682,66 @@ export default {
     async publish() {
       if (!this.valid) return
 
+      if (this.create) {
+        await this.save()
+      }
       let response = await this.$artifactRecordEndpoint.update(
         this.artifact_local.id,
         {
           publication: {}
         }
       )
-      this.$router.push(`${this.artifact_local.id}`)
+      this.$router.push(`/artifact/${this.artifact_local.id}`)
     },
     async save() {
       if (!this.valid) return
-      this.artifact_local.tags = this.artifact_local.tags.concat(
-        zipArray('tag', this.meta.keywords)
-      )
-      this.artifact_local.files = this.artifact_local.files.concat(
-        this.meta.files
-      )
-      this.artifact_local.affiliations = this.artifact_local.affiliations.concat(
-        this.meta.creators
-      )
-      this.artifact_local.badges = this.artifact_local.badges.concat(
-        zipArray('badge', this.meta.badges)
-      )
+      this.artifact_local.tags =
+        typeof this.artifact_local.tags !== 'undefined'
+          ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
+          : []
+      this.artifact_local.files =
+        typeof this.artifact_local.files !== 'undefined'
+          ? this.artifact_local.files.concat(this.meta.files)
+          : []
+      this.artifact_local.affiliations =
+        typeof this.artifact_local.affiliations !== 'undefined'
+          ? this.artifact_local.affiliations.concat(this.meta.creators)
+          : []
+      this.artifact_local.badges =
+        typeof this.artifact_local.badges !== 'undefined'
+          ? this.artifact_local.badges.concat(
+              zipArray('badge', this.meta.badges)
+            )
+          : []
 
-      let langs = this.artifact_local.meta.find(o => o.name == 'languages')
+      let langs =
+        typeof this.artifact_local.meta !== 'undefined'
+          ? this.artifact_local.meta.find(o => o.name == 'languages')
+          : null
       if (langs) langs.value = this.meta.languages.join(',')
 
-      console.log('local artifact')
-      console.log(this.artifact_local)
+      // console.log('local artifact')
+      // console.log(this.artifact_local)
 
       let response = null
       if (this.create) {
-        console.log('creating new artifact')
+        // console.log('creating new artifact')
         response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
-        console.log('curating')
+        // console.log('curating')
         response = await this.$artifactRecordEndpoint.update(
           this.artifact_local.id,
           this.artifact_local
         )
       }
-      console.log('response artifact')
-      console.log(response)
+      // console.log('response artifact')
+      // console.log(response)
       if (response) this.artifact_local = response.artifact
       this.snackbar = true
       this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
       this.meta.creators = []
       this.meta.badges = []
-    },
-    async addRelated(id) {
-      console.log('adding related artifact id' + id)
     },
     iconColor(type) {
       return artifactColor(type)
