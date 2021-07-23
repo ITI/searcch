@@ -103,11 +103,6 @@ export default {
         }
       ]
       if (this.$auth.loggedIn) {
-        // items.push({
-        //   icon: 'mdi-apps',
-        //   title: 'Dashboard',
-        //   to: '/dashboard'
-        // })
         items.push({
           icon: 'mdi-table-heart',
           title: 'Favorite Artifacts',
