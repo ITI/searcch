@@ -97,7 +97,6 @@
                         small-chips
                         persistent-hint
                         clearable
-                        v-if="orgs"
                         :items="orgNames"
                         v-model="userAffiliation"
                         hint="Select applicable org from the list or type in your own"
@@ -341,7 +340,7 @@ export default {
     }),
     orgNames: {
       get: function() {
-        return this.orgs.map(m => m.name)
+        return this.orgs ? this.orgs.map(m => m.name) : []
       }
     },
     researchInterests: {
