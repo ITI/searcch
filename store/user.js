@@ -87,7 +87,8 @@ export const actions = {
     let a = {}
     console.log('fetching organizations')
     let payload = {
-      verified: 1
+      verified: 1,
+      all: 1
     }
     a = await this.$organizationEndpoint.index(payload)
     commit('SET_ORGS', a.organizations)
