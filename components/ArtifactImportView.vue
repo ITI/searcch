@@ -9,7 +9,7 @@
                 >Import ID {{ artifact.id }}:&nbsp;<a
                   target="_blank"
                   :href="artifact.url"
-                  >{{ artifactTitle | titlecase }}</a
+                  >{{ artifactTitle }}</a
                 ></span
               >
             </div>
