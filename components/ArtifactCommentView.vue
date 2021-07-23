@@ -1,16 +1,27 @@
 <template>
   <div>
-    <v-card class="mx-auto overflow-hidden" elevation="3" v-if="artifact.artifact">
+    <v-card
+      class="mx-auto overflow-hidden"
+      elevation="3"
+      v-if="artifact.artifact"
+    >
       <v-row class="px-3">
         <v-card-title class="align-start">
           <div>
-            <span class="headline">{{ artifact.artifact.title | titlecase }}</span>
+            <span class="headline">{{
+              artifact.artifact.title | titlecase
+            }}</span>
           </div>
         </v-card-title>
         <v-spacer></v-spacer>
-        <v-chip v-if="artifact.artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
+        <v-chip
+          v-if="artifact.artifact.type"
+          :color="iconColor(artifact.artifact.type)"
+          class="ma-2 mt-5"
+          label
+        >
           <v-avatar left>
-            <v-icon>{{ artifactIcon }}</v-icon>
+            <v-icon>{{ iconImage(artifact.artifact.type) }}</v-icon>
           </v-avatar>
           <div v-if="artifact.artifact.type">{{ artifact.artifact.type }}</div>
         </v-chip>
@@ -33,7 +44,14 @@
 
       <div v-if="comments">
         <v-container fluid>
-          <SingleComment class="mt-2" outlined tile v-for="(comment, i) in commentsReordered" :comment="comment" :key="i"></SingleComment>
+          <SingleComment
+            class="mt-2"
+            outlined
+            tile
+            v-for="(comment, i) in commentsReordered"
+            :comment="comment"
+            :key="i"
+          ></SingleComment>
         </v-container>
       </div>
 
@@ -48,11 +66,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn
-          small
-          :to="`/artifact/${artifact.artifact.id}`"
-          nuxt
-        >
+        <v-btn small :to="`/artifact/${artifact.artifact.id}`" nuxt>
           Read More
         </v-btn>
       </v-card-actions>
@@ -62,13 +76,13 @@
 </template>
 
 <script>
-import SingleComment from '@/components/SingleComment'
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   components: {
-    SingleComment,
+    SingleComment: () => import('@/components/SingleComment')
   },
   props: {
     artifact: {
@@ -82,85 +96,81 @@ export default {
   },
   data() {
     return {
-      loadingMessage: "Loading...",
+      loadingMessage: 'Loading...',
       expanded: this.comments
         ? Array(this.comments.length)
             .fill(1)
             .map(Number.call, Number)
-        : [],
+        : []
     }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
-      this.loadingMessage = "Error loading"
+      this.loadingMessage = 'Error loading'
     }, 5000)
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
       let description = ''
-      if (this.source === 'zenodo') {
-        description = this.artifact.metadata.description
-      } else {
-        description = this.artifact.artifact.description
-      }
+      description = this.artifact.artifact.description
       let out = clip(this.$sanitize(description), 2000, {
         html: true,
         maxLines: 40
       })
-      if (out == "null") return "<br>"
+      if (out == 'null') return '<br>'
       else return out
     },
     favorite: {
-      get () {
+      get() {
         return this.favorites[this.artifact.artifact.id] ? true : false
       },
-      set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact.id)
+      set(value) {
+        if (value)
+          this.$store.commit(
+            'artifacts/ADD_FAVORITE',
+            this.artifact.artifact.id
+          )
+        else
+          this.$store.commit(
+            'artifacts/REMOVE_FAVORITE',
+            this.artifact.artifact.id
+          )
       }
     },
-    artifactIcon () {
-      if (this.artifact.artifact.type == "publication") return "mdi-newspaper-variant-outline"
-      if (this.artifact.artifact.type == "code") return "mdi-code-braces"
-      if (this.artifact.artifact.type == "dataset") return "mdi-database"
-    },
-    artifactColor () {
-      if (this.artifact.artifact.type == "publication") return "info"
-      if (this.artifact.artifact.type == "code") return "purple white--text"
-      if (this.artifact.artifact.type == "dataset") return "green white--text"
-    },
-    commentsReordered () {
+    commentsReordered() {
       let first = []
       let rest = []
       for (let comment of this.comments) {
-        if (comment.review.reviewer.id === this.user_id) first.push(comment)
+        if (comment.review.reviewer.id === this.userid) first.push(comment)
         else rest.push(comment)
       }
       return first.concat(rest)
     }
   },
-  methods:{
-    favoriteThis () {
+  methods: {
+    favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
-        let payload = {
-          token: this.$auth.getToken('github'),
-          userid: this.user_id
-        }
         if (action) {
-          this.$favoritesEndpoint.update(this.artifact.artifact.id, payload)
+          // FIXME: backend API
+          this.$favoritesEndpoint.post(this.artifact.artifact.id, {})
         } else {
-          this.$favoritesEndpoint.remove(this.artifact.artifact.id, payload)
+          this.$favoritesEndpoint.delete(this.artifact.artifact.id)
         }
       }
+    },
+    iconColor(type) {
+      return artifactColor(type)
+    },
+    iconImage(type) {
+      return artifactIcon(type)
     }
   }
 }

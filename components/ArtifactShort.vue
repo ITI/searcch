@@ -10,9 +10,14 @@
           </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip v-if="artifact.type" :color="artifactColor" class="ma-2 mt-5" label>
+          <v-chip
+            v-if="artifact.type"
+            :color="iconColor(artifact.type)"
+            class="ma-2 mt-5"
+            label
+          >
             <v-avatar left>
-              <v-icon>{{ artifactIcon }}</v-icon>
+              <v-icon>{{ iconImage(artifact.type) }}</v-icon>
             </v-avatar>
             <div v-if="artifact.type">{{ artifact.type }}</div>
           </v-chip>
@@ -72,6 +77,7 @@
 
         <v-btn
           icon
+          v-if="!related"
           :to="`/artifact/review/${artifact.id}`"
           nuxt
         >
@@ -79,13 +85,22 @@
         </v-btn>
 
         <v-spacer></v-spacer>
-
-        <v-btn
-          small
-          :to="`/artifact/${artifact.id}`"
-          nuxt
-        >
+        <v-select
+          v-if="related"
+          label="Relationship Type"
+          :items="relations"
+          v-model="relation"
+        ></v-select>
+        <v-btn v-if="!related" small :to="`/artifact/${artifact.id}`" nuxt>
           Read More
+        </v-btn>
+        <v-btn
+          v-else
+          small
+          color="success"
+          @click="addRelated(artifact.id, relation)"
+        >
+          Add Related
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -95,6 +110,8 @@
 <script>
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
+import { EventBus } from '@/helpers/event-bus.js'
 
 export default {
   props: {
@@ -105,6 +122,10 @@ export default {
     comments: {
       type: Array,
       required: false
+    },
+    related: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -114,70 +135,76 @@ export default {
             .fill(1)
             .map(Number.call, Number)
         : [],
+      relations: [
+        'cites',
+        'supplements',
+        'continues',
+        'references',
+        'documents',
+        'compiles',
+        'publishes'
+      ],
+      relation: ''
     }
   },
   computed: {
     ...mapState({
-      source: state => state.artifacts.source,
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
       let description = ''
-      if (this.source === 'zenodo') {
-        description = this.artifact.metadata.description
-      } else {
-        description = this.artifact.description
-      }
+      description = this.artifact.description
       return clip(this.$sanitize(description), 2000, {
         html: true,
         maxLines: 40
       })
     },
     favorite: {
-      get () {
+      get() {
         return this.favorites[this.artifact.id] ? true : false
       },
-      set (value) {
-        if (value) this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
+      set(value) {
+        if (value)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
       }
-    },
-    artifactIcon () {
-      if (this.artifact.type == "publication") return "mdi-newspaper-variant-outline"
-      if (this.artifact.type == "code") return "mdi-code-braces"
-      if (this.artifact.type == "dataset") return "mdi-database"
-    },
-    artifactColor () {
-      if (this.artifact.type == "publication") return "info"
-      if (this.artifact.type == "code") return "purple white--text"
-      if (this.artifact.type == "dataset") return "green white--text"
     }
   },
-  methods:{
-    favoriteThis () {
+  methods: {
+    favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
-        let payload = {
-          token: this.$auth.getToken('github'),
-          userid: this.user_id
-        }
         if (action) {
-          this.$favoritesEndpoint.update(this.artifact.id, payload)
+          // FIXME: backend API
+          this.$favoritesEndpoint.post(this.artifact.id, {})
         } else {
-          this.$favoritesEndpoint.remove(this.artifact.id, payload)
+          this.$favoritesEndpoint.delete(this.artifact.id)
         }
       }
+    },
+    iconColor(type) {
+      return artifactColor(type)
+    },
+    iconImage(type) {
+      return artifactIcon(type)
+    },
+    addRelated(id, relation) {
+      this.$store.dispatch('artifacts/setRelated', {
+        id: id,
+        relation: relation
+      })
+      EventBus.$emit('close', 'artifactdialog')
     }
   }
 }
 </script>
 
 <style scoped>
-  .v-card__title {
-    word-break: normal;
-  }
+.v-card__title {
+  word-break: normal;
+}
 </style>

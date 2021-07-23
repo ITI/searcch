@@ -1,9 +1,17 @@
 <template>
   <div>
     <a @click="$router.go(-1)">Back</a>
-    <ArtifactCommentView :artifact="artifact" :comments="comments"></ArtifactCommentView>
+    <ArtifactCommentView
+      :artifact="artifact"
+      :comments="comments"
+    ></ArtifactCommentView>
 
-    <v-container v-if="$auth.loggedIn && !alreadyCommented" fill-height fluid grid-list-xl>
+    <v-container
+      v-if="$auth.loggedIn && !alreadyCommented"
+      fill-height
+      fluid
+      grid-list-xl
+    >
       <v-row justify="center">
         <v-col cols="12">
           <material-card
@@ -27,6 +35,7 @@
                       dense
                       hover
                       size="32"
+                      required
                     ></v-rating>
                   </v-col>
                   <v-col cols="12">
@@ -34,11 +43,16 @@
                       label="Review"
                       placeholder="Add review..."
                       v-model="comment"
+                      required
                     >
                     </v-textarea>
                   </v-col>
                   <v-col cols="12" class="text-right">
-                    <v-btn color="success" @click="onSubmit" :disabled="!formCheck">
+                    <v-btn
+                      color="success"
+                      @click="onSubmit"
+                      :disabled="!formCheck"
+                    >
                       Add Review
                     </v-btn>
                   </v-col>
@@ -55,7 +69,8 @@
           <material-card
             color="primary"
             title="Log in to add a review"
-            nuxt to="/login"
+            nuxt
+            to="/login"
           >
           </material-card>
         </v-col>
@@ -65,13 +80,11 @@
 </template>
 
 <script>
-import ArtifactCommentView from '~/components/ArtifactCommentView'
-
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    ArtifactCommentView
+    ArtifactCommentView: () => import('@/components/ArtifactCommentView')
   },
   head() {
     return {
@@ -95,17 +108,19 @@ export default {
   computed: {
     ...mapState({
       artifact: state => state.artifacts.artifact,
-      source: state => state.artifacts.source,
       comments: state => state.artifacts.artifact.rating_review,
-      user_id: state => state.user.user_id,
+      userid: state => state.user.userid
     }),
     formCheck() {
-      if (this.rating == 0 && this.comment == '') return false
+      if (this.rating == 0 || this.comment === '') {
+        return false
+      }
       return true
     },
-    alreadyCommented () {
+    alreadyCommented() {
       if (!this.comments) return false
-      if (this.comments.find(c => c.review.reviewer.id == this.user_id)) return true
+      if (this.comments.find(c => c.review.reviewer.id == this.userid))
+        return true
       return false
     }
   },
@@ -116,37 +131,37 @@ export default {
       } else {
         if (this.rating && this.comment) {
           let rating_payload = {
-            token: this.$auth.getToken('github'),
-            userid: this.user_id,
             rating: this.rating
           }
-          await this.$ratingsEndpoint.put(this.artifact.artifact.id, rating_payload)
+          // FIXME: backend API
+          await this.$ratingsEndpoint.post(
+            this.artifact.artifact.id,
+            rating_payload
+          )
           let comment_payload = {
-            review: this.comment,
-            token: this.$auth.getToken('github'),
-            userid: this.user_id
+            review: this.comment
           }
-          await this.$reviewsEndpoint.update(this.artifact.artifact.id, comment_payload)
+          // FIXME: backend API
+          await this.$reviewsEndpoint.post(
+            this.artifact.artifact.id,
+            comment_payload
+          )
           this.$store.dispatch('artifacts/fetchArtifact', {
-            id: this.$route.params.id,
-            source: 'kg'
+            id: this.$route.params.id
           })
+
+          this.rating = 0
+          if (typeof this.$refs.comment !== 'undefined') {
+            this.$refs.comment.reset()
+          }
+        } else {
         }
-        this.$refs.comment.reset()
-        this.rating = 0
       }
     }
   },
   mounted() {
-    if (this.source === '') {
-      this.$store.commit('artifacts/SET_SOURCE', 'kg')
-    }
-    if (typeof this.$route.query.source !== 'undefined') {
-      this.$store.commit('artifacts/SET_SOURCE', this.$route.query.source)
-    }
     this.$store.dispatch('artifacts/fetchArtifact', {
-      id: this.$route.params.id,
-      source: 'kg'
+      id: this.$route.params.id
     })
   }
 }

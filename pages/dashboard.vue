@@ -441,14 +441,14 @@ export default {
       items: [
         {
           id: 1,
-          name: 'Cybersecuirty Paper',
+          name: 'Cybersecurity Paper',
           country: 5,
           city: '12,756',
           salary: '14'
         },
         {
           id: 2,
-          name: 'Cybersecuirty Code',
+          name: 'Cybersecurity Code',
           country: 4,
           city: '7,547',
           salary: '3'
@@ -469,11 +469,11 @@ export default {
         },
         {
           id: 5,
-          name: 'Cybersecuirty Paper 2',
+          name: 'Cybersecurity Paper 2',
           country: 3,
           city: '564',
           salary: '1'
-        },
+        }
       ],
       tabs: 0,
       list: {
@@ -482,6 +482,10 @@ export default {
         2: false
       }
     }
+  },
+  async mounted() {
+    let response = await this.$dashboardEndpoint.index()
+    console.log(response)
   },
   methods: {
     complete(index) {

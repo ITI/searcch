@@ -1,29 +1,25 @@
 <template>
   <div v-if="artifact.artifact">
     <span v-if="!edit">
-      <KGCodeArtifactLong v-if="artifact.artifact.type == 'code'" :record="artifact"></KGCodeArtifactLong>
-      <KGArtifactLong v-else :record="artifact"/>
+      <LazyHydrate when-visible>
+        <KGArtifactLong :record="artifact" />
+      </LazyHydrate>
     </span>
     <span v-else>
-      <KGArtifactEdit :record="artifact"></KGArtifactEdit>
+      <LazyHydrate when-visible>
+        <KGArtifactEdit :record="artifact" />
+      </LazyHydrate>
     </span>
   </div>
   <div v-else>{{ loadingMessage }}</div>
 </template>
 
 <script>
-import ZenodoArtifactLong from '@/components/ZenodoArtifactLong'
-import KGArtifactLong from '@/components/KGArtifactLong'
-import { mapState } from 'vuex'
-import KGCodeArtifactLong from './KGCodeArtifactLong.vue'
-import KGArtifactEdit from './KGArtifactEdit.vue'
-
 export default {
   components: {
-    ZenodoArtifactLong,
-    KGArtifactLong,
-    KGCodeArtifactLong,
-    KGArtifactEdit,
+    KGArtifactLong: () => import('@/components/KGArtifactLong'),
+    KGArtifactEdit: () => import('@/components/KGArtifactEdit'),
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   props: {
     artifact: {
@@ -37,18 +33,13 @@ export default {
   },
   data() {
     return {
-      loadingMessage: "Loading...",
+      loadingMessage: 'Loading...'
     }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
-      this.loadingMessage = "Error loading"
+      this.loadingMessage = 'Error loading'
     }, 5000)
-  },
-  computed: {
-    ...mapState({
-      source: state => state.artifacts.source
-    })
   }
 }
 </script>

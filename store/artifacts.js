@@ -1,27 +1,23 @@
 import Vue from 'vue'
 
 const renameKeys = (keysMap, obj) =>
-  Object.keys(obj).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...{ [keysMap[key] || key]: obj[key] }
-    }),
-    {}
-  )
-
-const processArtifacts = obj => {
-  return renameKeys({ doi: 'id' }, obj)
-}
+  typeof obj === 'object'
+    ? Object.keys(obj).reduce(
+        (acc, key) => ({
+          ...acc,
+          ...{ [keysMap[key] || key]: obj[key] }
+        }),
+        {}
+      )
+    : obj
 
 export const state = () => ({
   artifacts: [],
   artifact: {},
   search: '',
-  source: '',
-  scores: [],
   favorites: [],
   favoritesIDs: {},
-  imports: [],
+  imports: []
 })
 
 export const getters = {
@@ -33,12 +29,6 @@ export const getters = {
   },
   search: state => {
     return state.search
-  },
-  source: state => {
-    return state.source
-  },
-  scores: state => {
-    return state.scores
   },
   favorites: state => {
     return state.favorites
@@ -61,9 +51,6 @@ export const mutations = {
   SET_SEARCH(state, search) {
     state.search = search
   },
-  SET_SOURCE(state, source) {
-    state.source = source
-  },
   SET_FAVORITES(state, favorites) {
     state.favorites = favorites
   },
@@ -75,41 +62,21 @@ export const mutations = {
   },
   SET_IMPORTS(state, imports) {
     state.imports = imports
-  },
+  }
 }
 
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
-    let a = {}
     commit('SET_SEARCH', payload.keywords)
-    a = await this.$artifactSearchRepository.index({
+    let a = await this.$artifactsEndpoint.index({
       ...payload
     })
-    commit(
-      'SET_ARTIFACTS',
-      a.artifacts
-    )
+    commit('SET_ARTIFACTS', a.artifacts)
   },
   async fetchArtifact({ commit, state }, payload) {
-    let a = {}
-    if (
-      typeof payload.source !== 'undefined' &&
-      state.source !== payload.source
-    ) {
-      // override state.source if forced from function call
-      console.log('overriding source')
-      commit('SET_SOURCE', payload.source)
-    }
-    if (
-      typeof state.artifact.id !== 'undefined' &&
-      state.artifact.id === payload.id
-    ) {
-      console.log('returning cached entry ' + payload.id)
-      return state.artifact
-    } else {
-      console.log('fetching entry ' + payload.id)
-      a = await this.$artifactRecordRepository.show(payload.id)
-    }
+    console.log('fetching entry ' + payload.id)
+    let a = await this.$artifactRecordEndpoint.show(payload.id)
+    commit('SET_ARTIFACT', a)
   },
   async fetchFavorites({ commit, state }, payload) {
     let response = await this.$findFavoritesEndpoint.show(payload)
@@ -127,5 +94,16 @@ export const actions = {
     if (response.artifact_imports) {
       commit('SET_IMPORTS', response.artifact_imports)
     }
+  },
+  async setRelated({ commit, state, dispatch }, payload) {
+    console.log(
+      payload.id + ' ' + payload.relation + ' ' + state.artifact.artifact.id
+    )
+    let response = await this.$relationshipsEndpoint.create({
+      artifact_id: state.artifact.artifact.id,
+      related_artifact_id: payload.id,
+      relation: payload.relation
+    })
+    dispatch('fetchArtifact', { id: state.artifact.artifact.id })
   }
 }

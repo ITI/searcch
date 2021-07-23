@@ -1,12 +1,14 @@
 <template>
   <div>
     <v-container>
-      <v-row
-        v-for="artifact in artifacts"
-        :key="artifact.id"
-      >
+      <v-row v-for="artifact in artifacts" :key="artifact.id">
         <v-col>
-          <ArtifactShort :artifact="artifact"></ArtifactShort>
+          <LazyHydrate when-visible>
+            <ArtifactShort
+              :artifact="artifact"
+              v-bind:related="related"
+            ></ArtifactShort>
+          </LazyHydrate>
         </v-col>
       </v-row>
     </v-container>
@@ -14,36 +16,23 @@
 </template>
 
 <script>
-import ArtifactShort from '@/components/ArtifactShort'
-import { mapState } from 'vuex'
-
 export default {
   components: {
-    ArtifactShort
+    ArtifactShort: () => import('@/components/ArtifactShort'),
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   props: {
     artifacts: {
       type: Array,
       required: true
     },
-    limit: {
-      type: Number,
-      required: true
+    related: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
-    return {
-      relevanceResult: []
-    }
-  },
-  computed: {
-    ...mapState({
-      source: state => state.artifacts.source,
-      scores: state => state.artifacts.scores
-    }),
-    sparkScores: function() {
-      return this.scores.slice(0, 20)
-    }
+    return {}
   }
 }
 </script>

@@ -6,8 +6,25 @@
     <h1 v-else>
       {{ otherError }}
     </h1>
-    <NuxtLink to="/">
-      Home page
+    <h2 v-if="error.message">
+      {{ error.message }}
+    </h2>
+    <h2 v-if="error.isAxiosError">
+      {{ error.request.statusText }}
+    </h2>
+
+    <pretty-print
+      v-if="error.request"
+      :value="error.request.data"
+    ></pretty-print>
+
+    <pretty-print
+      v-if="error.request"
+      :value="error.request.response"
+    ></pretty-print>
+
+    <NuxtLink to="/search">
+      Back to search
     </NuxtLink>
   </v-app>
 </template>
@@ -21,6 +38,10 @@ export default {
       default: null
     }
   },
+  components: {
+    PrettyPrint: () => import('@/components/pretty-print')
+  },
+
   data() {
     return {
       pageNotFound: '404 Not Found',
@@ -33,6 +54,9 @@ export default {
     return {
       title
     }
+  },
+  mounted() {
+    // console.log(this.error)
   }
 }
 </script>

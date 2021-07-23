@@ -1,26 +1,27 @@
 <template>
   <div>
-    <ArtifactCustom :record="emptyArtifact"></ArtifactCustom>
+    <KGArtifactEdit :record="emptyArtifact" create />
   </div>
 </template>
 
 <script>
-import ArtifactCustom from '~/components/ArtifactCustom'
-
 export default {
   components: {
-    ArtifactCustom
+    KGArtifactEdit: () => import('@/components/KGArtifactEdit')
   },
   data() {
     return {
-        emptyArtifact: {
-            artifact: {
-                tags: [],
-                relationships: [],
-                files: [],
-                meta: [],
-            }
+      emptyArtifact: {
+        artifact: {
+          title: '',
+          description: '',
+          url: '',
+          tags: [],
+          relationships: [],
+          files: [],
+          meta: []
         }
+      }
     }
   }
 }
