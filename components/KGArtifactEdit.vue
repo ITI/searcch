@@ -478,7 +478,16 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn small color="green" dark @click="save()">
+          <v-btn
+            small
+            color="green"
+            :disabled="disabled"
+            dark
+            @click="
+              save()
+              disabled = true
+            "
+          >
             Save
           </v-btn>
 
@@ -562,6 +571,7 @@ export default {
       schemaLoaded: false,
       valid: false,
       dialog: false,
+      disabled: false,
       artifactdialog: false,
       search: '',
       possibleBadges: [],
