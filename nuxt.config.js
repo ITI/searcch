@@ -19,7 +19,7 @@ export default {
       // Doc: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html
       { property: 'twitter:card', content: 'summary' },
       { property: 'twitter:site', value: '@SEARCCH_HUB' },
-      { property: 'twitter:creator', value: '@SEARCCH_HUB' },
+      { property: 'twitter:creator', value: '@timyardley' },
 
       // OpenGraph Meta
       // Doc: http://ogp.me/
@@ -118,7 +118,8 @@ export default {
           process.env.PRODUCTION == 'true'
             ? process.env.KG_API_KEY
             : process.env.KG_DEV_API_KEY
-      }
+      },
+      changeOrigin: true
     },
     '/avatar/': { target: 'https://www.gravatar.com/' }
   },
@@ -153,7 +154,7 @@ export default {
     transpile: [/^vuetify/]
   },
   router: {
-    // middleware: 'auth'
+    // middleware: 'auth',
     mode: 'history'
   },
   auth: {
