@@ -35,6 +35,7 @@
                       dense
                       hover
                       size="32"
+                      required
                     ></v-rating>
                   </v-col>
                   <v-col cols="12">
@@ -42,6 +43,7 @@
                       label="Review"
                       placeholder="Add review..."
                       v-model="comment"
+                      required
                     >
                     </v-textarea>
                   </v-col>
@@ -110,7 +112,9 @@ export default {
       userid: state => state.user.userid
     }),
     formCheck() {
-      if (this.rating == 0 && this.comment == '') return false
+      if (this.rating == 0 || this.comment === '') {
+        return false
+      }
       return true
     },
     alreadyCommented() {
@@ -145,11 +149,13 @@ export default {
           this.$store.dispatch('artifacts/fetchArtifact', {
             id: this.$route.params.id
           })
+
+          this.rating = 0
+          if (typeof this.$refs.comment !== 'undefined') {
+            this.$refs.comment.reset()
+          }
+        } else {
         }
-        if (typeof this.$refs.comment !== 'undefined') {
-          this.$refs.comment.reset()
-        }
-        this.rating = 0
       }
     }
   },
