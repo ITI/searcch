@@ -40,7 +40,12 @@
             message:
             {{ artifact.message }}
           </v-card-text>
-          <v-card-text v-html="logMessage"> log: </v-card-text>
+          log:
+          <v-textarea
+            auto-grow
+            readonly
+            :value="this.artifact.log"
+          ></v-textarea>
         </v-col>
       </v-row>
       <v-card-actions>
@@ -139,7 +144,7 @@ export default {
       return undefined
     },
     logMessage() {
-      return this.artifact.log.replace(/\\n|\\r|\\n\\r|\\r/g, '<br />')
+      return this.artifact.log.replace(/\n|\r|\n\r|\r/g, '<br />')
     }
   },
   methods: {
