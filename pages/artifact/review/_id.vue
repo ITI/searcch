@@ -127,20 +127,18 @@ export default {
       } else {
         if (this.rating && this.comment) {
           let rating_payload = {
-            token: this.$auth.getToken('github'),
-            userid: this.userid,
             rating: this.rating
           }
-          await this.$ratingsEndpoint.update(
+          // FIXME: backend API
+          await this.$ratingsEndpoint.post(
             this.artifact.artifact.id,
             rating_payload
           )
           let comment_payload = {
-            review: this.comment,
-            token: this.$auth.getToken('github'),
-            userid: this.userid
+            review: this.comment
           }
-          await this.$reviewsEndpoint.update(
+          // FIXME: backend API
+          await this.$reviewsEndpoint.post(
             this.artifact.artifact.id,
             comment_payload
           )
@@ -148,7 +146,9 @@ export default {
             id: this.$route.params.id
           })
         }
-        this.$refs.comment.reset()
+        if (typeof this.$refs.comment !== 'undefined') {
+          this.$refs.comment.reset()
+        }
         this.rating = 0
       }
     }

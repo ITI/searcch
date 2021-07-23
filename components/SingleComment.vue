@@ -102,33 +102,25 @@ export default {
     async saveReview() {
       this.editing = false
       let rating_payload = {
-        token: this.$auth.getToken('github'),
-        userid: this.userid,
         rating: this.rating_local
       }
+
       await this.$ratingsEndpoint.update(this.$route.params.id, rating_payload)
       let comment_payload = {
-        token: this.$auth.getToken('github'),
-        userid: this.userid,
         review: this.review_local,
         reviewid: this.id
       }
-      await this.$reviewsEndpoint.update(this.$route.params.id, comment_payload)
+      // FIXME: backend API
+      await this.$reviewsEndpoint.post(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {
         id: this.$route.params.id
       })
     },
     async deleteReview() {
       if (!confirm('Are you sure you want to delete this review?')) return
-      let rating_payload = {
-        token: this.$auth.getToken('github'),
-        userid: this.userid
-      }
-      await this.$ratingsEndpoint.remove(this.$route.params.id, rating_payload)
+      await this.$ratingsEndpoint.delete(this.$route.params.id)
       let comment_payload = {
-        token: this.$auth.getToken('github'),
-        reviewid: this.id,
-        userid: this.userid
+        reviewid: this.id
       }
       await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {

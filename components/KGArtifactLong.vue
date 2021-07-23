@@ -384,14 +384,11 @@ export default {
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
-        let payload = {
-          token: this.$auth.getToken('github'),
-          userid: this.userid
-        }
         if (action) {
-          this.$favoritesEndpoint.update(this.record.artifact.id, payload)
+          // FIXME: backend API
+          this.$favoritesEndpoint.post(this.record.artifact.id, {})
         } else {
-          this.$favoritesEndpoint.remove(this.record.artifact.id, payload)
+          this.$favoritesEndpoint.delete(this.record.artifact.id)
         }
       }
     },
