@@ -4,6 +4,7 @@
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
+      permanent
       fixed
       app
     >
@@ -16,7 +17,12 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-tooltip right>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-on="on">{{ item.icon }}</v-icon>
+              </template>
+              <span>{{ item.title }}</span>
+            </v-tooltip>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -33,7 +39,12 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-tooltip right>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-on="on">{{ item.icon }}</v-icon>
+              </template>
+              <span>{{ item.title }}</span>
+            </v-tooltip>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
