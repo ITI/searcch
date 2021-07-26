@@ -77,7 +77,7 @@
           >
             <v-img
               src="https://demos.creative-tim.com/vue-material-dashboard/img/marc.aba54d65.jpg"
-            />
+            ></v-img>
           </v-avatar>
           <v-card-text v-if="user" class="text-center">
             <h6 class="overline mb-3">

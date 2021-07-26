@@ -4,7 +4,7 @@
       <v-row v-for="artifact in imports" :key="artifact.id">
         <v-col>
           <LazyHydrate when-visible>
-            <ArtifactImportView :artifact="artifact" />
+            <ArtifactImportView :artifact="artifact"></ArtifactImportView>
           </LazyHydrate>
         </v-col>
       </v-row>

@@ -151,7 +151,7 @@
             max-height="100"
             max-width="100"
             :src="b.badge.image_url"
-          />
+          ></v-img>
           <a :href="b.badge.url" target="_blank">
             {{ b.badge.title }}
           </a>

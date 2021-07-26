@@ -15,7 +15,7 @@
       <v-img
         v-bind="attrs"
         gradient="to top, rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)"
-      />
+      ></v-img>
     </template>
 
     <v-list-item two-line>

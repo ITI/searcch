@@ -2,12 +2,12 @@
   <div v-if="artifact.artifact">
     <span v-if="!edit">
       <LazyHydrate when-visible>
-        <KGArtifactLong :record="artifact" />
+        <KGArtifactLong :record="artifact"></KGArtifactLong>
       </LazyHydrate>
     </span>
     <span v-else>
       <LazyHydrate when-visible>
-        <KGArtifactEdit :record="artifact" />
+        <KGArtifactEdit :record="artifact"></KGArtifactEdit>
       </LazyHydrate>
     </span>
   </div>
