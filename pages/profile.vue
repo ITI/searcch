@@ -16,8 +16,12 @@
                 <h6 class="overline mb-3">
                   {{ user.name }}
                 </h6>
-                <h6 class="overline mb-3" v-if="userAffiliation">
-                  {{ userAffiliation }}
+                <h6
+                  class="overline mb-3"
+                  v-if="userAffiliation"
+                  v-for="affil in userAffiliation"
+                >
+                  <div v-if="affil.org">{{ affil.org.name }}</div>
                 </h6>
 
                 <p class="font-weight-light">
@@ -94,13 +98,17 @@
                     <v-col cols="12" md="12">
                       <v-combobox
                         label="Affiliation"
+                        multiple
                         small-chips
+                        deletable-chips
                         persistent-hint
-                        clearable
                         :items="orgNames"
                         v-model="userAffiliation"
                         hint="Select applicable org from the list or type in your own"
                         :search-input.sync="search"
+                        item-text="org.name"
+                        item-value="org.name"
+                        return-object
                       >
                         <template v-slot:no-data>
                           <v-list-item>
@@ -326,7 +334,7 @@ export default {
       // owned_artifacts: [],
       schema: {},
       schemaLoaded: false,
-      userAffiliation: null,
+      userAffiliation: [],
       search: null
     }
   },
@@ -359,13 +367,29 @@ export default {
       } else return []
     }
   },
+  watch: {
+    userAffiliation: function(newValue, oldValue) {
+      // delete case
+      let diff = oldValue.filter(function(obj) {
+        return newValue.indexOf(obj) == -1
+      })
+      if (diff.length > 0) {
+        diff.forEach(affil => {
+          if (typeof affil === 'object') {
+            this.$userAffiliationEndpoint.delete(affil.id)
+          }
+        })
+        diff = []
+      }
+    }
+  },
   async mounted() {
     this.$store.dispatch('user/fetchUser')
     this.$store.dispatch('user/fetchOrgs')
     this.$store.dispatch('user/fetchInterests')
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
-    this.userAffiliation = this.organization ? this.organization[0].name : null
+    this.userAffiliation = this.organization ? this.organization : []
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -392,24 +416,17 @@ export default {
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-        let org =
-          typeof this.userAffiliation !== 'undefined' &&
-          this.userAffiliation.length
-            ? this.orgs.find(o => o.name === this.userAffiliation)
-            : null
-        if (!org) {
-          org =
-            typeof this.userAffiliation !== 'undefined' &&
-            this.userAffiliation.length
-              ? { name: this.userAffiliation, type: 'Institution' }
-              : {}
-        }
-        this.$store.commit('user/SET_USER_ORG', [org])
+
+        this.userAffiliation.forEach(affil => {
+          if (typeof affil === 'string') {
+            this.$userAffiliationsEndpoint.create({
+              org: { name: affil, type: 'Institution' }
+            })
+          }
+        })
 
         this.$userEndpoint.update(this.userid, data)
-        if (org) {
-          this.$userAffiliationsEndpoint.create({ org: org })
-        }
+        this.$store.dispatch('user/fetchUser')
       }
     },
     updateName(e) {

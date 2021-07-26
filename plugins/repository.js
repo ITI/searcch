@@ -4,12 +4,6 @@ export default (ctx, inject) => {
   // And in the Vue instances (this.$repository in your components)
   const repositoryWithAxios = createRepository(ctx.$axios)
 
-  // affiliations
-  inject(
-    'userAffiliationsEndpoint',
-    repositoryWithAxios('kg/' + 'user/affiliations')
-  )
-
   // artifact searching
   inject('artifactsEndpoint', repositoryWithAxios('kg/' + 'artifacts'))
 
@@ -65,6 +59,12 @@ export default (ctx, inject) => {
   inject(
     'userAffiliationsEndpoint',
     repositoryWithAxios('kg/' + 'user/affiliations')
+  )
+
+  // user affiliation modification
+  inject(
+    'userAffiliationEndpoint',
+    repositoryWithAxios('kg/' + 'user/affiliation')
   )
 
   // organization API

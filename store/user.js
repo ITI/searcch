@@ -46,8 +46,8 @@ export const mutations = {
   SET_USER_INTERESTS(state, interests) {
     state.user.research_interests = interests
   },
-  SET_USER_ORG(state, org) {
-    state.organization = org
+  SET_USER_ORGS(state, orgs) {
+    state.organization = orgs
   },
   SET_USER_TOKEN(state, user_token) {
     state.user_token = user_token
@@ -78,7 +78,7 @@ export const actions = {
     a = await this.$userEndpoint.index()
     commit('SET_USER', a.user.person)
     commit('SET_USERID', a.user.id)
-    commit('SET_USER_ORG', a.user.organization)
+    commit('SET_USER_ORGS', a.user.affiliations)
   },
   async setUserToken({ commit }, user_token) {
     commit('SET_USER_TOKEN', user_token)
