@@ -10,7 +10,7 @@
                 class="mx-auto d-block elevation-6"
                 size="130"
               >
-                <v-img :src="gravatarImage(user.email)" />
+                <v-img :src="gravatarImage(user.email)"></v-img>
               </v-avatar>
               <v-card-text v-if="user" class="text-center">
                 <h6 class="overline mb-3">
@@ -392,18 +392,24 @@ export default {
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-        let org = this.userAffiliation.length
-          ? this.orgs.find(o => o.name === this.userAffiliation)
-          : null
+        let org =
+          typeof this.userAffiliation !== 'undefined' &&
+          this.userAffiliation.length
+            ? this.orgs.find(o => o.name === this.userAffiliation)
+            : null
         if (!org) {
-          org = this.userAffiliation.length
-            ? { name: this.userAffiliation, type: 'Institution' }
-            : {}
+          org =
+            typeof this.userAffiliation !== 'undefined' &&
+            this.userAffiliation.length
+              ? { name: this.userAffiliation, type: 'Institution' }
+              : {}
         }
         this.$store.commit('user/SET_USER_ORG', [org])
 
         this.$userEndpoint.update(this.userid, data)
-        if (org) this.$userAffiliationsEndpoint.create({ org: org })
+        if (org) {
+          this.$userAffiliationsEndpoint.create({ org: org })
+        }
       }
     },
     updateName(e) {

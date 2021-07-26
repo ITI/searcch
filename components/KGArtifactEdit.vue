@@ -273,16 +273,23 @@
         <span v-if="artifact_local.relationships">
           <v-chip
             color="primary"
-            v-for="(v, k) in artifact_local.relationships"
-            :key="`rel${k}`"
+            v-for="(rel, index) in artifact_local.relationships"
+            :key="`rel${index}`"
             cols="12"
             class="ma-2"
             label
-            :to="{ path: `/artifact/${v.related_artifact_id}` }"
           >
             <v-icon left>mdi-relation-one-to-one</v-icon>
 
-            {{ v.relation | titlecase }}: {{ v.related_artifact_id }}
+            {{ rel.relation | titlecase }}: {{ rel.related_artifact_id }}
+            <v-icon
+              @click="
+                deleteRelationship(rel.id)
+                artifact_local.relationships.splice(index, 1)
+              "
+              right
+              >mdi-close</v-icon
+            >
           </v-chip>
         </span>
         <v-dialog
@@ -301,7 +308,7 @@
               <v-card-title>
                 <span class="text-h5">Search for Related Artifacts</span>
               </v-card-title>
-              <SearchCard :search="search" related all />
+              <SearchCard :search="search" related all></SearchCard>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
@@ -317,6 +324,7 @@
         </v-dialog>
 
         <v-divider class="mx-4"></v-divider>
+
         <v-card-title class="py-0">Badges</v-card-title>
         <span v-for="(b, index) in artifact_local.badges">
           <v-img
@@ -324,7 +332,7 @@
             max-height="100"
             max-width="100"
             :src="b.badge.image_url"
-          />
+          ></v-img>
           <a :href="b.badge.url" target="_blank">
             {{ b.badge.title }}
           </a>
@@ -478,16 +486,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            small
-            color="green"
-            :disabled="disabled"
-            dark
-            @click="
-              save()
-              disabled = true
-            "
-          >
+          <v-btn small color="green" :disabled="disabled" dark @click="save()">
             Save
           </v-btn>
 
@@ -706,19 +705,24 @@ export default {
     },
     async save() {
       if (!this.valid) return
+      this.disabled = true
       this.artifact_local.tags =
+        typeof this.artifact_local.tags !== 'undefined' &&
         this.artifact_local.tags !== null
           ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
           : []
       this.artifact_local.files =
+        typeof this.artifact_local.files !== 'undefined' &&
         this.artifact_local.files !== null
           ? this.artifact_local.files.concat(this.meta.files)
           : []
       this.artifact_local.affiliations =
+        typeof this.artifact_local.affiliations !== 'undefined' &&
         this.artifact_local.affiliations !== null
           ? this.artifact_local.affiliations.concat(this.meta.creators)
           : []
       this.artifact_local.badges =
+        typeof this.artifact_local.badges !== 'undefined' &&
         this.artifact_local.badges !== null
           ? this.artifact_local.badges.concat(
               zipArray('badge', this.meta.badges)
@@ -748,11 +752,16 @@ export default {
       // console.log('response artifact')
       // console.log(response)
       if (response) this.artifact_local = response.artifact
+      this.disabled = false
       this.snackbar = true
+
       this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
       this.meta.creators = []
       this.meta.badges = []
+      this.meta.languages = []
+      this.meta.relations = []
+
       if (this.create) {
         this.create = false
         this.$router.push(`/artifact/${this.artifact_local.id}?edit=true`)
@@ -793,6 +802,9 @@ export default {
           this.artifactdialog = false
         }
       }
+    },
+    async deleteRelationship(id) {
+      let response = await this.$relationshipEndpoint.delete(id)
     }
   }
 }

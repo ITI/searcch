@@ -22,10 +22,16 @@ export default (ctx, inject) => {
   // import view/modify API
   inject('importEndpoint', repositoryWithAxios('kg/' + 'artifact/import'))
 
-  // add relationship
+  // get relationships
   inject(
     'relationshipsEndpoint',
     repositoryWithAxios('kg/' + 'artifact/relationships')
+  )
+
+  // modify relationship
+  inject(
+    'relationshipEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/relationship')
   )
 
   // badges
