@@ -3,8 +3,8 @@ import Vue from 'vue'
 export const state = () => ({
   user: null,
   userid: null,
-  organization: null,
-  orgs: null,
+  organization: [],
+  orgs: [],
   user_token: null,
   interests: null
 })
@@ -63,8 +63,8 @@ export const mutations = {
   },
   LOGOUT(state) {
     state.user = null
-    state.organization = null
-    state.orgs = null
+    state.organization = []
+    state.orgs = []
     state.interests = null
     state.user_token = null
     state.userid = null
@@ -84,7 +84,7 @@ export const actions = {
     commit('SET_USER_TOKEN', user_token)
   },
   async fetchOrgs({ commit, state }) {
-    if (state.orgs !== null && state.orgs.length > 0) {
+    if (typeof state.orgs === 'object' && state.orgs.length > 0) {
       return
     }
     let a = {}
