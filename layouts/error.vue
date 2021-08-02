@@ -57,6 +57,13 @@ export default {
   },
   mounted() {
     // console.log(this.error)
+    if (
+      this.error.statusCode === 401 &&
+      this.error.message === 'invalid session token'
+    ) {
+      console.log('invalid session token')
+      this.$router.push('/login')
+    }
   }
 }
 </script>
