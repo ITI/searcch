@@ -416,7 +416,6 @@ export default {
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-
         this.userAffiliation.forEach(affil => {
           if (typeof affil === 'string') {
             this.$userAffiliationsEndpoint.create({
@@ -426,7 +425,6 @@ export default {
         })
 
         this.$userEndpoint.update(this.userid, data)
-        this.$store.dispatch('user/fetchUser')
       }
     },
     updateName(e) {
