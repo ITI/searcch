@@ -746,33 +746,40 @@ export default {
         typeof this.artifact_local.tags !== 'undefined' &&
         this.artifact_local.tags !== null
           ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
-          : []
+          : zipArray('tag', this.meta.keywords)
       this.artifact_local.files =
         typeof this.artifact_local.files !== 'undefined' &&
         this.artifact_local.files !== null
           ? this.artifact_local.files.concat(this.meta.files)
-          : []
+          : this.meta.files
       this.artifact_local.affiliations =
         typeof this.artifact_local.affiliations !== 'undefined' &&
         this.artifact_local.affiliations !== null
           ? this.artifact_local.affiliations.concat(this.meta.creators)
-          : []
+          : this.meta.creators
       this.artifact_local.badges =
         typeof this.artifact_local.badges !== 'undefined' &&
         this.artifact_local.badges !== null
           ? this.artifact_local.badges.concat(
               zipArray('badge', this.meta.badges)
             )
-          : []
+          : zipArray('badge', this.meta.badges)
 
       let langs =
         this.artifact_local.meta !== null
           ? this.artifact_local.meta.find(o => o.name == 'languages')
           : null
-      if (langs) langs.value = this.meta.languages.join(',')
+      if (langs) {
+        langs.value = this.meta.languages.join(',')
+      } else {
+        this.artifact_local.meta.push({
+          name: 'languages',
+          value: this.meta.languages.join(',')
+        })
+      }
 
-      // console.log('local artifact')
-      // console.log(this.artifact_local)
+      console.log('local artifact')
+      console.log(this.artifact_local)
 
       let response = null
       if (this.create) {
