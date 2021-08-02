@@ -1,13 +1,15 @@
 <template>
   <div v-if="artifact_local">
-    <v-card class="mx-auto my-2">
-      <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
-      <v-card-text>
-        <a target="_blank" :href="artifact_local.url">
-          {{ artifact_local.url }}
-        </a>
-      </v-card-text>
-    </v-card>
+    <div>
+      <v-card class="mx-auto my-2">
+        <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
+        <v-card-text>
+          <a target="_blank" :href="artifact_local.url">
+            {{ artifact_local.url }}
+          </a>
+        </v-card-text>
+      </v-card>
+    </div>
     <v-form v-model="valid">
       <v-card class="mx-auto my-2">
         <v-card-title
@@ -52,46 +54,50 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Roles</v-card-title>
-
-        <v-chip
-          color="primary"
-          v-for="(a, index) in artifact_local.affiliations"
-          :key="a.id"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <span>
-            <v-avatar left>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-avatar>
-            {{ a.affiliation.person.name }} ({{ a.roles }})
-            <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </span>
-        </v-chip>
-
-        <v-chip
-          color="primary"
-          v-for="(item, index) in meta.creators"
-          :key="`c${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <span>
-            <v-avatar left>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-avatar>
-            {{ meta.creators[index].affiliation.person.name }} ({{
-              meta.creators[index].roles
-            }})
-            <v-icon @click="meta.creators.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </span>
-        </v-chip>
+        <div>
+          <v-chip
+            color="primary"
+            v-for="(a, index) in artifact_local.affiliations"
+            :key="a.id"
+            cols="12"
+            class="ma-2"
+            label
+          >
+            <span>
+              <v-avatar left>
+                <v-icon>mdi-account-circle</v-icon>
+              </v-avatar>
+              {{ a.affiliation.person.name }} ({{ a.roles }})
+              <v-icon
+                @click="artifact_local.affiliations.splice(index, 1)"
+                right
+                >mdi-close</v-icon
+              >
+            </span>
+          </v-chip>
+        </div>
+        <div>
+          <v-chip
+            color="primary"
+            v-for="(item, index) in meta.creators"
+            :key="`c${index}`"
+            cols="12"
+            class="ma-2"
+            label
+          >
+            <span>
+              <v-avatar left>
+                <v-icon>mdi-account-circle</v-icon>
+              </v-avatar>
+              {{ meta.creators[index].affiliation.person.name }} ({{
+                meta.creators[index].roles
+              }})
+              <v-icon @click="meta.creators.splice(index, 1)" right
+                >mdi-close</v-icon
+              >
+            </span>
+          </v-chip>
+        </div>
         <v-dialog
           transition="dialog-bottom-transition"
           max-width="600px"
@@ -180,118 +186,123 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Keywords</v-card-title>
-        <span v-if="artifact_local.tags.length">
+        <div>
+          <span v-if="artifact_local.tags.length">
+            <v-chip
+              color="primary"
+              v-for="(t, index) in artifact_local.tags"
+              :key="`tag${index}`"
+              cols="12"
+              class="ma-2"
+              label
+            >
+              <v-avatar left>
+                <v-icon>mdi-tag-outline</v-icon>
+              </v-avatar>
+              {{ t.tag }}
+              <v-icon @click="artifact_local.tags.splice(index, 1)" right
+                >mdi-close</v-icon
+              >
+            </v-chip>
+          </span>
+        </div>
+        <div>
           <v-chip
             color="primary"
-            v-for="(t, index) in artifact_local.tags"
-            :key="`tag${index}`"
+            v-for="(item, index) in meta.keywords"
+            :key="`k${index}`"
+            cols="12"
+            class="ma-2"
+            label
+          >
+            <v-icon left>mdi-tag-outline</v-icon>
+            <v-text-field
+              solo
+              dark
+              placeholder="Enter Keyword"
+              v-model="meta.keywords[index]"
+              hide-details
+              class="m-0"
+              background-color="#00476B"
+              >{{ meta.keywords[index] }}</v-text-field
+            >
+            <v-icon @click="meta.keywords.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-chip>
+          <v-btn
+            @click="meta.keywords.push('')"
+            class="success ml-2 mb-2"
+            fab
+            small
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </div>
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-title class="py-0">Languages</v-card-title>
+        <div>
+          <v-chip
+            color="primary"
+            v-for="(l, index) in meta.languages"
+            :key="`lang${index}`"
             cols="12"
             class="ma-2"
             label
           >
             <v-avatar left>
-              <v-icon>mdi-tag-outline</v-icon>
+              <v-icon>{{ iconImage('code') }}</v-icon>
             </v-avatar>
-            {{ t.tag }}
-            <v-icon @click="artifact_local.tags.splice(index, 1)" right
+            <v-text-field
+              solo
+              dark
+              placeholder="Enter Keyword"
+              v-model="meta.languages[index]"
+              hide-details
+              class="m-0"
+              background-color="#00476B"
+              >{{ meta.languages[index] }}</v-text-field
+            >
+            <v-icon @click="meta.languages.splice(index, 1)" right
               >mdi-close</v-icon
             >
           </v-chip>
-        </span>
-
-        <v-chip
-          color="primary"
-          v-for="(item, index) in meta.keywords"
-          :key="`k${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-icon left>mdi-tag-outline</v-icon>
-          <v-text-field
-            solo
-            dark
-            placeholder="Enter Keyword"
-            v-model="meta.keywords[index]"
-            hide-details
-            class="m-0"
-            background-color="#00476B"
-            >{{ meta.keywords[index] }}</v-text-field
+          <v-btn
+            @click="meta.languages.push('')"
+            class="success ml-2 mb-2"
+            fab
+            small
+            ><v-icon>mdi-plus</v-icon></v-btn
           >
-          <v-icon @click="meta.keywords.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </v-chip>
-        <v-btn
-          @click="meta.keywords.push('')"
-          class="success ml-2 mb-2"
-          fab
-          small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
-
-        <v-divider class="mx-4"></v-divider>
-
-        <v-card-title class="py-0">Languages</v-card-title>
-
-        <v-chip
-          color="primary"
-          v-for="(l, index) in meta.languages"
-          :key="`lang${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-avatar left>
-            <v-icon>{{ iconImage('code') }}</v-icon>
-          </v-avatar>
-          <v-text-field
-            solo
-            dark
-            placeholder="Enter Keyword"
-            v-model="meta.languages[index]"
-            hide-details
-            class="m-0"
-            background-color="#00476B"
-            >{{ meta.languages[index] }}</v-text-field
-          >
-          <v-icon @click="meta.languages.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </v-chip>
-        <v-btn
-          @click="meta.languages.push('')"
-          class="success ml-2 mb-2"
-          fab
-          small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
-
+        </div>
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Related</v-card-title>
-        <span v-if="artifact_local.relationships">
-          <v-chip
-            color="primary"
-            v-for="(rel, index) in artifact_local.relationships"
-            :key="`rel${index}`"
-            cols="12"
-            class="ma-2"
-            label
-          >
-            <v-icon left>mdi-relation-one-to-one</v-icon>
-
-            {{ rel.relation | titlecase }}: {{ rel.related_artifact_id }}
-            <v-icon
-              @click="
-                deleteRelationship(rel.id)
-                artifact_local.relationships.splice(index, 1)
-              "
-              right
-              >mdi-close</v-icon
+        <div>
+          <span v-if="artifact_local.relationships">
+            <v-chip
+              color="primary"
+              v-for="(rel, index) in artifact_local.relationships"
+              :key="`rel${index}`"
+              cols="12"
+              class="ma-2"
+              label
             >
-          </v-chip>
-        </span>
+              <v-icon left>mdi-relation-one-to-one</v-icon>
+
+              {{ rel.relation | titlecase }}: {{ rel.related_artifact_id }}
+              <v-icon
+                @click="
+                  deleteRelationship(rel.id)
+                  artifact_local.relationships.splice(index, 1)
+                "
+                right
+                >mdi-close</v-icon
+              >
+            </v-chip>
+          </span>
+        </div>
         <v-dialog
           transition="dialog-bottom-transition"
           persistent
@@ -326,55 +337,64 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Badges</v-card-title>
-        <span v-for="(b, index) in artifact_local.badges">
-          <v-img
-            :key="`badgeimg${index}`"
-            max-height="100"
-            max-width="100"
-            :src="b.badge.image_url"
-          ></v-img>
-          <a :href="b.badge.url" target="_blank">
-            {{ b.badge.title }}
-          </a>
-          <v-icon @click="artifact_local.badges.splice(index, 1)" right
-            >mdi-close</v-icon
+        <div>
+          <span v-for="(b, index) in artifact_local.badges">
+            <v-img
+              :key="`badgeimg${index}`"
+              max-height="100"
+              max-width="100"
+              :src="b.badge.image_url"
+            ></v-img>
+            <a :href="b.badge.url" target="_blank">
+              {{ b.badge.title }}
+            </a>
+            <v-icon @click="artifact_local.badges.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </span>
+        </div>
+        <div>
+          <v-chip
+            v-for="(item, index) in meta.badges"
+            :key="`newbadge${index}`"
+            cols="12"
+            class="ma-2"
+            label
           >
-        </span>
+            <v-icon left>mdi-tag-outline</v-icon>
 
-        <v-chip
-          v-for="(item, index) in meta.badges"
-          :key="`newbadge${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-icon left>mdi-tag-outline</v-icon>
-
-          <v-select
-            label="Badges"
-            v-bind:items="possibleBadges"
-            v-model="meta.badges[index]"
-            item-text="id"
-            item-value="title"
-            return-object
+            <v-select
+              label="Badges"
+              v-bind:items="possibleBadges"
+              v-model="meta.badges[index]"
+              item-text="id"
+              item-value="title"
+              return-object
+            >
+              <template slot="item" slot-scope="data">
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-html="`${data.item.organization} - ${data.item.title}`"
+                  >
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <template slot="selection" slot-scope="data">
+                {{ data.item.organization }} - {{ data.item.title }}
+              </template>
+            </v-select>
+            <v-icon @click="meta.badges.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-chip>
+          <v-btn
+            @click="meta.badges.push('')"
+            class="success ml-2 mb-2"
+            fab
+            small
+            ><v-icon>mdi-plus</v-icon></v-btn
           >
-            <template slot="item" slot-scope="data">
-              <v-list-item-content>
-                <v-list-item-title
-                  v-html="`${data.item.organization} - ${data.item.title}`"
-                >
-                </v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <template slot="selection" slot-scope="data">
-              {{ data.item.organization }} - {{ data.item.title }}
-            </template>
-          </v-select>
-          <v-icon @click="meta.badges.splice(index, 1)" right>mdi-close</v-icon>
-        </v-chip>
-        <v-btn @click="meta.badges.push('')" class="success ml-2 mb-2" fab small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
+        </div>
 
         <v-divider class="mx-4"></v-divider>
 
