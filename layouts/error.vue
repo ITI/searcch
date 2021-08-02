@@ -23,8 +23,8 @@
       :value="error.request.response"
     ></pretty-print>
 
-    <NuxtLink to="/search">
-      Back to search
+    <NuxtLink to="/">
+      Start Over
     </NuxtLink>
   </v-app>
 </template>
