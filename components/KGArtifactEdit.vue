@@ -462,45 +462,61 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Files</v-card-title>
+
         <span v-if="artifact_local.files">
-          <v-card-text
+          <v-list-item
             v-for="(f, index) in artifact_local.files"
             :key="`file${index}`"
-            cols="12"
+            dense
           >
-            <div>
-              <v-icon left>mdi-file</v-icon>
-              <a target="_blank" :href="f.url">{{ f.url }}</a>
-              &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
-              {{ f.size ? convertSize(f.size) : 'unknown' }})
-              <v-icon @click="artifact_local.files.splice(index, 1)" right
-                >mdi-close</v-icon
+            <v-list-group :value="true" no-action sub-group>
+              <template v-slot:activator>
+                <a @click.stop target="_blank" :href="f.url">{{ f.url }}</a>
+                &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
+                {{ f.size ? convertSize(f.size) : 'unknown' }})
+              </template>
+              <v-list-item
+                v-for="(fm, indexm) in f.members"
+                :key="`mem${indexm}`"
+                dense
               >
-            </div>
-          </v-card-text>
-          <v-card-text
-            v-for="(f, index) in meta.files"
-            :key="`newfile${index}`"
-            cols="12"
-          >
-            <v-textarea
-              outlined
-              height="10"
-              label="File URL"
-              placeholder="Enter File URL"
-              v-model="f.url"
-              prepend-icon="mdi-file"
-              append-outer-icon="mdi-close"
-              @click:append-outer="meta.files.splice(index, 1)"
-            ></v-textarea>
-          </v-card-text>
-          <v-btn
-            @click="meta.files.push({ url: '', filetype: 'unknown' })"
-            class="success ml-2 mb-2"
-            fab
-            small
-            ><v-icon>mdi-plus</v-icon></v-btn
-          >
+                <a target="_blank" :href="fm.html_url || fm.download_url">{{
+                  fm.pathname || fm.name || fm.html_url || fm.download_url
+                }}</a>
+                &nbsp; (type: {{ fm.filetype ? fm.filetype : 'unknown' }}, size:
+                {{ fm.size ? convertSize(fm.size) : 'unknown' }})
+              </v-list-item>
+            </v-list-group>
+            <v-icon @click="artifact_local.files.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-list-item>
+
+          <div>
+            <v-card-text
+              v-for="(f, index) in meta.files"
+              :key="`newfile${index}`"
+              cols="12"
+            >
+              <v-textarea
+                outlined
+                height="10"
+                label="File URL"
+                placeholder="Enter File URL"
+                v-model="f.url"
+                prepend-icon="mdi-file"
+                append-outer-icon="mdi-close"
+                @click:append-outer="meta.files.splice(index, 1)"
+              ></v-textarea>
+            </v-card-text>
+            <v-btn
+              @click="meta.files.push({ url: '', filetype: 'unknown' })"
+              class="success ml-2 mb-2"
+              fab
+              small
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
+          </div>
         </span>
         <span class="ml-4 mb-2" v-else>No files found by importer</span>
 
