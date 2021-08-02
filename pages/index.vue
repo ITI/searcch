@@ -60,8 +60,9 @@
             </v-card-title>
             <v-card-text>
               <p>
-                There are three navigation tabs on the left hand pane: Search,
-                Favorites, and Import.
+                There are four navigation tabs on the left hand pane: Search
+                Artifacts, Favorite Artifacts, Submit Artifact, and Manage
+                Account.
               </p>
               <p>
                 The Search page allows users to perform keyword searches to find
@@ -77,12 +78,12 @@
                 artifact.
               </p>
               <p>
-                The Imports page is used to import your own artifacts into the
-                hub. To import an artifact, it must first be published on the
-                Internet. Provide the artifact URL, and our intelligent import
-                tool will prepare the artifact for review and publishing. For
-                the alpha release, github, ACM digital library, ieeexplore, and
-                Zenodo are the only supported internet repositories.
+                The Submit Artifact page is used to import your own artifacts
+                into the hub. To import an artifact, it must first be published
+                on the Internet. Provide the artifact URL, and our intelligent
+                import tool will prepare the artifact for review and publishing.
+                For the beta release, github, ACM digital library, ieeexplore,
+                and Zenodo are the only supported internet repositories.
               </p>
               <p>
                 Please provide comments and report bugs using the Send Us
