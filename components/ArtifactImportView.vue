@@ -49,12 +49,16 @@
         </v-col>
       </v-row>
       <v-card-actions>
+        <v-btn v-if="artifact.artifact_id" text @click="deleteArtifact()">
+          Delete
+        </v-btn>
+
         <v-btn v-if="artifact.artifact_id || archived" text @click="archive()">
           Archive
         </v-btn>
 
         <v-btn v-else text @click="deleteImport()">
-          Delete
+          Delete Import
         </v-btn>
 
         <v-btn
@@ -145,6 +149,12 @@ export default {
     }
   },
   methods: {
+    async deleteArtifact() {
+      let response = await this.$artifactRecordEndpoint.delete(
+        this.artifact.artifact_id
+      )
+      this.updateImports()
+    },
     async deleteImport() {
       // artifact.id here is the import ID
       let response = await this.$importEndpoint.delete(this.artifact.id)
