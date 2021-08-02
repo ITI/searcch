@@ -24,30 +24,35 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>
-        <v-row class="mx-1"
-          >Description<v-spacer></v-spacer
-          ><v-btn v-if="isOverflow" @click="expanded = !expanded">{{
-            !expanded ? 'Expand' : 'Collapse'
-          }}</v-btn></v-row
-        >
-      </v-card-title>
+      <v-card-title>Description</v-card-title>
 
       <v-card-text ref="descDiv" :class="hideOverflow">
-        <vue-markdown
-          v-if="record.artifact.type === 'code'"
-          :source="markdown"
-        ></vue-markdown>
-        <div v-else v-html="sanitizedDescription"></div>
+        <div v-html="sanitizedDescription"></div>
       </v-card-text>
-      <v-btn
-        elevation="0"
-        tile
-        v-if="isOverflow"
-        @click="expanded = !expanded"
-        block
-        ><v-icon>{{ overflowIcon }}</v-icon></v-btn
-      >
+
+      <div v-if="record.artifact.type === 'code'">
+        <v-divider class="mx-4"></v-divider>
+        <v-card-title>
+          <v-row class="mx-1"
+            >Readme<v-spacer></v-spacer
+            ><v-btn v-if="isOverflow" @click="expanded = !expanded">{{
+              !expanded ? 'Expand' : 'Collapse'
+            }}</v-btn></v-row
+          >
+        </v-card-title>
+        <v-card-text>
+          <vue-markdown :source="markdown"></vue-markdown>
+        </v-card-text>
+        <v-btn
+          elevation="0"
+          tile
+          v-if="isOverflow"
+          @click="expanded = !expanded"
+          block
+          ><v-icon>{{ overflowIcon }}</v-icon></v-btn
+        >
+      </div>
+
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
