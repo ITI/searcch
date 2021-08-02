@@ -4,13 +4,14 @@
       <v-text-field
         light
         solo
-        placeholder="Type keyword..."
+        placeholder="Type search term..."
         v-model="search"
         loading="true"
         clearable
         class="rounded-0"
         hide-details
         @keydown="onChange"
+        @change="onSubmit"
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen">
