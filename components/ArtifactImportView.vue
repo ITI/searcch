@@ -53,7 +53,7 @@
           Archive
         </v-btn>
 
-        <v-btn v-else text @click="cancel()">
+        <v-btn v-else text @click="deleteImport()">
           Delete
         </v-btn>
 
@@ -145,7 +145,8 @@ export default {
     }
   },
   methods: {
-    async cancel() {
+    async deleteImport() {
+      // artifact.id here is the import ID
       let response = await this.$importEndpoint.delete(this.artifact.id)
       this.updateImports()
     },
