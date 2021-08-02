@@ -778,8 +778,8 @@ export default {
         })
       }
 
-      console.log('local artifact')
-      console.log(this.artifact_local)
+      // console.log('local artifact')
+      // console.log(this.artifact_local)
 
       let response = null
       if (this.create) {
