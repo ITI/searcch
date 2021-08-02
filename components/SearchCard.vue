@@ -14,7 +14,7 @@
         @change="onSubmit"
       >
       </v-text-field>
-      <v-expansion-panels v-model="adopen">
+      <v-expansion-panels v-model="adopen" multiple>
         <v-expansion-panel class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -146,7 +146,7 @@ export default {
       searchMessage: '',
       searchInterval: null,
       submitted: false,
-      adopen: false,
+      adopen: [0],
       advanced: {
         types: ['dataset', 'code'],
         author: '',
@@ -212,6 +212,7 @@ export default {
   },
   methods: {
     async onSubmit() {
+      console.log(this.adopen)
       this.submitted = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'
