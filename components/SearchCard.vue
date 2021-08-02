@@ -10,6 +10,7 @@
         clearable
         class="rounded-0"
         hide-details
+        @keydown="onChange"
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen">
@@ -88,10 +89,10 @@
       :limit="limit"
       v-bind:related="related"
     ></ArtifactList>
-    <span v-if="artifacts.length == 0 && searchLoading == true">{{
+    <span v-if="artifacts.length == 0 && search !== ''">{{
       searchMessage
     }}</span>
-    <span v-if="artifacts.length == 0 && searchLoading == false"
+    <span v-if="!searchLoading && artifacts.length == 0 && search === ''"
       ><h3>Type a search term into the input above and press Enter</h3></span
     >
     <v-btn
@@ -141,9 +142,9 @@ export default {
       limit: 20,
       page: 1,
       search: '',
-      searchLoading: false,
-      searchMessage: 'Searching...',
+      searchMessage: '',
       searchInterval: null,
+      submitted: false,
       adopen: false,
       advanced: {
         types: ['dataset', 'code'],
@@ -186,7 +187,8 @@ export default {
   computed: {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
-      search_init: state => state.artifacts.search
+      search_init: state => state.artifacts.search,
+      searchLoading: state => state.artifacts.loading
     }),
     allArtifacts() {
       return this.advanced.types.length === this.types.length
@@ -209,10 +211,10 @@ export default {
   },
   methods: {
     async onSubmit() {
-      this.searchLoading = true
+      this.submitted = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
-      this.searchMessage = 'Loading...'
-      this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the loading... message is shown
+      this.searchMessage = 'Searching...'
+      this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the Searching... message is shown
       let payload = {
         keywords: this.search,
         page: this.page,
@@ -222,9 +224,14 @@ export default {
 
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
-        this.searchMessage = 'No results found'
-        this.searchLoading = false
-      }, 5000)
+        if (!this.searchLoading) {
+          this.searchMessage = 'No results found'
+        }
+      }, 3000)
+      this.submitted = false
+    },
+    onChange() {
+      this.searchMessage = ''
     },
     toggle() {
       this.$nextTick(() => {
@@ -245,6 +252,16 @@ export default {
   watch: {
     page() {
       this.onSubmit()
+    },
+    searchLoading(val) {
+      if (val) {
+        this.searchMessage = 'Searching...'
+      } else if (this.search !== '') {
+        if (this.searchInterval != null) clearTimeout(this.searchInterval)
+        this.searchMessage = 'No results found'
+      } else {
+        this.searchMessage = ''
+      }
     }
   }
 }
