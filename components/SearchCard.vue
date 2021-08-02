@@ -142,7 +142,7 @@ export default {
       page: 1,
       search: '',
       searchLoading: false,
-      searchMessage: 'Loading...',
+      searchMessage: 'Searching...',
       searchInterval: null,
       adopen: false,
       advanced: {
