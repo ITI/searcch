@@ -24,6 +24,19 @@ export default {
     Logo: () => import('@/components/Logo'),
     ArtifactList: () => import('@/components/ArtifactList')
   },
+  head() {
+    return {
+      title: 'SEARCCH Favorite Artifacts',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SEARCCH Favorite Artifacts'
+        }
+      ]
+    }
+  },
+
   data() {
     return {
       limit: 20

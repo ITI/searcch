@@ -3,7 +3,7 @@
     <v-main>
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
-          <v-col cols="12" sm="8" md="4">
+          <v-col cols="12" sm="8" md="6">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Login</v-toolbar-title>
@@ -30,6 +30,19 @@ export default {
       }
     }
   },
+  head() {
+    return {
+      title: 'SEARCCH Login Screen',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SEARCCH Login Screen'
+        }
+      ]
+    }
+  },
+
   methods: {
     async userLogin() {
       let response = await this.$auth.loginWith('github')

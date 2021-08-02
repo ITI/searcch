@@ -36,8 +36,6 @@ export default {
     Logo: () => import('@/components/Logo'),
     LazyHydrate: () => import('vue-lazy-hydration')
   },
-  async mounted() {
-    // let emails = await this.$axios.$get("https://api.github.com/user/emails")
-  }
+  async mounted() {}
 }
 </script>

@@ -306,6 +306,18 @@ export default {
   components: {
     LazyHydrate: () => import('vue-lazy-hydration')
   },
+  head() {
+    return {
+      title: 'SEARCCH User Profile',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SEARCCH User Profile'
+        }
+      ]
+    }
+  },
   data() {
     return {
       // TODO: FIXME

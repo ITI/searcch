@@ -100,6 +100,19 @@ export default {
     Logo: () => import('@/components/Logo'),
     ImportList: () => import('@/components/ImportList')
   },
+  head() {
+    return {
+      title: 'SEARCCH Artifact Import',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SEARCCH Hub Artifact Import'
+        }
+      ]
+    }
+  },
+
   data() {
     return {
       importing: false,
