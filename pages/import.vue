@@ -23,29 +23,28 @@
                 <div class="text-h6 pa-12">
                   <p>
                     To start importing, place the URL of an artifact in the
-                    input field and click Start Import
+                    input field and click Start Import.
                   </p>
                   <p></p>
                   <p>
                     Once an import has started, it will show up in your imports
-                    list, below the URL field
+                    list, below the URL field.
                   </p>
                   <p>
                     The importer will have to process through a few stages to
                     get all of the information scraped and formatted properly.
                     Once the progress bar shows the process is complete, you
                     will have the option to view the imported artifact by
-                    clicking Read More
+                    clicking Read More.
                   </p>
                   <p>
-                    We have provided an edit button to show what an editor will
-                    look like for artifacts, but that feature is not currently
-                    available in the beta version
+                    We have provided an edit button to all you to edit the
+                    automated import details.
                   </p>
                   <p>
                     Once you are ready to add your artifact to the list of
                     searchable artifacts, you can click Publish. Press Archive
-                    to hide a completed import from your list
+                    to hide a completed import from your list.
                   </p>
                 </div>
               </v-card-text>
