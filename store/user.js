@@ -73,12 +73,12 @@ export const mutations = {
 
 export const actions = {
   async fetchUser({ commit, state }) {
-    let a = {}
+    let response = {}
     console.log('fetching user')
-    a = await this.$userEndpoint.index()
-    commit('SET_USER', a.user.person)
-    commit('SET_USERID', a.user.id)
-    commit('SET_USER_ORGS', a.user.affiliations)
+    response = await this.$userEndpoint.index()
+    commit('SET_USER', response.user.person)
+    commit('SET_USERID', response.user.id)
+    commit('SET_USER_ORGS', response.user.affiliations)
   },
   async setUserToken({ commit }, user_token) {
     commit('SET_USER_TOKEN', user_token)
@@ -87,22 +87,22 @@ export const actions = {
     if (typeof state.orgs === 'object' && state.orgs.length > 0) {
       return
     }
-    let a = {}
+    let response = {}
     console.log('fetching organizations')
     let payload = {
       verified: 1,
       all: 1
     }
-    a = await this.$organizationEndpoint.index(payload)
-    commit('SET_ORGS', a.organizations)
+    response = await this.$organizationEndpoint.index(payload)
+    commit('SET_ORGS', response.organizations)
   },
   async fetchInterests({ commit, state }) {
-    let a = {}
+    let response = {}
     console.log('fetching interests')
     let payload = {
       all: 1
     }
-    a = await this.$interestsEndpoint.index(payload)
-    commit('SET_INTERESTS', a.research_interests)
+    response = await this.$interestsEndpoint.index(payload)
+    commit('SET_INTERESTS', response.research_interests)
   }
 }
