@@ -57,7 +57,7 @@
         </v-dialog>
       </v-row>
       <v-divider></v-divider><br />
-      Submit the URL below where you artifact is located at:
+      Enter the URL where your artifact is located.
       <v-form v-model="valid">
         <v-row>
           <v-col cols="10">
