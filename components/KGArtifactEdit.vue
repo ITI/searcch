@@ -164,7 +164,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   @click="
-                    meta.creators.push(affiliation)
+                    meta.creators.push(JSON.parse(JSON.stringify(affiliation)))
                     dialog.value = false
                   "
                   class="success ml-2 mb-2"
