@@ -709,7 +709,6 @@ export default {
         return this.affiliationSchema.org.properties.type.enum
       } else return []
     },
-
     published() {
       if (this.artifact_local.publication) return true
       return false
@@ -718,6 +717,11 @@ export default {
   watch: {
     record(val) {
       this.artifact_local = JSON.parse(JSON.stringify(val.artifact))
+      let csv = this.artifact_local.meta.find(o => o.name == 'languages')
+      this.meta.languages = csv ? csv.value.split(',') : []
+      this.meta.keywords = this.getPossibleTags()
+    },
+    artifact_local(val) {
       let csv = this.artifact_local.meta.find(o => o.name == 'languages')
       this.meta.languages = csv ? csv.value.split(',') : []
       this.meta.keywords = this.getPossibleTags()
@@ -808,6 +812,7 @@ export default {
       if (this.create) {
         this.create = false
         this.$router.push(`/artifact/${this.artifact_local.id}?edit=true`)
+      } else {
       }
     },
     iconColor(type) {
