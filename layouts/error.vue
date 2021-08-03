@@ -56,16 +56,14 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.error)
+    console.log(this.error)
     if (
       this.error.statusCode === 401 &&
-      this.error.message === 'invalid session token'
+      this.error.response.data.message === 'invalid session token'
     ) {
       console.log('invalid session token')
       this.$store.commit('user/LOGOUT')
       this.$auth.logout()
-
-      this.$router.push('/login')
     }
   }
 }
