@@ -146,7 +146,6 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
       imports: state => state.artifacts.imports
     })
   },
@@ -155,7 +154,6 @@ export default {
       if (!this.valid) return
       this.importing = true
       let response = await this.$importsEndpoint.create({
-        userid: this.userid,
         url: this.url
       })
       this.updateImports()
@@ -166,24 +164,16 @@ export default {
         }.bind(this),
         3000
       )
+      this.url = undefined
       this.importing = false
     },
     updateImports() {
-      if (this.userid) {
-        this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
-      }
+      this.$store.dispatch('artifacts/fetchImports', {})
       if (
         !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
       ) {
         clearInterval(this.pollingID)
       }
-    }
-  },
-  watch: {
-    userid() {
-      // had to make this because on refresh, userid doesn't update until after the mounted has already run,
-      // but mounted needs to run when switching pages where the userid doesn't update
-      this.updateImports()
     }
   },
   beforeRouteLeave(to, from, next) {

@@ -150,7 +150,6 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {
