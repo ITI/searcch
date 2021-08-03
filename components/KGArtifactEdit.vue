@@ -661,7 +661,6 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
       orgs: state => state.user.orgs
     }),
     orgNames: {
