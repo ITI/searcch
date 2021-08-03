@@ -62,7 +62,7 @@
         </v-btn>
 
         <v-btn
-          v-if="artifact.artifact_id && !published"
+          v-if="artifact.artifact_id"
           :to="{
             path: `/artifact/${artifact.artifact_id}`,
             query: { edit: 'true' }
@@ -78,12 +78,8 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn
-          :disabled="!artifact.artifact_id || published"
-          text
-          @click="publish()"
-        >
-          Publish{{ published ? 'ed' : '' }}
+        <v-btn :disabled="!artifact.artifact_id" text @click="publish()">
+          Publish
         </v-btn>
 
         <v-btn
@@ -99,7 +95,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
@@ -110,42 +105,18 @@ export default {
     }
   },
   data() {
-    return {
-      publish_local: false
-    }
+    return {}
   },
   computed: {
-    ...mapState({
-      userid: state => state.user.userid
-    }),
-    full_artifact() {
-      return this.artifact.artifact
-    },
     artifactType() {
-      if (this.full_artifact) {
-        if (this.full_artifact.type) return this.full_artifact.type
-      }
       if (this.artifact.type == null) return 'Detecting Type...'
       return this.artifact.type
     },
     artifactTitle() {
-      if (this.full_artifact) {
-        if (this.full_artifact.title) return this.full_artifact.title
-      }
       return this.artifact.url
     },
-    published() {
-      if (this.full_artifact) {
-        if (this.full_artifact.publication || this.publish_local) return true
-      }
-      return false
-    },
     archived() {
-      if (this.full_artifact) {
-        if (this.full_artifact.archived) return true
-        else return false
-      }
-      return undefined
+      return this.artifact.archived ? this.artifact.archived : false
     }
   },
   methods: {
@@ -176,7 +147,7 @@ export default {
       if (!confirm('Are you sure you want to publish this artifact?')) return
 
       let response = await this.$artifactRecordEndpoint.update(
-        this.full_artifact.id,
+        this.artifact.artifact_id,
         {
           publication: {}
         }
@@ -185,8 +156,7 @@ export default {
       this.updateImports()
     },
     updateImports() {
-      if (this.userid)
-        this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
+      this.$store.dispatch('artifacts/fetchImports', {})
     },
     iconColor(type) {
       return artifactColor(type)
