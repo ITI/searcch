@@ -18,6 +18,7 @@ export const state = () => ({
   favorites: [],
   favoritesIDs: {},
   imports: [],
+  import: {},
   loading: false
 })
 
@@ -39,6 +40,9 @@ export const getters = {
   },
   imports: state => {
     return state.imports
+  },
+  import: state => {
+    return state.import
   },
   loading: state => {
     return state.loading
@@ -67,6 +71,9 @@ export const mutations = {
   SET_IMPORTS(state, imports) {
     state.imports = imports
   },
+  SET_IMPORT(state, import_) {
+    state.import = import_
+  },
   SET_LOADING(state, loading) {
     state.loading = loading
   }
@@ -76,7 +83,7 @@ export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
     commit('SET_LOADING', true)
     commit('SET_SEARCH', payload.keywords)
-    let response = await this.$artifactsEndpoint.index({
+    let response = await this.$artifactSearchEndpoint.index({
       ...payload
     })
     if (typeof response !== 'undefined') {
@@ -115,6 +122,14 @@ export const actions = {
       if (response.artifact_imports) {
         commit('SET_IMPORTS', response.artifact_imports)
       }
+    }
+    commit('SET_LOADING', false)
+  },
+  async fetchImport({ commit, state }, payload) {
+    commit('SET_LOADING', true)
+    let response = await this.$importEndpoint.show(payload.id)
+    if (typeof response !== 'undefined') {
+      commit('SET_IMPORT', response)
     }
     commit('SET_LOADING', false)
   },

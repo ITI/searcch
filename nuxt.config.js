@@ -67,7 +67,8 @@ export default {
     '~/plugins/base',
     '~/plugins/chartist',
     '~/plugins/components',
-    '~/plugins/sanitize'
+    '~/plugins/sanitize',
+    '~/plugins/moment'
   ],
   /*
    ** Nuxt.js dev-modules

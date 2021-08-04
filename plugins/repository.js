@@ -4,11 +4,14 @@ export default (ctx, inject) => {
   // And in the Vue instances (this.$repository in your components)
   const repositoryWithAxios = createRepository(ctx.$axios)
 
-  // artifact searching
+  // artifacts
   inject('artifactsEndpoint', repositoryWithAxios('kg/' + 'artifacts'))
 
   // artifact retrieval
   inject('artifactRecordEndpoint', repositoryWithAxios('kg/' + 'artifact'))
+
+  // artifact searching
+  inject('artifactSearchEndpoint', repositoryWithAxios('kg/' + 'artifact/search'))
 
   // imports array view/add API
   inject('importsEndpoint', repositoryWithAxios('kg/' + 'artifact/imports'))
@@ -49,6 +52,9 @@ export default (ctx, inject) => {
   // reviews modify API
   inject('reviewsEndpoint', repositoryWithAxios('kg/' + 'review'))
 
+  // users index API
+  inject('usersEndpoint', repositoryWithAxios('kg/' + 'users'))
+
   // user API
   inject('userEndpoint', repositoryWithAxios('kg/' + 'user'))
 
@@ -75,4 +81,13 @@ export default (ctx, inject) => {
 
   // dashboard API
   inject('dashboardEndpoint', repositoryWithAxios('kg/' + 'dashboard'))
+
+  // importers array view API
+  inject('importersEndpoint', repositoryWithAxios('kg/' + 'importers'))
+
+  // importer view/modify API
+  inject('importerEndpoint', repositoryWithAxios('kg/' + 'importer'))
+
+  // sessions index API
+  inject('sessionsEndpoint', repositoryWithAxios('kg/' + 'sessions'))
 }
