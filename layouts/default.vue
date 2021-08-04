@@ -81,10 +81,18 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <span v-if="$auth.loggedIn" class="mr-2" v-text="$auth.user.name"></span>
-      <v-btn v-if="$auth.loggedIn && this.user_can_admin && !this.user_is_admin" icon @click="setAdmin(true)">
+      <v-btn
+        v-if="$auth.loggedIn && this.user_can_admin && !this.user_is_admin"
+        icon
+        @click="setAdmin(true)"
+      >
         <v-icon style="color: green">mdi-alpha-a-circle</v-icon>
       </v-btn>
-      <v-btn v-else-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin" icon @click="setAdmin(false)">
+      <v-btn
+        v-else-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
+        icon
+        @click="setAdmin(false)"
+      >
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
       </v-btn>
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
@@ -227,8 +235,8 @@ export default {
           if (!mode) {
             this.$store.commit('user/ADMIN_OFF')
             this.$store.commit('system/ADMIN_OFF')
-            if (this.$route.name.startsWith("admin")) {
-              this.$router.push("/")
+            if (this.$route.name.startsWith('admin')) {
+              this.$router.push('/')
             }
           }
         })

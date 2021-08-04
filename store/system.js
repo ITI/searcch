@@ -43,17 +43,17 @@ export const mutations = {
     state.importers = importers
   },
   LOGOUT(state) {
-    state.artifacts = {},
-    state.artifact_imports = {},
-    state.users = {},
+    state.artifacts = {}
+    state.artifact_imports = {}
+    state.users = {}
     state.sessions = {}
     state.importers = []
   },
   ADMIN_OFF(state) {
-    state.artifacts = {},
-    state.artifact_imports = {},
-    state.users = {},
-    state.sessions = {}
+    ;(state.artifacts = {}),
+      (state.artifact_imports = {}),
+      (state.users = {}),
+      (state.sessions = {})
     state.importers = []
   }
 }
@@ -65,7 +65,7 @@ export const actions = {
     })
     if (response) {
       commit('SET_ARTIFACTS', response)
-      console.log("fetched artifacts (admin)")
+      console.log('fetched artifacts (admin)')
     }
   },
   async fetchArtifactImports({ commit, state }, payload) {
@@ -74,7 +74,7 @@ export const actions = {
     })
     if (response) {
       commit('SET_ARTIFACT_IMPORTS', response)
-      console.log("fetched artifact_imports (admin)")
+      console.log('fetched artifact_imports (admin)')
     }
   },
   async fetchUsers({ commit, state }, payload) {
@@ -83,7 +83,7 @@ export const actions = {
     })
     if (response) {
       commit('SET_USERS', response)
-      console.log("fetched users (admin)")
+      console.log('fetched users (admin)')
     }
   },
   async fetchSessions({ commit, state }, payload) {
@@ -92,7 +92,7 @@ export const actions = {
     })
     if (response) {
       commit('SET_SESSIONS', response)
-      console.log("fetched sessions (admin)")
+      console.log('fetched sessions (admin)')
     }
   },
   async fetchImporters({ commit, state }, payload) {
@@ -101,7 +101,7 @@ export const actions = {
     })
     if (response.importers) {
       commit('SET_IMPORTERS', response.importers)
-      console.log("fetched importers (admin)")
+      console.log('fetched importers (admin)')
     }
   }
 }
