@@ -27,6 +27,8 @@ export default function({ $loginEndpoint, store, $auth }) {
           store.commit('user/SET_USER_TOKEN', payload.token)
           store.commit('user/SET_USER', response.person)
           store.commit('user/SET_USERID', response.userid)
+          store.commit('user/SET_USER_IS_ADMIN', response.is_admin)
+          store.commit('user/SET_USER_CAN_ADMIN', response.can_admin)
           store.dispatch('artifacts/fetchFavorites', response.userid)
         }
       })
