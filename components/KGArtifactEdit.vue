@@ -310,7 +310,14 @@
           v-model="artifactdialog"
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-btn class="success ml-2 mb-2" fab small v-bind="attrs" v-on="on">
+            <v-btn
+              class="success ml-2 mb-2"
+              fab
+              small
+              v-bind="attrs"
+              v-on="on"
+              :disabled="artifact_local.id ? false : true"
+            >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
