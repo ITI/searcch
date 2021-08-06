@@ -609,13 +609,11 @@ export default {
   },
   watch: {
     record(val) {
-      console.log('record watch')
       this.artifact_local = JSON.parse(JSON.stringify(val.artifact))
       this.meta.languages = this.getLanguages()
       this.meta.keywords = this.getPossibleTags()
     },
     artifact_local(val) {
-      console.log('artifact local watch')
       this.meta.languages = this.getLanguages()
       this.meta.keywords = this.getPossibleTags()
     }
