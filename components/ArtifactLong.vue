@@ -1,15 +1,15 @@
 <template>
   <div v-if="artifact.artifact">
-    <span v-if="!edit">
+    <div v-if="!edit">
       <LazyHydrate when-visible>
         <KGArtifactLong :record="artifact"></KGArtifactLong>
       </LazyHydrate>
-    </span>
-    <span v-else>
+    </div>
+    <div v-else>
       <LazyHydrate when-visible>
         <KGArtifactEdit :record="artifact"></KGArtifactEdit>
       </LazyHydrate>
-    </span>
+    </div>
   </div>
   <div v-else>{{ loadingMessage }}</div>
 </template>

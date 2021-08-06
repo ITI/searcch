@@ -294,7 +294,7 @@
         <v-divider class="mx-4"></v-divider>
 
         <div v-if="artifact_local.type == 'code'">
-          <span v-if="stars || watchers">
+          <div v-if="stars || watchers">
             <v-card-title class="py-0">Github Metrics</v-card-title>
 
             <v-chip color="primary" cols="12" class="ma-2" label>
@@ -311,9 +311,9 @@
 
               {{ watchers }}
             </v-chip>
-          </span>
+          </div>
 
-          <span v-if="record.artifact.importer">
+          <div v-if="record.artifact.importer">
             <v-card-title class="py-0">Importer</v-card-title>
 
             <v-chip color="primary" cols="12" class="ma-2" label>
@@ -325,7 +325,7 @@
               }}
             </v-chip>
             <v-divider class="mx-4"></v-divider>
-          </span>
+          </div>
         </div>
 
         <v-card-title class="py-0">License</v-card-title>
@@ -358,7 +358,7 @@
 
         <v-card-title class="py-0">Files</v-card-title>
 
-        <span v-if="artifact_local.files">
+        <div v-if="artifact_local.files">
           <v-list-item
             v-for="(f, index) in artifact_local.files"
             :key="`file${index}`"
@@ -412,8 +412,8 @@
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
-        </span>
-        <span class="ml-4 mb-2" v-else>No files found by importer</span>
+        </div>
+        <div class="ml-4 mb-2" v-else>No files found by importer</div>
 
         <v-card-actions>
           <v-spacer></v-spacer>

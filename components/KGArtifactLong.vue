@@ -90,14 +90,14 @@
         <v-divider class="mx-4"></v-divider>
       </div>
 
-      <span v-if="languages.length > 0">
+      <div v-if="languages.length > 0">
         <v-card-title class="py-0">Languages</v-card-title>
         <ArtifactChips :field="languages" type="code" display></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="record.artifact.relationships.length">
+      <div v-if="record.artifact.relationships.length">
         <v-card-title class="py-0">Related</v-card-title>
 
         <ArtifactChips
@@ -108,9 +108,9 @@
         ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="badgesPresent">
+      <div v-if="badgesPresent">
         <v-card-title class="py-0">Badges</v-card-title>
 
         <span v-for="(b, index) in record.artifact.badges">
@@ -125,10 +125,10 @@
           </a>
         </span>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
       <div v-if="record.artifact.type == 'code'">
-        <span v-if="stars || watchers">
+        <div v-if="stars || watchers">
           <v-card-title class="py-0">Github Metrics</v-card-title>
 
           <v-chip color="primary" cols="12" class="ma-2" label>
@@ -145,9 +145,9 @@
 
             {{ watchers }}
           </v-chip>
-        </span>
+        </div>
 
-        <span v-if="record.artifact.importer">
+        <div v-if="record.artifact.importer">
           <v-card-title class="py-0">Importer</v-card-title>
 
           <v-chip color="primary" cols="12" class="ma-2" label>
@@ -159,10 +159,10 @@
             }}
           </v-chip>
           <v-divider class="mx-4"></v-divider>
-        </span>
+        </div>
       </div>
 
-      <span v-if="license">
+      <div v-if="license">
         <v-card-title class="py-0">License</v-card-title>
         <a :href="record.artifact.license.url">
           <v-chip color="primary" cols="12" class="ma-2" label>
@@ -174,9 +174,9 @@
           </v-chip>
         </a>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="record.artifact.files.length">
+      <div v-if="record.artifact.files.length">
         <v-card-title class="py-0">Files</v-card-title>
 
         <v-list-item
@@ -199,7 +199,7 @@
         </v-list-item>
 
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
       <v-card-actions>
         <v-btn

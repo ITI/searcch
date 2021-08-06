@@ -72,7 +72,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <span v-else>{{ loadingMessage }}</span>
+    <div v-else>{{ loadingMessage }}</div>
   </div>
 </template>
 
