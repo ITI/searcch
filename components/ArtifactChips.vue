@@ -107,6 +107,9 @@ export default {
         }
       }
       return null
+    },
+    async deleteRelationship(id) {
+      let response = await this.$relationshipEndpoint.delete(id)
     }
   }
 }

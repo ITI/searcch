@@ -763,9 +763,6 @@ export default {
           this.artifactdialog = false
         }
       }
-    },
-    async deleteRelationship(id) {
-      let response = await this.$relationshipEndpoint.delete(id)
     }
   }
 }
