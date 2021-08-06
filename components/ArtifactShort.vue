@@ -111,8 +111,7 @@
 <script>
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor } from '@/helpers'
-import { EventBus } from '@/helpers/event-bus.js'
+import { artifactIcon, artifactColor, EventBus } from '@/helpers'
 
 export default {
   props: {
