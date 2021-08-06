@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const artifactIcon = type => {
   switch (type) {
     case 'publication':
@@ -6,6 +8,12 @@ export const artifactIcon = type => {
       return 'mdi-database'
     case 'code':
       return 'mdi-code-braces'
+    case 'keyword':
+      return 'mdi-tag-outline'
+    case 'role':
+      return 'mdi-account-circle'
+    case 'relation':
+      return 'mdi-relation-one-to-one'
     default:
       return 'mdi-help'
   }
@@ -19,6 +27,10 @@ export const artifactColor = type => {
       return 'green white--text'
     case 'code':
       return 'purple white--text'
+    case 'role':
+      return 'primary'
+    case 'relation':
+      return 'primary'
     default:
       return 'info'
   }
@@ -50,3 +62,5 @@ export const zipArray = (tag, input) => {
     array = getArray(zip)
   return array
 }
+
+export const EventBus = new Vue()
