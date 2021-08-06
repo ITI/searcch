@@ -8,12 +8,13 @@
       class="ma-2"
       label
       :color="iconColor(type)"
-      close
+      v-bind:close="!display"
       close-icon="mdi-close"
       @click:close="
         if (type === 'relation') deleteRelationship(item.id)
         field.splice(index, 1)
       "
+      :to="whereTo(item)"
     >
       <v-icon left>{{ iconImage(type) }}</v-icon>
 
@@ -70,11 +71,17 @@ export default {
       type: String,
       required: false
     },
-    text: {
-      type: String,
+    create: {
+      type: Boolean,
+      default: false,
       required: false
     },
-    create: {
+    display: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    link: {
       type: Boolean,
       default: false,
       required: false
@@ -89,6 +96,17 @@ export default {
     },
     isObject(item) {
       return typeof item === 'object'
+    },
+    whereTo(item) {
+      if (this.link) {
+        switch (this.type) {
+          case 'keyword':
+            return '/search?keywords=' + item
+          case 'relation':
+            return '/artifact/' + item.related_artifact_id
+        }
+      }
+      return null
     }
   }
 }
