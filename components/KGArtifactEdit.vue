@@ -738,15 +738,19 @@ export default {
       if (!this.valid) return
       if (!confirm('Are you sure you want to publish this artifact?')) return
 
-      if (this.create) {
-        await this.save()
-      }
+      // save the artifact first
+      await this.save()
+
       let response = await this.$artifactRecordEndpoint.update(
         this.artifact_local.id,
         {
           publication: {}
         }
       )
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        id: this.artifact_local.id
+      })
+
       this.$router.push(`/artifact/${this.artifact_local.id}`)
     },
     async save() {
