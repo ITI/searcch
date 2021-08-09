@@ -134,10 +134,9 @@
                   <v-spacer></v-spacer>
                   <v-btn
                     @click="
-                      meta.creators.push(
-                        JSON.parse(JSON.stringify(affiliation))
-                      )
+                      meta.creators.push(affiliation)
                       dialog.value = false
+                      affiliation = affiliationObject()
                     "
                     class="success ml-2 mb-2"
                     text
@@ -483,19 +482,7 @@ export default {
         relations: [],
         badges: []
       },
-      affiliation: {
-        affiliation: {
-          org: {
-            name: '',
-            type: 'Institution'
-          },
-          person: {
-            email: '',
-            name: ''
-          }
-        },
-        roles: 'Author'
-      },
+      affiliation: this.affiliationObject(),
       schema: {},
       affiliationSchema: {},
       schemaLoaded: false,
@@ -761,6 +748,21 @@ export default {
           this.artifactdialog = false
         }
       }
+    },
+    affiliationObject() {
+      return new Object({
+        affiliation: {
+          org: {
+            name: '',
+            type: 'Institution'
+          },
+          person: {
+            email: '',
+            name: ''
+          }
+        },
+        roles: 'Author'
+      })
     }
   }
 }
