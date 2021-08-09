@@ -384,9 +384,9 @@ export default {
   watch: {
     userAffiliation: function(newValue, oldValue) {
       // delete case
-      let diff = oldValue.filter(function(obj) {
-        return newValue.indexOf(obj) == -1
-      })
+      let diff = oldValue.filter(
+        affil => newValue.findIndex(newAffil => newAffil.id == affil.id) == -1
+      )
       if (diff.length > 0) {
         diff.forEach(affil => {
           if (typeof affil === 'object') {
@@ -395,6 +395,9 @@ export default {
         })
         diff = []
       }
+    },
+    organization: function(val) {
+      this.userAffiliation = val
     }
   },
   async mounted() {
@@ -430,15 +433,16 @@ export default {
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-        this.userAffiliation.forEach(affil => {
+        this.$userEndpoint.update(this.userid, data)
+
+        // create any affiliations that were added
+        this.userAffiliation.forEach((affil, index, object) => {
           if (typeof affil === 'string') {
-            this.$userAffiliationsEndpoint.create({
-              org: { name: affil, type: 'Institution' }
-            })
+            this.$store.dispatch('user/createAffiliation', affil)
+            object.splice(index, 1)
           }
         })
-
-        this.$userEndpoint.update(this.userid, data)
+        this.$store.dispatch('user/fetchUser')
       }
     },
     updateName(e) {

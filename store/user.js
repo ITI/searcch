@@ -129,5 +129,13 @@ export const actions = {
     if (typeof response !== 'undefined' && response.research_interests) {
       commit('SET_INTERESTS', response.research_interests)
     }
+  },
+  async createAffiliation({ commit, state, dispatch }, name) {
+    let response = {}
+    console.log('adding affiliation: ' + name)
+    response = await this.$userAffiliationsEndpoint.create({
+      org: { name: name, type: 'Institution' }
+    })
+    dispatch('fetchUser')
   }
 }
