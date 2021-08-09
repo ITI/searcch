@@ -88,7 +88,7 @@
                                 No results matching "<strong>{{
                                   interestSearch
                                 }}</strong
-                                >". Click outside this window to create a new
+                                >". Press <kbd>tab</kbd> to create a new one
                                 item.
                               </v-list-item-title>
                             </v-list-item-content>
@@ -119,8 +119,7 @@
                                 No results matching "<strong>{{
                                   orgSearch
                                 }}</strong
-                                >". Press <kbd>enter</kbd> or click outside this
-                                window to create a new one
+                                >". Press <kbd>tab</kbd> to create a new one
                               </v-list-item-title>
                             </v-list-item-content>
                           </v-list-item>
