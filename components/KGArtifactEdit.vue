@@ -527,9 +527,10 @@ export default {
     this.meta.languages = this.getLanguages()
     this.meta.keywords = this.getPossibleTags()
     let response = await this.$badgesEndpoint.index({ verified: 1 })
-    this.possibleBadges = response.badges
+    this.possibleBadges = typeof response !== 'undefined' ? response.badges : []
     response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
-    this.possibleLicenses = response.licenses
+    this.possibleLicenses =
+      typeof response !== 'undefined' ? response.licenses : []
   },
   mounted() {
     // force title and description to refresh on page load
@@ -688,7 +689,10 @@ export default {
       }
       // console.log('response artifact')
       // console.log(response)
-      if (response) this.artifact_local = response.artifact
+
+      this.artifact_local =
+        typeof response !== 'undefined' ? response.artifact : {}
+
       this.disabled = false
       this.snackbar = true
 

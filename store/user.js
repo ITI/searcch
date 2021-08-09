@@ -85,8 +85,7 @@ export const mutations = {
     state.user_is_admin = false
     state.user_can_admin = false
   },
-  ADMIN_OFF(state) {
-  }
+  ADMIN_OFF(state) {}
 }
 
 export const actions = {
@@ -94,11 +93,13 @@ export const actions = {
     let response = {}
     console.log('fetching user')
     response = await this.$userEndpoint.index()
-    commit('SET_USER', response.user.person)
-    commit('SET_USERID', response.user.id)
-    commit('SET_USER_CAN_ADMIN', response.user.can_admin)
-    commit('SET_USER_IS_ADMIN', response.user.is_admin)
-    commit('SET_USER_ORGS', response.user.affiliations)
+    if (typeof response !== 'undefined' && response.user) {
+      commit('SET_USER', response.user.person)
+      commit('SET_USERID', response.user.id)
+      commit('SET_USER_CAN_ADMIN', response.user.can_admin)
+      commit('SET_USER_IS_ADMIN', response.user.is_admin)
+      commit('SET_USER_ORGS', response.user.affiliations)
+    }
   },
   async setUserToken({ commit }, user_token) {
     commit('SET_USER_TOKEN', user_token)
@@ -114,7 +115,9 @@ export const actions = {
       all: 1
     }
     response = await this.$organizationEndpoint.index(payload)
-    commit('SET_ORGS', response.organizations)
+    if (typeof response !== 'undefined' && response.organizations) {
+      commit('SET_ORGS', response.organizations)
+    }
   },
   async fetchInterests({ commit, state }) {
     let response = {}
@@ -123,6 +126,8 @@ export const actions = {
       all: 1
     }
     response = await this.$interestsEndpoint.index(payload)
-    commit('SET_INTERESTS', response.research_interests)
+    if (typeof response !== 'undefined' && response.research_interests) {
+      commit('SET_INTERESTS', response.research_interests)
+    }
   }
 }

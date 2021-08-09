@@ -86,7 +86,7 @@ export const actions = {
     let response = await this.$artifactSearchEndpoint.index({
       ...payload
     })
-    if (typeof response !== 'undefined') {
+    if (typeof response !== 'undefined' && response.artifacts) {
       commit('SET_ARTIFACTS', response.artifacts)
     }
     commit('SET_LOADING', false)
@@ -103,12 +103,10 @@ export const actions = {
   async fetchFavorites({ commit, state }, payload) {
     commit('SET_LOADING', true)
     let response = await this.$findFavoritesEndpoint.show(payload)
-    if (typeof response !== 'undefined') {
-      if (response.artifacts) {
-        commit('SET_FAVORITES', response.artifacts)
-        for (let fav in response.artifacts) {
-          commit('ADD_FAVORITE', response.artifacts[fav].id)
-        }
+    if (typeof response !== 'undefined' && response.artifacts) {
+      commit('SET_FAVORITES', response.artifacts)
+      for (let fav in response.artifacts) {
+        commit('ADD_FAVORITE', response.artifacts[fav].id)
       }
     }
     commit('SET_LOADING', false)
@@ -118,10 +116,8 @@ export const actions = {
     let response = await this.$importsEndpoint.index({
       ...payload
     })
-    if (typeof response !== 'undefined') {
-      if (response.artifact_imports) {
-        commit('SET_IMPORTS', response.artifact_imports)
-      }
+    if (typeof response !== 'undefined' && response.artifact_imports) {
+      commit('SET_IMPORTS', response.artifact_imports)
     }
     commit('SET_LOADING', false)
   },
@@ -135,9 +131,6 @@ export const actions = {
   },
   async setRelated({ commit, state, dispatch }, payload) {
     commit('SET_LOADING', true)
-    console.log(
-      payload.id + ' ' + payload.relation + ' ' + state.artifact.artifact.id
-    )
     let response = await this.$relationshipsEndpoint.create({
       artifact_id: state.artifact.artifact.id,
       related_artifact_id: payload.id,

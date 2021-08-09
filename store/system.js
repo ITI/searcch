@@ -63,7 +63,7 @@ export const actions = {
     let response = await this.$artifactsEndpoint.index({
       ...payload
     })
-    if (response) {
+    if (typeof response !== 'undefined') {
       commit('SET_ARTIFACTS', response)
       console.log('fetched artifacts (admin)')
     }
@@ -72,7 +72,7 @@ export const actions = {
     let response = await this.$importsEndpoint.index({
       ...payload
     })
-    if (response) {
+    if (typeof response !== 'undefined') {
       commit('SET_ARTIFACT_IMPORTS', response)
       console.log('fetched artifact_imports (admin)')
     }
@@ -81,7 +81,7 @@ export const actions = {
     let response = await this.$usersEndpoint.index({
       ...payload
     })
-    if (response) {
+    if (typeof response !== 'undefined') {
       commit('SET_USERS', response)
       console.log('fetched users (admin)')
     }
@@ -90,7 +90,7 @@ export const actions = {
     let response = await this.$sessionsEndpoint.index({
       ...payload
     })
-    if (response) {
+    if (typeof response !== 'undefined') {
       commit('SET_SESSIONS', response)
       console.log('fetched sessions (admin)')
     }
@@ -99,7 +99,7 @@ export const actions = {
     let response = await this.$importersEndpoint.index({
       ...payload
     })
-    if (response.importers) {
+    if (typeof response !== 'undefined' && response.importers) {
       commit('SET_IMPORTERS', response.importers)
       console.log('fetched importers (admin)')
     }
