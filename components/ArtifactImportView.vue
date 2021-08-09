@@ -40,12 +40,14 @@
             message:
             {{ artifact.message }}
           </v-card-text>
-          log:
-          <v-textarea
-            auto-grow
-            readonly
-            :value="this.artifact.log"
-          ></v-textarea>
+          <span v-if="this.artifact.log">
+            log:
+            <v-textarea
+              auto-grow
+              readonly
+              :value="this.artifact.log"
+            ></v-textarea>
+          </span>
         </v-col>
       </v-row>
       <v-card-actions>
