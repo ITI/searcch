@@ -62,6 +62,9 @@ export default {
       console.log('invalid session token')
       this.$store.commit('user/LOGOUT')
       this.$auth.logout()
+
+      // auto log them back in
+      alert('Your session expired. The system will now log you back in')
       this.$auth.loginWith('github')
     }
   }
