@@ -69,25 +69,27 @@
                     </v-col>
                     <v-col cols="12" md="12">
                       <v-combobox
+                        v-if="user"
                         label="Interests"
                         multiple
                         small-chips
                         deletable-chips
                         persistent-hint
-                        v-if="user"
                         :items="hardcodedInterests"
                         v-model="researchInterests"
                         hint="Select applicable items from the list or type in your own"
-                        :search-input.sync="search"
+                        :search-input.sync="interestSearch"
+                        return-object
                       >
                         <template v-slot:no-data>
                           <v-list-item>
                             <v-list-item-content>
                               <v-list-item-title>
                                 No results matching "<strong>{{
-                                  search
+                                  interestSearch
                                 }}</strong
-                                >". Press <kbd>enter</kbd> to create a new one
+                                >". Click outside this window to create a new
+                                item.
                               </v-list-item-title>
                             </v-list-item-content>
                           </v-list-item>
@@ -104,8 +106,8 @@
                         persistent-hint
                         :items="orgNames"
                         v-model="userAffiliation"
-                        hint="Select applicable org from the list or type in your own"
-                        :search-input.sync="search"
+                        hint="Select applicable organization from the list or type in your own"
+                        :search-input.sync="orgSearch"
                         item-text="org.name"
                         item-value="org.name"
                         return-object
@@ -115,9 +117,10 @@
                             <v-list-item-content>
                               <v-list-item-title>
                                 No results matching "<strong>{{
-                                  search
+                                  orgSearch
                                 }}</strong
-                                >". Press <kbd>enter</kbd> to create a new one
+                                >". Press <kbd>enter</kbd> or click outside this
+                                window to create a new one
                               </v-list-item-title>
                             </v-list-item-content>
                           </v-list-item>
@@ -320,9 +323,7 @@ export default {
   },
   data() {
     return {
-      // TODO: FIXME
-      // these lists should be provided dynamically from back-end by querying db for unique existing values
-      // also entries need aliases
+      // TODO: FIXME get dynamically from backend once there are enough entries
       hardcodedInterests: [
         'Application Security',
         'Artificial Intelligence',
@@ -347,7 +348,8 @@ export default {
       schema: {},
       schemaLoaded: false,
       userAffiliation: [],
-      search: null
+      orgSearch: null,
+      interestSearch: null
     }
   },
   computed: {
