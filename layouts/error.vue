@@ -23,9 +23,7 @@
       :value="error.request.response"
     ></pretty-print>
 
-    <NuxtLink to="/">
-      Start Over
-    </NuxtLink>
+    <a href="/">Start Over</a>
   </v-app>
 </template>
 
@@ -64,6 +62,7 @@ export default {
       console.log('invalid session token')
       this.$store.commit('user/LOGOUT')
       this.$auth.logout()
+      this.$auth.loginWith('github')
     }
   }
 }
