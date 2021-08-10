@@ -99,7 +99,7 @@ export default {
         {
           q: 'I need to withdraw my artifact. How can I do that?',
           a:
-            'This feature is not yet implemented in the hub. To take ownership, please use the feedback feature to initiate discussion with the SEARCCH team.'
+            'This feature is not yet implemented in the hub. If you need to withdraw your artifact, please use the feedback feature to initiate discussion with the SEARCCH team.'
         },
         {
           q:
