@@ -68,12 +68,12 @@ export default {
         {
           q: 'What is an artifact?',
           a:
-            'An artifact is a tangible output from scientific research. Artifacts include publications, datasets, code, etc. The SEARCCH project focuses less on publications, which can be found through a variety of existing sources and more on datasets, code, testbeds, and the like, which can be more difficult to find.'
+            'An artifact is a tangible output from scientific research. Artifacts include publications, datasets, code, etc. The SEARCCH project focuses less on publications, which can be found through a variety of existing sources, and more on datasets, code, testbeds, and the like, which can be more difficult to find.'
         },
         {
           q: 'How can I get an account on the SEARCCH hub?',
           a:
-            'SEARCCH currently utilizes single sign-on from Github.com. As such, anyone that has a GitHub account can utilize the SEARCCH hub. Please visit https://github.com/signup to sign up for a GitHub account and then visit the SEARCCH hub to login using single sign-on.'
+            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone that has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
         },
         {
           q: 'Do I have to share data in order to use the hub?',
@@ -83,7 +83,7 @@ export default {
         {
           q: 'How can I submit my data or code to the hub?',
           a:
-            'The most direct way to get your artifacts into the SEARCCH hub is through the SEARCCH importer service. Please visit https://hub.cyberexperimentation.org/importer to start importing your work.'
+            'The most direct way to get your artifacts into the SEARCCH hub is through the SEARCCH importer service. Please visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
         },
         {
           q:
@@ -94,7 +94,7 @@ export default {
         {
           q: 'The metadata for my artifact is incorrect. How can I update it?',
           a:
-            'During the import process you can choose to edit any of the automatically generated metadata. Any changes you make will be saved and reflected in the artifact once you’ve published it.<br/><br/> If your artifact is already published, please please use the feedback feature to initiate discussion with the SEARCCH team.'
+            'During the import process you can choose to edit any of the automatically generated metadata. Any changes you make will be saved and reflected in the artifact once you’ve published it.<br/><br/> If your artifact is already published, please use the feedback feature to initiate discussion with the SEARCCH team.'
         },
         {
           q: 'I need to withdraw my artifact. How can I do that?',
