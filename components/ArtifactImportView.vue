@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     async deleteArtifact() {
-      let response = await this.$artifactRecordEndpoint.delete(
+      let response = await this.$artifactEndpoint.delete(
         this.artifact.artifact_id
       )
       this.updateImports()
@@ -148,7 +148,7 @@ export default {
     async publish() {
       if (!confirm('Are you sure you want to publish this artifact?')) return
 
-      let response = await this.$artifactRecordEndpoint.update(
+      let response = await this.$artifactEndpoint.update(
         this.artifact.artifact_id,
         {
           publication: {}

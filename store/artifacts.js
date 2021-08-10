@@ -94,7 +94,7 @@ export const actions = {
   async fetchArtifact({ commit, state }, payload) {
     commit('SET_LOADING', true)
     console.log('fetching entry ' + payload.id)
-    let response = await this.$artifactRecordEndpoint.show(payload.id)
+    let response = await this.$artifactEndpoint.show(payload.id)
     if (typeof response !== 'undefined') {
       commit('SET_ARTIFACT', response)
     }

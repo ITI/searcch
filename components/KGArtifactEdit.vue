@@ -614,7 +614,7 @@ export default {
       // save the artifact first
       await this.save()
 
-      let response = await this.$artifactRecordEndpoint.update(
+      let response = await this.$artifactEndpoint.update(
         this.artifact_local.id,
         {
           publication: {}
@@ -682,7 +682,7 @@ export default {
         response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
         // console.log('curating')
-        response = await this.$artifactRecordEndpoint.update(
+        response = await this.$artifactEndpoint.update(
           this.artifact_local.id,
           this.artifact_local
         )
