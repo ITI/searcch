@@ -5,7 +5,10 @@
         <h1>Importers</h1>
       </v-row>
       <v-divider></v-divider><br />
-      <ImporterList v-if="importers && importers.length" :importers="importers"></ImporterList>
+      <ImporterList
+        v-if="importers && importers.length"
+        :importers="importers"
+      ></ImporterList>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
   </span>

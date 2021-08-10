@@ -1,10 +1,6 @@
 <template>
-  <span>
+  <div>
     <v-layout column justify-left align-top>
-      <v-row class="ml-1 mb-2">
-        <h1>Users</h1>
-      </v-row>
-      <v-divider></v-divider><br />
       <v-row align="center">
         <v-col cols="1">
           <h3>Filters:</h3>
@@ -15,10 +11,7 @@
           </v-subheader>
         </v-col>
         <v-col cols="1">
-          <v-checkbox
-            v-model="can_admin"
-            @change="updateUsers()"
-          ></v-checkbox>
+          <v-checkbox v-model="can_admin" @change="updateUsers()"></v-checkbox>
         </v-col>
         <v-col cols="2">
           <v-text-field
@@ -39,30 +32,46 @@
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
+    </v-layout>
+    <v-card>
+      <v-card-title>
+        Users
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+          dense
+        ></v-text-field>
+      </v-card-title>
       <v-data-table
         :headers="headers"
         :items="items"
+        :search="search"
         :loading="loading"
         :options.sync="options"
-        :server-items-length="total"
-        :footer-props="{'items-per-page-options':[10, 20, 50, 100, -1]}">
-        <template #item.id="{ item }">
+        :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
+        dense
+      >
+        <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="item.id" :href="`/profile/${item.id}`">
+              <!-- <a v-if="item.id" :href="`/profile/${item.id}`">
                 <v-icon v-on="on">mdi-account</v-icon>
-              </a>
+              </a> -->
+              {{ item.id }}
             </template>
             <span>View User Profile</span>
           </v-tooltip>
         </template>
-        <template #item.can_admin="{ item }">
+        <template v-slot:item.can_admin="{ item }">
           <v-icon v-if="item.can_admin">mdi-check</v-icon>
         </template>
       </v-data-table>
-    </div>
-    </v-layout>
-  </span>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -74,19 +83,20 @@ export default {
       loadingMessage: 'Loading users...',
       timeoutID: null,
       can_admin: false,
-      owner_filter: "",
+      owner_filter: '',
       headers: [
-        { text: "User ID", value: "id", align: "start", sortable: true },
-        { text: "User Email", value: "person.email" },
-        { text: "User Name", value: "person.name" },
-        { text: "Can Admin", value: "can_admin" },
+        { text: 'User ID', value: 'id', align: 'start', sortable: true },
+        { text: 'User Email', value: 'person.email' },
+        { text: 'User Name', value: 'person.name' },
+        { text: 'Can Admin', value: 'can_admin' }
       ],
       loading: true,
       options: {
-        itemsPerPage: 10,
+        itemsPerPage: 20,
         page: 1,
         sortDesc: [true]
       },
+      search: ''
     }
   },
   async mounted() {
@@ -104,21 +114,22 @@ export default {
       //page: state => state.system.users.page,
       //pages: state => state.system.users.pages,
       total: state => state.system.users.total
-    }),
+    })
   },
   methods: {
     updateUsers() {
       if (this.user_is_admin) {
         this.loading = true
+        // FIXME: backend needs some fixes on owner search, disabled pagination for now
         var payload = {
-          page: this.options.page, items_per_page: this.options.itemsPerPage,
-          sort: this.options.sortBy, sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
+          // page: this.options.page,
+          // items_per_page: this.options.itemsPerPage,
+          sort: this.options.sortBy,
+          sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1
         }
-        if (this.can_admin)
-          payload["can_admin"] = 1
-        if (this.owner_filter)
-          payload["owner"] = this.owner_filter
+        if (this.can_admin) payload['can_admin'] = 1
+        if (this.owner_filter) payload['owner'] = this.owner_filter
         this.$store.dispatch('system/fetchUsers', payload)
       }
       clearTimeout(this.timeoutID)
@@ -128,17 +139,17 @@ export default {
     user_is_admin() {
       // had to make this because on refresh, user_is_admin doesn't update until after the mounted has already run,
       // but mounted needs to run when switching pages where the user_is_admin doesn't update
-      console.log("watch updateUsers")
+      console.log('watch updateUsers')
       this.updateUsers()
     },
     items() {
       this.loading = false
     },
     options: {
-      handler () {
+      handler() {
         this.updateUsers()
       },
-      deep: true,
+      deep: true
     }
   },
   beforeRouteLeave(to, from, next) {

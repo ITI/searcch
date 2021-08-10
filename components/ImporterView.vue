@@ -1,67 +1,65 @@
 <template>
   <div>
-    <v-card tile class="mx-auto overflow-hidden" elevation="3">
-      <v-row class="px-3">
-        <v-col cols="10">
-          <v-card-title class="align-start">
-            <div>
-              <span class="headline"
-                >Importer {{ importer.id }} ({{ importer.url }})</span
-              >
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <table>
-              <tr>
-                <td>Admin Status</td>
-                <td>
-                  {{ importer.admin_status }} ({{
-                    this.$moment.utc(importer.admin_status_time).fromNow()
-                  }})
-                </td>
-              </tr>
-              <tr>
-                <td>Status</td>
-                <td>
-                  {{ importer.status }} ({{
-                    this.$moment.utc(importer.status_time).fromNow()
-                  }})
-                </td>
-              </tr>
-              <tr>
-                <td>Max Tasks</td>
-                <td>{{ importer.max_tasks }}</td>
-              </tr>
-              <tr>
-                <td>Scheduled Tasks</td>
-                <td>{{ importer.scheduled.length }}</td>
-              </tr>
-            </table>
+    <v-card class="mx-auto" max-width="800">
+      <v-card-title class="primary white--text">
+        <span class="text-h6"
+          >Importer {{ importer.id }} ({{ importer.url }})</span
+        >
+      </v-card-title>
+      <v-card-text class="py-0">
+        <v-list class="transparent">
+          <v-list-item>
+            <v-list-item-title>Admin Status</v-list-item-title>
+            <v-list-item-subtitle class="text-right">
+              {{ importer.admin_status }} ({{
+                this.$moment.utc(importer.admin_status_time).fromNow()
+              }})
+            </v-list-item-subtitle>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Status</v-list-item-title>
+            <v-list-item-subtitle class="text-right">
+              {{ importer.status }} ({{
+                this.$moment.utc(importer.status_time).fromNow()
+              }})
+            </v-list-item-subtitle>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Max Tasks</v-list-item-title>
+            <v-list-item-subtitle class="text-right">
+              {{ importer.max_tasks }}
+            </v-list-item-subtitle>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Scheduled Tasks</v-list-item-title>
+            <v-list-item-subtitle class="text-right">
+              {{ importer.scheduled.length }}
+            </v-list-item-subtitle>
+          </v-list-item>
+        </v-list>
 
-            <v-data-table
-              v-if="importer.scheduled.length"
-              :headers="scheduled_headers"
-              :items="scheduled_items"
-              :items-per-page="100"
-            >
-              <template v-slot:item.schedule_time="{ item }">
-                {{ $moment.utc(item.schedule_time).fromNow() }}
-              </template>
-            </v-data-table>
-          </v-card-text>
-        </v-col>
-      </v-row>
+        <v-data-table
+          v-if="importer.scheduled.length"
+          :headers="scheduled_headers"
+          :items="scheduled_items"
+          :items-per-page="100"
+        >
+          <template v-slot:item.schedule_time="{ item }">
+            {{ $moment.utc(item.schedule_time).fromNow() }}
+          </template>
+        </v-data-table>
+      </v-card-text>
       <v-card-actions>
         <v-btn
           v-if="importer.admin_status === 'enabled'"
-          text
+          color="error"
           @click="disable()"
         >
           Disable
         </v-btn>
         <v-btn
-          v-if="importer.admin_status === 'disabled'"
-          text
+          v-else-if="importer.admin_status === 'disabled'"
+          color="success"
           @click="enable()"
         >
           Enable

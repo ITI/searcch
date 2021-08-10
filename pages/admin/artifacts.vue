@@ -1,10 +1,6 @@
 <template>
-  <span>
+  <div>
     <v-layout column justify-left align-top>
-      <v-row class="ml-1 mb-2">
-        <h1>Artifacts</h1>
-      </v-row>
-      <v-divider></v-divider><br />
       <v-row align="center">
         <v-col cols="1">
           <h3>Filters:</h3>
@@ -53,26 +49,58 @@
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
+    </v-layout>
+    <v-card>
+      <v-card-title>
+        Artifacts
+        <v-spacer></v-spacer>
+        <!-- <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+          dense
+        ></v-text-field> -->
+      </v-card-title>
+
       <v-data-table
         :headers="headers"
         :items="items"
+        :search="search"
         :loading="loading"
         :options.sync="options"
+        :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
-        :footer-props="{'items-per-page-options':[10, 20, 50, 100, -1]}">
-        <template #item.id="{ item }">
+        :expanded.sync="expanded"
+        show-expand
+        dense
+      >
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length">
+            <p>Created: {{ $moment.utc(item.ctime).fromNow() }}</p>
+            <p>
+              Modified:
+              {{ item.mtime ? $moment.utc(item.mtime).fromNow() : '' }}
+            </p>
+          </td>
+        </template>
+        <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <a v-if="item.id" :href="`/artifact/${item.id}`">
-                <v-icon v-on="on">mdi-database</v-icon>
+                <v-icon v-on="on" small color="blue">mdi-database</v-icon>
               </a>
             </template>
             <span>View</span>
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="!item.publication" :href="`/artifact/${item.id}?edit=true`">
-                <v-icon v-on="on">mdi-database-edit</v-icon>
+              <a
+                v-if="!item.publication"
+                :href="`/artifact/${item.id}?edit=true`"
+              >
+                <v-icon v-on="on" small color="green">mdi-database-edit</v-icon>
               </a>
             </template>
             <span>Edit</span>
@@ -82,55 +110,88 @@
           {{ $moment.utc(item.ctime).fromNow() }}
         </template>
         <template v-slot:item.mtime="{ item }">
-          {{ item.mtime ? $moment.utc(item.mtime).fromNow() : "" }}
+          {{ item.mtime ? $moment.utc(item.mtime).fromNow() : '' }}
         </template>
-        <template #item.url="{ item }">
-          <a v-if="item.url" :href="`${item.url}`">{{ ellipsize(item.url,32) }}</a>
+        <template v-slot:item.url="{ item }">
+          <a v-if="item.url" :href="`${item.url}`" target="_blank">{{
+            ellipsize(item.url, 32)
+          }}</a>
         </template>
-        <template #item.publication="{ item }">
+        <template v-slot:item.publication="{ item }">
           <v-icon v-if="item.publication">mdi-check</v-icon>
         </template>
-        <template #item.owner.person="{ item }">
-          {{ item.owner.person.email }}{{ item.owner.person.name ? " (" + item.owner.person.name + ")" : "" }}
+        <template v-slot:item.owner.person="{ item }">
+          {{ item.owner.person.email
+          }}{{
+            item.owner.person.name ? ' (' + item.owner.person.name + ')' : ''
+          }}
+        </template>
+        <template v-slot:item.type="{ item }">
+          <v-chip :color="iconColor(item.type)" class="ma-2" label small>
+            <v-avatar left>
+              <v-icon>{{ iconImage(item.type) }}</v-icon>
+            </v-avatar>
+            <div>{{ item.type }}</div>
+          </v-chip>
         </template>
       </v-data-table>
-    </div>
-    </v-layout>
-  </span>
+    </v-card>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   data() {
     return {
       loadingMessage: 'Loading imports...',
       timeoutID: null,
-      type_select: "",
+      type_select: '',
       type_items: [
-          "", "dataset", "executable", "methodology", "metrics",
-          "priorwork", "publication", "hypothesis", "code", "domain",
-          "supportinginfo" ],
+        '',
+        'dataset',
+        'executable',
+        'methodology',
+        'metrics',
+        'priorwork',
+        'publication',
+        'hypothesis',
+        'code',
+        'domain',
+        'supportinginfo'
+      ],
       published: false,
-      owner_filter: "",
+      owner_filter: '',
       headers: [
-        { text: "Artifact", value: "id", align: "start", sortable: true },
-        { text: "Created", sortable: true, align: "start", value: "ctime", sortable: true },
-        { text: "Modified", sortable: true, align: "start", value: "mtime", sortable: true },
-        { text: "Type", value: "type", sortable: true },
-        { text: "URL", value: "url", sortable: true },
-        { text: "Title", value: "title", sortable: true },
-        { text: "Published", value: "publication", sortable: true },
-        { text: "Owner", value: "owner.person", sortable: false },
+        { text: 'Artifact', value: 'id', align: 'start', sortable: true },
+        { text: 'Type', value: 'type', sortable: true },
+        { text: 'Title', value: 'title', sortable: true },
+        { text: 'URL', value: 'url', sortable: true },
+        { text: 'Published', value: 'publication', sortable: true },
+        {
+          text: 'Created',
+          sortable: true,
+          value: 'ctime'
+        },
+        {
+          text: 'Modified',
+          sortable: true,
+          value: 'mtime'
+        },
+        { text: 'Owner', value: 'owner.person', sortable: false },
+        { text: '', value: 'data-table-expand' }
         //{ text: "Owner Email", value: "owner.person.email", sortable: false },
       ],
       loading: true,
       options: {
-        itemsPerPage: 10,
+        itemsPerPage: 20,
         page: 1,
         sortDesc: [true]
       },
+      expanded: [],
+      search: ''
     }
   },
   async mounted() {
@@ -148,49 +209,53 @@ export default {
       //page: state => state.system.artifacts.page,
       //pages: state => state.system.artifacts.pages,
       total: state => state.system.artifacts.total
-    }),
+    })
   },
   methods: {
-    ellipsize(s,l) {
-      if (s.length > l)
-        return s.substring(0, l) + "...";
-      else
-        return s;
+    ellipsize(s, l) {
+      if (s.length > l) return s.substring(0, l) + '...'
+      else return s
     },
     updateArtifacts() {
       if (this.user_is_admin) {
         this.loading = true
         var payload = {
-          page: this.options.page, items_per_page: this.options.itemsPerPage,
-          sort: this.options.sortBy, sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
-          allusers: 1, short_view_include: "owner,publication"
+          page: this.options.page,
+          items_per_page: this.options.itemsPerPage,
+          sort: this.options.sortBy,
+          sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
+          allusers: 1,
+          short_view_include: 'owner,publication'
         }
-        if (this.type_select)
-          payload["type"] = this.type_select
-        if (this.published)
-          payload["published"] = 1
-        if (this.owner_filter)
-          payload["owner"] = this.owner_filter
+        if (this.type_select) payload['type'] = this.type_select
+        if (this.published) payload['published'] = 1
+        if (this.owner_filter) payload['owner'] = this.owner_filter
         this.$store.dispatch('system/fetchArtifacts', payload)
       }
       clearTimeout(this.timeoutID)
+    },
+    iconColor(type) {
+      return artifactColor(type)
+    },
+    iconImage(type) {
+      return artifactIcon(type)
     }
   },
   watch: {
     user_is_admin() {
       // had to make this because on refresh, user_is_admin doesn't update until after the mounted has already run,
       // but mounted needs to run when switching pages where the user_is_admin doesn't update
-      console.log("watch updateArtifacts")
+      console.log('watch updateArtifacts')
       this.updateArtifacts()
     },
     items() {
       this.loading = false
     },
     options: {
-      handler () {
+      handler() {
         this.updateArtifacts()
       },
-      deep: true,
+      deep: true
     }
   },
   beforeRouteLeave(to, from, next) {
