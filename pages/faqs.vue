@@ -112,6 +112,11 @@ export default {
             'I found a dataset in the Hub, but the data is wrong/malformed/mislabeled. How do I get help or submit feedback?',
           a:
             'Please do not submit feedback to the hub if you are having issues with a dataset. The SEARCCH team does not have direct experience with most of the artifacts that are in the system and will be unable to help you. <br/><br/> It is always best to first contact the author and try to work out any issues or misunderstandings. Use the SEARCCH entry to identify the dataset’s owner/author, and contact the owner directly for support. If you still have issues with the dataset after reaching out for support, you can try asking a question using the review feature. Be sure to leave your contact information so folks can reach out to you. <br/><br/> You can also share your experience using the data by leaving a review of the artifact in the hub. Please try to be constructive in your comments. E.g., if you found a way to fix broken labeling and were then able to use the dataset, share how to do that. We also encourage sharing positive experiences.'
+        },
+        {
+          q: 'How do I add a profile pic?',
+          a:
+            'Direct profile picture upload is not yet implemented in the hub. The hub searches gravatar.com for profile pictures associated with your registered SEARCCH email address. If you would like your profile picture to show up in the SEARCCH hub, go to <a href="https://gravatar.com" target="_blank">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
         }
       ]
     }
