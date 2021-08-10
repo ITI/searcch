@@ -6,22 +6,28 @@
           <div class="text-center">
             <logo />
           </div>
-          <v-card>
-            <v-card-text>
-              <p>
-                <b>Q: What features is the SEARCCH Hub going to have.</b> <br />
-                A: The planned feature list can be found at the following
-                <a>link</a>
-              </p>
-            </v-card-text>
-          </v-card>
-          <v-card class="mt-2">
-            <v-card-text>
-              <p>
-                <b>Q: When is a full version set to be released?</b> <br />
-                A: The development of the platform is ongoing with feedback from
-                the community and no official release date is set.
-              </p>
+          <v-card class="mx-auto" max-width="800">
+            <v-card-title class="primary white--text">
+              <span class="text-h6">Frequently Asked Questions</span>
+            </v-card-title>
+            <v-card-text class="py-0">
+              <v-timeline align-top dense>
+                <v-timeline-item
+                  v-for="(faq, index) in faqs"
+                  :key="`faq${index}`"
+                  small
+                  fill-dot
+                  icon="mdi-help"
+                >
+                  <v-card color="primary" dark>
+                    <v-card-title class="text-h6" v-text="faq.q">
+                      Lorem Ipsum Dolor
+                    </v-card-title>
+                    <v-card-text class="white text--primary" v-html="faq.a">
+                    </v-card-text>
+                  </v-card>
+                </v-timeline-item>
+              </v-timeline>
             </v-card-text>
           </v-card>
         </div>
@@ -35,6 +41,80 @@ export default {
   components: {
     Logo: () => import('@/components/Logo'),
     LazyHydrate: () => import('vue-lazy-hydration')
+  },
+  data() {
+    return {
+      faqs: [
+        {
+          q: 'What is the SEARCCH Hub?',
+          a:
+            'The SEARCCH hub is a cybersecurity research artifact sharing portal. It maintains an index of cybersecurity research artifacts, such as data sets and code, that are distributed across the internet and facilitates a community around these artifacts. It allows researchers to share the location of their artifacts with the community and their experience with certain artifacts. It helps researchers rapidly find relevant artifacts that will help with their ongoing research efforts.'
+        },
+        {
+          q: 'How is SEARCCH funded?',
+          a:
+            'SEARCCH is funded under cooperative grants from the National Science Foundation. Grant numbers are CNS-1925773, CNS-1925616, CNS-1925588, and CNS-1925564.'
+        },
+        {
+          q: 'Who is behind SEARCCH?',
+          a:
+            'SEARCCH is being developed under a collaboration between the University of Southern California Information Sciences Institute (USC-ISI), the University of Utah (Utah), the University of Illinois Urbana-Champaign (UIUC), and SRI International (SRI).'
+        },
+        {
+          q: 'Is there any cost to use the hub?',
+          a:
+            'There is no cost to use the SEARCCH Hub. It is open to all researchers in the cybersecurity community.'
+        },
+        {
+          q: 'What is an artifact?',
+          a:
+            'An artifact is a tangible output from scientific research. Artifacts include publications, datasets, code, etc. The SEARCCH project focuses less on publications, which can be found through a variety of existing sources and more on datasets, code, testbeds, and the like, which can be more difficult to find.'
+        },
+        {
+          q: 'How can I get an account on the SEARCCH hub?',
+          a:
+            'SEARCCH currently utilizes single sign-on from Github.com. As such, anyone that has a GitHub account can utilize the SEARCCH hub. Please visit https://github.com/signup to sign up for a GitHub account and then visit the SEARCCH hub to login using single sign-on.'
+        },
+        {
+          q: 'Do I have to share data in order to use the hub?',
+          a:
+            'No. Researchers are free to browse the SEARCCH hub contents to find and access useful artifacts in support of their own research. It is our hope that, over time, researchers will generate artifacts that have broader use, make them freely available on the Internet, and index them in the hub so others can quickly find and reuse them.'
+        },
+        {
+          q: 'How can I submit my data or code to the hub?',
+          a:
+            'The most direct way to get your artifacts into the SEARCCH hub is through the SEARCCH importer service. Please visit https://hub.cyberexperimentation.org/importer to start importing your work.'
+        },
+        {
+          q:
+            'My artifact is already in the hub, but I didn’t put it there. How can I take ownership of it?',
+          a:
+            'This feature is not yet implemented in the hub. To take ownership, please use the feedback feature to initiate discussion with the SEARCCH team.'
+        },
+        {
+          q: 'The metadata for my artifact is incorrect. How can I update it?',
+          a:
+            'During the import process you can choose to edit any of the automatically generated metadata. Any changes you make will be saved and reflected in the artifact once you’ve published it.<br/><br/> If your artifact is already published, please please use the feedback feature to initiate discussion with the SEARCCH team.'
+        },
+        {
+          q: 'I need to withdraw my artifact. How can I do that?',
+          a:
+            'This feature is not yet implemented in the hub. To take ownership, please use the feedback feature to initiate discussion with the SEARCCH team.'
+        },
+        {
+          q:
+            'I found a tool in the Hub, but the tool doesn’t work or works incorrectly. How do I get help or submit feedback?',
+          a:
+            'Please do not submit feedback to the hub if you are having issues with using a tool. The SEARCCH team does not have direct experience with most of the artifacts that are in the system and will be unable to help you. <br/><br/> It is always best to first contact the author and try to work out any issues or misunderstandings. Use the SEARCCH entry to identify the tool’s owner/author, and contact the owner directly for tool support. If you still have issues with the tool after reaching out for support, you can try asking a question using the review tool and leaving your contact info there. <br/><br/>You can also share your experience with the tool by leaving a review of the artifact in the hub. Please try to be constructive, understanding that most tools are not products; they are typically shared for use “as is”. If the tool is not maintained, leaving a review that says so and giving the artifact a low rating can help others. We also encourage sharing positive experiences.'
+        },
+        {
+          q:
+            'I found a dataset in the Hub, but the data is wrong/malformed/mislabeled. How do I get help or submit feedback?',
+          a:
+            'Please do not submit feedback to the hub if you are having issues with a dataset. The SEARCCH team does not have direct experience with most of the artifacts that are in the system and will be unable to help you. <br/><br/> It is always best to first contact the author and try to work out any issues or misunderstandings. Use the SEARCCH entry to identify the dataset’s owner/author, and contact the owner directly for support. If you still have issues with the dataset after reaching out for support, you can try asking a question using the review feature. Be sure to leave your contact information so folks can reach out to you. <br/><br/> You can also share your experience using the data by leaving a review of the artifact in the hub. Please try to be constructive in your comments. E.g., if you found a way to fix broken labeling and were then able to use the dataset, share how to do that. We also encourage sharing positive experiences.'
+        }
+      ]
+    }
   },
   async mounted() {}
 }
