@@ -51,14 +51,14 @@
       <v-card-title>
         Artifact Imports
         <v-spacer></v-spacer>
-        <v-text-field
+        <!-- <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           hide-details
           dense
-        ></v-text-field>
+        ></v-text-field> -->
       </v-card-title>
 
       <v-data-table
@@ -69,6 +69,7 @@
         :loading="loading"
         :options.sync="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
+        :server-items-length="total"
         dense
       >
         <template v-slot:item.id="{ item }">
@@ -154,8 +155,8 @@ export default {
     ...mapState({
       user_is_admin: state => state.user.user_is_admin,
       items: state => state.system.artifact_imports.artifact_imports,
-      //page: state => state.system.artifact_imports.page,
-      //pages: state => state.system.artifact_imports.pages,
+      page: state => state.system.artifact_imports.page,
+      pages: state => state.system.artifact_imports.pages,
       total: state => state.system.artifact_imports.total
     })
   },
@@ -168,9 +169,8 @@ export default {
       if (this.user_is_admin) {
         this.loading = true
         var payload = {
-          // FIXME: disabled pagination for now
-          // page: this.options.page,
-          // items_per_page: this.options.itemsPerPage,
+          page: this.options.page,
+          items_per_page: this.options.itemsPerPage,
           sort: this.options.sortBy,
           sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1

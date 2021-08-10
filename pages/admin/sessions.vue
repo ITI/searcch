@@ -31,7 +31,7 @@
           <v-text-field
             v-model="owner_filter"
             hint="Case-insensitive substring of user name or email"
-            label="Owner"
+            label="User"
             @change="updateSessions()"
           ></v-text-field>
         </v-col>
@@ -51,14 +51,14 @@
       <v-card-title>
         Login Sessions
         <v-spacer></v-spacer>
-        <v-text-field
+        <!-- <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           hide-details
           dense
-        ></v-text-field>
+        ></v-text-field> -->
       </v-card-title>
       <v-data-table
         :headers="headers"
@@ -68,6 +68,7 @@
         :loading="loading"
         :options.sync="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
+        :server-items-length="total"
         dense
       >
         <template v-slot:top>
@@ -176,8 +177,8 @@ export default {
     ...mapState({
       user_is_admin: state => state.user.user_is_admin,
       sessions: state => state.system.sessions.sessions,
-      //page: state => state.system.sessions.page,
-      //pages: state => state.system.sessions.pages,
+      page: state => state.system.sessions.page,
+      pages: state => state.system.sessions.pages,
       total: state => state.system.sessions.total
     })
   },
@@ -185,13 +186,11 @@ export default {
     updateSessions() {
       if (this.user_is_admin) {
         this.loading = true
-        // FIXME: disabled pagination for now
         var payload = {
-          // page: this.options.page,
-          // items_per_page: this.options.itemsPerPage,
+          page: this.options.page,
+          items_per_page: this.options.itemsPerPage,
           sort: this.options.sortBy,
-          // sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
-          sort_desc: 0,
+          sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1
         }
         if (this.is_admin) payload['is_admin'] = 1

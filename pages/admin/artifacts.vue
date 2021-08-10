@@ -206,8 +206,8 @@ export default {
     ...mapState({
       user_is_admin: state => state.user.user_is_admin,
       items: state => state.system.artifacts.artifacts,
-      //page: state => state.system.artifacts.page,
-      //pages: state => state.system.artifacts.pages,
+      page: state => state.system.artifacts.page,
+      pages: state => state.system.artifacts.pages,
       total: state => state.system.artifacts.total
     })
   },

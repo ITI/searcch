@@ -37,14 +37,14 @@
       <v-card-title>
         Users
         <v-spacer></v-spacer>
-        <v-text-field
+        <!-- <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           hide-details
           dense
-        ></v-text-field>
+        ></v-text-field> -->
       </v-card-title>
       <v-data-table
         :headers="headers"
@@ -53,6 +53,7 @@
         :loading="loading"
         :options.sync="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
+        :server-items-length="total"
         dense
       >
         <template v-slot:item.id="{ item }">
@@ -111,8 +112,8 @@ export default {
     ...mapState({
       user_is_admin: state => state.user.user_is_admin,
       items: state => state.system.users.users,
-      //page: state => state.system.users.page,
-      //pages: state => state.system.users.pages,
+      page: state => state.system.users.page,
+      pages: state => state.system.users.pages,
       total: state => state.system.users.total
     })
   },
@@ -120,10 +121,9 @@ export default {
     updateUsers() {
       if (this.user_is_admin) {
         this.loading = true
-        // FIXME: backend needs some fixes on owner search, disabled pagination for now
         var payload = {
-          // page: this.options.page,
-          // items_per_page: this.options.itemsPerPage,
+          page: this.options.page,
+          items_per_page: this.options.itemsPerPage,
           sort: this.options.sortBy,
           sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1
