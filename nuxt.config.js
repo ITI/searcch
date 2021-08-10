@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   /*
    ** Headers of the page
@@ -67,7 +65,8 @@ export default {
     '~/plugins/base',
     '~/plugins/chartist',
     '~/plugins/components',
-    '~/plugins/sanitize'
+    '~/plugins/sanitize',
+    '~/plugins/moment'
   ],
   /*
    ** Nuxt.js dev-modules

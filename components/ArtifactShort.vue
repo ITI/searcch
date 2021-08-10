@@ -25,7 +25,8 @@
       </v-row>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
-        {{ artifact.num_reviews }} reviews
+        {{ artifact.num_reviews }}
+        {{ artifact.num_reviews == 1 ? 'review' : 'reviews' }}
       </span>
       <v-rating
         v-model="artifact.avg_rating"
@@ -110,8 +111,7 @@
 <script>
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor } from '@/helpers'
-import { EventBus } from '@/helpers/event-bus.js'
+import { artifactIcon, artifactColor, EventBus } from '@/helpers'
 
 export default {
   props: {
@@ -149,7 +149,6 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
       favorites: state => state.artifacts.favoritesIDs
     }),
     sanitizedDescription: function() {

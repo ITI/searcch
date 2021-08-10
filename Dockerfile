@@ -1,4 +1,4 @@
-FROM node:15.1
+FROM node:14.17.4
 
 # create a directory for the application
 RUN mkdir /app

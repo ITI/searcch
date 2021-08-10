@@ -28,7 +28,8 @@
       </v-row>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
-        {{ artifact.num_reviews }} reviews
+        {{ artifact.num_reviews }}
+        {{ artifact.num_reviews == 1 ? 'review' : 'reviews' }}
       </span>
       <v-rating
         v-model="artifact.avg_rating"
@@ -71,7 +72,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <span v-else>{{ loadingMessage }}</span>
+    <div v-else>{{ loadingMessage }}</div>
   </div>
 </template>
 

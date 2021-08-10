@@ -1,13 +1,15 @@
 <template>
   <div v-if="artifact_local">
-    <v-card class="mx-auto my-2">
-      <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
-      <v-card-text>
-        <a target="_blank" :href="artifact_local.url">
-          {{ artifact_local.url }}
-        </a>
-      </v-card-text>
-    </v-card>
+    <div>
+      <v-card class="mx-auto my-2">
+        <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
+        <v-card-text>
+          <a target="_blank" :href="artifact_local.url">
+            {{ artifact_local.url }}
+          </a>
+        </v-card-text>
+      </v-card>
+    </div>
     <v-form v-model="valid">
       <v-card class="mx-auto my-2">
         <v-card-title
@@ -53,325 +55,245 @@
 
         <v-card-title class="py-0">Roles</v-card-title>
 
-        <v-chip
-          color="primary"
-          v-for="(a, index) in artifact_local.affiliations"
-          :key="a.id"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <span>
-            <v-avatar left>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-avatar>
-            {{ a.affiliation.person.name }} ({{ a.roles }})
-            <v-icon @click="artifact_local.affiliations.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </span>
-        </v-chip>
+        <ArtifactChips
+          :field="artifact_local.affiliations"
+          type="role"
+        ></ArtifactChips>
 
-        <v-chip
-          color="primary"
-          v-for="(item, index) in meta.creators"
-          :key="`c${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <span>
-            <v-avatar left>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-avatar>
-            {{ meta.creators[index].affiliation.person.name }} ({{
-              meta.creators[index].roles
-            }})
-            <v-icon @click="meta.creators.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </span>
-        </v-chip>
-        <v-dialog
-          transition="dialog-bottom-transition"
-          max-width="600px"
-          persistent
-          v-model="dialog"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="success ml-2 mb-2" fab small v-bind="attrs" v-on="on">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <template v-slot:default="dialog">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Add Author</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-combobox
-                        label="Organization Name"
-                        small-chips
-                        persistent-hint
-                        clearable
-                        v-if="orgs"
-                        :items="orgNames"
-                        v-model="affiliation.affiliation.org.name"
-                        hint="Select applicable org from the list or type in your own"
-                        :search-input.sync="search"
-                      >
-                        <template v-slot:no-data>
-                          <v-list-item>
-                            <v-list-item-content>
-                              <v-list-item-title>
-                                No results matching "<strong>{{
-                                  search
-                                }}</strong
-                                >". Press <kbd>enter</kbd> to create a new one
-                              </v-list-item-title>
-                            </v-list-item-content>
-                          </v-list-item>
-                        </template>
-                      </v-combobox>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Author Name"
-                        v-model="affiliation.affiliation.person.name"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Email Address"
-                        v-model="affiliation.affiliation.person.email"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  @click="
-                    meta.creators.push(affiliation)
-                    dialog.value = false
-                  "
-                  class="success ml-2 mb-2"
-                  text
-                  >Add</v-btn
-                >
-                <v-btn
-                  class="error ml-2 mb-2"
-                  text
-                  @click="dialog.value = false"
-                >
-                  Close
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
+        <ArtifactChips :field="meta.creators" type="role"></ArtifactChips>
+        <div>
+          <v-dialog
+            transition="dialog-bottom-transition"
+            max-width="600px"
+            persistent
+            v-model="dialog"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="success ml-2 mb-2"
+                fab
+                small
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <template v-slot:default="dialog">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Add Author</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-combobox
+                          label="Organization Name"
+                          small-chips
+                          persistent-hint
+                          clearable
+                          v-if="orgs"
+                          :items="orgNames"
+                          v-model="affiliation.affiliation.org.name"
+                          hint="Select applicable org from the list or type in your own"
+                          :search-input.sync="search"
+                        >
+                          <template v-slot:no-data>
+                            <v-list-item>
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                  No results matching "<strong>{{
+                                    search
+                                  }}</strong
+                                  >". Press <kbd>enter</kbd> to create a new one
+                                </v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </template>
+                        </v-combobox>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          label="Author Name"
+                          v-model="affiliation.affiliation.person.name"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          label="Email Address"
+                          v-model="affiliation.affiliation.person.email"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    @click="
+                      meta.creators.push(affiliation)
+                      dialog.value = false
+                      affiliation = affiliationObject()
+                    "
+                    class="success ml-2 mb-2"
+                    text
+                    >Add</v-btn
+                  >
+                  <v-btn
+                    class="error ml-2 mb-2"
+                    text
+                    @click="dialog.value = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </div>
 
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Keywords</v-card-title>
-        <span v-if="artifact_local.tags.length">
-          <v-chip
-            color="primary"
-            v-for="(t, index) in artifact_local.tags"
-            :key="`tag${index}`"
-            cols="12"
-            class="ma-2"
-            label
-          >
-            <v-avatar left>
-              <v-icon>mdi-tag-outline</v-icon>
-            </v-avatar>
-            {{ t.tag }}
-            <v-icon @click="artifact_local.tags.splice(index, 1)" right
-              >mdi-close</v-icon
-            >
-          </v-chip>
-        </span>
+        <ArtifactChips
+          :field="artifact_local.tags"
+          type="keyword"
+        ></ArtifactChips>
 
-        <v-chip
-          color="primary"
-          v-for="(item, index) in meta.keywords"
-          :key="`k${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-icon left>mdi-tag-outline</v-icon>
-          <v-text-field
-            solo
-            dark
-            placeholder="Enter Keyword"
-            v-model="meta.keywords[index]"
-            hide-details
-            class="m-0"
-            background-color="#00476B"
-            >{{ meta.keywords[index] }}</v-text-field
-          >
-          <v-icon @click="meta.keywords.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </v-chip>
-        <v-btn
-          @click="meta.keywords.push('')"
-          class="success ml-2 mb-2"
-          fab
-          small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
+        <ArtifactChips
+          :field="meta.keywords"
+          type="keyword"
+          placeholder="Enter Keyword"
+          create
+        ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Languages</v-card-title>
-
-        <v-chip
-          color="primary"
-          v-for="(l, index) in meta.languages"
-          :key="`lang${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-avatar left>
-            <v-icon>{{ iconImage('code') }}</v-icon>
-          </v-avatar>
-          <v-text-field
-            solo
-            dark
-            placeholder="Enter Keyword"
-            v-model="meta.languages[index]"
-            hide-details
-            class="m-0"
-            background-color="#00476B"
-            >{{ meta.languages[index] }}</v-text-field
-          >
-          <v-icon @click="meta.languages.splice(index, 1)" right
-            >mdi-close</v-icon
-          >
-        </v-chip>
-        <v-btn
-          @click="meta.languages.push('')"
-          class="success ml-2 mb-2"
-          fab
-          small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
+        <ArtifactChips
+          :field="meta.languages"
+          type="code"
+          placeholder="Enter Language"
+          create
+        ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Related</v-card-title>
-        <span v-if="artifact_local.relationships">
+
+        <ArtifactChips
+          :field="artifact_local.relationships"
+          type="relation"
+        ></ArtifactChips>
+
+        <div>
+          <v-dialog
+            transition="dialog-bottom-transition"
+            persistent
+            fullscreen
+            v-model="artifactdialog"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="success ml-2 mb-2"
+                fab
+                small
+                v-bind="attrs"
+                v-on="on"
+                :disabled="artifact_local.id ? false : true"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <template v-slot:default="artifactdialog">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Search for Related Artifacts</span>
+                </v-card-title>
+                <SearchCard :search="search" related all></SearchCard>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    class="error ml-2 mb-2"
+                    text
+                    @click="artifactdialog.value = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </div>
+        <v-divider class="mx-4"></v-divider>
+
+        <v-card-title class="py-0">Badges</v-card-title>
+        <div>
+          <span v-for="(b, index) in artifact_local.badges">
+            <v-img
+              :key="`badgeimg${index}`"
+              max-height="100"
+              max-width="100"
+              :src="b.badge.image_url"
+            ></v-img>
+            <a :href="b.badge.url" target="_blank">
+              {{ b.badge.title }}
+            </a>
+            <v-icon @click="artifact_local.badges.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </span>
+        </div>
+        <div>
           <v-chip
-            color="primary"
-            v-for="(v, k) in artifact_local.relationships"
-            :key="`rel${k}`"
+            v-for="(item, index) in meta.badges"
+            :key="`newbadge${index}`"
             cols="12"
             class="ma-2"
             label
-            :to="{ path: `/artifact/${v.related_artifact_id}` }"
           >
-            <v-icon left>mdi-relation-one-to-one</v-icon>
+            <v-icon left>mdi-tag-outline</v-icon>
 
-            {{ v.relation | titlecase }}: {{ v.related_artifact_id }}
+            <v-select
+              label="Badges"
+              v-bind:items="possibleBadges"
+              v-model="meta.badges[index]"
+              item-text="id"
+              item-value="title"
+              return-object
+            >
+              <template slot="item" slot-scope="data">
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-html="`${data.item.organization} - ${data.item.title}`"
+                  >
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <template slot="selection" slot-scope="data">
+                {{ data.item.organization }} - {{ data.item.title }}
+              </template>
+            </v-select>
+            <v-icon @click="meta.badges.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
           </v-chip>
-        </span>
-        <v-dialog
-          transition="dialog-bottom-transition"
-          persistent
-          fullscreen
-          v-model="artifactdialog"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="success ml-2 mb-2" fab small v-bind="attrs" v-on="on">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <template v-slot:default="artifactdialog">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Search for Related Artifacts</span>
-              </v-card-title>
-              <SearchCard :search="search" related all />
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  class="error ml-2 mb-2"
-                  text
-                  @click="artifactdialog.value = false"
-                >
-                  Close
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-
-        <v-divider class="mx-4"></v-divider>
-        <v-card-title class="py-0">Badges</v-card-title>
-        <span v-for="(b, index) in artifact_local.badges">
-          <v-img
-            :key="`badgeimg${index}`"
-            max-height="100"
-            max-width="100"
-            :src="b.badge.image_url"
-          />
-          <a :href="b.badge.url" target="_blank">
-            {{ b.badge.title }}
-          </a>
-          <v-icon @click="artifact_local.badges.splice(index, 1)" right
-            >mdi-close</v-icon
+          <v-btn
+            @click="meta.badges.push('')"
+            class="success ml-2 mb-2"
+            fab
+            small
+            ><v-icon>mdi-plus</v-icon></v-btn
           >
-        </span>
-
-        <v-chip
-          v-for="(item, index) in meta.badges"
-          :key="`newbadge${index}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-icon left>mdi-tag-outline</v-icon>
-
-          <v-select
-            label="Badges"
-            v-bind:items="possibleBadges"
-            v-model="meta.badges[index]"
-            item-text="id"
-            item-value="title"
-            return-object
-          >
-            <template slot="item" slot-scope="data">
-              <v-list-item-content>
-                <v-list-item-title
-                  v-html="`${data.item.organization} - ${data.item.title}`"
-                >
-                </v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <template slot="selection" slot-scope="data">
-              {{ data.item.organization }} - {{ data.item.title }}
-            </template>
-          </v-select>
-          <v-icon @click="meta.badges.splice(index, 1)" right>mdi-close</v-icon>
-        </v-chip>
-        <v-btn @click="meta.badges.push('')" class="success ml-2 mb-2" fab small
-          ><v-icon>mdi-plus</v-icon></v-btn
-        >
+        </div>
 
         <v-divider class="mx-4"></v-divider>
 
         <div v-if="artifact_local.type == 'code'">
-          <span v-if="stars || watchers">
+          <div v-if="stars || watchers">
             <v-card-title class="py-0">Github Metrics</v-card-title>
 
             <v-chip color="primary" cols="12" class="ma-2" label>
@@ -388,9 +310,9 @@
 
               {{ watchers }}
             </v-chip>
-          </span>
+          </div>
 
-          <span v-if="record.artifact.importer">
+          <div v-if="record.artifact.importer">
             <v-card-title class="py-0">Importer</v-card-title>
 
             <v-chip color="primary" cols="12" class="ma-2" label>
@@ -402,7 +324,7 @@
               }}
             </v-chip>
             <v-divider class="mx-4"></v-divider>
-          </span>
+          </div>
         </div>
 
         <v-card-title class="py-0">License</v-card-title>
@@ -434,60 +356,67 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Files</v-card-title>
-        <span v-if="artifact_local.files">
-          <v-card-text
+
+        <div v-if="artifact_local.files">
+          <v-list-item
             v-for="(f, index) in artifact_local.files"
             :key="`file${index}`"
-            cols="12"
+            dense
           >
-            <div>
-              <v-icon left>mdi-file</v-icon>
-              <a target="_blank" :href="f.url">{{ f.url }}</a>
-              &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
-              {{ f.size ? convertSize(f.size) : 'unknown' }})
-              <v-icon @click="artifact_local.files.splice(index, 1)" right
-                >mdi-close</v-icon
+            <v-list-group :value="true" no-action sub-group>
+              <template v-slot:activator>
+                <a @click.stop target="_blank" :href="f.url">{{ f.url }}</a>
+                &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
+                {{ f.size ? convertSize(f.size) : 'unknown' }})
+              </template>
+              <v-list-item
+                v-for="(fm, indexm) in f.members"
+                :key="`mem${indexm}`"
+                dense
               >
-            </div>
-          </v-card-text>
-          <v-card-text
-            v-for="(f, index) in meta.files"
-            :key="`newfile${index}`"
-            cols="12"
-          >
-            <v-textarea
-              outlined
-              height="10"
-              label="File URL"
-              placeholder="Enter File URL"
-              v-model="f.url"
-              prepend-icon="mdi-file"
-              append-outer-icon="mdi-close"
-              @click:append-outer="meta.files.splice(index, 1)"
-            ></v-textarea>
-          </v-card-text>
-          <v-btn
-            @click="meta.files.push({ url: '', filetype: 'unknown' })"
-            class="success ml-2 mb-2"
-            fab
-            small
-            ><v-icon>mdi-plus</v-icon></v-btn
-          >
-        </span>
-        <span class="ml-4 mb-2" v-else>No files found by importer</span>
+                <a target="_blank" :href="fm.html_url || fm.download_url">{{
+                  fm.pathname || fm.name || fm.html_url || fm.download_url
+                }}</a>
+                &nbsp; (type: {{ fm.filetype ? fm.filetype : 'unknown' }}, size:
+                {{ fm.size ? convertSize(fm.size) : 'unknown' }})
+              </v-list-item>
+            </v-list-group>
+            <v-icon @click="artifact_local.files.splice(index, 1)" right
+              >mdi-close</v-icon
+            >
+          </v-list-item>
+
+          <div>
+            <v-card-text
+              v-for="(f, index) in meta.files"
+              :key="`newfile${index}`"
+              cols="12"
+            >
+              <v-textarea
+                outlined
+                height="10"
+                label="File URL"
+                placeholder="Enter File URL"
+                v-model="f.url"
+                prepend-icon="mdi-file"
+                append-outer-icon="mdi-close"
+                @click:append-outer="meta.files.splice(index, 1)"
+              ></v-textarea>
+            </v-card-text>
+            <v-btn
+              @click="meta.files.push({ url: '', filetype: 'unknown' })"
+              class="success ml-2 mb-2"
+              fab
+              small
+              ><v-icon>mdi-plus</v-icon></v-btn
+            >
+          </div>
+        </div>
+        <div class="ml-4 mb-2" v-else>No files found by importer</div>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            small
-            color="green"
-            :disabled="disabled"
-            dark
-            @click="
-              save()
-              disabled = true
-            "
-          >
+          <v-btn small color="green" :disabled="disabled" dark @click="save()">
             Save
           </v-btn>
 
@@ -519,8 +448,7 @@ import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
-import { EventBus } from '@/helpers/event-bus.js'
-import { zipArray } from '@/helpers'
+import { zipArray, EventBus } from '@/helpers'
 
 export default {
   name: 'KGArtifactEdit',
@@ -536,7 +464,8 @@ export default {
   },
   components: {
     LazyHydrate: () => import('vue-lazy-hydration'),
-    SearchCard: () => import('@/components/SearchCard')
+    SearchCard: () => import('@/components/SearchCard'),
+    ArtifactChips: () => import('@/components/ArtifactChips')
   },
   data() {
     return {
@@ -553,19 +482,7 @@ export default {
         relations: [],
         badges: []
       },
-      affiliation: {
-        affiliation: {
-          org: {
-            name: '',
-            type: 'Institution'
-          },
-          person: {
-            email: '',
-            name: ''
-          }
-        },
-        roles: 'Author'
-      },
+      affiliation: this.affiliationObject(),
       schema: {},
       affiliationSchema: {},
       schemaLoaded: false,
@@ -607,13 +524,13 @@ export default {
       }
     })
     this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
-    let csv = this.artifact_local.meta.find(o => o.name == 'languages')
-    this.meta.languages = csv ? csv.value.split(',') : []
+    this.meta.languages = this.getLanguages()
     this.meta.keywords = this.getPossibleTags()
     let response = await this.$badgesEndpoint.index({ verified: 1 })
-    this.possibleBadges = response.badges
+    this.possibleBadges = typeof response !== 'undefined' ? response.badges : []
     response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
-    this.possibleLicenses = response.licenses
+    this.possibleLicenses =
+      typeof response !== 'undefined' ? response.licenses : []
   },
   mounted() {
     // force title and description to refresh on page load
@@ -626,7 +543,6 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
       orgs: state => state.user.orgs
     }),
     orgNames: {
@@ -674,7 +590,6 @@ export default {
         return this.affiliationSchema.org.properties.type.enum
       } else return []
     },
-
     published() {
       if (this.artifact_local.publication) return true
       return false
@@ -683,8 +598,11 @@ export default {
   watch: {
     record(val) {
       this.artifact_local = JSON.parse(JSON.stringify(val.artifact))
-      let csv = this.artifact_local.meta.find(o => o.name == 'languages')
-      this.meta.languages = csv ? csv.value.split(',') : []
+      this.meta.languages = this.getLanguages()
+      this.meta.keywords = this.getPossibleTags()
+    },
+    artifact_local(val) {
+      this.meta.languages = this.getLanguages()
       this.meta.keywords = this.getPossibleTags()
     }
   },
@@ -693,44 +611,68 @@ export default {
       if (!this.valid) return
       if (!confirm('Are you sure you want to publish this artifact?')) return
 
-      if (this.create) {
-        await this.save()
-      }
-      let response = await this.$artifactRecordEndpoint.update(
+      // save the artifact first
+      await this.save()
+
+      let response = await this.$artifactEndpoint.update(
         this.artifact_local.id,
         {
           publication: {}
         }
       )
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        id: this.artifact_local.id
+      })
+
       this.$router.push(`/artifact/${this.artifact_local.id}`)
     },
     async save() {
       if (!this.valid) return
+      this.disabled = true
       this.artifact_local.tags =
+        typeof this.artifact_local.tags !== 'undefined' &&
         this.artifact_local.tags !== null
           ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
-          : []
+          : zipArray('tag', this.meta.keywords)
       this.artifact_local.files =
+        typeof this.artifact_local.files !== 'undefined' &&
         this.artifact_local.files !== null
           ? this.artifact_local.files.concat(this.meta.files)
-          : []
+          : this.meta.files
       this.artifact_local.affiliations =
+        typeof this.artifact_local.affiliations !== 'undefined' &&
         this.artifact_local.affiliations !== null
           ? this.artifact_local.affiliations.concat(this.meta.creators)
-          : []
+          : this.meta.creators
       this.artifact_local.badges =
+        typeof this.artifact_local.badges !== 'undefined' &&
         this.artifact_local.badges !== null
           ? this.artifact_local.badges.concat(
               zipArray('badge', this.meta.badges)
             )
-          : []
+          : zipArray('badge', this.meta.badges)
 
       let langs =
         this.artifact_local.meta !== null
           ? this.artifact_local.meta.find(o => o.name == 'languages')
           : null
-      if (langs) langs.value = this.meta.languages.join(',')
-
+      if (langs) {
+        if (this.meta.languages.join(',')) {
+          langs.value = this.meta.languages.join(',')
+        } else {
+          this.artifact_local.meta.splice(
+            this.artifact_local.meta.findIndex(o => o.name == 'languages'),
+            1
+          )
+        }
+      } else {
+        if (this.meta.languages.join(',')) {
+          this.artifact_local.meta.push({
+            name: 'languages',
+            value: this.meta.languages.join(',')
+          })
+        }
+      }
       // console.log('local artifact')
       // console.log(this.artifact_local)
 
@@ -740,22 +682,31 @@ export default {
         response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
         // console.log('curating')
-        response = await this.$artifactRecordEndpoint.update(
+        response = await this.$artifactEndpoint.update(
           this.artifact_local.id,
           this.artifact_local
         )
       }
       // console.log('response artifact')
       // console.log(response)
-      if (response) this.artifact_local = response.artifact
+
+      this.artifact_local =
+        typeof response !== 'undefined' ? response.artifact : {}
+
+      this.disabled = false
       this.snackbar = true
+
       this.meta.keywords = this.getPossibleTags()
       this.meta.files = []
       this.meta.creators = []
       this.meta.badges = []
+      this.meta.languages = []
+      this.meta.relations = []
+
       if (this.create) {
         this.create = false
         this.$router.push(`/artifact/${this.artifact_local.id}?edit=true`)
+      } else {
       }
     },
     iconColor(type) {
@@ -787,12 +738,35 @@ export default {
       t = t.filter(el => !this.artifact_local.tags.map(e => e.tag).includes(el))
       return t
     },
+    getLanguages() {
+      let csv = this.artifact_local.meta.find(o => o.name == 'languages')
+      if (csv) {
+        return csv.value ? csv.value.split(',') : []
+      } else {
+        return []
+      }
+    },
     closeHandler(dialog) {
       switch (dialog) {
         case 'artifactdialog': {
           this.artifactdialog = false
         }
       }
+    },
+    affiliationObject() {
+      return new Object({
+        affiliation: {
+          org: {
+            name: '',
+            type: 'Institution'
+          },
+          person: {
+            email: '',
+            name: ''
+          }
+        },
+        roles: 'Author'
+      })
     }
   }
 }

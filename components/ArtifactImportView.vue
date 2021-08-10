@@ -9,7 +9,7 @@
                 >Import ID {{ artifact.id }}:&nbsp;<a
                   target="_blank"
                   :href="artifact.url"
-                  >{{ artifactTitle | titlecase }}</a
+                  >{{ artifactTitle }}</a
                 ></span
               >
             </div>
@@ -40,25 +40,31 @@
             message:
             {{ artifact.message }}
           </v-card-text>
-          log:
-          <v-textarea
-            auto-grow
-            readonly
-            :value="this.artifact.log"
-          ></v-textarea>
+          <span v-if="this.artifact.log">
+            log:
+            <v-textarea
+              auto-grow
+              readonly
+              :value="this.artifact.log"
+            ></v-textarea>
+          </span>
         </v-col>
       </v-row>
       <v-card-actions>
+        <v-btn v-if="artifact.artifact_id" text @click="deleteArtifact()">
+          Delete
+        </v-btn>
+
         <v-btn v-if="artifact.artifact_id || archived" text @click="archive()">
           Archive
         </v-btn>
 
-        <v-btn v-else text @click="cancel()">
-          Delete
+        <v-btn v-else text @click="deleteImport()">
+          Delete Import
         </v-btn>
 
         <v-btn
-          v-if="artifact.artifact_id && !published"
+          v-if="artifact.artifact_id"
           :to="{
             path: `/artifact/${artifact.artifact_id}`,
             query: { edit: 'true' }
@@ -74,12 +80,8 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn
-          :disabled="!artifact.artifact_id || published"
-          text
-          @click="publish()"
-        >
-          Publish{{ published ? 'ed' : '' }}
+        <v-btn :disabled="!artifact.artifact_id" text @click="publish()">
+          Publish
         </v-btn>
 
         <v-btn
@@ -95,7 +97,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
@@ -106,46 +107,29 @@ export default {
     }
   },
   data() {
-    return {
-      publish_local: false
-    }
+    return {}
   },
   computed: {
-    ...mapState({
-      userid: state => state.user.userid
-    }),
-    full_artifact() {
-      return this.artifact.artifact
-    },
     artifactType() {
-      if (this.full_artifact) {
-        if (this.full_artifact.type) return this.full_artifact.type
-      }
       if (this.artifact.type == null) return 'Detecting Type...'
       return this.artifact.type
     },
     artifactTitle() {
-      if (this.full_artifact) {
-        if (this.full_artifact.title) return this.full_artifact.title
-      }
       return this.artifact.url
     },
-    published() {
-      if (this.full_artifact) {
-        if (this.full_artifact.publication || this.publish_local) return true
-      }
-      return false
-    },
     archived() {
-      if (this.full_artifact) {
-        if (this.full_artifact.archived) return true
-        else return false
-      }
-      return undefined
+      return this.artifact.archived ? this.artifact.archived : false
     }
   },
   methods: {
-    async cancel() {
+    async deleteArtifact() {
+      let response = await this.$artifactEndpoint.delete(
+        this.artifact.artifact_id
+      )
+      this.updateImports()
+    },
+    async deleteImport() {
+      // artifact.id here is the import ID
       let response = await this.$importEndpoint.delete(this.artifact.id)
       this.updateImports()
     },
@@ -164,8 +148,8 @@ export default {
     async publish() {
       if (!confirm('Are you sure you want to publish this artifact?')) return
 
-      let response = await this.$artifactRecordEndpoint.update(
-        this.full_artifact.id,
+      let response = await this.$artifactEndpoint.update(
+        this.artifact.artifact_id,
         {
           publication: {}
         }
@@ -174,8 +158,7 @@ export default {
       this.updateImports()
     },
     updateImports() {
-      if (this.userid)
-        this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
+      this.$store.dispatch('artifacts/fetchImports', {})
     },
     iconColor(type) {
       return artifactColor(type)

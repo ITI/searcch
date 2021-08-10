@@ -3,9 +3,7 @@
     <v-container>
       <v-row v-for="artifact in imports" :key="artifact.id">
         <v-col>
-          <LazyHydrate when-visible>
-            <ArtifactImportView :artifact="artifact" />
-          </LazyHydrate>
+          <ArtifactImportView :artifact="artifact"></ArtifactImportView>
         </v-col>
       </v-row>
     </v-container>
@@ -15,8 +13,7 @@
 <script>
 export default {
   components: {
-    ArtifactImportView: () => import('@/components/ArtifactImportView'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    ArtifactImportView: () => import('@/components/ArtifactImportView')
   },
   props: {
     imports: {

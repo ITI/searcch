@@ -23,9 +23,7 @@
       :value="error.request.response"
     ></pretty-print>
 
-    <NuxtLink to="/search">
-      Back to search
-    </NuxtLink>
+    <a href="/">Start Over</a>
   </v-app>
 </template>
 
@@ -56,7 +54,19 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.error)
+    console.log(this.error)
+    if (
+      this.error.statusCode === 401 &&
+      this.error.response.data.message === 'invalid session token'
+    ) {
+      console.log('invalid session token')
+      this.$store.commit('user/LOGOUT')
+      this.$auth.logout()
+
+      // auto log them back in
+      alert('Your session expired. The system will now log you back in')
+      this.$auth.loginWith('github')
+    }
   }
 }
 </script>

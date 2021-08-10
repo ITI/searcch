@@ -4,17 +4,17 @@ export default (ctx, inject) => {
   // And in the Vue instances (this.$repository in your components)
   const repositoryWithAxios = createRepository(ctx.$axios)
 
-  // affiliations
-  inject(
-    'userAffiliationsEndpoint',
-    repositoryWithAxios('kg/' + 'user/affiliations')
-  )
-
-  // artifact searching
+  // artifacts
   inject('artifactsEndpoint', repositoryWithAxios('kg/' + 'artifacts'))
 
   // artifact retrieval
-  inject('artifactRecordEndpoint', repositoryWithAxios('kg/' + 'artifact'))
+  inject('artifactEndpoint', repositoryWithAxios('kg/' + 'artifact'))
+
+  // artifact searching
+  inject(
+    'artifactSearchEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/search')
+  )
 
   // imports array view/add API
   inject('importsEndpoint', repositoryWithAxios('kg/' + 'artifact/imports'))
@@ -22,10 +22,16 @@ export default (ctx, inject) => {
   // import view/modify API
   inject('importEndpoint', repositoryWithAxios('kg/' + 'artifact/import'))
 
-  // add relationship
+  // get relationships
   inject(
     'relationshipsEndpoint',
     repositoryWithAxios('kg/' + 'artifact/relationships')
+  )
+
+  // modify relationship
+  inject(
+    'relationshipEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/relationship')
   )
 
   // badges
@@ -49,6 +55,9 @@ export default (ctx, inject) => {
   // reviews modify API
   inject('reviewsEndpoint', repositoryWithAxios('kg/' + 'review'))
 
+  // users index API
+  inject('usersEndpoint', repositoryWithAxios('kg/' + 'users'))
+
   // user API
   inject('userEndpoint', repositoryWithAxios('kg/' + 'user'))
 
@@ -61,6 +70,12 @@ export default (ctx, inject) => {
     repositoryWithAxios('kg/' + 'user/affiliations')
   )
 
+  // user affiliation modification
+  inject(
+    'userAffiliationEndpoint',
+    repositoryWithAxios('kg/' + 'user/affiliation')
+  )
+
   // organization API
   inject('organizationEndpoint', repositoryWithAxios('kg/' + 'organizations'))
 
@@ -69,4 +84,16 @@ export default (ctx, inject) => {
 
   // dashboard API
   inject('dashboardEndpoint', repositoryWithAxios('kg/' + 'dashboard'))
+
+  // importers array view API
+  inject('importersEndpoint', repositoryWithAxios('kg/' + 'importers'))
+
+  // importer view/modify API
+  inject('importerEndpoint', repositoryWithAxios('kg/' + 'importer'))
+
+  // session operation API
+  inject('sessionEndpoint', repositoryWithAxios('kg/' + 'session'))
+
+  // sessions index API
+  inject('sessionsEndpoint', repositoryWithAxios('kg/' + 'sessions'))
 }

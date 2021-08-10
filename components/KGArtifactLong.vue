@@ -24,30 +24,35 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>
-        <v-row class="mx-1"
-          >Description<v-spacer></v-spacer
-          ><v-btn v-if="isOverflow" @click="expanded = !expanded">{{
-            !expanded ? 'Expand' : 'Collapse'
-          }}</v-btn></v-row
-        >
-      </v-card-title>
+      <v-card-title>Description</v-card-title>
 
       <v-card-text ref="descDiv" :class="hideOverflow">
-        <vue-markdown
-          v-if="record.artifact.type === 'code'"
-          :source="markdown"
-        ></vue-markdown>
-        <div v-else v-html="sanitizedDescription"></div>
+        <div v-html="sanitizedDescription"></div>
       </v-card-text>
-      <v-btn
-        elevation="0"
-        tile
-        v-if="isOverflow"
-        @click="expanded = !expanded"
-        block
-        ><v-icon>{{ overflowIcon }}</v-icon></v-btn
-      >
+
+      <div v-if="record.artifact.type === 'code'">
+        <v-divider class="mx-4"></v-divider>
+        <v-card-title>
+          <v-row class="mx-1"
+            >Readme<v-spacer></v-spacer
+            ><v-btn v-if="isOverflow" @click="expanded = !expanded">{{
+              !expanded ? 'Expand' : 'Collapse'
+            }}</v-btn></v-row
+          >
+        </v-card-title>
+        <v-card-text>
+          <vue-markdown :source="markdown"></vue-markdown>
+        </v-card-text>
+        <v-btn
+          elevation="0"
+          tile
+          v-if="isOverflow"
+          @click="expanded = !expanded"
+          block
+          ><v-icon>{{ overflowIcon }}</v-icon></v-btn
+        >
+      </div>
+
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title class="py-0"> Artifact Type </v-card-title>
@@ -62,87 +67,50 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <span v-if="record.artifact.affiliations">
+      <div v-if="record.artifact.affiliations">
         <v-card-title class="py-0">Roles</v-card-title>
+        <ArtifactChips
+          :field="record.artifact.affiliations"
+          type="role"
+          display
+        ></ArtifactChips>
 
-        <v-chip
-          color="primary"
-          v-for="a in record.artifact.affiliations"
-          :key="a.id"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <span>
-            <v-avatar left>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-avatar>
-            {{ a.affiliation.person.name }} ({{ a.roles }})
-          </span>
-        </v-chip>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="tags.length">
+      <div v-if="tags.length">
         <v-card-title class="py-0">Keywords</v-card-title>
-        <v-chip
-          color="primary"
-          v-for="(t, index) in tags"
-          :key="`tag${index}`"
-          cols="12"
-          class="ma-2"
-          label
-          :to="{ path: `/search?keywords=${t}` }"
-        >
-          <v-avatar left>
-            <v-icon>mdi-tag-outline</v-icon>
-          </v-avatar>
-          {{ t }}
-        </v-chip>
-        <v-divider class="mx-4"></v-divider>
-      </span>
+        <ArtifactChips
+          :field="tags"
+          type="keyword"
+          display
+          link
+        ></ArtifactChips>
 
-      <span v-if="languages">
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div v-if="languages.length > 0">
         <v-card-title class="py-0">Languages</v-card-title>
+        <ArtifactChips :field="languages" type="code" display></ArtifactChips>
 
-        <v-chip
-          color="primary"
-          v-for="(v, k) in languages"
-          :key="`lang${k}`"
-          cols="12"
-          class="ma-2"
-          label
-        >
-          <v-avatar left>
-            <v-icon>{{ iconImage('code') }}</v-icon>
-          </v-avatar>
-          {{ v }}
-        </v-chip>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="record.artifact.relationships.length">
+      <div v-if="record.artifact.relationships.length">
         <v-card-title class="py-0">Related</v-card-title>
 
-        <v-chip
-          color="primary"
-          v-for="(v, k) in record.artifact.relationships"
-          :key="`rel${k}`"
-          cols="12"
-          class="ma-2"
-          label
-          :to="{ path: `/artifact/${v.related_artifact_id}` }"
-        >
-          <v-avatar left>
-            <v-icon>mdi-relation-one-to-one</v-icon>
-          </v-avatar>
+        <ArtifactChips
+          :field="record.artifact.relationships"
+          type="relation"
+          display
+          link
+        ></ArtifactChips>
 
-          {{ v.relation | titlecase }}: {{ v.related_artifact_id }}
-        </v-chip>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="badgesPresent">
+      <div v-if="badgesPresent">
         <v-card-title class="py-0">Badges</v-card-title>
 
         <span v-for="(b, index) in record.artifact.badges">
@@ -151,16 +119,16 @@
             max-height="100"
             max-width="100"
             :src="b.badge.image_url"
-          />
+          ></v-img>
           <a :href="b.badge.url" target="_blank">
             {{ b.badge.title }}
           </a>
         </span>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
       <div v-if="record.artifact.type == 'code'">
-        <span v-if="stars || watchers">
+        <div v-if="stars || watchers">
           <v-card-title class="py-0">Github Metrics</v-card-title>
 
           <v-chip color="primary" cols="12" class="ma-2" label>
@@ -177,9 +145,9 @@
 
             {{ watchers }}
           </v-chip>
-        </span>
+        </div>
 
-        <span v-if="record.artifact.importer">
+        <div v-if="record.artifact.importer">
           <v-card-title class="py-0">Importer</v-card-title>
 
           <v-chip color="primary" cols="12" class="ma-2" label>
@@ -191,10 +159,10 @@
             }}
           </v-chip>
           <v-divider class="mx-4"></v-divider>
-        </span>
+        </div>
       </div>
 
-      <span v-if="license">
+      <div v-if="license">
         <v-card-title class="py-0">License</v-card-title>
         <a :href="record.artifact.license.url">
           <v-chip color="primary" cols="12" class="ma-2" label>
@@ -206,9 +174,9 @@
           </v-chip>
         </a>
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
-      <span v-if="record.artifact.files.length">
+      <div v-if="record.artifact.files.length">
         <v-card-title class="py-0">Files</v-card-title>
 
         <v-list-item
@@ -231,7 +199,7 @@
         </v-list-item>
 
         <v-divider class="mx-4"></v-divider>
-      </span>
+      </div>
 
       <v-card-actions>
         <v-btn
@@ -267,7 +235,8 @@ export default {
     }
   },
   components: {
-    VueMarkdown: () => import('vue-markdown')
+    VueMarkdown: () => import('vue-markdown'),
+    ArtifactChips: () => import('@/components/ArtifactChips')
   },
   data() {
     return {
@@ -306,14 +275,25 @@ export default {
     },
     tags() {
       let tags = []
-      if (this.record.artifact.tags) {
-        tags = this.record.artifact.tags.map(e => e.tag)
+      if (this.record.artifact.tags.length > 0) {
+        return this.record.artifact.tags.map(e => e.tag)
       }
-      let topics = this.record.artifact.meta.find(o => o.name == 'top_keywords')
-      if (topics) {
-        tags = tags.concat(JSON.parse(topics.value).map(e => e[0]))
+      let top = this.record.artifact.meta.find(o => o.name == 'top_keywords')
+      if (top) {
+        tags = tags.concat(JSON.parse(top.value).map(e => e[0]))
       }
-      return tags.filter((value, index, self) => self.indexOf(value) === index)
+      top = this.record.artifact.meta
+        ? this.record.artifact.meta.find(o => o.name == 'top_ngram_keywords')
+        : null
+      if (top) {
+        tags = tags.concat(JSON.parse(top.value).map(e => e[0]))
+      }
+      // return only unique
+      let t = [...new Set(tags)]
+      t = t.filter(
+        el => !this.record.artifact.tags.map(e => e.tag).includes(el)
+      )
+      return t
     },
     badgesPresent() {
       return (
@@ -321,11 +301,13 @@ export default {
         this.record.artifact.badges.length > 0
       )
     },
-
     languages() {
       let csv = this.record.artifact.meta.find(o => o.name == 'languages')
-      if (!csv) return null
-      return csv.value.split(',')
+      if (csv) {
+        return csv.value ? csv.value.split(',') : []
+      } else {
+        return []
+      }
     },
     homepage() {
       let hp = this.record.artifact.meta.find(o => o.name == 'homepage')

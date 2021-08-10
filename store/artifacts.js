@@ -17,7 +17,9 @@ export const state = () => ({
   search: '',
   favorites: [],
   favoritesIDs: {},
-  imports: []
+  imports: [],
+  import: {},
+  loading: false
 })
 
 export const getters = {
@@ -38,6 +40,12 @@ export const getters = {
   },
   imports: state => {
     return state.imports
+  },
+  import: state => {
+    return state.import
+  },
+  loading: state => {
+    return state.loading
   }
 }
 
@@ -62,48 +70,73 @@ export const mutations = {
   },
   SET_IMPORTS(state, imports) {
     state.imports = imports
+  },
+  SET_IMPORT(state, import_) {
+    state.import = import_
+  },
+  SET_LOADING(state, loading) {
+    state.loading = loading
   }
 }
 
 export const actions = {
   async fetchArtifacts({ commit, state }, payload) {
+    commit('SET_LOADING', true)
     commit('SET_SEARCH', payload.keywords)
-    let a = await this.$artifactsEndpoint.index({
+    let response = await this.$artifactSearchEndpoint.index({
       ...payload
     })
-    commit('SET_ARTIFACTS', a.artifacts)
+    if (typeof response !== 'undefined' && response.artifacts) {
+      commit('SET_ARTIFACTS', response.artifacts)
+    }
+    commit('SET_LOADING', false)
   },
   async fetchArtifact({ commit, state }, payload) {
+    commit('SET_LOADING', true)
     console.log('fetching entry ' + payload.id)
-    let a = await this.$artifactRecordEndpoint.show(payload.id)
-    commit('SET_ARTIFACT', a)
+    let response = await this.$artifactEndpoint.show(payload.id)
+    if (typeof response !== 'undefined') {
+      commit('SET_ARTIFACT', response)
+    }
+    commit('SET_LOADING', false)
   },
   async fetchFavorites({ commit, state }, payload) {
+    commit('SET_LOADING', true)
     let response = await this.$findFavoritesEndpoint.show(payload)
-    if (response.artifacts) {
+    if (typeof response !== 'undefined' && response.artifacts) {
       commit('SET_FAVORITES', response.artifacts)
       for (let fav in response.artifacts) {
         commit('ADD_FAVORITE', response.artifacts[fav].id)
       }
     }
+    commit('SET_LOADING', false)
   },
   async fetchImports({ commit, state }, payload) {
+    commit('SET_LOADING', true)
     let response = await this.$importsEndpoint.index({
       ...payload
     })
-    if (response.artifact_imports) {
+    if (typeof response !== 'undefined' && response.artifact_imports) {
       commit('SET_IMPORTS', response.artifact_imports)
     }
+    commit('SET_LOADING', false)
+  },
+  async fetchImport({ commit, state }, payload) {
+    commit('SET_LOADING', true)
+    let response = await this.$importEndpoint.show(payload.id)
+    if (typeof response !== 'undefined') {
+      commit('SET_IMPORT', response)
+    }
+    commit('SET_LOADING', false)
   },
   async setRelated({ commit, state, dispatch }, payload) {
-    console.log(
-      payload.id + ' ' + payload.relation + ' ' + state.artifact.artifact.id
-    )
+    commit('SET_LOADING', true)
     let response = await this.$relationshipsEndpoint.create({
       artifact_id: state.artifact.artifact.id,
       related_artifact_id: payload.id,
       relation: payload.relation
     })
     dispatch('fetchArtifact', { id: state.artifact.artifact.id })
+    commit('SET_LOADING', false)
   }
 }

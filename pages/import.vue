@@ -23,29 +23,28 @@
                 <div class="text-h6 pa-12">
                   <p>
                     To start importing, place the URL of an artifact in the
-                    input field and click Start Import
+                    input field and click Start Import.
                   </p>
                   <p></p>
                   <p>
                     Once an import has started, it will show up in your imports
-                    list, below the URL field
+                    list, below the URL field.
                   </p>
                   <p>
                     The importer will have to process through a few stages to
                     get all of the information scraped and formatted properly.
                     Once the progress bar shows the process is complete, you
                     will have the option to view the imported artifact by
-                    clicking Read More
+                    clicking Read More.
                   </p>
                   <p>
-                    We have provided an edit button to show what an editor will
-                    look like for artifacts, but that feature is not currently
-                    available in the beta version
+                    We have provided an edit button to all you to edit the
+                    automated import details.
                   </p>
                   <p>
                     Once you are ready to add your artifact to the list of
                     searchable artifacts, you can click Publish. Press Archive
-                    to hide a completed import from your list
+                    to hide a completed import from your list.
                   </p>
                 </div>
               </v-card-text>
@@ -57,7 +56,7 @@
         </v-dialog>
       </v-row>
       <v-divider></v-divider><br />
-      Submit the URL below where you artifact is located at:
+      Enter the URL where your artifact is located.
       <v-form v-model="valid">
         <v-row>
           <v-col cols="10">
@@ -100,6 +99,19 @@ export default {
     Logo: () => import('@/components/Logo'),
     ImportList: () => import('@/components/ImportList')
   },
+  head() {
+    return {
+      title: 'SEARCCH Artifact Import',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SEARCCH Hub Artifact Import'
+        }
+      ]
+    }
+  },
+
   data() {
     return {
       importing: false,
@@ -134,7 +146,6 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
       imports: state => state.artifacts.imports
     })
   },
@@ -143,7 +154,6 @@ export default {
       if (!this.valid) return
       this.importing = true
       let response = await this.$importsEndpoint.create({
-        userid: this.userid,
         url: this.url
       })
       this.updateImports()
@@ -154,24 +164,16 @@ export default {
         }.bind(this),
         3000
       )
+      this.url = undefined
       this.importing = false
     },
     updateImports() {
-      if (this.userid) {
-        this.$store.dispatch('artifacts/fetchImports', { userid: this.userid })
-      }
+      this.$store.dispatch('artifacts/fetchImports', {})
       if (
         !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
       ) {
         clearInterval(this.pollingID)
       }
-    }
-  },
-  watch: {
-    userid() {
-      // had to make this because on refresh, userid doesn't update until after the mounted has already run,
-      // but mounted needs to run when switching pages where the userid doesn't update
-      this.updateImports()
     }
   },
   beforeRouteLeave(to, from, next) {

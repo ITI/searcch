@@ -10,14 +10,18 @@
                 class="mx-auto d-block elevation-6"
                 size="130"
               >
-                <v-img :src="gravatarImage(user.email)" />
+                <v-img :src="gravatarImage(user.email)"></v-img>
               </v-avatar>
               <v-card-text v-if="user" class="text-center">
                 <h6 class="overline mb-3">
                   {{ user.name }}
                 </h6>
-                <h6 class="overline mb-3" v-if="userAffiliation">
-                  {{ userAffiliation }}
+                <h6
+                  class="overline mb-3"
+                  v-if="userAffiliation"
+                  v-for="affil in userAffiliation"
+                >
+                  <div v-if="affil.org">{{ affil.org.name }}</div>
                 </h6>
 
                 <p class="font-weight-light">
@@ -65,25 +69,27 @@
                     </v-col>
                     <v-col cols="12" md="12">
                       <v-combobox
+                        v-if="user"
                         label="Interests"
                         multiple
                         small-chips
                         deletable-chips
                         persistent-hint
-                        v-if="user"
                         :items="hardcodedInterests"
                         v-model="researchInterests"
                         hint="Select applicable items from the list or type in your own"
-                        :search-input.sync="search"
+                        :search-input.sync="interestSearch"
+                        return-object
                       >
                         <template v-slot:no-data>
                           <v-list-item>
                             <v-list-item-content>
                               <v-list-item-title>
                                 No results matching "<strong>{{
-                                  search
+                                  interestSearch
                                 }}</strong
-                                >". Press <kbd>enter</kbd> to create a new one
+                                >". Press <kbd>tab</kbd> to create a new one
+                                item.
                               </v-list-item-title>
                             </v-list-item-content>
                           </v-list-item>
@@ -94,22 +100,26 @@
                     <v-col cols="12" md="12">
                       <v-combobox
                         label="Affiliation"
+                        multiple
                         small-chips
+                        deletable-chips
                         persistent-hint
-                        clearable
                         :items="orgNames"
                         v-model="userAffiliation"
-                        hint="Select applicable org from the list or type in your own"
-                        :search-input.sync="search"
+                        hint="Select applicable organization from the list or type in your own"
+                        :search-input.sync="orgSearch"
+                        item-text="org.name"
+                        item-value="org.name"
+                        return-object
                       >
                         <template v-slot:no-data>
                           <v-list-item>
                             <v-list-item-content>
                               <v-list-item-title>
                                 No results matching "<strong>{{
-                                  search
+                                  orgSearch
                                 }}</strong
-                                >". Press <kbd>enter</kbd> to create a new one
+                                >". Press <kbd>tab</kbd> to create a new one
                               </v-list-item-title>
                             </v-list-item-content>
                           </v-list-item>
@@ -298,11 +308,21 @@ export default {
   components: {
     LazyHydrate: () => import('vue-lazy-hydration')
   },
+  head() {
+    return {
+      title: 'SEARCCH User Profile',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'SEARCCH User Profile'
+        }
+      ]
+    }
+  },
   data() {
     return {
-      // TODO: FIXME
-      // these lists should be provided dynamically from back-end by querying db for unique existing values
-      // also entries need aliases
+      // TODO: FIXME get dynamically from backend once there are enough entries
       hardcodedInterests: [
         'Application Security',
         'Artificial Intelligence',
@@ -326,8 +346,9 @@ export default {
       // owned_artifacts: [],
       schema: {},
       schemaLoaded: false,
-      userAffiliation: null,
-      search: null
+      userAffiliation: [],
+      orgSearch: null,
+      interestSearch: null
     }
   },
   computed: {
@@ -359,13 +380,32 @@ export default {
       } else return []
     }
   },
+  watch: {
+    userAffiliation: function(newValue, oldValue) {
+      // delete case
+      let diff = oldValue.filter(
+        affil => newValue.findIndex(newAffil => newAffil.id == affil.id) == -1
+      )
+      if (diff.length > 0) {
+        diff.forEach(affil => {
+          if (typeof affil === 'object') {
+            this.$userAffiliationEndpoint.delete(affil.id)
+          }
+        })
+        diff = []
+      }
+    },
+    organization: function(val) {
+      this.userAffiliation = val
+    }
+  },
   async mounted() {
     this.$store.dispatch('user/fetchUser')
     this.$store.dispatch('user/fetchOrgs')
     this.$store.dispatch('user/fetchInterests')
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
-    this.userAffiliation = this.organization ? this.organization[0].name : null
+    this.userAffiliation = this.organization ? this.organization : []
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -392,18 +432,16 @@ export default {
           profile_photo: this.user.profile_photo
           // profile_photo: this.fetchGravatar(this.user.email)
         }
-        let org = this.userAffiliation.length
-          ? this.orgs.find(o => o.name === this.userAffiliation)
-          : null
-        if (!org) {
-          org = this.userAffiliation.length
-            ? { name: this.userAffiliation, type: 'Institution' }
-            : {}
-        }
-        this.$store.commit('user/SET_USER_ORG', [org])
-
         this.$userEndpoint.update(this.userid, data)
-        if (org) this.$userAffiliationsEndpoint.create({ org: org })
+
+        // create any affiliations that were added
+        this.userAffiliation.forEach((affil, index, object) => {
+          if (typeof affil === 'string') {
+            this.$store.dispatch('user/createAffiliation', affil)
+            object.splice(index, 1)
+          }
+        })
+        this.$store.dispatch('user/fetchUser')
       }
     },
     updateName(e) {
