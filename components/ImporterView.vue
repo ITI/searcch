@@ -101,11 +101,16 @@ export default {
       let response = await this.$importerEndpoint.update(this.importer.id, {
         admin_status: 'disabled'
       })
+      this.updateImporters()
     },
     async enable() {
       let response = await this.$importerEndpoint.update(this.importer.id, {
         admin_status: 'enabled'
       })
+      this.updateImporters()
+    },
+    updateImporters() {
+      this.$store.dispatch('system/fetchImporters')
     }
   }
 }
