@@ -98,12 +98,12 @@ export default {
   },
   methods: {
     async disable() {
-      let response = await this.$importerEndpoint.put(this.importer.id, {
+      let response = await this.$importerEndpoint.update(this.importer.id, {
         admin_status: 'disabled'
       })
     },
     async enable() {
-      let response = await this.$importerEndpoint.put(this.importer.id, {
+      let response = await this.$importerEndpoint.update(this.importer.id, {
         admin_status: 'enabled'
       })
     }
