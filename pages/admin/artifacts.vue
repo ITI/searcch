@@ -73,9 +73,25 @@
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
         :expanded.sync="expanded"
-        show-expand
         dense
       >
+        <template v-slot:top>
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-sheet
+              class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
+              color="blue-grey darken-3"
+              dark
+            >
+              <div class="grey--text text--lighten-1 text-body-2 mb-4">
+                Are you sure you want to delete this item?
+              </div>
+
+              <v-btn plain color="success" @click="deleteItemConfirm">OK</v-btn>
+              <v-btn plain color="error" @click="closeDelete">Cancel</v-btn>
+            </v-sheet>
+          </v-dialog>
+        </template>
+
         <template v-slot:expanded-item="{ headers, item }">
           <td :colspan="headers.length">
             <p>Created: {{ $moment.utc(item.ctime).fromNow() }}</p>
@@ -134,6 +150,22 @@
             <div>{{ item.type }}</div>
           </v-chip>
         </template>
+        <template v-slot:item.actions="{ item }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                v-if="item.id"
+                v-on="on"
+                small
+                color="error"
+                @click="deleteItem(item)"
+              >
+                mdi-delete
+              </v-icon>
+            </template>
+            <span>Delete Artifact {{ item.id }} </span>
+          </v-tooltip>
+        </template>
       </v-data-table>
     </v-card>
   </div>
@@ -181,7 +213,9 @@ export default {
           value: 'mtime'
         },
         { text: 'Owner', value: 'owner.person', sortable: false },
-        { text: '', value: 'data-table-expand' }
+        { text: 'Actions', value: 'actions', sortable: false }
+
+        // { text: '', value: 'data-table-expand' }
         //{ text: "Owner Email", value: "owner.person.email", sortable: false },
       ],
       loading: true,
@@ -191,7 +225,10 @@ export default {
         sortDesc: [true]
       },
       expanded: [],
-      search: ''
+      search: '',
+      dialogDelete: false,
+      editedIndex: -1,
+      items: []
     }
   },
   async mounted() {
@@ -205,7 +242,7 @@ export default {
   computed: {
     ...mapState({
       user_is_admin: state => state.user.user_is_admin,
-      items: state => state.system.artifacts.artifacts,
+      artifacts: state => state.system.artifacts.artifacts,
       page: state => state.system.artifacts.page,
       pages: state => state.system.artifacts.pages,
       total: state => state.system.artifacts.total
@@ -239,17 +276,33 @@ export default {
     },
     iconImage(type) {
       return artifactIcon(type)
+    },
+    deleteItem(item) {
+      this.editedIndex = this.items.indexOf(item)
+      this.dialogDelete = true
+    },
+    deleteItemConfirm() {
+      this.$artifactEndpoint.delete(this.items[this.editedIndex].id)
+      this.items.splice(this.editedIndex, 1)
+      this.closeDelete()
+      this.updateArtifacts()
+    },
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedIndex = -1
+      })
     }
   },
   watch: {
     user_is_admin() {
       // had to make this because on refresh, user_is_admin doesn't update until after the mounted has already run,
       // but mounted needs to run when switching pages where the user_is_admin doesn't update
-      console.log('watch updateArtifacts')
       this.updateArtifacts()
     },
-    items() {
+    artifacts() {
       this.loading = false
+      this.items = JSON.parse(JSON.stringify(this.artifacts))
     },
     options: {
       handler() {
