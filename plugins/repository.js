@@ -91,6 +91,9 @@ export default (ctx, inject) => {
   // importer view/modify API
   inject('importerEndpoint', repositoryWithAxios('kg/' + 'importer'))
 
+  // session operation API
+  inject('sessionEndpoint', repositoryWithAxios('kg/' + 'session'))
+
   // sessions index API
   inject('sessionsEndpoint', repositoryWithAxios('kg/' + 'sessions'))
 }
