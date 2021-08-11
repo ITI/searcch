@@ -213,6 +213,16 @@
         <v-btn icon :to="`/artifact/review/${record.artifact.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="isOwner()"
+          color="success"
+          small
+          :to="`/artifact/${record.artifact.id}?edit=true`"
+          nuxt
+        >
+          Edit
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -382,6 +392,11 @@ export default {
     },
     convertSize(size) {
       return bytesToSize(size)
+    },
+    isOwner() {
+      return this.record.artifact.owner !== 'undefined'
+        ? this.record.artifact.owner.id == this.userid
+        : false
     }
   }
 }
