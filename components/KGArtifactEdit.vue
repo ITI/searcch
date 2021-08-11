@@ -95,9 +95,12 @@
                           clearable
                           v-if="orgs"
                           :items="orgNames"
-                          v-model="affiliation.affiliation.org.name"
-                          hint="Select applicable org from the list or type in your own"
+                          v-model="affiliation.affiliation.org"
+                          hint="Select applicable organization from the list or type in your own"
                           :search-input.sync="search"
+                          item-value="org.name"
+                          item-text="org.name"
+                          return-object
                         >
                           <template v-slot:no-data>
                             <v-list-item>
@@ -342,7 +345,7 @@
             <template slot="item" slot-scope="data">
               <v-list-item-content>
                 <v-list-item-title
-                  v-html="`${data.item.short_name} (${data.item.long_name})`"
+                  v-text="`${data.item.short_name} (${data.item.long_name})`"
                 >
                 </v-list-item-title>
               </v-list-item-content>
@@ -629,21 +632,42 @@ export default {
     async save() {
       if (!this.valid) return
       this.disabled = true
+
+      // tags
       this.artifact_local.tags =
         typeof this.artifact_local.tags !== 'undefined' &&
         this.artifact_local.tags !== null
           ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
           : zipArray('tag', this.meta.keywords)
+
+      // files
       this.artifact_local.files =
         typeof this.artifact_local.files !== 'undefined' &&
         this.artifact_local.files !== null
           ? this.artifact_local.files.concat(this.meta.files)
           : this.meta.files
+
+      // process affiliations
+      this.meta.creators.forEach((affil, index, object) => {
+        if (typeof affil.affiliation.org === 'string') {
+          let org = this.orgs.find(a => a.name === affil.affiliation.org)
+          if (typeof org !== 'undefined') {
+            affil.affiliation.org = JSON.parse(JSON.stringify(org))
+          } else {
+            affil.affiliation.org = {
+              name: affil.affiliation.org,
+              type: 'Institution'
+            }
+          }
+        }
+      })
       this.artifact_local.affiliations =
         typeof this.artifact_local.affiliations !== 'undefined' &&
         this.artifact_local.affiliations !== null
           ? this.artifact_local.affiliations.concat(this.meta.creators)
           : this.meta.creators
+
+      // badges
       this.artifact_local.badges =
         typeof this.artifact_local.badges !== 'undefined' &&
         this.artifact_local.badges !== null
@@ -652,6 +676,7 @@ export default {
             )
           : zipArray('badge', this.meta.badges)
 
+      // languages
       let langs =
         this.artifact_local.meta !== null
           ? this.artifact_local.meta.find(o => o.name == 'languages')
@@ -756,10 +781,7 @@ export default {
     affiliationObject() {
       return new Object({
         affiliation: {
-          org: {
-            name: '',
-            type: 'Institution'
-          },
+          org: '',
           person: {
             email: '',
             name: ''
