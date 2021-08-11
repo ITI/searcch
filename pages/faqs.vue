@@ -116,7 +116,7 @@ export default {
         {
           q: 'How do I add a profile pic?',
           a:
-            'Direct profile picture upload is not yet implemented in the hub. The hub searches gravatar.com for profile pictures associated with your registered SEARCCH email address. If you would like your profile picture to show up in the SEARCCH hub, go to <a href="https://gravatar.com" target="_blank">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
+            'Direct profile picture upload is not yet implemented in the hub. The hub utilizes your GitHub avatar if it is set. If GitHub does not return an avatar for your account, the hub queries gravatar.com for profile pictures associated with your registered SEARCCH email address. <br/><br/> If you would like your profile picture to show up in the SEARCCH hub, either set an avatar image on GitHub.com by visiting <a href="https://github.com/settings/profile" target="_blank">https://github.com/settings/profile</a> or go to <a href="https://gravatar.com" target="_blank">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
         }
       ]
     }

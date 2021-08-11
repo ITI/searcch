@@ -10,7 +10,7 @@
                 class="mx-auto d-block elevation-6"
                 size="130"
               >
-                <v-img :src="gravatarImage(user.email)"></v-img>
+                <v-img :src="profileImage(user.email)"></v-img>
               </v-avatar>
               <v-card-text v-if="user" class="text-center">
                 <h6 class="overline mb-3">
@@ -357,7 +357,8 @@ export default {
       organization: state => state.user.organization,
       userid: state => state.user.userid,
       orgs: state => state.user.orgs,
-      interests: state => state.user.interests
+      interests: state => state.user.interests,
+      githubUser: state => state.auth.user
     }),
     orgNames: {
       get: function() {
@@ -456,7 +457,12 @@ export default {
     iconImage(type) {
       return artifactIcon(type)
     },
-    gravatarImage(email) {
+    profileImage(email) {
+      if (typeof this.githubUser !== 'undefined') {
+        if (this.githubUser.avatar_url.length > 0) {
+          return this.githubUser.avatar_url + '&size=130'
+        }
+      }
       var md5 = require('md5')
       const url =
         'https://www.gravatar.com/avatar/' +
