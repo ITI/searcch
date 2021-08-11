@@ -264,7 +264,8 @@ export default {
   computed: {
     ...mapState({
       userid: state => state.user.userid,
-      favorites: state => state.artifacts.favoritesIDs
+      favorites: state => state.artifacts.favoritesIDs,
+      user_is_admin: state => state.user.user_is_admin
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
@@ -394,6 +395,7 @@ export default {
       return bytesToSize(size)
     },
     isOwner() {
+      if (this.user_is_admin) return true
       return this.record.artifact.owner !== 'undefined'
         ? this.record.artifact.owner.id == this.userid
         : false
