@@ -282,8 +282,8 @@ export default {
       this.editedIndex = this.items.indexOf(item)
       this.dialogDelete = true
     },
-    deleteItemConfirm() {
-      this.$artifactEndpoint.delete(this.items[this.editedIndex].id)
+    async deleteItemConfirm() {
+      await this.$artifactEndpoint.delete(this.items[this.editedIndex].id)
       this.items.splice(this.editedIndex, 1)
       this.closeDelete()
       this.updateArtifacts()

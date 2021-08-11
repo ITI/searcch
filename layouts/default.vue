@@ -228,7 +228,7 @@ export default {
     },
     async setAdmin(mode) {
       console.log('Setting admin mode', mode)
-      this.$loginEndpoint
+      await this.$loginEndpoint
         .put({ is_admin: mode })
         .then(response => {
           this.$store.commit('user/SET_USER_IS_ADMIN', mode)

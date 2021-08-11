@@ -183,7 +183,7 @@ export default {
     }
   },
   methods: {
-    favoriteThis() {
+    async favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
@@ -191,9 +191,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          this.$favoritesEndpoint.post(this.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.artifact.id, {})
         } else {
-          this.$favoritesEndpoint.delete(this.artifact.id)
+          await this.$favoritesEndpoint.delete(this.artifact.id)
         }
       }
     },
