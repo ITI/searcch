@@ -104,7 +104,7 @@
         <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="item.id" :href="`/artifact/${item.id}`">
+              <a v-if="item.id" :href="`/artifact/${item.id}`" target="_blank">
                 <v-icon v-on="on" small color="blue">mdi-database</v-icon>
               </a>
             </template>
@@ -115,6 +115,7 @@
               <a
                 v-if="!item.publication"
                 :href="`/artifact/${item.id}?edit=true`"
+                target="_blank"
               >
                 <v-icon v-on="on" small color="green">mdi-database-edit</v-icon>
               </a>
