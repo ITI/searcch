@@ -2,7 +2,7 @@
   <v-layout column justify-left align-top>
     <v-container fill-height fluid>
       <v-row justify="center">
-        <v-col cols="12" md="4" v-if="user">
+        <v-col cols="12" md="4" v-if="localuser">
           <LazyHydrate never>
             <material-card class="v-card-profile">
               <v-avatar
@@ -10,11 +10,11 @@
                 class="mx-auto d-block elevation-6"
                 size="130"
               >
-                <v-img :src="profileImage(user.email)"></v-img>
+                <v-img :src="profileImage(localuser.email)"></v-img>
               </v-avatar>
-              <v-card-text v-if="user" class="text-center">
+              <v-card-text class="text-center">
                 <h6 class="overline mb-3">
-                  {{ user.name }}
+                  {{ localuser.name }}
                 </h6>
                 <h6
                   class="overline mb-3"
@@ -25,7 +25,7 @@
                 </h6>
 
                 <p class="font-weight-light">
-                  {{ user.email }}
+                  {{ localuser.email }}
                 </p>
               </v-card-text>
             </material-card>
@@ -33,110 +33,105 @@
         </v-col>
 
         <v-col cols="12" md="8">
-          <LazyHydrate when-visible>
-            <material-card
-              color="primary"
-              title="Edit Profile"
-              text="Complete your profile"
-            >
-              <v-form>
-                <v-container class="py-0">
-                  <v-row v-if="user">
-                    <v-col cols="12" md="8">
-                      <v-text-field
-                        label="Name"
-                        class="primary-input"
-                        :value="user.name"
-                        @input="updateName"
-                      />
-                    </v-col>
+          <material-card
+            color="primary"
+            title="Edit Profile"
+            text="Complete your profile"
+          >
+            <v-form>
+              <v-container class="py-0">
+                <v-row v-if="localuser">
+                  <v-col cols="12" md="8">
+                    <v-text-field
+                      label="Name"
+                      class="primary-input"
+                      v-model="localuser.name"
+                    />
+                  </v-col>
 
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        label="Email Address"
-                        class="primary-input"
-                        :value="user.email"
-                      />
-                    </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      label="Email Address"
+                      class="primary-input"
+                      v-model="localuser.email"
+                    />
+                  </v-col>
 
-                    <v-col cols="12" md="12">
-                      <v-text-field
-                        label="Website"
-                        class="primary-input"
-                        :value="user.website"
-                        @input="updateWebsite"
-                      />
-                    </v-col>
-                    <v-col cols="12" md="12">
-                      <v-combobox
-                        v-if="user"
-                        label="Interests"
-                        multiple
-                        small-chips
-                        deletable-chips
-                        persistent-hint
-                        :items="hardcodedInterests"
-                        v-model="researchInterests"
-                        hint="Select applicable items from the list or type in your own"
-                        :search-input.sync="interestSearch"
-                        return-object
-                      >
-                        <template v-slot:no-data>
-                          <v-list-item>
-                            <v-list-item-content>
-                              <v-list-item-title>
-                                No results matching "<strong>{{
-                                  interestSearch
-                                }}</strong
-                                >". Press <kbd>tab</kbd> to create a new one
-                                item.
-                              </v-list-item-title>
-                            </v-list-item-content>
-                          </v-list-item>
-                        </template>
-                      </v-combobox>
-                    </v-col>
+                  <v-col cols="12" md="12">
+                    <v-text-field
+                      label="Website"
+                      class="primary-input"
+                      v-model="localuser.website"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="12">
+                    <v-combobox
+                      v-if="user"
+                      label="Interests"
+                      multiple
+                      small-chips
+                      deletable-chips
+                      persistent-hint
+                      :items="hardcodedInterests"
+                      v-model="researchInterests"
+                      hint="Select applicable items from the list or type in your own"
+                      :search-input.sync="interestSearch"
+                      return-object
+                    >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              No results matching "<strong>{{
+                                interestSearch
+                              }}</strong
+                              >". Press <kbd>tab</kbd> to create a new one item.
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-combobox>
+                  </v-col>
 
-                    <v-col cols="12" md="12">
-                      <v-combobox
-                        label="Affiliation"
-                        multiple
-                        small-chips
-                        deletable-chips
-                        persistent-hint
-                        :items="orgNames"
-                        v-model="userAffiliation"
-                        hint="Select applicable organization from the list or type in your own"
-                        :search-input.sync="orgSearch"
-                        item-text="org.name"
-                        item-value="org.name"
-                        return-object
-                      >
-                        <template v-slot:no-data>
-                          <v-list-item>
-                            <v-list-item-content>
-                              <v-list-item-title>
-                                No results matching "<strong>{{
-                                  orgSearch
-                                }}</strong
-                                >". Press <kbd>tab</kbd> to create a new one
-                              </v-list-item-title>
-                            </v-list-item-content>
-                          </v-list-item>
-                        </template>
-                      </v-combobox>
-                    </v-col>
+                  <v-col cols="12" md="12">
+                    <v-combobox
+                      label="Affiliation"
+                      multiple
+                      small-chips
+                      deletable-chips
+                      persistent-hint
+                      :items="orgNames"
+                      v-model="userAffiliation"
+                      hint="Select applicable organization from the list or type in your own"
+                      :search-input.sync="orgSearch"
+                      item-text="org.name"
+                      item-value="org.name"
+                      return-object
+                    >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              No results matching "<strong>{{
+                                orgSearch
+                              }}</strong
+                              >". Press <kbd>tab</kbd> to create a new one
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-combobox>
+                  </v-col>
 
-                    <v-col cols="12" class="text-right">
-                      <v-btn color="success" @click="updateProfile">
-                        Update Profile
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-form>
-            </material-card>
-          </LazyHydrate>
+                  <v-col cols="12" class="text-right">
+                    <v-btn color="success" @click="updateProfile">
+                      Update Profile
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </material-card>
         </v-col>
       </v-row>
     </v-container>
@@ -348,7 +343,8 @@ export default {
       schemaLoaded: false,
       userAffiliation: [],
       orgSearch: null,
-      interestSearch: null
+      interestSearch: null,
+      localuser: null
     }
   },
   computed: {
@@ -367,12 +363,12 @@ export default {
     },
     researchInterests: {
       get: function() {
-        return this.user.research_interests
-          ? this.user.research_interests.split(',')
+        return this.localuser.research_interests
+          ? this.localuser.research_interests.split(',')
           : ''
       },
       set: function(newValue) {
-        this.$store.commit('user/SET_USER_INTERESTS', newValue.join(','))
+        this.localuser.research_interests = newValue.join(',')
       }
     },
     types: function() {
@@ -382,7 +378,7 @@ export default {
     }
   },
   watch: {
-    userAffiliation: function(newValue, oldValue) {
+    userAffiliation(newValue, oldValue) {
       // delete case
       let diff = oldValue.filter(
         affil => newValue.findIndex(newAffil => newAffil.id == affil.id) == -1
@@ -390,14 +386,18 @@ export default {
       if (diff.length > 0) {
         diff.forEach(affil => {
           if (typeof affil === 'object') {
+            // cannot use await here as this is inside a foreach loop
             this.$userAffiliationEndpoint.delete(affil.id)
           }
         })
         diff = []
       }
     },
-    organization: function(val) {
+    organization(val) {
       this.userAffiliation = val
+    },
+    user(val) {
+      this.localuser = JSON.parse(JSON.stringify(val))
     }
   },
   async mounted() {
@@ -407,6 +407,7 @@ export default {
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
     this.userAffiliation = this.organization ? this.organization : []
+    this.localuser = JSON.parse(JSON.stringify(this.user))
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -421,19 +422,11 @@ export default {
     })
   },
   methods: {
-    updateProfile() {
+    async updateProfile() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
-        // update profile
-        const data = {
-          name: this.user.name,
-          research_interests: this.user.research_interests,
-          website: this.user.website,
-          profile_photo: this.user.profile_photo
-          // profile_photo: this.fetchGravatar(this.user.email)
-        }
-        this.$userEndpoint.update(this.userid, data)
+        await this.$userEndpoint.update(this.userid, this.localuser)
 
         // create any affiliations that were added
         this.userAffiliation.forEach((affil, index, object) => {
@@ -444,12 +437,6 @@ export default {
         })
         this.$store.dispatch('user/fetchUser')
       }
-    },
-    updateName(e) {
-      this.$store.commit('user/SET_NAME', e)
-    },
-    updateWebsite(e) {
-      this.$store.commit('user/SET_WEBSITE', e)
     },
     iconColor(type) {
       return artifactColor(type)
