@@ -100,6 +100,7 @@
           small
           color="success"
           @click="addRelated(artifact.id, relation)"
+          :disabled="relation.length == 0"
         >
           Add Related
         </v-btn>
