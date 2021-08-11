@@ -214,7 +214,6 @@ export default {
   },
   methods: {
     async onSubmit() {
-      console.log(this.adopen)
       this.submitted = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'
