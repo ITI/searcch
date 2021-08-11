@@ -396,7 +396,7 @@ export default {
     },
     isOwner() {
       if (this.user_is_admin) return true
-      return this.record.artifact.owner !== 'undefined'
+      return typeof this.record.artifact.owner !== 'undefined'
         ? this.record.artifact.owner.id == this.userid
         : false
     }

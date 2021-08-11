@@ -104,6 +104,15 @@
         >
           Add Related
         </v-btn>
+        <v-btn
+          v-if="isOwner()"
+          color="success"
+          small
+          :to="`/artifact/${artifact.id}?edit=true`"
+          nuxt
+        >
+          Edit
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -150,7 +159,9 @@ export default {
   },
   computed: {
     ...mapState({
-      favorites: state => state.artifacts.favoritesIDs
+      favorites: state => state.artifacts.favoritesIDs,
+      userid: state => state.user.userid,
+      user_is_admin: state => state.user.user_is_admin
     }),
     sanitizedDescription: function() {
       let description = ''
@@ -198,6 +209,12 @@ export default {
         relation: relation
       })
       EventBus.$emit('close', 'artifactdialog')
+    },
+    isOwner() {
+      if (this.user_is_admin) return true
+      return typeof this.artifact.owner !== 'undefined'
+        ? this.artifact.owner.id == this.userid
+        : false
     }
   }
 }
