@@ -2,8 +2,8 @@
   <div>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
-        light
-        solo
+        append-icon="mdi-magnify"
+        label="Search"
         placeholder="Type search term..."
         v-model="search"
         loading="true"
@@ -12,6 +12,8 @@
         hide-details
         @keydown="onChange"
         @change="onSubmit"
+        solo
+        dense
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen" multiple>
