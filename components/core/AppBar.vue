@@ -90,13 +90,11 @@ export default {
     title: null,
     responsive: false
   }),
-
   watch: {
     $route(val) {
       this.title = val.name
     }
   },
-
   mounted() {
     this.onResponsiveInverted()
     window.addEventListener('resize', this.onResponsiveInverted)
@@ -104,7 +102,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.onResponsiveInverted)
   },
-
   methods: {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     onClick() {
