@@ -210,29 +210,7 @@ export default {
       } else return []
     }
   },
-  watch: {
-    userAffiliation(newValue, oldValue) {
-      // delete case
-      let diff = oldValue.filter(
-        affil => newValue.findIndex(newAffil => newAffil.id == affil.id) == -1
-      )
-      if (diff.length > 0) {
-        diff.forEach(affil => {
-          if (typeof affil === 'object') {
-            // cannot use await here as this is inside a foreach loop
-            this.$userAffiliationEndpoint.delete(affil.id)
-          }
-        })
-        diff = []
-      }
-    },
-    organization(val) {
-      this.userAffiliation = val
-    },
-    user(val) {
-      this.localuser = JSON.parse(JSON.stringify(val))
-    }
-  },
+  watch: {},
   async mounted() {
     let response = await this.$userEndpoint.show(this.$route.params.id)
     this.localuser = response.user.person
