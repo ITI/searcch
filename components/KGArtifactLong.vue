@@ -41,7 +41,7 @@
           >
         </v-card-title>
         <v-card-text>
-          <vue-markdown :source="markdown"></vue-markdown>
+          <vue-simple-markdown :source="markdown"></vue-simple-markdown>
         </v-card-text>
         <v-btn
           elevation="0"
@@ -245,7 +245,6 @@ export default {
     }
   },
   components: {
-    VueMarkdown: () => import('vue-markdown'),
     ArtifactChips: () => import('@/components/ArtifactChips')
   },
   data() {
