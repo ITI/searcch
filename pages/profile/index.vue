@@ -68,7 +68,7 @@
                   </v-col>
                   <v-col cols="12" md="12">
                     <v-combobox
-                      v-if="user"
+                      v-if="localuser"
                       label="Interests"
                       multiple
                       small-chips
