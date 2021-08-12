@@ -122,6 +122,7 @@
             </template>
             <span>Edit</span>
           </v-tooltip>
+          {{ item.id }}
         </template>
         <template v-slot:item.ctime="{ item }">
           {{ $moment.utc(item.ctime).fromNow() }}
