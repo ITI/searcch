@@ -2,6 +2,10 @@
   <div v-if="record.artifact">
     <v-card class="mx-auto my-2">
       <v-card-title> {{ record.artifact.title | titlecase }} </v-card-title>
+      <v-card-subtitle>
+        Artifact ID:
+        {{ record.artifact.id }}
+      </v-card-subtitle>
       <v-card-text>
         <a target="_blank" :href="record.artifact.url">
           {{ record.artifact.url }}
