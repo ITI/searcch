@@ -59,9 +59,9 @@
         <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <!-- <a v-if="item.id" :href="`/profile/${item.id}`">
+              <a v-if="item.id" :href="`/profile/${item.id}`" nuxt>
                 <v-icon v-on="on">mdi-account</v-icon>
-              </a> -->
+              </a>
               {{ item.id }}
             </template>
             <span>View User Profile</span>
