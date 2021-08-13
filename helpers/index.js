@@ -10,6 +10,9 @@ export const artifactIcon = type => {
       return 'mdi-newspaper-variant-outline'
     case 'software':
       return 'mdi-code-braces'
+    // FIXME: eventually remove code
+    case 'code':
+      return 'mdi-code-braces'
     case 'keyword':
       return 'mdi-tag-outline'
     case 'role':
@@ -30,6 +33,9 @@ export const artifactColor = type => {
     case 'publication':
       return 'red white--text'
     case 'software':
+      return 'purple white--text'
+    // FIXME: eventually remove code
+    case 'code':
       return 'purple white--text'
     case 'role':
       return 'primary'
