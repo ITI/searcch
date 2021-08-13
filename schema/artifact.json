@@ -65,18 +65,7 @@
           "type": "string"
         },
         "type": {
-          "enum": [
-            "dataset",
-            "executable",
-            "methodology",
-            "metrics",
-            "priorwork",
-            "publication",
-            "hypothesis",
-            "code",
-            "domain",
-            "supportinginfo"
-          ],
+          "enum": ["dataset", "presentation", "publication", "software", "other"],
           "type": "string"
         },
         "url": {
