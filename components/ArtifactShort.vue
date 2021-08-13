@@ -95,7 +95,6 @@
         </v-btn>
         <v-btn
           v-else
-          small
           color="success"
           @click="addRelated(artifact.id, relation)"
           :disabled="relation.length == 0"
@@ -105,7 +104,6 @@
         <v-btn
           v-if="isOwner()"
           color="success"
-          small
           :to="`/artifact/${artifact.id}?edit=true`"
           nuxt
         >
