@@ -16,12 +16,10 @@
           </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip :color="iconColor(artifactType)" class="mr-4 mt-5" label>
-            <v-avatar left>
-              <v-icon>{{ iconImage(artifactType) }}</v-icon>
-            </v-avatar>
-            <div>{{ artifactType }}</div>
-          </v-chip>
+          <ArtifactChips
+            :field="[artifactType]"
+            :type="artifactType"
+          ></ArtifactChips>
         </v-col>
       </v-row>
 
@@ -51,15 +49,23 @@
         </v-col>
       </v-row>
       <v-card-actions>
-        <v-btn v-if="artifact.artifact_id" text @click="deleteArtifact()">
+        <v-btn
+          v-if="artifact.artifact_id"
+          color="error"
+          @click="deleteArtifact()"
+        >
           Delete
         </v-btn>
 
-        <v-btn v-if="artifact.artifact_id || archived" text @click="archive()">
+        <v-btn
+          v-if="artifact.artifact_id || archived"
+          color="orange"
+          @click="archive()"
+        >
           Archive
         </v-btn>
 
-        <v-btn v-else text @click="deleteImport()">
+        <v-btn v-else color="error" @click="deleteImport()">
           Delete Import
         </v-btn>
 
@@ -69,25 +75,29 @@
             path: `/artifact/${artifact.artifact_id}`,
             query: { edit: 'true' }
           }"
-          text
+          color="success"
         >
           Edit
         </v-btn>
 
-        <v-btn v-if="archived === true" text @click="unarchive()">
+        <v-btn v-if="archived === true" @click="unarchive()">
           Unarchive
         </v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn :disabled="!artifact.artifact_id" text @click="publish()">
+        <v-btn
+          :disabled="!artifact.artifact_id"
+          @click="publish()"
+          color="success"
+        >
           Publish
         </v-btn>
 
         <v-btn
           :to="`/artifact/${artifact.artifact_id}`"
           :disabled="!artifact.artifact_id"
-          text
+          color="primary"
         >
           Read More
         </v-btn>
@@ -105,6 +115,9 @@ export default {
       type: Object,
       required: true
     }
+  },
+  components: {
+    ArtifactChips: () => import('@/components/ArtifactChips')
   },
   data() {
     return {}

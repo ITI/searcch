@@ -58,9 +58,10 @@
         <ArtifactChips
           :field="artifact_local.affiliations"
           type="role"
+          edit
         ></ArtifactChips>
 
-        <ArtifactChips :field="meta.creators" type="role"></ArtifactChips>
+        <ArtifactChips :field="meta.creators" type="role" edit></ArtifactChips>
         <div>
           <v-dialog
             transition="dialog-bottom-transition"
@@ -72,7 +73,7 @@
               <v-btn
                 class="success ml-2 mb-2"
                 fab
-                small
+                x-small
                 v-bind="attrs"
                 v-on="on"
               >
@@ -164,12 +165,14 @@
         <ArtifactChips
           :field="artifact_local.tags"
           type="keyword"
+          edit
         ></ArtifactChips>
 
         <ArtifactChips
           :field="meta.keywords"
           type="keyword"
           placeholder="Enter Keyword"
+          edit
           create
         ></ArtifactChips>
 
@@ -180,6 +183,7 @@
           :field="meta.languages"
           type="software"
           placeholder="Enter Language"
+          edit
           create
         ></ArtifactChips>
 
@@ -190,6 +194,7 @@
         <ArtifactChips
           :field="artifact_local.relationships"
           type="relation"
+          edit
         ></ArtifactChips>
 
         <div>
@@ -203,7 +208,7 @@
               <v-btn
                 class="success ml-2 mb-2"
                 fab
-                small
+                x-small
                 v-bind="attrs"
                 v-on="on"
                 :disabled="artifact_local.id ? false : true"
@@ -288,7 +293,7 @@
             @click="meta.badges.push('')"
             class="success ml-2 mb-2"
             fab
-            small
+            x-small
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </div>
@@ -410,7 +415,7 @@
               @click="meta.files.push({ url: '', filetype: 'unknown' })"
               class="success ml-2 mb-2"
               fab
-              small
+              x-small
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
@@ -419,11 +424,11 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn small color="green" :disabled="disabled" dark @click="save()">
+          <v-btn color="success" :disabled="disabled" @click="save()">
             Save
           </v-btn>
 
-          <v-btn small color="blue" dark @click="publish()">
+          <v-btn color="primary" @click="publish()">
             Publish
           </v-btn>
         </v-card-actions>
@@ -433,7 +438,7 @@
     <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
       <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+        <v-btn color="error" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>

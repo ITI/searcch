@@ -10,17 +10,10 @@
           </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip
-            v-if="artifact.type"
-            :color="iconColor(artifact.type)"
-            class="ma-2 mt-5"
-            label
-          >
-            <v-avatar left>
-              <v-icon>{{ iconImage(artifact.type) }}</v-icon>
-            </v-avatar>
-            <div v-if="artifact.type">{{ artifact.type }}</div>
-          </v-chip>
+          <ArtifactChips
+            :field="[artifact.type]"
+            :type="artifact.type"
+          ></ArtifactChips>
         </v-col>
       </v-row>
 
@@ -92,7 +85,12 @@
           :items="relations"
           v-model="relation"
         ></v-select>
-        <v-btn v-if="!related" small :to="`/artifact/${artifact.id}`" nuxt>
+        <v-btn
+          v-if="!related"
+          color="primary"
+          :to="`/artifact/${artifact.id}`"
+          nuxt
+        >
           Read More
         </v-btn>
         <v-btn
@@ -137,6 +135,9 @@ export default {
       type: Boolean,
       required: false
     }
+  },
+  components: {
+    ArtifactChips: () => import('@/components/ArtifactChips')
   },
   data() {
     return {

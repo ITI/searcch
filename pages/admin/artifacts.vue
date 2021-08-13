@@ -105,7 +105,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <a v-if="item.id" :href="`/artifact/${item.id}`" target="_blank">
-                <v-icon v-on="on" small color="blue">mdi-database</v-icon>
+                <v-icon v-on="on" small color="info">mdi-database</v-icon>
               </a>
             </template>
             <span>View</span>
@@ -145,12 +145,11 @@
           }}
         </template>
         <template v-slot:item.type="{ item }">
-          <v-chip :color="iconColor(item.type)" class="ma-2" label small>
-            <v-avatar left>
-              <v-icon>{{ iconImage(item.type) }}</v-icon>
-            </v-avatar>
-            <div>{{ item.type }}</div>
-          </v-chip>
+          <ArtifactChips
+            :field="[item.type]"
+            :type="item.type"
+            small
+          ></ArtifactChips>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-tooltip bottom>
@@ -178,6 +177,9 @@ import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
+  components: {
+    ArtifactChips: () => import('@/components/ArtifactChips')
+  },
   data() {
     return {
       loadingMessage: 'Loading imports...',

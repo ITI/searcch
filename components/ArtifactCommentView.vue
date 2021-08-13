@@ -5,26 +5,23 @@
       elevation="3"
       v-if="artifact.artifact"
     >
-      <v-row class="px-3">
-        <v-card-title class="align-start">
-          <div>
-            <span class="headline">{{
-              artifact.artifact.title | titlecase
-            }}</span>
-          </div>
-        </v-card-title>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title class="align-start">
+            <div>
+              <span class="headline">{{
+                artifact.artifact.title | titlecase
+              }}</span>
+            </div>
+          </v-card-title>
+        </v-col>
         <v-spacer></v-spacer>
-        <v-chip
-          v-if="artifact.artifact.type"
-          :color="iconColor(artifact.artifact.type)"
-          class="ma-2 mt-5"
-          label
-        >
-          <v-avatar left>
-            <v-icon>{{ iconImage(artifact.artifact.type) }}</v-icon>
-          </v-avatar>
-          <div v-if="artifact.artifact.type">{{ artifact.artifact.type }}</div>
-        </v-chip>
+        <v-col>
+          <ArtifactChips
+            :field="[artifact.artifact.type]"
+            :type="artifact.artifact.type"
+          ></ArtifactChips>
+        </v-col>
       </v-row>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
@@ -67,7 +64,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn small :to="`/artifact/${artifact.artifact.id}`" nuxt>
+        <v-btn color="primary" :to="`/artifact/${artifact.artifact.id}`" nuxt>
           Read More
         </v-btn>
       </v-card-actions>
@@ -83,7 +80,8 @@ import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   components: {
-    SingleComment: () => import('@/components/SingleComment')
+    SingleComment: () => import('@/components/SingleComment'),
+    ArtifactChips: () => import('@/components/ArtifactChips')
   },
   props: {
     artifact: {

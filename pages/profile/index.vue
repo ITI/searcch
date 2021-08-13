@@ -213,12 +213,10 @@
                     :key="i"
                   >
                     <v-list-item>
-                      <v-chip :color="iconColor(item.type)" class="ma-2" label>
-                        <v-avatar left>
-                          <v-icon>{{ iconImage(item.type) }}</v-icon>
-                        </v-avatar>
-                        <div>{{ item.type }}</div>
-                      </v-chip>
+                      <ArtifactChips
+                        :field="[item.type]"
+                        :type="item.type"
+                      ></ArtifactChips>
 
                       <v-list-item-title v-text="item.title" />
 
@@ -254,14 +252,13 @@
                     :key="i"
                   >
                     <v-list-item>
-                      <v-chip :color="iconColor(item.type)" class="ma-2" label>
-                        <v-avatar left>
-                          <v-icon>{{ iconImage(item.type) }}</v-icon>
-                        </v-avatar>
-                        <div>{{ item.type }}</div>
-                      </v-chip>
-                      <v-list-item-title v-text="item.title" />
-
+                      <ArtifactChips
+                        :field="[item.type]"
+                        :type="item.type"
+                      ></ArtifactChips>
+                      <v-list-item-title
+                        v-text="item.title"
+                      ></v-list-item-title>
                       <div class="d-flex">
                         <v-tooltip top content-class="top">
                           <template v-slot:activator="{ attrs, on }">
@@ -303,7 +300,8 @@ import schemaWithPointers from '~/schema/affiliation.json'
 
 export default {
   components: {
-    LazyHydrate: () => import('vue-lazy-hydration')
+    LazyHydrate: () => import('vue-lazy-hydration'),
+    ArtifactChips: () => import('@/components/ArtifactChips')
   },
   head() {
     return {
