@@ -34,7 +34,7 @@
         <div v-html="sanitizedDescription"></div>
       </v-card-text>
 
-      <div v-if="record.artifact.type === 'code'">
+      <div v-if="record.artifact.type === 'software'">
         <v-divider class="mx-4"></v-divider>
         <v-card-title>
           <v-row class="mx-1"
@@ -96,7 +96,11 @@
 
       <div v-if="languages.length > 0">
         <v-card-title class="py-0">Languages</v-card-title>
-        <ArtifactChips :field="languages" type="code" display></ArtifactChips>
+        <ArtifactChips
+          :field="languages"
+          type="software"
+          display
+        ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -131,7 +135,7 @@
         <v-divider class="mx-4"></v-divider>
       </div>
 
-      <div v-if="record.artifact.type == 'code'">
+      <div v-if="record.artifact.type == 'software'">
         <div v-if="stars || watchers">
           <v-card-title class="py-0">Github Metrics</v-card-title>
 

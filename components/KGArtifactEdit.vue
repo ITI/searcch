@@ -178,7 +178,7 @@
         <v-card-title class="py-0">Languages</v-card-title>
         <ArtifactChips
           :field="meta.languages"
-          type="code"
+          type="software"
           placeholder="Enter Language"
           create
         ></ArtifactChips>
@@ -295,7 +295,7 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <div v-if="artifact_local.type == 'code'">
+        <div v-if="artifact_local.type == 'software'">
           <div v-if="stars || watchers">
             <v-card-title class="py-0">Github Metrics</v-card-title>
 

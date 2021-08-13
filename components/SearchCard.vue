@@ -150,22 +150,11 @@ export default {
       submitted: false,
       adopen: [0],
       advanced: {
-        types: ['dataset', 'code'],
+        types: ['dataset', 'software'],
         author: '',
         org: ''
       },
-      types: [
-        'dataset',
-        'executable',
-        'methodology',
-        'metrics',
-        'priorwork',
-        'publication',
-        'hypothesis',
-        'code',
-        'domain',
-        'supportinginfo'
-      ],
+      types: ['dataset', 'presentation', 'publication', 'software', 'other'],
       filters: ['Name', 'Organization'],
       showScrollToTop: 0
     }

@@ -186,15 +186,10 @@ export default {
       type_items: [
         '',
         'dataset',
-        'executable',
-        'methodology',
-        'metrics',
-        'priorwork',
+        'presentation',
         'publication',
-        'hypothesis',
-        'code',
-        'domain',
-        'supportinginfo'
+        'software',
+        'other'
       ],
       published: false,
       owner_filter: '',
