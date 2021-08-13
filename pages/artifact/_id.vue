@@ -1,7 +1,20 @@
 <template>
   <div>
     <a @click="$router.go(-1)">Back</a>
-    <ArtifactLong :artifact="artifact" :edit="editing" />
+
+    <div v-if="artifact.artifact">
+      <div v-if="!editing">
+        <LazyHydrate when-visible>
+          <KGArtifactLong :record="artifact"></KGArtifactLong>
+        </LazyHydrate>
+      </div>
+      <div v-else>
+        <LazyHydrate when-visible>
+          <KGArtifactEdit :record="artifact"></KGArtifactEdit>
+        </LazyHydrate>
+      </div>
+    </div>
+    <div v-else>{{ loadingMessage }}</div>
   </div>
 </template>
 
@@ -10,7 +23,9 @@ import { mapState } from 'vuex'
 
 export default {
   components: {
-    ArtifactLong: () => import('@/components/ArtifactLong')
+    KGArtifactLong: () => import('@/components/KGArtifactLong'),
+    KGArtifactEdit: () => import('@/components/KGArtifactEdit'),
+    LazyHydrate: () => import('vue-lazy-hydration')
   },
   head() {
     return {
@@ -25,7 +40,9 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      loadingMessage: 'Loading...'
+    }
   },
   computed: {
     ...mapState({
