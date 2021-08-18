@@ -10,13 +10,15 @@
         </v-card-text>
       </v-card>
     </div>
-    <v-form v-model="valid">
+    <v-form v-model="valid" ref="artifact">
       <v-card class="mx-auto my-2">
         <v-card-title
           ><v-text-field
             label="Title"
             outlined
             v-model="artifact_local.title"
+            :rules="[rules.required, rules.exists]"
+            required
           ></v-text-field
         ></v-card-title>
         <v-card-text>
@@ -26,6 +28,8 @@
               outlined
               label="Description"
               v-model="artifact_local.description"
+              :rules="[rules.required, rules.exists]"
+              required
             ></v-textarea>
           </div>
         </v-card-text>
@@ -35,6 +39,7 @@
             outlined
             v-model="artifact_local.url"
             :rules="[rules.required, rules.url]"
+            required
           ></v-text-field
         ></v-card-title>
 
@@ -49,6 +54,8 @@
           v-model="artifact_local.type"
           :prepend-icon="iconImage(artifact_local.type)"
           :color="iconColor(artifact_local.type)"
+          :rules="[rules.required, rules.exists]"
+          required
         ></v-select>
 
         <v-divider class="mx-4"></v-divider>
@@ -424,11 +431,15 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" :disabled="disabled" @click="save()">
+          <v-btn color="success" :disabled="!valid || disabled" @click="save()">
             Save
           </v-btn>
 
-          <v-btn color="primary" @click="publish()">
+          <v-btn
+            color="primary"
+            :disabled="!valid || disabled"
+            @click="publish()"
+          >
             Publish
           </v-btn>
         </v-card-actions>
@@ -494,7 +505,7 @@ export default {
       schema: {},
       affiliationSchema: {},
       schemaLoaded: false,
-      valid: false,
+      valid: true,
       dialog: false,
       disabled: false,
       artifactdialog: false,
@@ -502,7 +513,10 @@ export default {
       possibleBadges: [],
       possibleLicenses: [],
       rules: {
-        required: value => !!value || 'URL required',
+        required: value => !!value || 'required',
+        exists: value => {
+          return typeof value === 'string' ? value.length > 0 : false
+        },
         url: value => {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
