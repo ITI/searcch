@@ -68,7 +68,10 @@ export default {
   props: {
     field: {
       type: [Array, Object],
-      required: true
+      required: true,
+      default: function() {
+        return []
+      }
     },
     type: {
       type: String,
