@@ -73,7 +73,7 @@ export default {
         {
           q: 'How can I get an account on the SEARCCH hub?',
           a:
-            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone that has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
+            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone who has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
         },
         {
           q: 'Do I have to share data in order to use the hub?',
