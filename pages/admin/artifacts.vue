@@ -113,7 +113,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <a
-                v-if="!item.publication"
+                v-if="item.id && user_is_admin"
                 :href="`/artifact/${item.id}?edit=true`"
                 target="_blank"
               >
