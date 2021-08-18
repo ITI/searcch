@@ -27,9 +27,27 @@
         <v-col cols="1">
           <v-checkbox
             v-model="published"
-            @change="updateArtifacts()"
+            @change="
+              notpublished = false
+              updateArtifacts()
+            "
           ></v-checkbox>
         </v-col>
+        <v-col cols="1">
+          <v-subheader>
+            Not Published
+          </v-subheader>
+        </v-col>
+        <v-col cols="1">
+          <v-checkbox
+            v-model="notpublished"
+            @change="
+              published = false
+              updateArtifacts()
+            "
+          ></v-checkbox>
+        </v-col>
+
         <v-col cols="2">
           <v-text-field
             v-model="owner_filter"
@@ -194,6 +212,7 @@ export default {
         'other'
       ],
       published: false,
+      notpublished: false,
       owner_filter: '',
       headers: [
         { text: 'Artifact', value: 'id', align: 'start', sortable: true },
@@ -265,6 +284,7 @@ export default {
         }
         if (this.type_select) payload['type'] = this.type_select
         if (this.published) payload['published'] = 1
+        if (this.notpublished) payload['published'] = 0
         if (this.owner_filter) payload['owner'] = this.owner_filter
         this.$store.dispatch('system/fetchArtifacts', payload)
       }
