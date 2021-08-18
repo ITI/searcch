@@ -174,17 +174,17 @@
               <v-tabs-items v-model="tabs">
                 <v-tab-item>
                   <!-- artifacts -->
-                  <v-timeline align-top dense>
+                  <v-timeline align-top dense v-if="dashboard.owned_artifacts">
                     <v-timeline-item
-                      v-for="item in dashboard.owned_artifacts"
-                      :key="item.ctime"
+                      v-for="item in sortedArtifacts"
+                      :key="item.id"
                       :color="iconColor(item.type)"
                       :icon="iconImage(item.type)"
                       small
                     >
                       <div>
                         <div class="font-weight-normal">
-                          <strong>{{ Date(item.ctime) }}</strong>
+                          <strong>{{ new Date(item.ctime) }}</strong>
                         </div>
                         <div>
                           {{ item.title }}
@@ -374,6 +374,16 @@ export default {
     types: function() {
       if (this.schemaLoaded) {
         return this.schema.properties.type.enum
+      } else return []
+    },
+    sortedArtifacts: function() {
+      if (typeof this.dashboard.owned_artifacts !== 'undefined') {
+        return this.dashboard.owned_artifacts.sort(function(a, b) {
+          // reverse sort order
+          if (a.ctime < b.ctime) return 1
+          if (a.ctime > b.ctime) return -1
+          return 0
+        })
       } else return []
     }
   },
