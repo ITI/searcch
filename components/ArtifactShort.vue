@@ -147,11 +147,12 @@ export default {
       relations: [
         'cites',
         'supplements',
-        'continues',
-        'references',
-        'documents',
-        'compiles',
-        'publishes'
+        'extends',
+        'uses',
+        'describes',
+        'requires',
+        'processes',
+        'produces'
       ],
       relation: ''
     }

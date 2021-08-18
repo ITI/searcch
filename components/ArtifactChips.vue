@@ -45,7 +45,13 @@
         {{ item.affiliation.person.name }} ({{ item.roles }})
       </div>
       <div v-else-if="type === 'relation'">
-        {{ item.relation | titlecase }}: {{ item.related_artifact_id }}
+        {{ item.artifact_id }} {{ item.relation | titlecase }}
+        {{ item.related_artifact_id }}
+      </div>
+      <div v-else-if="type === 'reverse-relation'">
+        {{ item.related_artifact_id }}
+        {{ flipRelation(item.relation) | titlecase }}
+        {{ item.artifact_id }}
       </div>
     </v-chip>
     <v-btn
@@ -61,7 +67,7 @@
 </template>
 
 <script>
-import { artifactIcon, artifactColor } from '@/helpers'
+import { artifactIcon, artifactColor, reverseRelation } from '@/helpers'
 
 export default {
   components: {},
@@ -108,6 +114,9 @@ export default {
     }
   },
   methods: {
+    flipRelation(type) {
+      return reverseRelation(type)
+    },
     iconColor(type) {
       return artifactColor(type)
     },
@@ -124,6 +133,8 @@ export default {
             return '/search?keywords=' + item
           case 'relation':
             return '/artifact/' + item.related_artifact_id
+          case 'reverse-relation':
+            return '/artifact/' + item.artifact_id
         }
       }
       return null

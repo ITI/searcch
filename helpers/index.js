@@ -19,6 +19,8 @@ export const artifactIcon = type => {
       return 'mdi-account-circle'
     case 'relation':
       return 'mdi-relation-one-to-one'
+    case 'reverse-relation':
+      return 'mdi-relation-one-to-one'
     default:
       return 'mdi-help'
   }
@@ -41,8 +43,33 @@ export const artifactColor = type => {
       return 'primary'
     case 'relation':
       return 'primary'
+    case 'reverse-relation':
+      return 'primary'
     default:
       return 'info'
+  }
+}
+
+export const reverseRelation = type => {
+  switch (type) {
+    case 'cites':
+      return 'is cited by'
+    case 'supplements':
+      return 'is supplemented by'
+    case 'extends':
+      return 'is extended by'
+    case 'uses':
+      return 'is used by'
+    case 'describes':
+      return 'is described by'
+    case 'requires':
+      return 'is required by'
+    case 'processes':
+      return 'is processed by'
+    case 'produces':
+      return 'is produced by'
+    default:
+      return type
   }
 }
 
