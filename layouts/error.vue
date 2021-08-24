@@ -57,9 +57,9 @@ export default {
     console.log(this.error)
     if (
       this.error.statusCode === 401 &&
-      this.error.response.data.message === 'invalid session token'
+      this.error.response.data.message.includes('session token')
     ) {
-      console.log('invalid session token')
+      console.log('session token')
       this.$store.commit('user/LOGOUT')
       this.$auth.logout()
 
