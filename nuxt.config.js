@@ -96,7 +96,51 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    [
+      '@dansmaculotte/nuxt-security',
+      {
+        /* module options */
+        dev: true,
+        hsts: {
+          maxAge: 15552000,
+          includeSubDomains: true,
+          preload: true
+        },
+        csp: {
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: [
+              "'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com"
+            ],
+            objectSrc: ["'self'"],
+            styleSrc: [
+              "'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net"
+            ],
+            fontSrc: [
+              "'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"
+            ],
+            connectSrc: [
+              "'self' https://api.github.com https://www.gravatar.com"
+            ],
+            // asterisk here due to badge images
+            imgSrc: [
+              "'self' https://avatars.githubusercontent.com https://*.gravatar.com *"
+            ]
+          },
+          reportOnly: false
+        },
+        referrer: 'same-origin',
+
+        securityFile: {
+          contacts: ['mailto:yardley@illinois.edu'],
+          canonical:
+            'https://hub.cyberexperimentation.org/.well-know/security.txt',
+          preferredLanguages: ['en']
+        },
+        additionalHeaders: true
+      }
+    ]
   ],
   /*
    ** Axios module configuration
