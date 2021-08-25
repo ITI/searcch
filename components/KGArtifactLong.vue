@@ -7,7 +7,7 @@
         {{ record.artifact.id }}
       </v-card-subtitle>
       <v-card-text>
-        <a target="_blank" :href="record.artifact.url">
+        <a target="_blank" :href="record.artifact.url" rel="noopener">
           {{ record.artifact.url }}
         </a>
       </v-card-text>
@@ -151,7 +151,7 @@
             max-width="100"
             :src="b.badge.image_url"
           ></v-img>
-          <a :href="b.badge.url" target="_blank">
+          <a :href="b.badge.url" target="_blank" rel="noopener">
             {{ b.badge.title }}
           </a>
         </span>
@@ -217,13 +217,20 @@
         >
           <v-list-group :value="true" no-action sub-group>
             <template v-slot:activator>
-              <a @click.stop target="_blank" :href="v.url">{{ v.url }}</a>
+              <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
+                v.url
+              }}</a>
               &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
             </template>
             <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
-              <a target="_blank" :href="vm.html_url || vm.download_url">{{
-                vm.pathname || vm.name || vm.html_url || vm.download_url
-              }}</a>
+              <a
+                target="_blank"
+                :href="vm.html_url || vm.download_url"
+                rel="noopener"
+                >{{
+                  vm.pathname || vm.name || vm.html_url || vm.download_url
+                }}</a
+              >
               &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
             </v-list-item>
           </v-list-group>

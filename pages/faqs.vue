@@ -73,7 +73,7 @@ export default {
         {
           q: 'How can I get an account on the SEARCCH hub?',
           a:
-            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone who has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
+            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone who has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank" rel="noopener">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
         },
         {
           q: 'Do I have to share data in order to use the hub?',
@@ -116,7 +116,7 @@ export default {
         {
           q: 'How do I add a profile pic?',
           a:
-            'Direct profile picture upload is not yet implemented in the hub. The hub utilizes your GitHub avatar if it is set. If GitHub does not return an avatar for your account, the hub queries gravatar.com for profile pictures associated with your registered SEARCCH email address. <br/><br/> If you would like your profile picture to show up in the SEARCCH hub, either set an avatar image on GitHub.com by visiting <a href="https://github.com/settings/profile" target="_blank">https://github.com/settings/profile</a> or go to <a href="https://gravatar.com" target="_blank">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
+            'Direct profile picture upload is not yet implemented in the hub. The hub utilizes your GitHub avatar if it is set. If GitHub does not return an avatar for your account, the hub queries gravatar.com for profile pictures associated with your registered SEARCCH email address. <br/><br/> If you would like your profile picture to show up in the SEARCCH hub, either set an avatar image on GitHub.com by visiting <a href="https://github.com/settings/profile" target="_blank" rel="noopener">https://github.com/settings/profile</a> or go to <a href="https://gravatar.com" target="_blank" rel="noopener">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
         }
       ]
     }

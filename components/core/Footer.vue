@@ -11,7 +11,7 @@
     <span class="font-weight-light copyright">
       Template &copy;
       {{ new Date().getFullYear() }}
-      <a href="https://www.creative-tim.com/" target="_blank">
+      <a href="https://www.creative-tim.com/" target="_blank" rel="noopener">
         Creative Tim
       </a>
       , made with

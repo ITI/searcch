@@ -14,6 +14,7 @@
                   class="white--text"
                   href="https://materialdesignicons.com/"
                   target="_blank"
+                  rel="noopener"
                 >
                   Icons
                 </a>
@@ -42,6 +43,7 @@
           color="success"
           href="https://materialdesignicons.com/"
           target="_blank"
+          rel="noopener"
         >
           <v-icon left>
             mdi-material-design

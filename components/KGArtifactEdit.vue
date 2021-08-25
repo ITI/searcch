@@ -4,7 +4,7 @@
       <v-card class="mx-auto my-2">
         <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
         <v-card-text>
-          <a target="_blank" :href="artifact_local.url">
+          <a target="_blank" :href="artifact_local.url" rel="noopener">
             {{ artifact_local.url }}
           </a>
         </v-card-text>
@@ -254,7 +254,7 @@
               max-width="100"
               :src="b.badge.image_url"
             ></v-img>
-            <a :href="b.badge.url" target="_blank">
+            <a :href="b.badge.url" target="_blank" rel="noopener">
               {{ b.badge.title }}
             </a>
             <v-icon @click="artifact_local.badges.splice(index, 1)" right
@@ -380,7 +380,9 @@
           >
             <v-list-group :value="true" no-action sub-group>
               <template v-slot:activator>
-                <a @click.stop target="_blank" :href="f.url">{{ f.url }}</a>
+                <a @click.stop target="_blank" :href="f.url" rel="noopener">{{
+                  f.url
+                }}</a>
                 &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
                 {{ f.size ? convertSize(f.size) : 'unknown' }})
               </template>
@@ -389,9 +391,14 @@
                 :key="`mem${indexm}`"
                 dense
               >
-                <a target="_blank" :href="fm.html_url || fm.download_url">{{
-                  fm.pathname || fm.name || fm.html_url || fm.download_url
-                }}</a>
+                <a
+                  target="_blank"
+                  :href="fm.html_url || fm.download_url"
+                  rel="noopener"
+                  >{{
+                    fm.pathname || fm.name || fm.html_url || fm.download_url
+                  }}</a
+                >
                 &nbsp; (type: {{ fm.filetype ? fm.filetype : 'unknown' }}, size:
                 {{ fm.size ? convertSize(fm.size) : 'unknown' }})
               </v-list-item>

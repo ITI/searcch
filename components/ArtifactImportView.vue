@@ -9,6 +9,7 @@
                 >Import ID {{ artifact.id }}:&nbsp;<a
                   target="_blank"
                   :href="artifact.url"
+                  rel="noopener"
                   >{{ artifactTitle }}</a
                 ></span
               >

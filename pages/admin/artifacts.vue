@@ -122,7 +122,12 @@
         <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="item.id" :href="`/artifact/${item.id}`" target="_blank">
+              <a
+                v-if="item.id"
+                :href="`/artifact/${item.id}`"
+                target="_blank"
+                rel="noopener"
+              >
                 <v-icon v-on="on" small color="info">mdi-database</v-icon>
               </a>
             </template>
@@ -134,6 +139,7 @@
                 v-if="item.id && user_is_admin"
                 :href="`/artifact/${item.id}?edit=true`"
                 target="_blank"
+                rel="noopener"
               >
                 <v-icon v-on="on" small color="green">mdi-database-edit</v-icon>
               </a>
@@ -149,9 +155,13 @@
           {{ item.mtime ? $moment.utc(item.mtime).fromNow() : '' }}
         </template>
         <template v-slot:item.url="{ item }">
-          <a v-if="item.url" :href="`${item.url}`" target="_blank">{{
-            ellipsize(item.url, 32)
-          }}</a>
+          <a
+            v-if="item.url"
+            :href="`${item.url}`"
+            target="_blank"
+            rel="noopener"
+            >{{ ellipsize(item.url, 32) }}</a
+          >
         </template>
         <template v-slot:item.publication="{ item }">
           <v-icon v-if="item.publication">mdi-check</v-icon>
