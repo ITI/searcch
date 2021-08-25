@@ -106,7 +106,12 @@
         <template v-slot:item.user.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="item.user_id" :href="`/profile/${item.user_id}`">
+              <a
+                v-if="item.user_id"
+                :href="`/profile/${item.user_id}`"
+                target="_blank"
+                rel="noopener"
+              >
                 <v-icon v-on="on">mdi-account</v-icon>
               </a>
             </template>
