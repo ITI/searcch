@@ -283,7 +283,7 @@
               <template slot="item" slot-scope="data">
                 <v-list-item-content>
                   <v-list-item-title
-                    v-html="`${data.item.organization} - ${data.item.title}`"
+                    v-text="`${data.item.organization} - ${data.item.title}`"
                   >
                   </v-list-item-title>
                 </v-list-item-content>
