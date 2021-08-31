@@ -24,6 +24,7 @@
                 <a
                   href="https://searcch.cyberexperimentation.org"
                   target="_blank"
+                  rel="noopener"
                 >
                   project homepage.
                 </a>

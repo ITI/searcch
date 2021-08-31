@@ -4,19 +4,21 @@
       <v-card class="mx-auto my-2">
         <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
         <v-card-text>
-          <a target="_blank" :href="artifact_local.url">
+          <a target="_blank" :href="artifact_local.url" rel="noopener">
             {{ artifact_local.url }}
           </a>
         </v-card-text>
       </v-card>
     </div>
-    <v-form v-model="valid">
+    <v-form v-model="valid" ref="artifact">
       <v-card class="mx-auto my-2">
         <v-card-title
           ><v-text-field
             label="Title"
             outlined
             v-model="artifact_local.title"
+            :rules="[rules.required, rules.exists]"
+            required
           ></v-text-field
         ></v-card-title>
         <v-card-text>
@@ -26,6 +28,8 @@
               outlined
               label="Description"
               v-model="artifact_local.description"
+              :rules="[rules.required, rules.exists]"
+              required
             ></v-textarea>
           </div>
         </v-card-text>
@@ -35,6 +39,7 @@
             outlined
             v-model="artifact_local.url"
             :rules="[rules.required, rules.url]"
+            required
           ></v-text-field
         ></v-card-title>
 
@@ -49,6 +54,8 @@
           v-model="artifact_local.type"
           :prepend-icon="iconImage(artifact_local.type)"
           :color="iconColor(artifact_local.type)"
+          :rules="[rules.required, rules.exists]"
+          required
         ></v-select>
 
         <v-divider class="mx-4"></v-divider>
@@ -58,9 +65,10 @@
         <ArtifactChips
           :field="artifact_local.affiliations"
           type="role"
+          edit
         ></ArtifactChips>
 
-        <ArtifactChips :field="meta.creators" type="role"></ArtifactChips>
+        <ArtifactChips :field="meta.creators" type="role" edit></ArtifactChips>
         <div>
           <v-dialog
             transition="dialog-bottom-transition"
@@ -72,7 +80,7 @@
               <v-btn
                 class="success ml-2 mb-2"
                 fab
-                small
+                x-small
                 v-bind="attrs"
                 v-on="on"
               >
@@ -95,9 +103,12 @@
                           clearable
                           v-if="orgs"
                           :items="orgNames"
-                          v-model="affiliation.affiliation.org.name"
-                          hint="Select applicable org from the list or type in your own"
+                          v-model="affiliation.affiliation.org"
+                          hint="Select applicable organization from the list or type in your own"
                           :search-input.sync="search"
+                          item-value="org.name"
+                          item-text="org.name"
+                          return-object
                         >
                           <template v-slot:no-data>
                             <v-list-item>
@@ -161,12 +172,14 @@
         <ArtifactChips
           :field="artifact_local.tags"
           type="keyword"
+          edit
         ></ArtifactChips>
 
         <ArtifactChips
           :field="meta.keywords"
           type="keyword"
           placeholder="Enter Keyword"
+          edit
           create
         ></ArtifactChips>
 
@@ -175,8 +188,9 @@
         <v-card-title class="py-0">Languages</v-card-title>
         <ArtifactChips
           :field="meta.languages"
-          type="code"
+          type="software"
           placeholder="Enter Language"
+          edit
           create
         ></ArtifactChips>
 
@@ -187,6 +201,7 @@
         <ArtifactChips
           :field="artifact_local.relationships"
           type="relation"
+          edit
         ></ArtifactChips>
 
         <div>
@@ -200,7 +215,7 @@
               <v-btn
                 class="success ml-2 mb-2"
                 fab
-                small
+                x-small
                 v-bind="attrs"
                 v-on="on"
                 :disabled="artifact_local.id ? false : true"
@@ -239,7 +254,7 @@
               max-width="100"
               :src="b.badge.image_url"
             ></v-img>
-            <a :href="b.badge.url" target="_blank">
+            <a :href="b.badge.url" target="_blank" rel="noopener">
               {{ b.badge.title }}
             </a>
             <v-icon @click="artifact_local.badges.splice(index, 1)" right
@@ -268,7 +283,7 @@
               <template slot="item" slot-scope="data">
                 <v-list-item-content>
                   <v-list-item-title
-                    v-html="`${data.item.organization} - ${data.item.title}`"
+                    v-text="`${data.item.organization} - ${data.item.title}`"
                   >
                   </v-list-item-title>
                 </v-list-item-content>
@@ -285,14 +300,14 @@
             @click="meta.badges.push('')"
             class="success ml-2 mb-2"
             fab
-            small
+            x-small
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </div>
 
         <v-divider class="mx-4"></v-divider>
 
-        <div v-if="artifact_local.type == 'code'">
+        <div v-if="artifact_local.type == 'software'">
           <div v-if="stars || watchers">
             <v-card-title class="py-0">Github Metrics</v-card-title>
 
@@ -342,7 +357,7 @@
             <template slot="item" slot-scope="data">
               <v-list-item-content>
                 <v-list-item-title
-                  v-html="`${data.item.short_name} (${data.item.long_name})`"
+                  v-text="`${data.item.short_name} (${data.item.long_name})`"
                 >
                 </v-list-item-title>
               </v-list-item-content>
@@ -365,7 +380,9 @@
           >
             <v-list-group :value="true" no-action sub-group>
               <template v-slot:activator>
-                <a @click.stop target="_blank" :href="f.url">{{ f.url }}</a>
+                <a @click.stop target="_blank" :href="f.url" rel="noopener">{{
+                  f.url
+                }}</a>
                 &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
                 {{ f.size ? convertSize(f.size) : 'unknown' }})
               </template>
@@ -374,9 +391,14 @@
                 :key="`mem${indexm}`"
                 dense
               >
-                <a target="_blank" :href="fm.html_url || fm.download_url">{{
-                  fm.pathname || fm.name || fm.html_url || fm.download_url
-                }}</a>
+                <a
+                  target="_blank"
+                  :href="fm.html_url || fm.download_url"
+                  rel="noopener"
+                  >{{
+                    fm.pathname || fm.name || fm.html_url || fm.download_url
+                  }}</a
+                >
                 &nbsp; (type: {{ fm.filetype ? fm.filetype : 'unknown' }}, size:
                 {{ fm.size ? convertSize(fm.size) : 'unknown' }})
               </v-list-item>
@@ -407,7 +429,7 @@
               @click="meta.files.push({ url: '', filetype: 'unknown' })"
               class="success ml-2 mb-2"
               fab
-              small
+              x-small
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
@@ -416,11 +438,15 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn small color="green" :disabled="disabled" dark @click="save()">
+          <v-btn color="success" :disabled="!valid || disabled" @click="save()">
             Save
           </v-btn>
 
-          <v-btn small color="blue" dark @click="publish()">
+          <v-btn
+            color="primary"
+            :disabled="!valid || disabled"
+            @click="publish()"
+          >
             Publish
           </v-btn>
         </v-card-actions>
@@ -430,7 +456,7 @@
     <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
       <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+        <v-btn color="error" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>
@@ -486,7 +512,7 @@ export default {
       schema: {},
       affiliationSchema: {},
       schemaLoaded: false,
-      valid: false,
+      valid: true,
       dialog: false,
       disabled: false,
       artifactdialog: false,
@@ -494,7 +520,10 @@ export default {
       possibleBadges: [],
       possibleLicenses: [],
       rules: {
-        required: value => !!value || 'URL required',
+        required: value => !!value || 'required',
+        exists: value => {
+          return typeof value === 'string' ? value.length > 0 : false
+        },
         url: value => {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
@@ -629,21 +658,42 @@ export default {
     async save() {
       if (!this.valid) return
       this.disabled = true
+
+      // tags
       this.artifact_local.tags =
         typeof this.artifact_local.tags !== 'undefined' &&
         this.artifact_local.tags !== null
           ? this.artifact_local.tags.concat(zipArray('tag', this.meta.keywords))
           : zipArray('tag', this.meta.keywords)
+
+      // files
       this.artifact_local.files =
         typeof this.artifact_local.files !== 'undefined' &&
         this.artifact_local.files !== null
           ? this.artifact_local.files.concat(this.meta.files)
           : this.meta.files
+
+      // process affiliations
+      this.meta.creators.forEach((affil, index, object) => {
+        if (typeof affil.affiliation.org === 'string') {
+          let org = this.orgs.find(a => a.name === affil.affiliation.org)
+          if (typeof org !== 'undefined') {
+            affil.affiliation.org = JSON.parse(JSON.stringify(org))
+          } else {
+            affil.affiliation.org = {
+              name: affil.affiliation.org,
+              type: 'Institution'
+            }
+          }
+        }
+      })
       this.artifact_local.affiliations =
         typeof this.artifact_local.affiliations !== 'undefined' &&
         this.artifact_local.affiliations !== null
           ? this.artifact_local.affiliations.concat(this.meta.creators)
           : this.meta.creators
+
+      // badges
       this.artifact_local.badges =
         typeof this.artifact_local.badges !== 'undefined' &&
         this.artifact_local.badges !== null
@@ -652,6 +702,7 @@ export default {
             )
           : zipArray('badge', this.meta.badges)
 
+      // languages
       let langs =
         this.artifact_local.meta !== null
           ? this.artifact_local.meta.find(o => o.name == 'languages')
@@ -756,10 +807,7 @@ export default {
     affiliationObject() {
       return new Object({
         affiliation: {
-          org: {
-            name: '',
-            type: 'Institution'
-          },
+          org: '',
           person: {
             email: '',
             name: ''

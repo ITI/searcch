@@ -10,17 +10,10 @@
           </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip
-            v-if="artifact.type"
-            :color="iconColor(artifact.type)"
-            class="ma-2 mt-5"
-            label
-          >
-            <v-avatar left>
-              <v-icon>{{ iconImage(artifact.type) }}</v-icon>
-            </v-avatar>
-            <div v-if="artifact.type">{{ artifact.type }}</div>
-          </v-chip>
+          <ArtifactChips
+            :field="[artifact.type]"
+            :type="artifact.type"
+          ></ArtifactChips>
         </v-col>
       </v-row>
 
@@ -92,16 +85,29 @@
           :items="relations"
           v-model="relation"
         ></v-select>
-        <v-btn v-if="!related" small :to="`/artifact/${artifact.id}`" nuxt>
+        <v-btn
+          v-if="!related"
+          color="primary"
+          :to="`/artifact/${artifact.id}`"
+          nuxt
+        >
           Read More
         </v-btn>
         <v-btn
           v-else
-          small
           color="success"
           @click="addRelated(artifact.id, relation)"
+          :disabled="relation.length == 0"
         >
           Add Related
+        </v-btn>
+        <v-btn
+          v-if="isOwner()"
+          color="success"
+          :to="`/artifact/${artifact.id}?edit=true`"
+          nuxt
+        >
+          Edit
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -128,6 +134,9 @@ export default {
       required: false
     }
   },
+  components: {
+    ArtifactChips: () => import('@/components/ArtifactChips')
+  },
   data() {
     return {
       expanded: this.comments
@@ -138,18 +147,21 @@ export default {
       relations: [
         'cites',
         'supplements',
-        'continues',
-        'references',
-        'documents',
-        'compiles',
-        'publishes'
+        'extends',
+        'uses',
+        'describes',
+        'requires',
+        'processes',
+        'produces'
       ],
       relation: ''
     }
   },
   computed: {
     ...mapState({
-      favorites: state => state.artifacts.favoritesIDs
+      favorites: state => state.artifacts.favoritesIDs,
+      userid: state => state.user.userid,
+      user_is_admin: state => state.user.user_is_admin
     }),
     sanitizedDescription: function() {
       let description = ''
@@ -171,7 +183,7 @@ export default {
     }
   },
   methods: {
-    favoriteThis() {
+    async favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
@@ -179,9 +191,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          this.$favoritesEndpoint.post(this.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.artifact.id, {})
         } else {
-          this.$favoritesEndpoint.delete(this.artifact.id)
+          await this.$favoritesEndpoint.delete(this.artifact.id)
         }
       }
     },
@@ -197,6 +209,12 @@ export default {
         relation: relation
       })
       EventBus.$emit('close', 'artifactdialog')
+    },
+    isOwner() {
+      if (this.user_is_admin) return true
+      return typeof this.artifact.owner !== 'undefined'
+        ? this.artifact.owner.id == this.userid
+        : false
     }
   }
 }

@@ -2,8 +2,8 @@
   <div>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
-        light
-        solo
+        append-icon="mdi-magnify"
+        label="Search"
         placeholder="Type search term..."
         v-model="search"
         loading="true"
@@ -12,6 +12,8 @@
         hide-details
         @keydown="onChange"
         @change="onSubmit"
+        solo
+        dense
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen" multiple>
@@ -148,22 +150,11 @@ export default {
       submitted: false,
       adopen: [0],
       advanced: {
-        types: ['dataset', 'code'],
+        types: ['dataset', 'software'],
         author: '',
         org: ''
       },
-      types: [
-        'dataset',
-        'executable',
-        'methodology',
-        'metrics',
-        'priorwork',
-        'publication',
-        'hypothesis',
-        'code',
-        'domain',
-        'supportinginfo'
-      ],
+      types: ['dataset', 'presentation', 'publication', 'software', 'other'],
       filters: ['Name', 'Organization'],
       showScrollToTop: 0
     }
@@ -212,7 +203,6 @@ export default {
   },
   methods: {
     async onSubmit() {
-      console.log(this.adopen)
       this.submitted = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'

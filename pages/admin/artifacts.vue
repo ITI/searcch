@@ -27,9 +27,27 @@
         <v-col cols="1">
           <v-checkbox
             v-model="published"
-            @change="updateArtifacts()"
+            @change="
+              notpublished = false
+              updateArtifacts()
+            "
           ></v-checkbox>
         </v-col>
+        <v-col cols="1">
+          <v-subheader>
+            Not Published
+          </v-subheader>
+        </v-col>
+        <v-col cols="1">
+          <v-checkbox
+            v-model="notpublished"
+            @change="
+              published = false
+              updateArtifacts()
+            "
+          ></v-checkbox>
+        </v-col>
+
         <v-col cols="2">
           <v-text-field
             v-model="owner_filter"
@@ -104,8 +122,13 @@
         <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="item.id" :href="`/artifact/${item.id}`">
-                <v-icon v-on="on" small color="blue">mdi-database</v-icon>
+              <a
+                v-if="item.id"
+                :href="`/artifact/${item.id}`"
+                target="_blank"
+                rel="noopener"
+              >
+                <v-icon v-on="on" small color="info">mdi-database</v-icon>
               </a>
             </template>
             <span>View</span>
@@ -113,14 +136,17 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <a
-                v-if="!item.publication"
+                v-if="item.id && user_is_admin"
                 :href="`/artifact/${item.id}?edit=true`"
+                target="_blank"
+                rel="noopener"
               >
                 <v-icon v-on="on" small color="green">mdi-database-edit</v-icon>
               </a>
             </template>
             <span>Edit</span>
           </v-tooltip>
+          {{ item.id }}
         </template>
         <template v-slot:item.ctime="{ item }">
           {{ $moment.utc(item.ctime).fromNow() }}
@@ -129,9 +155,13 @@
           {{ item.mtime ? $moment.utc(item.mtime).fromNow() : '' }}
         </template>
         <template v-slot:item.url="{ item }">
-          <a v-if="item.url" :href="`${item.url}`" target="_blank">{{
-            ellipsize(item.url, 32)
-          }}</a>
+          <a
+            v-if="item.url"
+            :href="`${item.url}`"
+            target="_blank"
+            rel="noopener"
+            >{{ ellipsize(item.url, 32) }}</a
+          >
         </template>
         <template v-slot:item.publication="{ item }">
           <v-icon v-if="item.publication">mdi-check</v-icon>
@@ -143,12 +173,11 @@
           }}
         </template>
         <template v-slot:item.type="{ item }">
-          <v-chip :color="iconColor(item.type)" class="ma-2" label small>
-            <v-avatar left>
-              <v-icon>{{ iconImage(item.type) }}</v-icon>
-            </v-avatar>
-            <div>{{ item.type }}</div>
-          </v-chip>
+          <ArtifactChips
+            :field="[item.type]"
+            :type="item.type"
+            small
+          ></ArtifactChips>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-tooltip bottom>
@@ -176,6 +205,9 @@ import { mapState } from 'vuex'
 import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
+  components: {
+    ArtifactChips: () => import('@/components/ArtifactChips')
+  },
   data() {
     return {
       loadingMessage: 'Loading imports...',
@@ -184,17 +216,13 @@ export default {
       type_items: [
         '',
         'dataset',
-        'executable',
-        'methodology',
-        'metrics',
-        'priorwork',
+        'presentation',
         'publication',
-        'hypothesis',
-        'code',
-        'domain',
-        'supportinginfo'
+        'software',
+        'other'
       ],
       published: false,
+      notpublished: false,
       owner_filter: '',
       headers: [
         { text: 'Artifact', value: 'id', align: 'start', sortable: true },
@@ -266,6 +294,7 @@ export default {
         }
         if (this.type_select) payload['type'] = this.type_select
         if (this.published) payload['published'] = 1
+        if (this.notpublished) payload['published'] = 0
         if (this.owner_filter) payload['owner'] = this.owner_filter
         this.$store.dispatch('system/fetchArtifacts', payload)
       }
@@ -281,8 +310,8 @@ export default {
       this.editedIndex = this.items.indexOf(item)
       this.dialogDelete = true
     },
-    deleteItemConfirm() {
-      this.$artifactEndpoint.delete(this.items[this.editedIndex].id)
+    async deleteItemConfirm() {
+      await this.$artifactEndpoint.delete(this.items[this.editedIndex].id)
       this.items.splice(this.editedIndex, 1)
       this.closeDelete()
       this.updateArtifacts()

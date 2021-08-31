@@ -106,7 +106,12 @@
         <template v-slot:item.user.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <a v-if="item.user_id" :href="`/profile/${item.user_id}`">
+              <a
+                v-if="item.user_id"
+                :href="`/profile/${item.user_id}`"
+                target="_blank"
+                rel="noopener"
+              >
                 <v-icon v-on="on">mdi-account</v-icon>
               </a>
             </template>
@@ -204,8 +209,8 @@ export default {
       this.editedIndex = this.items.indexOf(item)
       this.dialogDelete = true
     },
-    deleteItemConfirm() {
-      this.$sessionEndpoint.delete(this.items[this.editedIndex].id)
+    async deleteItemConfirm() {
+      await this.$sessionEndpoint.delete(this.items[this.editedIndex].id)
       this.items.splice(this.editedIndex, 1)
       this.closeDelete()
       this.updateSessions()

@@ -73,18 +73,32 @@
         dense
       >
         <template v-slot:item.id="{ item }">
-          <a v-if="item.id" :href="`/artifact/import/${item.id}`">View</a>
+          <a
+            v-if="item.id"
+            :href="`/artifact/import/${item.id}`"
+            target="_blank"
+            rel="noopener"
+            >View</a
+          >
         </template>
         <template v-slot:item.ctime="{ item }">
           {{ $moment.utc(item.ctime).fromNow() }}
         </template>
         <template v-slot:item.url="{ item }">
-          <a v-if="item.url" :href="`${item.url}`">{{
-            ellipsize(item.url, 32)
-          }}</a>
+          <a
+            v-if="item.url"
+            :href="`${item.url}`"
+            target="_blank"
+            rel="noopener"
+            >{{ ellipsize(item.url, 32) }}</a
+          >
         </template>
         <template v-slot:item.artifact_id="{ item }">
-          <a v-if="item.artifact_id" :href="`/artifact/${item.artifact_id}`"
+          <a
+            v-if="item.artifact_id"
+            :href="`/artifact/${item.artifact_id}`"
+            target="_blank"
+            rel="noopener"
             >View</a
           >
         </template>

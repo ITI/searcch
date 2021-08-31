@@ -35,23 +35,25 @@
       >
       </v-textarea>
     </v-card-text>
-    <v-card-actions v-if="userid == comment.review.reviewer.id">
-      <v-btn text color="primary" @click="editing = true" v-if="!editing">
+    <v-card-actions
+      v-if="userid == comment.review.reviewer.id"
+      class="justify-end"
+    >
+      <v-btn color="success" @click="editing = true" v-if="!editing">
         Edit
       </v-btn>
       <v-btn
-        text
-        color="primary"
+        color="success"
         @click="saveReview()"
         disable="this.review == ''"
         v-if="editing"
       >
         Save
       </v-btn>
-      <v-btn text color="primary" @click="deleteReview()" v-if="!editing">
+      <v-btn color="error" @click="deleteReview()" v-if="!editing">
         Delete
       </v-btn>
-      <v-btn text color="primary" @click="editing = false" v-if="editing">
+      <v-btn text color="error" @click="editing = false" v-if="editing">
         Cancel
       </v-btn>
     </v-card-actions>

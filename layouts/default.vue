@@ -98,7 +98,7 @@
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
         >Logout</v-btn
       >
-      <v-btn v-else class="primary" nuxt to="/login">Login</v-btn>
+      <v-btn v-else class="primary" nuxt @click="login()">Login</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -218,6 +218,9 @@ export default {
     }
   },
   methods: {
+    async login() {
+      let response = await this.$auth.loginWith('github')
+    },
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
         console.log('Logging out')
@@ -228,7 +231,7 @@ export default {
     },
     async setAdmin(mode) {
       console.log('Setting admin mode', mode)
-      this.$loginEndpoint
+      await this.$loginEndpoint
         .put({ is_admin: mode })
         .then(response => {
           this.$store.commit('user/SET_USER_IS_ADMIN', mode)

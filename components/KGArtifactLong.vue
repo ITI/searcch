@@ -2,8 +2,12 @@
   <div v-if="record.artifact">
     <v-card class="mx-auto my-2">
       <v-card-title> {{ record.artifact.title | titlecase }} </v-card-title>
+      <v-card-subtitle>
+        Artifact ID:
+        {{ record.artifact.id }}
+      </v-card-subtitle>
       <v-card-text>
-        <a target="_blank" :href="record.artifact.url">
+        <a target="_blank" :href="record.artifact.url" rel="noopener">
           {{ record.artifact.url }}
         </a>
       </v-card-text>
@@ -30,7 +34,7 @@
         <div v-html="sanitizedDescription"></div>
       </v-card-text>
 
-      <div v-if="record.artifact.type === 'code'">
+      <div v-if="record.artifact.type === 'software'">
         <v-divider class="mx-4"></v-divider>
         <v-card-title>
           <v-row class="mx-1"
@@ -41,7 +45,7 @@
           >
         </v-card-title>
         <v-card-text>
-          <vue-markdown :source="markdown"></vue-markdown>
+          <vue-simple-markdown :source="markdown"></vue-simple-markdown>
         </v-card-text>
         <v-btn
           elevation="0"
@@ -92,17 +96,44 @@
 
       <div v-if="languages.length > 0">
         <v-card-title class="py-0">Languages</v-card-title>
-        <ArtifactChips :field="languages" type="code" display></ArtifactChips>
+        <ArtifactChips
+          :field="languages"
+          type="software"
+          display
+        ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
       </div>
 
-      <div v-if="record.artifact.relationships.length">
-        <v-card-title class="py-0">Related</v-card-title>
+      <div
+        v-if="
+          typeof record.artifact.relationships !== 'undefined' &&
+            record.artifact.relationships.length
+        "
+      >
+        <v-card-title class="py-0">Relations</v-card-title>
 
         <ArtifactChips
           :field="record.artifact.relationships"
           type="relation"
+          display
+          link
+        ></ArtifactChips>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div
+        v-if="
+          typeof record.artifact.reverse_relationships !== 'undefined' &&
+            record.artifact.reverse_relationships.length
+        "
+      >
+        <v-card-title class="py-0">Reverse Relations</v-card-title>
+
+        <ArtifactChips
+          :field="record.artifact.reverse_relationships"
+          type="reverse-relation"
           display
           link
         ></ArtifactChips>
@@ -120,14 +151,14 @@
             max-width="100"
             :src="b.badge.image_url"
           ></v-img>
-          <a :href="b.badge.url" target="_blank">
+          <a :href="b.badge.url" target="_blank" rel="noopener">
             {{ b.badge.title }}
           </a>
         </span>
         <v-divider class="mx-4"></v-divider>
       </div>
 
-      <div v-if="record.artifact.type == 'code'">
+      <div v-if="record.artifact.type == 'software'">
         <div v-if="stars || watchers">
           <v-card-title class="py-0">Github Metrics</v-card-title>
 
@@ -186,13 +217,20 @@
         >
           <v-list-group :value="true" no-action sub-group>
             <template v-slot:activator>
-              <a @click.stop target="_blank" :href="v.url">{{ v.url }}</a>
+              <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
+                v.url
+              }}</a>
               &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
             </template>
             <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
-              <a target="_blank" :href="vm.html_url || vm.download_url">{{
-                vm.pathname || vm.name || vm.html_url || vm.download_url
-              }}</a>
+              <a
+                target="_blank"
+                :href="vm.html_url || vm.download_url"
+                rel="noopener"
+                >{{
+                  vm.pathname || vm.name || vm.html_url || vm.download_url
+                }}</a
+              >
               &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
             </v-list-item>
           </v-list-group>
@@ -212,6 +250,16 @@
 
         <v-btn icon :to="`/artifact/review/${record.artifact.id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="isOwner()"
+          color="success"
+          small
+          :to="`/artifact/${record.artifact.id}?edit=true`"
+          nuxt
+        >
+          Edit
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -235,7 +283,6 @@ export default {
     }
   },
   components: {
-    VueMarkdown: () => import('vue-markdown'),
     ArtifactChips: () => import('@/components/ArtifactChips')
   },
   data() {
@@ -254,7 +301,8 @@ export default {
   computed: {
     ...mapState({
       userid: state => state.user.userid,
-      favorites: state => state.artifacts.favoritesIDs
+      favorites: state => state.artifacts.favoritesIDs,
+      user_is_admin: state => state.user.user_is_admin
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
@@ -360,7 +408,7 @@ export default {
     }
   },
   methods: {
-    favoriteThis() {
+    async favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
@@ -368,9 +416,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          this.$favoritesEndpoint.post(this.record.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.record.artifact.id, {})
         } else {
-          this.$favoritesEndpoint.delete(this.record.artifact.id)
+          await this.$favoritesEndpoint.delete(this.record.artifact.id)
         }
       }
     },
@@ -382,6 +430,12 @@ export default {
     },
     convertSize(size) {
       return bytesToSize(size)
+    },
+    isOwner() {
+      if (this.user_is_admin) return true
+      return typeof this.record.artifact.owner !== 'undefined'
+        ? this.record.artifact.owner.id == this.userid
+        : false
     }
   }
 }

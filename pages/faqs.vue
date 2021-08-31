@@ -73,7 +73,7 @@ export default {
         {
           q: 'How can I get an account on the SEARCCH hub?',
           a:
-            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone that has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
+            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone who has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank" rel="noopener">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
         },
         {
           q: 'Do I have to share data in order to use the hub?',
@@ -83,7 +83,12 @@ export default {
         {
           q: 'How can I submit my data or code to the hub?',
           a:
-            'The most direct way to get your artifacts into the SEARCCH hub is through the SEARCCH importer service. Please visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
+            'Use the SEARCCH importer service to import artifacts into the SEARCCH hub. Please note that SEARCCH is a database of artifact metadata and does not store artifacts for you. Artifacts must be published on the internet with a valid URL to be imported into the hub. SEARCCH supports assisted import and fully manual import.  Artifacts published on github, ACM digital library, ieeexplore, usenix web site publication, arxiv, paperswithcode, Zenodo, and generic git repos reachable from https can be imported using the assisted import function (the default). The import assistant will scan artifacts in these repositories and automatically populate the import web form for user review. The user can accept the field contents as is or make any modifications desired. Artifacts located in other online locations such as on personal websites can be manually imported by the user entering all the fields required. Entered data may be saved iteratively by clicking SAVE. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a> and then visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
+        },
+        {
+          q: 'I have code, data, and other artifacts that are all from the same research. How should I submit those to the hub?',
+          a:
+            'Generally, code and data should be packaged and submitted separately into logical components. The hub supports the ability to link artifacts that are related. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a> for more information.'
         },
         {
           q:
@@ -109,14 +114,14 @@ export default {
         },
         {
           q:
-            'I found a dataset in the Hub, but the data is wrong/malformed/mislabeled. How do I get help or submit feedback?',
+            'I found a dataset in the Hub, but the data is wrong, malformed, or mislabeled. How do I get help or submit feedback?',
           a:
             'Please do not submit feedback to the hub if you are having issues with a dataset. The SEARCCH team does not have direct experience with most of the artifacts that are in the system and will be unable to help you. <br/><br/> It is always best to first contact the author and try to work out any issues or misunderstandings. Use the SEARCCH entry to identify the dataset’s owner/author, and contact the owner directly for support. If you still have issues with the dataset after reaching out for support, you can try asking a question using the review feature. Be sure to leave your contact information so folks can reach out to you. <br/><br/> You can also share your experience using the data by leaving a review of the artifact in the hub. Please try to be constructive in your comments. E.g., if you found a way to fix broken labeling and were then able to use the dataset, share how to do that. We also encourage sharing positive experiences.'
         },
         {
-          q: 'How do I add a profile pic?',
+          q: 'How do I add a profile picture?',
           a:
-            'Direct profile picture upload is not yet implemented in the hub. The hub searches gravatar.com for profile pictures associated with your registered SEARCCH email address. If you would like your profile picture to show up in the SEARCCH hub, go to <a href="https://gravatar.com" target="_blank">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
+            'Direct profile picture upload is not yet implemented in the hub. The hub automatically uses your GitHub avatar, if it is set. If GitHub does not return an avatar for your account, the hub queries gravatar.com for profile pictures associated with your registered SEARCCH email address. <br/><br/> If you would like your profile picture to show up in the SEARCCH hub, either set an avatar image on GitHub.com by visiting <a href="https://github.com/settings/profile" target="_blank" rel="noopener">https://github.com/settings/profile</a> or go to <a href="https://gravatar.com" target="_blank" rel="noopener">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
         }
       ]
     }
