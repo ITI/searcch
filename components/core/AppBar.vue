@@ -25,7 +25,7 @@
           hide-details
         />
 
-        <v-btn icon to="/dashboard/">
+        <v-btn icon to="/dashboard-example/">
           <v-icon color="tertiary">
             mdi-view-dashboard
           </v-icon>
@@ -36,7 +36,7 @@
             <v-btn
               class="toolbar-items"
               icon
-              to="/dashboard/notifications"
+              to="/dashboard-example/notifications"
               v-bind="attrs"
               v-on="on"
             >
@@ -64,7 +64,7 @@
           </v-card>
         </v-menu>
 
-        <v-btn to="/dashboard/user-profile" icon>
+        <v-btn to="/dashboard-example/user-profile" icon>
           <v-icon color="tertiary">
             mdi-account
           </v-icon>
@@ -90,13 +90,11 @@ export default {
     title: null,
     responsive: false
   }),
-
   watch: {
     $route(val) {
       this.title = val.name
     }
   },
-
   mounted() {
     this.onResponsiveInverted()
     window.addEventListener('resize', this.onResponsiveInverted)
@@ -104,7 +102,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.onResponsiveInverted)
   },
-
   methods: {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     onClick() {

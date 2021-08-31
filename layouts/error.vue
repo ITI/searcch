@@ -6,9 +6,24 @@
     <h1 v-else>
       {{ otherError }}
     </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+    <h2 v-if="error.message">
+      {{ error.message }}
+    </h2>
+    <h2 v-if="error.isAxiosError">
+      {{ error.request.statusText }}
+    </h2>
+
+    <pretty-print
+      v-if="error.request"
+      :value="error.request.data"
+    ></pretty-print>
+
+    <pretty-print
+      v-if="error.request"
+      :value="error.request.response"
+    ></pretty-print>
+
+    <a href="/">Start Over</a>
   </v-app>
 </template>
 
@@ -21,6 +36,10 @@ export default {
       default: null
     }
   },
+  components: {
+    PrettyPrint: () => import('@/components/pretty-print')
+  },
+
   data() {
     return {
       pageNotFound: '404 Not Found',
@@ -32,6 +51,21 @@ export default {
       this.error.statusCode === 404 ? this.pageNotFound : this.otherError
     return {
       title
+    }
+  },
+  mounted() {
+    console.log(this.error)
+    if (
+      this.error.statusCode === 401 &&
+      this.error.response.data.message.includes('session token')
+    ) {
+      console.log('session token')
+      this.$store.commit('user/LOGOUT')
+      this.$auth.logout()
+
+      // auto log them back in
+      alert('Your session expired. The system will now log you back in')
+      this.$auth.loginWith('github')
     }
   }
 }

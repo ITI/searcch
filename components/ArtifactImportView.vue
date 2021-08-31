@@ -3,77 +3,102 @@
     <v-card tile class="mx-auto overflow-hidden" elevation="3">
       <v-row class="px-3">
         <v-col cols="10">
-        <v-card-title class="align-start" >
-          <div>
-            <span class="headline">Import ID {{ artifact.id }}:&nbsp;<a target="_blank" :href="artifact.url">{{ artifactTitle }}</a></span>
-          </div>
-        </v-card-title>
+          <v-card-title class="align-start">
+            <div>
+              <span class="headline"
+                >Import ID {{ artifact.id }}:&nbsp;<a
+                  target="_blank"
+                  :href="artifact.url"
+                  rel="noopener"
+                  >{{ artifactTitle }}</a
+                ></span
+              >
+            </div>
+          </v-card-title>
         </v-col>
         <v-col cols="2" class="text-lg-right">
-          <v-chip :color="artifactColor" class="mr-4 mt-5" label>
-            <v-avatar left>
-              <v-icon>{{ artifactIcon }}</v-icon>
-            </v-avatar>
-            <div>{{ artifactType }}</div>
-          </v-chip>
+          <ArtifactChips
+            :field="[artifactType]"
+            :type="artifactType"
+          ></ArtifactChips>
         </v-col>
       </v-row>
 
-      <v-card-text> 
+      <v-card-text>
         <v-progress-linear
           color="light-blue"
           height="25"
           :value="artifact.progress"
-        ><strong>{{ artifact.progress }}%</strong></v-progress-linear>
+          ><strong>{{ artifact.progress }}%</strong></v-progress-linear
+        >
         {{ artifact.status }} - {{ artifact.phase }}
       </v-card-text>
-
+      <v-row v-if="artifact.status === 'failed'" class="px-3">
+        <v-col cols="10">
+          <v-card-text>
+            message:
+            {{ artifact.message }}
+          </v-card-text>
+          <span v-if="this.artifact.log">
+            log:
+            <v-textarea
+              auto-grow
+              readonly
+              :value="this.artifact.log"
+            ></v-textarea>
+          </span>
+        </v-col>
+      </v-row>
       <v-card-actions>
         <v-btn
-          v-if="artifact.artifact_id || archived"
-          text
-          @click="archive()"
+          v-if="artifact.artifact_id"
+          color="error"
+          @click="deleteArtifact()"
         >
-          Archive 
-        </v-btn>
-        
-        <v-btn
-          v-else
-          text
-        >
-          Cancel
+          Delete
         </v-btn>
 
         <v-btn
-          v-if="artifact.artifact_id && !published"
-          :to="{ path: `/artifact/${artifact.artifact_id}`, query: {edit: 'true'} }"
-          text
+          v-if="artifact.artifact_id || archived"
+          color="orange"
+          @click="archive()"
+        >
+          Archive
+        </v-btn>
+
+        <v-btn v-else color="error" @click="deleteImport()">
+          Delete Import
+        </v-btn>
+
+        <v-btn
+          v-if="artifact.artifact_id"
+          :to="{
+            path: `/artifact/${artifact.artifact_id}`,
+            query: { edit: 'true' }
+          }"
+          color="success"
         >
           Edit
         </v-btn>
 
-        <v-btn
-          v-if="archived === true"
-          text
-          @click="unarchive()"
-        >
+        <v-btn v-if="archived === true" @click="unarchive()">
           Unarchive
         </v-btn>
 
         <v-spacer></v-spacer>
 
         <v-btn
-          :disabled="!artifact.artifact_id || published"
-          text
+          :disabled="!artifact.artifact_id"
           @click="publish()"
+          color="success"
         >
-          Publish{{ published ? "ed" : "" }}
+          Publish
         </v-btn>
 
         <v-btn
           :to="`/artifact/${artifact.artifact_id}`"
           :disabled="!artifact.artifact_id"
-          text
+          color="primary"
         >
           Read More
         </v-btn>
@@ -83,8 +108,7 @@
 </template>
 
 <script>
-import clip from 'text-clipper'
-import { mapState } from 'vuex'
+import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   props: {
@@ -93,88 +117,75 @@ export default {
       required: true
     }
   },
+  components: {
+    ArtifactChips: () => import('@/components/ArtifactChips')
+  },
   data() {
-    return {
-      publish_local: false,
-    }
+    return {}
   },
   computed: {
-    ...mapState({
-      user_id: state => state.user.user_id,
-    }),
-    full_artifact () {
-      return this.artifact.artifact
-    },
-    artifactType () {
-      if (this.full_artifact) {
-        if (this.full_artifact.type) return this.full_artifact.type
-      }
-      if (this.artifact.type == null) return "Detecting Type..."
+    artifactType() {
+      if (this.artifact.type == null) return 'Detecting Type...'
       return this.artifact.type
     },
-    artifactIcon () {
-      let type = this.artifactType
-      if (type == "publication") return "mdi-newspaper-variant-outline"
-      if (type == "code") return "mdi-code-braces"
-      if (type == "dataset") return "mdi-database"
-      return "mdi-magnify"
-    },
-    artifactColor () {
-      let type = this.artifactType
-      if (type == "publication") return "info"
-      if (type == "code") return "purple white--text"
-      if (type == "dataset") return "green white--text"
-      return "warning"
-    },
-    artifactTitle () {
-      if (this.full_artifact) {
-        if (this.full_artifact.title) return this.full_artifact.title
-      }
+    artifactTitle() {
       return this.artifact.url
     },
-    published () {
-      if (this.full_artifact) {
-        if (this.full_artifact.publication || this.publish_local) return true
-      }
-      return false
-    },
-    archived () {
-      if (this.full_artifact) {
-        if (this.full_artifact.archived) return true
-        else return false
-      }
-      return undefined
-    },
+    archived() {
+      return this.artifact.archived ? this.artifact.archived : false
+    }
   },
-  methods:{
-    async archive () {
-      let response = await this.$importEndpoint.put(this.artifact.id, {
-        archived: true,
+  methods: {
+    async deleteArtifact() {
+      let response = await this.$artifactEndpoint.delete(
+        this.artifact.artifact_id
+      )
+      this.updateImports()
+    },
+    async deleteImport() {
+      // artifact.id here is the import ID
+      let response = await this.$importEndpoint.delete(this.artifact.id)
+      this.updateImports()
+    },
+    async archive() {
+      let response = await this.$importEndpoint.update(this.artifact.id, {
+        archived: true
       })
       this.updateImports()
     },
-    async unarchive () {
-      let response = await this.$importEndpoint.put(this.artifact.id, {
-        archived: false,
+    async unarchive() {
+      let response = await this.$importEndpoint.update(this.artifact.id, {
+        archived: false
       })
       this.updateImports()
     },
-    async publish () {
-      let response = await this.$knowledgeGraphRecordRepository.put(this.full_artifact.id, {
-        publication: {},
-      })
+    async publish() {
+      if (!confirm('Are you sure you want to publish this artifact?')) return
+
+      let response = await this.$artifactEndpoint.update(
+        this.artifact.artifact_id,
+        {
+          publication: {}
+        }
+      )
       this.publish_local = true
       this.updateImports()
     },
-    updateImports () {
-      if (this.user_id) this.$store.dispatch('artifacts/fetchImports', { userid: this.user_id })
+    updateImports() {
+      this.$store.dispatch('artifacts/fetchImports', {})
     },
+    iconColor(type) {
+      return artifactColor(type)
+    },
+    iconImage(type) {
+      return artifactIcon(type)
+    }
   }
 }
 </script>
 
 <style scoped>
-  .v-card__title {
-    word-break: normal;
-  }
+.v-card__title {
+  word-break: normal;
+}
 </style>
