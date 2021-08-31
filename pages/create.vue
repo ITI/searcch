@@ -1,13 +1,27 @@
 <template>
-  <div>
-    <KGArtifactEdit :record="emptyArtifact" create />
-  </div>
+  <v-layout column justify-left align-top>
+    <v-container fill-height fluid>
+      <v-row justify="center">
+        <v-col cols="12" md="4">
+          <!-- <ArtifactView></ArtifactView> -->
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12" lg="12">
+          <ArtifactEdit :record="emptyArtifact" create />
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-layout>
 </template>
 
 <script>
 export default {
   components: {
-    KGArtifactEdit: () => import('@/components/KGArtifactEdit')
+    ArtifactEdit: () => import('@/components/ArtifactEdit'),
+    ArtifactView: () => import('@/components/ArtifactView')
   },
   head() {
     return {
@@ -29,6 +43,7 @@ export default {
           description: '',
           url: '',
           tags: [],
+          affiliations: [],
           relationships: [],
           files: [],
           meta: []
