@@ -92,7 +92,7 @@ export default {
         },
         {
           q: 'How do I add multiple authors for my artifact?',
-          a: 'When importing an artifact, click on the + under Roles and enter the author organization, name and email address. Click "Add". Repeat for each author.'
+          a: 'When importing an artifact, each author should be added individually. Click on the + under Roles and enter the author organization, name and email address. Click "Add". Repeat for each author.'
         }.
         {
           q: 'My artifact is already in the hub, but I didn’t put it there. How can I take ownership of it?',
