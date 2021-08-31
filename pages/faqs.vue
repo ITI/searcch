@@ -91,8 +91,11 @@ export default {
             'Generally, code and data should be packaged and submitted separately into logical components. The hub supports the ability to link artifacts that are related. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a> for more information.'
         },
         {
-          q:
-            'My artifact is already in the hub, but I didn’t put it there. How can I take ownership of it?',
+          q: 'How do I add multiple authors for my artifact?',
+          a: 'When importing an artifact, click on the + under Roles and enter the author organization, name and email address. Click "Add". Repeat for each author.'
+        }.
+        {
+          q: 'My artifact is already in the hub, but I didn’t put it there. How can I take ownership of it?',
           a:
             'This feature is not yet implemented in the hub. To take ownership, please use the feedback feature to initiate discussion with the SEARCCH team.'
         },
