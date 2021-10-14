@@ -40,7 +40,8 @@
 export default {
   components: {
     Logo: () => import('@/components/Logo'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    LazyHydrate: () => import('vue-lazy-hydration'),
+    Supporters: () => import('@/components/Supporters')
   },
   data() {
     return {
