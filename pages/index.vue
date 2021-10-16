@@ -7,10 +7,11 @@
       <LazyHydrate never>
         <div>
           <v-card>
-            <v-card-title class="headline">
+            <v-card-title class="primary white--text">
               Welcome to the SEARCCH Hub
             </v-card-title>
             <v-card-text>
+              <br />
               <p>
                 The SEARCCH hub is a collaborative, community-driven platform
                 that lowers the barrier to sharing by aiding researchers in
@@ -56,10 +57,11 @@
             </v-card-actions> </v-card
           ><br />
           <v-card>
-            <v-card-title class="headline">
+            <v-card-title class="primary white--text">
               Current Features
             </v-card-title>
             <v-card-text>
+              <br />
               <p>
                 There are four navigation tabs on the left hand pane: Search
                 Artifacts, Favorite Artifacts, Submit Artifact, and Manage
@@ -94,6 +96,10 @@
           </v-card>
         </div>
       </LazyHydrate>
+      <br />
+      <div>
+        <supporters />
+      </div>
     </v-flex>
   </v-layout>
 </template>
@@ -102,7 +108,8 @@
 export default {
   components: {
     Logo: () => import('@/components/Logo'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    LazyHydrate: () => import('vue-lazy-hydration'),
+    Supporters: () => import('@/components/Supporters')
   },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")

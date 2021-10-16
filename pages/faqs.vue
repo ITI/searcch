@@ -6,7 +6,7 @@
           <div class="text-center">
             <logo />
           </div>
-          <v-card class="mx-auto" max-width="800">
+          <v-card>
             <v-card-title class="primary white--text">
               <span class="text-h6">Frequently Asked Questions</span>
             </v-card-title>
@@ -23,6 +23,7 @@
                     <v-card-title class="text-h6" v-text="faq.q">
                       Lorem Ipsum Dolor
                     </v-card-title>
+                    <br />
                     <v-card-text class="white text--primary" v-html="faq.a">
                     </v-card-text>
                   </v-card>
@@ -32,6 +33,10 @@
           </v-card>
         </div>
       </LazyHydrate>
+      <br />
+      <div>
+        <supporters />
+      </div>
     </v-flex>
   </v-layout>
 </template>
