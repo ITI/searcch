@@ -21,24 +21,33 @@
               <v-toolbar color="primary" dark>Import Help</v-toolbar>
               <v-card-text>
                 <div class="text-h6 pa-12">
-		  <p>
-		   Artifacts published on GitHub, ACM digital library, IEEE Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo, and generic git repositories can be processed using our import assistant. All other artifact sources must be manually processed.
-		  </p>
                   <p>
-                    To start the import assistant, type the URL of an artifact in the input field and click START IMPORT.
+                    Artifacts published on GitHub, ACM digital library, IEEE
+                    Xplore, USENIX web site publication, arXiv, Papers With
+                    Code, Zenodo, and generic git repositories can be processed
+                    using our import assistant. All other artifact sources must
+                    be manually processed.
                   </p>
                   <p>
-                    When the import processing starts, it will show up in your imports list below the URL field.
+                    To start the import assistant, type the URL of an artifact
+                    in the input field and click START IMPORT.
                   </p>
                   <p>
-                    The import assistant works in multiple stages to scrape all of the information and format it properly.
-                    Once the progress bar shows the process is complete, you should review and correct the information (as needed) by clicking EDIT.
+                    When the import processing starts, it will show up in your
+                    imports list below the URL field.
                   </p>
                   <p>
-                    When you are ready to make your artifact available in the catalog of searchable artifacts, click PUBLISH.
-                 </p>
+                    The import assistant works in multiple stages to scrape all
+                    of the information and format it properly. Once the progress
+                    bar shows the process is complete, you should review and
+                    correct the information (as needed) by clicking EDIT.
+                  </p>
                   <p>
-		    Click ARCHIVE to hide a completed import from your list.
+                    When you are ready to make your artifact available in the
+                    catalog of searchable artifacts, click PUBLISH.
+                  </p>
+                  <p>
+                    Click ARCHIVE to hide a completed import from your list.
                   </p>
                 </div>
               </v-card-text>
@@ -52,10 +61,12 @@
       <v-divider></v-divider><br />
       <h2>Artifact Import Assistant</h2>
       <p>
-      Supported artifact locations are: GitHub, ACM digital library, IEEE Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo, and openly-accessible generic git repositories.
+        Supported artifact locations are: GitHub, ACM digital library, IEEE
+        Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo,
+        and openly-accessible generic git repositories.
       </p>
       <p>
-      Enter the supported URL for your artifact:
+        Enter the supported URL for your artifact:
       </p>
       <v-form v-model="valid">
         <v-row>
@@ -81,11 +92,12 @@
       </v-form>
       <br />
       <v-row class="ml-1 mb-2">
-      Artifacts stored on unsupported sources may be manually imported. 
-        &nbsp; <NuxtLink to="/create">Click here</NuxtLink> &nbsp; to start a manual import.
+        Artifacts stored on unsupported sources may be manually imported. &nbsp;
+        <NuxtLink to="/create">Click here</NuxtLink> &nbsp; to start a manual
+        import.
       </v-row>
       <br /><v-divider></v-divider><br />
-       <h2>Imported Artifacts</h2>
+      <h2>Imported Artifacts</h2>
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>

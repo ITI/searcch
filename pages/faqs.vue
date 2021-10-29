@@ -55,10 +55,11 @@ export default {
           a:
             'An artifact is a tangible output from scientific research. Artifacts include datasets, code, publications, experimental methodologies, etc. While SEARCCH does catalog publications, its emphasis is on non-publication artifacts that can be more difficult to find and on their relationships to existing publications.'
         },
-	      {
-	        q: 'How do artifacts get into the hub?',
-	        a: 'While SEARCCH is a catalog and search engine for artifacts stored in disparate locations across the Internet, it does not automatically crawl the Internet as do other search engines. Artifacts must be submitted to the hub for import. The SEARCCH team pre-populated the catalog with many artifacts. The working model, however, is for researchers to submit their own artifacts for cataloging. Researchers should first check to see if older artifacts are in the hub and then submit if they are not found.'
-	      },
+        {
+          q: 'How do artifacts get into the hub?',
+          a:
+            'While SEARCCH is a catalog and search engine for artifacts stored in disparate locations across the Internet, it does not automatically crawl the Internet as do other search engines. Artifacts must be submitted to the hub for import. The SEARCCH team pre-populated the catalog with many artifacts. The working model, however, is for researchers to submit their own artifacts for cataloging. Researchers should first check to see if older artifacts are in the hub and then submit if they are not found.'
+        },
         {
           q: 'How can I submit my artifacts to the SEARCCH catalog?',
           a:
@@ -69,7 +70,7 @@ export default {
           a:
             'No. Researchers are free to browse the SEARCCH hub contents to find and access useful artifacts in support of their own research. It is our hope that over time, researchers will generate artifacts that have broader use, make them freely available on the Internet, and index them in the SEARCCH catalog so others can quickly find and reuse them.'
         },
-	      {
+        {
           q: 'Is there any cost to use the hub?',
           a:
             'There is no cost to use SEARCCH. It is open to all researchers in the cybersecurity community.'
@@ -77,7 +78,7 @@ export default {
         {
           q: 'Do I need an account to use SEARCCH?',
           a:
-            'A SEARCCH account is not required to browse the catalog and search for artifacts. Accounts are required to submit artifacts to the SEARCCH catalog and to rate and comment on existing artifacts.',
+            'A SEARCCH account is not required to browse the catalog and search for artifacts. Accounts are required to submit artifacts to the SEARCCH catalog and to rate and comment on existing artifacts.'
         },
         {
           q: 'How can I get an account on the SEARCCH hub?',
@@ -85,7 +86,8 @@ export default {
             'SEARCCH currently leverages single sign-on from GitHub.com. To sign in, click on “LOGIN” in the upper right hand corner and log in using your GitHub account. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank" rel="noopener">https://github.com/signup</a> to sign up for an account.  SEARCCH may, in the future, use additional single sign-on sources.'
         },
         {
-          q: 'I have code, data, and other artifacts that are all from the same research. How should I submit those to the hub?',
+          q:
+            'I have code, data, and other artifacts that are all from the same research. How should I submit those to the hub?',
           a:
             'Generally, code and data are different logcial components and should be submitted separately. SEARCCH supports the ability to link related artifacts with a set of pre-defined relationships. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a> for more information.'
         },
