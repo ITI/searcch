@@ -83,7 +83,8 @@
         &nbsp; <NuxtLink to="/create">Click here</NuxtLink> to start a manual import.
       </v-row>
       <br /><v-divider></v-divider><br />
-      <ImportList v-if="imports.length" :imports="imports"></ImportList>
+       <b>Imported Artifacts</b>
+       <ImportList v-if="imports.length" :imports="imports"></ImportList>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
   </span>
