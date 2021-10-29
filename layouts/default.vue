@@ -12,7 +12,9 @@
         <v-list-item
           v-for="(item, i) in items"
           :key="`main${i}`"
-          :to="item.to"
+          :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined"
+          :to="!('href' in item) ? item.to : undefined"
           router
           exact
         >
@@ -34,7 +36,9 @@
         <v-list-item
           v-for="(item, i) in adminItems"
           :key="`main${i}`"
-          :to="item.to"
+          :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined"
+          :to="!('href' in item) ? item.to : undefined"
           router
           exact
         >
@@ -56,7 +60,9 @@
         <v-list-item
           v-for="(item, i) in footerItems"
           :key="`footer${i}`"
-          :to="item.to"
+          :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined"
+          :to="!('href' in item) ? item.to : undefined"
           router
           exact
         >
@@ -211,7 +217,7 @@ export default {
         {
           icon: 'mdi-information',
           title: 'Best Practices',
-          to: 'https://searcch.cyberexperimentation.org/best-practices'
+          href: 'https://searcch.cyberexperimentation.org/best-practices'
         },
         {
           icon: 'mdi-frequently-asked-questions',
