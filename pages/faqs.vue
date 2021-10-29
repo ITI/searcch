@@ -57,7 +57,7 @@ export default {
         },
 	{
 	  q: 'How do artifacts get into the hub?',
-	  a: 'While SEARCCH is a catalog and search engine for artifacts stored in disparate locations across the Internet, it does not automatically crawl the Internet as do other search engines. Artifacts must be submitted to the hub for import. The SEARCCH team pre-populated the catalogue with many artifacts. The working model, however, is for researchers to submit their own artifacts for cataloging. Researchers should first check to see if older artifacts are in the hub and then submit if they are not found.'
+	  a: 'While SEARCCH is a catalog and search engine for artifacts stored in disparate locations across the Internet, it does not automatically crawl the Internet as do other search engines. Artifacts must be submitted to the hub for import. The SEARCCH team pre-populated the catalog with many artifacts. The working model, however, is for researchers to submit their own artifacts for cataloging. Researchers should first check to see if older artifacts are in the hub and then submit if they are not found.'
 	},
         {
           q: 'How can I submit my data or code to the SEARCCH catalog?',
