@@ -32,7 +32,7 @@
                   </p>
                   <p>
                     The import assistant works in multiple stages to scrape all of the information and format it properly.
-                    Once the progress bar shows the process is complete, you should review and correct the inforamtion (as needed) by clicking EDIT.
+                    Once the progress bar shows the process is complete, you should review and correct the information (as needed) by clicking EDIT.
                   </p>
                   <p>
                     When you are ready to make your artifact available in the catalog of searchable artifacts, click PUBLISH.
