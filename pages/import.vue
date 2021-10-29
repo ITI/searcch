@@ -50,7 +50,7 @@
         </v-dialog>
       </v-row>
       <v-divider></v-divider><br />
-      <b>Artifact Import Assistant</b>
+      <h2>Artifact Import Assistant</h2>
       <p>
       Supported artifact locations are: GitHub, ACM digital library, IEEE Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo, and openly-accessible generic git repositories.
       </p>
@@ -85,7 +85,7 @@
         &nbsp; <NuxtLink to="/create">Click here</NuxtLink> &nbsp; to start a manual import.
       </v-row>
       <br /><v-divider></v-divider><br />
-       <b>Imported Artifacts</b>
+       <h2>Imported Artifacts</h2>
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
