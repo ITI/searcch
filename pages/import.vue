@@ -51,10 +51,12 @@
       </v-row>
       <v-divider></v-divider><br />
       <b>Artifact Import Assistant</b>
-      <br/><br/>
+      <p>
       Supported artifact locations are: GitHub, ACM digital library, IEEE Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo, and openly-accessible generic git repositories.
-      <br/><br/>
+      </p>
+      <p>
       Enter the supported URL for your artifact:
+      </p>
       <v-form v-model="valid">
         <v-row>
           <v-col cols="10">
@@ -80,11 +82,11 @@
       <br />
       <v-row class="ml-1 mb-2">
       Artifacts stored on unsupported sources may be manually imported. 
-        &nbsp; <NuxtLink to="/create">Click here</NuxtLink> to start a manual import.
+        &nbsp; <NuxtLink to="/create">Click here</NuxtLink> &nbsp; to start a manual import.
       </v-row>
       <br /><v-divider></v-divider><br />
        <b>Imported Artifacts</b>
-       <ImportList v-if="imports.length" :imports="imports"></ImportList>
+      <ImportList v-if="imports.length" :imports="imports"></ImportList>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
   </span>
