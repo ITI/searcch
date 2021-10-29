@@ -55,21 +55,21 @@ export default {
           a:
             'An artifact is a tangible output from scientific research. Artifacts include datasets, code, publications, experimental methodologies, etc. While SEARCCH does catalog publications, its emphasis is on non-publication artifacts that can be more difficult to find and on their relationships to existing publications.'
         },
-	{
-	  q: 'How do artifacts get into the hub?',
-	  a: 'While SEARCCH is a catalog and search engine for artifacts stored in disparate locations across the Internet, it does not automatically crawl the Internet as do other search engines. Artifacts must be submitted to the hub for import. The SEARCCH team pre-populated the catalog with many artifacts. The working model, however, is for researchers to submit their own artifacts for cataloging. Researchers should first check to see if older artifacts are in the hub and then submit if they are not found.'
-	},
+	      {
+	        q: 'How do artifacts get into the hub?',
+	        a: 'While SEARCCH is a catalog and search engine for artifacts stored in disparate locations across the Internet, it does not automatically crawl the Internet as do other search engines. Artifacts must be submitted to the hub for import. The SEARCCH team pre-populated the catalog with many artifacts. The working model, however, is for researchers to submit their own artifacts for cataloging. Researchers should first check to see if older artifacts are in the hub and then submit if they are not found.'
+	      },
         {
           q: 'How can I submit my artifacts to the SEARCCH catalog?',
           a:
-            'Use the SEARCCH importer service to create and import data and code artifact metadata into the SEARCCH catalog. Please note that SEARCCH does not store the actual artifacts. Artifacts must be published on the internet with a valid URL to be imported into the hub.<br/><br/>SEARCCH supports assisted import and fully manual import.  Artifacts published on github, ACM digital library, ieeexplore, usenix web site publication, arxiv, paperswithcode, Zenodo, and generic git repositories (reachable using http)s can be imported using the assisted import function (the default). The import assistant will scan artifacts in these repositories and automatically populate the import web form for user review. The user can accept the field contents as is or make any modifications desired.<br/><br/>Artifacts stored on other online locations (e.g., on personal websites) can be manually imported by entering all the fields required. Entered data may be saved iteratively by clicking "SAVE".<br/><br/>Once artifact metadata has been confirmed as being correct, click "PUBLISH" to publish the artifact information in the catalog.<br/><br/>Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a>, and then visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
+            'Use the SEARCCH importer service to create and import data and code artifact metadata into the SEARCCH catalog. Please note that SEARCCH does not store the actual artifacts. Artifacts must be published on the internet with a valid URL to be imported into the hub.<br/><br/>SEARCCH supports assisted import and fully manual import.  Artifacts published on github, ACM digital library, ieeexplore, usenix web site publication, arxiv, paperswithcode, Zenodo, and generic git repositories (reachable using https) can be imported using the assisted import function (the default). The import assistant will scan artifacts in these repositories and automatically populate the import web form for user review. The user can accept the field contents as is or make any modifications desired.<br/><br/>Artifacts stored on other online locations (e.g., on personal websites) can be manually imported by entering all the fields required. Entered data may be saved iteratively by clicking "SAVE".<br/><br/>Once artifact metadata has been confirmed as being correct, click "PUBLISH" to publish the artifact information in the catalog.<br/><br/>Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a>, and then visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
         },
         {
           q: 'Do I have to share artifacts in order to use the hub?',
           a:
             'No. Researchers are free to browse the SEARCCH hub contents to find and access useful artifacts in support of their own research. It is our hope that over time, researchers will generate artifacts that have broader use, make them freely available on the Internet, and index them in the SEARCCH catalog so others can quickly find and reuse them.'
         },
-	{
+	      {
           q: 'Is there any cost to use the hub?',
           a:
             'There is no cost to use SEARCCH. It is open to all researchers in the cybersecurity community.'
