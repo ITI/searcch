@@ -9,7 +9,7 @@
     </v-layout>
     <v-layout column justify-left align-top>
       <v-row class="ml-1 mb-2"
-        ><h1>Import</h1>
+        ><h1>Artifact Import</h1>
         <v-dialog transition="dialog-bottom-transition" max-width="600">
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="primary ml-4" fab small v-bind="attrs" v-on="on"
