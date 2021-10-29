@@ -48,42 +48,37 @@ export default {
         {
           q: 'What is the SEARCCH Hub?',
           a:
-            'The SEARCCH hub is a cybersecurity research artifact sharing portal. It maintains an index of cybersecurity research artifacts, such as data sets and code, that are distributed across the internet and facilitates a community around these artifacts. It allows researchers to share the location of their artifacts with the community and their experience with certain artifacts. It helps researchers rapidly find relevant artifacts that will help with their ongoing research efforts.'
-        },
-        {
-          q: 'How is SEARCCH funded?',
-          a:
-            'SEARCCH is funded under cooperative grants from the National Science Foundation. Grant numbers are CNS-1925773, CNS-1925616, CNS-1925588, and CNS-1925564.'
-        },
-        {
-          q: 'Who is behind SEARCCH?',
-          a:
-            'SEARCCH is being developed under a collaboration between the University of Southern California Information Sciences Institute (USC-ISI), the University of Utah (Utah), the University of Illinois Urbana-Champaign (UIUC), and SRI International (SRI).'
-        },
-        {
-          q: 'Is there any cost to use the hub?',
-          a:
-            'There is no cost to use the SEARCCH Hub. It is open to all researchers in the cybersecurity community.'
+            'The SEARCCH hub is a cybersecurity research artifact portal that builds and maintains a catalog of cybersecurity research artifacts housed in different places on the internet. The search engine enables researchers rapidly find relevant artifacts that will help with their own research through the use of cybersecurity domain-specific metadata about artifacts, including relationships to other related artifacts. The portal also facilitates a community around these artifacts, allowing researchers to share the location of their artifacts with the community and their experience with different artifacts.'
         },
         {
           q: 'What is an artifact?',
           a:
-            'An artifact is a tangible output from scientific research. Artifacts include publications, datasets, code, etc. The SEARCCH project focuses less on publications, which can be found through a variety of existing sources, and more on datasets, code, testbeds, and the like, which can be more difficult to find.'
+            'An artifact is a tangible output from scientific research. Artifacts include datasets, code, publications, experimental methodologies, etc. While the SEARCCH catalog does include publications, its emphasis is on non-publication artifacts that can be more difficult to find.'
+        },
+        {
+          q: 'Is there any cost to use the hub?',
+          a:
+            'There is no cost to use SEARCCH. It is open to all researchers in the cybersecurity community.'
+        },
+        {
+          q: 'Do I need an account to use SEARCCH?',
+          a:
+            'An account is not required to browse the catalog and search for artifacts using SEARCCH. Accounts are required to import artifact metadata into SEARCCH and to rate and comment on existing artifacts.',
         },
         {
           q: 'How can I get an account on the SEARCCH hub?',
           a:
-            'SEARCCH currently leverages single sign-on from GitHub.com. Anyone who has a GitHub account can use the SEARCCH hub right now. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank" rel="noopener">https://github.com/signup</a> to sign up for an account.  Click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account.'
+            'SEARCCH currently leverages single sign-on from GitHub.com. To sign in, click on “LOGIN” in the upper right hand corner of the SEARCCH hub to log in using your GitHub account. If you do not have a GitHub account, please visit <a href="https://github.com/signup" target="_blank" rel="noopener">https://github.com/signup</a> to sign up for an account.  SEARCCH may, in the future, use additional single sign-on sources.'
         },
         {
-          q: 'Do I have to share data in order to use the hub?',
+          q: 'Do I have to share data or code in order to use the hub?',
           a:
             'No. Researchers are free to browse the SEARCCH hub contents to find and access useful artifacts in support of their own research. It is our hope that, over time, researchers will generate artifacts that have broader use, make them freely available on the Internet, and index them in the hub so others can quickly find and reuse them.'
         },
         {
-          q: 'How can I submit my data or code to the hub?',
+          q: 'How can I submit my data or code to the SEARCCH catalog?',
           a:
-            'Use the SEARCCH importer service to import artifacts into the SEARCCH hub. Please note that SEARCCH is a database of artifact metadata and does not store artifacts for you. Artifacts must be published on the internet with a valid URL to be imported into the hub. SEARCCH supports assisted import and fully manual import.  Artifacts published on github, ACM digital library, ieeexplore, usenix web site publication, arxiv, paperswithcode, Zenodo, and generic git repos reachable from https can be imported using the assisted import function (the default). The import assistant will scan artifacts in these repositories and automatically populate the import web form for user review. The user can accept the field contents as is or make any modifications desired. Artifacts located in other online locations such as on personal websites can be manually imported by the user entering all the fields required. Entered data may be saved iteratively by clicking SAVE. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a> and then visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
+            'Use the SEARCCH importer service to create and import artifact metadata into the SEARCCH catalog. SEARCCH does not store the actual artifacts. Artifacts must be published on the internet with a valid URL to be imported into the hub. SEARCCH supports assisted import and fully manual import.  Artifacts published on github, ACM digital library, ieeexplore, usenix web site publication, arxiv, paperswithcode, Zenodo, and generic git repositories reachable from https can be imported using the assisted import function (the default). The import assistant will scan artifacts in these repositories and automatically populate the import web form for user review. The user can accept the field contents as is or make any modifications desired. Artifacts located in other online locations such as on personal websites can be manually imported by the user entering all the fields required. Entered data may be saved iteratively by clicking SAVE. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices">best practices and considerations for SEARCCH hub curation</a> and then visit <a href="https://hub.cyberexperimentation.org/importer">https://hub.cyberexperimentation.org/importer</a> to start importing your work.'
         },
         {
           q: 'I have code, data, and other artifacts that are all from the same research. How should I submit those to the hub?',
@@ -122,6 +117,16 @@ export default {
           q: 'How do I add a profile picture?',
           a:
             'Direct profile picture upload is not yet implemented in the hub. The hub automatically uses your GitHub avatar, if it is set. If GitHub does not return an avatar for your account, the hub queries gravatar.com for profile pictures associated with your registered SEARCCH email address. <br/><br/> If you would like your profile picture to show up in the SEARCCH hub, either set an avatar image on GitHub.com by visiting <a href="https://github.com/settings/profile" target="_blank" rel="noopener">https://github.com/settings/profile</a> or go to <a href="https://gravatar.com" target="_blank" rel="noopener">https://gravatar.com</a> and register (or add) the email address you used for SEARCCH.'
+        },
+        {
+          q: 'How is SEARCCH funded?',
+          a:
+            'SEARCCH is funded under cooperative grants from the National Science Foundation. Grant numbers are CNS-1925773, CNS-1925616, CNS-1925588, and CNS-1925564.'
+        },
+        {
+          q: 'Who is behind SEARCCH?',
+          a:
+            'SEARCCH is being developed under a collaboration between the University of Southern California Information Sciences Institute (USC-ISI), the University of Utah (Utah), the University of Illinois Urbana-Champaign (UIUC), and SRI International (SRI).'
         }
       ]
     }
