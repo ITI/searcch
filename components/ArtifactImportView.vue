@@ -87,13 +87,13 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn
+        <!-- <v-btn
           :disabled="!artifact.artifact_id"
           @click="publish()"
           color="success"
         >
           Publish
-        </v-btn>
+        </v-btn> -->
 
         <v-btn
           :to="`/artifact/${artifact.artifact_id}`"
