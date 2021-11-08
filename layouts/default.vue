@@ -104,7 +104,7 @@
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
         >Logout</v-btn
       >
-      <v-btn v-else class="primary" nuxt @click="login()">Login</v-btn>
+      <v-btn v-else class="primary" nuxt @click="login()">GitHub Login</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
