@@ -37,6 +37,22 @@
           <v-expansion-panel-content>
             <v-row align="center">
               <v-col cols="12">
+                <v-text-field
+                  label="Owner"
+                  placeholder="Search for artifacts by owner name..."
+                  v-model="owner"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Organization"
+                  placeholder="Search for artifacts by organization name..."
+                  v-model="organization"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
                 <v-select
                   v-model="advanced.types"
                   :items="types"
@@ -145,10 +161,12 @@ export default {
       limit: 20,
       page: 1,
       search: '',
+      owner: '',
+      organization: '',
       searchMessage: '',
       searchInterval: null,
       submitted: false,
-      adopen: [0],
+      adopen: [1],
       advanced: {
         types: ['dataset', 'software'],
         author: '',
@@ -211,7 +229,9 @@ export default {
         keywords: this.search,
         page: this.page,
         entity: 'artifact',
-        type: this.advanced.types
+        type: this.advanced.types,
+        owner: this.owner,
+        organization: this.organization
       }
 
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
