@@ -229,10 +229,11 @@ export default {
         keywords: this.search,
         page: this.page,
         entity: 'artifact',
-        type: this.advanced.types,
-        owner: this.owner,
-        organization: this.organization
+        type: this.advanced.types
       }
+
+      this.owner ? (payload['owner'] = this.owner) : false
+      this.organization ? (payload['organization'] = this.organization) : false
 
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
