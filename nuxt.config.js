@@ -133,7 +133,7 @@ export default {
         referrer: 'same-origin',
 
         securityFile: {
-          contacts: ['mailto:yardley@illinois.edu'],
+          contacts: ['mailto:security@cyberexperimentation.org'],
           canonical:
             'https://hub.cyberexperimentation.org/.well-know/security.txt',
           preferredLanguages: ['en']
