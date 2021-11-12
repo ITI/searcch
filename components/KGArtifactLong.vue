@@ -253,7 +253,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
-          v-if="isOwner()"
+          v-if="isOwner() && !published"
           color="success"
           small
           :to="`/artifact/${record.artifact.id}?edit=true`"
@@ -405,6 +405,9 @@ export default {
     overflowIcon() {
       if (!this.expanded) return 'mdi-chevron-down'
       else return 'mdi-chevron-up'
+    },
+    published() {
+      return this.record.artifact.publication ? true : false
     }
   },
   methods: {
