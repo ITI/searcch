@@ -12,4 +12,4 @@ currently being supported with security updates.
 ## Reporting a Vulnerability
 
 If a vulnerability is discovered that you would like to bring to the attention
-of the project team, please reach out to yardley@illinois.edu privately with the details.
+of the project team, please reach out to security@cyberexperimentation.org privately with the details.
