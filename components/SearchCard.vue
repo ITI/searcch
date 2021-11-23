@@ -38,9 +38,9 @@
             <v-row align="center">
               <v-col cols="12">
                 <v-text-field
-                  label="Owner"
-                  placeholder="Search for artifacts by owner name..."
-                  v-model="owner"
+                  label="Author"
+                  placeholder="Search for artifacts by author name..."
+                  v-model="author"
                 >
                 </v-text-field>
               </v-col>
@@ -88,6 +88,15 @@
                     </span>
                   </template>
                 </v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+		  v-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
+                  label="Owner"
+                  placeholder="Search for artifacts by owner name..."
+                  v-model="owner"
+                >
+                </v-text-field>
               </v-col>
             </v-row>
             <v-btn @click="onSubmit" class="primary mt-3">Search</v-btn>
@@ -161,6 +170,7 @@ export default {
       limit: 20,
       page: 1,
       search: '',
+      author: '',
       owner: '',
       organization: '',
       searchMessage: '',
@@ -198,7 +208,9 @@ export default {
     ...mapState({
       artifacts: state => state.artifacts.artifacts,
       search_init: state => state.artifacts.search,
-      searchLoading: state => state.artifacts.loading
+      searchLoading: state => state.artifacts.loading,
+      user_is_admin: state => state.user.user_is_admin,
+      user_can_admin: state => state.user.user_can_admin
     }),
     allArtifacts() {
       return this.advanced.types.length === this.types.length
@@ -232,6 +244,7 @@ export default {
         type: this.advanced.types
       }
 
+      this.author ? (payload['author'] = this.author) : false
       this.owner ? (payload['owner'] = this.owner) : false
       this.organization ? (payload['organization'] = this.organization) : false
 
