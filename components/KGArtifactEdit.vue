@@ -60,7 +60,7 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-title class="py-0">Roles</v-card-title>
+        <v-card-title class="py-0">Authors</v-card-title>
 
         <ArtifactChips
           :field="artifact_local.affiliations"

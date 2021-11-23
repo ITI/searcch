@@ -72,7 +72,7 @@
       <v-divider class="mx-4"></v-divider>
 
       <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Roles</v-card-title>
+        <v-card-title class="py-0">Authors</v-card-title>
         <ArtifactChips
           :field="record.artifact.affiliations"
           type="role"

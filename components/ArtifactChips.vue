@@ -42,7 +42,7 @@
         {{ item.tag }}
       </div>
       <div v-else-if="type === 'role'">
-        {{ item.affiliation.person.name }} ({{ item.roles }})
+        {{ item.affiliation.person.name }} <span v-if="item.affiliation.org && item.affiliation.org.name">({{ item.affiliation.org.name }})</span>
       </div>
       <div v-else-if="type === 'relation'">
         {{ item.artifact_id }} {{ item.relation | titlecase }}
