@@ -125,11 +125,11 @@
     >
     <v-btn
       v-if="showScrollToTop != 0"
-      class="primary"
+      class="secondary"
       id="scrollbtn"
       @click="scrollToTop()"
       elevation="10"
-      >Back to Top</v-btn
+      ><v-icon large color="lightblue">mdi-chevron-up</v-icon></v-btn
     >
   </div>
 </template>
@@ -303,8 +303,8 @@ export default {
 }
 #scrollbtn {
   position: fixed;
-  bottom: 80px;
-  right: 30px;
+  bottom: 50px;
+  right: 0px;
   scroll-margin-bottom: 5rem;
 }
 </style>
