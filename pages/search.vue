@@ -17,32 +17,19 @@
             <v-card-text>
               <div class="text-h6 pa-12">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Fermentum dui faucibus in ornare quam. Laoreet id donec
-                  ultrices tincidunt arcu non sodales neque. Tincidunt augue
-                  interdum velit euismod in pellentesque massa placerat duis.
-                  Maecenas volutpat blandit aliquam etiam erat velit scelerisque
-                  in. Elit eget gravida cum sociis natoque. Volutpat commodo sed
-                  egestas egestas fringilla phasellus faucibus scelerisque
-                  eleifend. Ipsum faucibus vitae aliquet nec ullamcorper sit.
-                  Nulla facilisi cras fermentum odio eu. Purus in mollis nunc
-                  sed id semper risus in hendrerit. Velit dignissim sodales ut
-                  eu. Morbi tristique senectus et netus et malesuada fames ac.
-                  Orci sagittis eu volutpat odio facilisis mauris sit amet
-                  massa.
+                   To search for artifacts in the hub, 
+                   enter your search terms in the search dialog box at the top of the form
+                   and click on the SEARCH button.
                 </p>
                 <p>
-                  Dignissim cras tincidunt lobortis feugiat vivamus at augue
-                  eget. Adipiscing diam donec adipiscing tristique risus nec
-                  feugiat in. Quis blandit turpis cursus in hac habitasse
-                  platea. Integer quis auctor elit sed. Quam quisque id diam
-                  vel. Mollis aliquam ut porttitor leo a diam sollicitudin. Id
-                  velit ut tortor pretium viverra suspendisse potenti nullam ac.
-                  Mauris pellentesque pulvinar pellentesque habitant morbi
-                  tristique senectus et. Quis eleifend quam adipiscing vitae
-                  proin sagittis. Posuere morbi leo urna molestie at elementum
-                  eu facilisis. Orci a scelerisque purus semper eget.
+                   The hub searches subjects, descriptions, and keywords and returns matches.
+                   Please note that searching over author names is not yet implemented.
+                </p>
+                <p>
+                   By default, only data and code artifact types are searched.
+                   To search other artifact types, click on the datatype to expand the options.
+                   Select the types you would like to search
+                   and click on the SEARCH button.
                 </p>
               </div>
             </v-card-text>
