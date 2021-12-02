@@ -22,8 +22,8 @@
                    and click on the SEARCH button.
                 </p>
                 <p>
-                   The hub searches subjects, descriptions, and keywords and returns matches.
-                   Please note that searching over author names is not yet implemented.
+                   The hub searches subjects, descriptions, and keywords by default and returns matches.
+                   You may search by author and organization by clicking on the Advanced button.
                 </p>
                 <p>
                    By default, only data and code artifact types are searched.
