@@ -12,7 +12,11 @@ const renameKeys = (keysMap, obj) =>
     : obj
 
 export const state = () => ({
-  artifacts: [],
+  artifacts: {
+    artifacts: [],
+    pages: 0,
+    total: 0
+  },
   artifact: {},
   search: '',
   favorites: [],
@@ -53,6 +57,13 @@ export const mutations = {
   SET_ARTIFACTS(state, artifacts) {
     state.artifacts = artifacts
   },
+  RESET_ARTIFACTS(state) {
+    state.artifacts = {
+      artifacts: [],
+      pages: 0,
+      total: 0
+    }
+  },
   SET_ARTIFACT(state, artifact) {
     state.artifact = artifact
   },
@@ -86,8 +97,8 @@ export const actions = {
     let response = await this.$artifactSearchEndpoint.index({
       ...payload
     })
-    if (typeof response !== 'undefined' && response.artifacts) {
-      commit('SET_ARTIFACTS', response.artifacts)
+    if (typeof response !== 'undefined') {
+      commit('SET_ARTIFACTS', response)
     }
     commit('SET_LOADING', false)
   },

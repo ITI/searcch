@@ -109,7 +109,7 @@
     <v-pagination
       v-if="artifacts"
       v-model="page"
-      :length="10"
+      :length="pages"
       circle
     ></v-pagination>
     <ArtifactList
@@ -117,10 +117,10 @@
       :limit="limit"
       v-bind:related="related"
     ></ArtifactList>
-    <span v-if="artifacts.length == 0 && search !== ''">{{
+    <span v-if="artifacts.total == 0 && search !== ''">{{
       searchMessage
     }}</span>
-    <span v-if="!searchLoading && artifacts.length == 0 && search === ''"
+    <span v-if="!searchLoading && artifacts.total == 0 && search === ''"
       ><h3>Type a search term into the input above and press Enter</h3></span
     >
     <v-btn
@@ -167,7 +167,7 @@ export default {
   },
   data() {
     return {
-      limit: 20,
+      limit: 10,
       page: 1,
       search: '',
       author: '',
@@ -206,7 +206,9 @@ export default {
   },
   computed: {
     ...mapState({
-      artifacts: state => state.artifacts.artifacts,
+      artifacts: state => state.artifacts.artifacts.artifacts,
+      pages: state => state.artifacts.artifacts.pages,
+      total: state => state.artifacts.artifacts.total,
       search_init: state => state.artifacts.search,
       searchLoading: state => state.artifacts.loading,
       user_is_admin: state => state.user.user_is_admin,
@@ -226,9 +228,6 @@ export default {
     advancedPlaceholder() {
       if (this.advanced.filter === 'Name') return 'First or Last name'
       if (this.advanced.filter === 'Organization') return 'Organization name'
-    },
-    dynamicLength() {
-      return this.artifacts.length ? Math.ceil(this.artifacts.length / 20) : 1
     }
   },
   methods: {
@@ -236,11 +235,11 @@ export default {
       this.submitted = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'
-      this.$store.commit('artifacts/SET_ARTIFACTS', []) // clear artifacts so the Searching... message is shown
+      this.$store.commit('artifacts/RESET_ARTIFACTS') // clear artifacts so the Searching... message is shown
       let payload = {
         keywords: this.search,
         page: this.page,
-        entity: 'artifact',
+        items_per_page: this.limit,
         type: this.advanced.types
       }
 
