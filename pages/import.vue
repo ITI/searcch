@@ -68,7 +68,7 @@
       <p>
         Enter the supported URL for your artifact:
       </p>
-      <v-form v-model="valid">
+      <v-form v-model="valid" ref="importform">
         <v-row>
           <v-col cols="10">
             <v-text-field
@@ -169,6 +169,7 @@ export default {
       let response = await this.$importsEndpoint.create({
         url: this.url
       })
+      this.$refs.importform.reset()
       this.updateImports()
       clearInterval(this.pollingID)
       this.pollingID = setInterval(
