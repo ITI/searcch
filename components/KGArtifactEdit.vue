@@ -89,6 +89,7 @@
             </template>
             <template v-slot:default="dialog">
               <v-card>
+              <v-form v-model="dialogvalid" ref="dialogform">
                 <v-card-title>
                   <span class="text-h5">Add Author</span>
                 </v-card-title>
@@ -108,6 +109,7 @@
                           :search-input.sync="search"
                           item-value="org.name"
                           item-text="org.name"
+                          :rules="[rules.notwhitespace]"
                           return-object
                         >
                           <template v-slot:no-data>
@@ -128,6 +130,7 @@
                         <v-text-field
                           label="Author Name"
                           v-model="affiliation.affiliation.person.name"
+                          :rules="[rules.required, rules.exists, rules.notwhitespace]"
                           required
                         ></v-text-field>
                       </v-col>
@@ -135,7 +138,6 @@
                         <v-text-field
                           label="Email Address"
                           v-model="affiliation.affiliation.person.email"
-                          required
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -148,7 +150,9 @@
                       meta.creators.push(affiliation)
                       dialog.value = false
                       affiliation = affiliationObject()
+                      $refs.dialogform.reset()
                     "
+                    :disabled="!dialogvalid"
                     class="success ml-2 mb-2"
                     text
                     >Add</v-btn
@@ -156,11 +160,16 @@
                   <v-btn
                     class="error ml-2 mb-2"
                     text
-                    @click="dialog.value = false"
+                    @click="
+                      dialog.value = false
+                      affiliation = affiliationObject()
+                      $refs.dialogform.reset()
+                    "
                   >
                     Close
                   </v-btn>
                 </v-card-actions>
+              </v-form>
               </v-card>
             </template>
           </v-dialog>
@@ -278,6 +287,7 @@
               v-model="meta.badges[index]"
               item-text="id"
               item-value="title"
+              :rules="[rules.required]"
               return-object
             >
               <template slot="item" slot-scope="data">
@@ -423,6 +433,8 @@
                 prepend-icon="mdi-file"
                 append-outer-icon="mdi-close"
                 @click:append-outer="meta.files.splice(index, 1)"
+                :rules="[rules.required, rules.url]"
+                required
               ></v-textarea>
             </v-card-text>
             <v-btn
@@ -514,6 +526,7 @@ export default {
       schemaLoaded: false,
       valid: true,
       dialog: false,
+      dialogvalid: true,
       disabled: false,
       artifactdialog: false,
       search: '',
@@ -523,6 +536,9 @@ export default {
         required: value => !!value || 'required',
         exists: value => {
           return typeof value === 'string' ? value.length > 0 : false
+        },
+        notwhitespace: value => {
+          return !value ? true : (value.trim().length > 0 || 'empty string invalid')
         },
         url: value => {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0

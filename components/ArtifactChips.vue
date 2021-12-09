@@ -31,6 +31,8 @@
           :placeholder="placeholder"
           v-model="field[index]"
           v-bind:readonly="!create"
+          :rules="[rules.required, rules.exists]"
+          required
         >
           {{ field[index] }}
         </v-text-field>
@@ -111,6 +113,16 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    }
+  },
+  data() {
+    return {
+      rules: {
+        required: value => !!value || 'required',
+        exists: value => {
+          return typeof value === 'string' ? value.length > 0 : false
+        }
+      }
     }
   },
   methods: {
