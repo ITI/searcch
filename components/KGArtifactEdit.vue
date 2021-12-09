@@ -376,7 +376,7 @@
               {{ data.item.short_name }} ({{ data.item.long_name }})
             </template>
           </v-autocomplete>
-          <v-icon @click="artifact_local.license = []" right>mdi-close</v-icon>
+          <v-icon @click="artifact_local.license = null" right>mdi-close</v-icon>
         </v-chip>
         <v-divider class="mx-4"></v-divider>
 
