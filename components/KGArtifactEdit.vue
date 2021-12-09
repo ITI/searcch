@@ -283,7 +283,7 @@
 
             <v-select
               label="Badges"
-              v-bind:items="possibleBadges"
+              v-bind:items="badges"
               v-model="meta.badges[index]"
               item-text="id"
               item-value="title"
@@ -530,7 +530,6 @@ export default {
       disabled: false,
       artifactdialog: false,
       search: '',
-      possibleBadges: [],
       possibleLicenses: [],
       rules: {
         required: value => !!value || 'required',
@@ -571,9 +570,7 @@ export default {
     this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
     this.meta.languages = this.getLanguages()
     this.meta.keywords = this.getPossibleTags()
-    let response = await this.$badgesEndpoint.index({ verified: 1 })
-    this.possibleBadges = typeof response !== 'undefined' ? response.badges : []
-    response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
+    let response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
     this.possibleLicenses =
       typeof response !== 'undefined' ? response.licenses : []
   },
@@ -585,10 +582,12 @@ export default {
     }, 5000)
     EventBus.$on('close', this.closeHandler)
     this.$store.dispatch('user/fetchOrgs')
+    this.$store.dispatch('user/fetchBadges')
   },
   computed: {
     ...mapState({
-      orgs: state => state.user.orgs
+      orgs: state => state.user.orgs,
+      badges: state => state.user.badges
     }),
     orgNames: {
       get: function() {
