@@ -34,7 +34,7 @@
         <div v-html="sanitizedDescription"></div>
       </v-card-text>
 
-      <div v-if="record.artifact.type === 'software'">
+      <div v-if="markdown">
         <v-divider class="mx-4"></v-divider>
         <v-card-title>
           <v-row class="mx-1"
@@ -390,7 +390,6 @@ export default {
         readmes = f.members.find(m => m.name.toUpperCase() == 'README.MD')
       })
       if (typeof readmes !== 'undefined') return readmes.content
-      else return this.sanitizedDescription
     },
     hideOverflow() {
       return {
