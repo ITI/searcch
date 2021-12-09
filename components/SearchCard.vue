@@ -90,8 +90,49 @@
                 </v-select>
               </v-col>
               <v-col cols="12">
+                <v-select
+                  v-model="advanced.badge_ids"
+                  :items="badges"
+                  :item-value="item => item.id"
+                  label="Artifact badges"
+                  multiple
+                  class="rounded-0"
+                  hide-details
+                >
+                  <template v-slot:prepend-item>
+                    <v-list-item ripple @click="toggleBadges">
+                      <v-list-item-action>
+                        <v-icon
+                          :color="
+                            advanced.badge_ids.length > 0 ? 'indigo darken-4' : ''
+                          "
+                        >
+                          {{ badgeIcon }}
+                        </v-icon>
+                      </v-list-item-action>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          Select All
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+                  <template v-slot:selection="{ item, index }">
+                    <span v-if="index === 0">{{ `${item.organization} ${item.title}` }}</span>
+                    <span></span>
+                    <span v-if="index === 1" class="grey--text caption">
+                      (+{{ advanced.badge_ids.length - 1 }} others)
+                    </span>
+                  </template>
+                  <template v-slot:item="{ item, index }">
+                    {{ `${item.organization} ${item.title}` }}
+                  </template>
+                </v-select>
+              </v-col>
+              <v-col cols="12">
                 <v-text-field
-		  v-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
+                  v-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
                   label="Owner"
                   placeholder="Search for artifacts by owner name..."
                   v-model="owner"
@@ -180,7 +221,8 @@ export default {
       advanced: {
         types: ['dataset', 'software'],
         author: '',
-        org: ''
+        org: '',
+        badge_ids: []
       },
       types: ['dataset', 'presentation', 'publication', 'software', 'other'],
       filters: ['Name', 'Organization'],
@@ -203,9 +245,11 @@ export default {
     if (this.all) {
       this.advanced.types = this.types
     }
+    this.$store.dispatch('user/fetchBadges')
   },
   computed: {
     ...mapState({
+      badges: state => state.user.badges,
       artifacts: state => state.artifacts.artifacts.artifacts,
       pages: state => state.artifacts.artifacts.pages,
       total: state => state.artifacts.artifacts.total,
@@ -223,6 +267,17 @@ export default {
     artifactTypeIcon() {
       if (this.allArtifacts) return 'mdi-close-box'
       if (this.someArtifacts) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    },
+    allBadges() {
+      return this.advanced.badge_ids.length === this.badges.length
+    },
+    someBadges() {
+      return this.advanced.badge_ids.length > 0 && !this.allBadges
+    },
+    badgeIcon() {
+      if (this.allBadges) return 'mdi-close-box'
+      if (this.someBadges) return 'mdi-minus-box'
       return 'mdi-checkbox-blank-outline'
     },
     advancedPlaceholder() {
@@ -246,6 +301,7 @@ export default {
       this.author ? (payload['author'] = this.author) : false
       this.owner ? (payload['owner'] = this.owner) : false
       this.organization ? (payload['organization'] = this.organization) : false
+      this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
 
       this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
@@ -264,6 +320,15 @@ export default {
           this.advanced.types = []
         } else {
           this.advanced.types = this.types.slice()
+        }
+      })
+    },
+    toggleBadges() {
+      this.$nextTick(() => {
+        if (this.allBadges) {
+          this.advanced.badge_ids = []
+        } else {
+          this.advanced.badge_ids = this.badges.map(x => x.id)
         }
       })
     },
