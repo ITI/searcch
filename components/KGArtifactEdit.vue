@@ -109,7 +109,7 @@
                           :search-input.sync="search"
                           item-value="org.name"
                           item-text="org.name"
-                          :rules="[rules.notwhitespace]"
+                          :rules="[rules.notwhitespace, rules.unique_creator]"
                           return-object
                         >
                           <template v-slot:no-data>
@@ -130,7 +130,8 @@
                         <v-text-field
                           label="Author Name"
                           v-model="affiliation.affiliation.person.name"
-                          :rules="[rules.required, rules.exists, rules.notwhitespace]"
+                          :rules="[rules.required, rules.exists,
+				   rules.notwhitespace, rules.unique_creator]"
                           required
                         ></v-text-field>
                       </v-col>
@@ -138,6 +139,7 @@
                         <v-text-field
                           label="Email Address"
                           v-model="affiliation.affiliation.person.email"
+                          :rules="[rules.notwhitespace, rules.unique_creator]"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -488,6 +490,22 @@ import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { zipArray, EventBus } from '@/helpers'
 
+function affiliationObjectsEqual(o1,o2) {
+  //console.log("o1: ",o1)
+  //console.log("o2: ",o2)
+  if (((["",null].includes(o1.affiliation.org) && ["",null].includes(o2.affiliation.org))
+           || o1.affiliation.org == o2.affiliation.org)
+          && o1.affiliation.person.name == o2.affiliation.person.name
+          && o1.affiliation.person.email == o2.affiliation.person.email) {
+    //console.log("o1 == o2")
+    return true
+  }
+  else {
+    //console.log("o1 != o2")
+    return false
+  }
+}
+
 export default {
   name: 'KGArtifactEdit',
   props: {
@@ -542,6 +560,24 @@ export default {
         url: value => {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
+        },
+        unique_creator: X => {
+          let newaffiliation = this.affiliation
+          if ("affiliations" in this.artifact_local
+              && this.artifact_local.affiliations !== undefined) {
+            //console.log("affiliations: ",this.artifact_local.affiliations)
+            for (let i = 0; i < this.artifact_local.affiliations.length; ++i) {
+              let item = this.artifact_local.affiliations[i]
+              if (affiliationObjectsEqual(newaffiliation,item))
+                return 'duplicate author'
+            }
+          }
+          for (let i = 0; i < this.meta.creators.length; ++i) {
+            let item = this.meta.creators[i]
+            if (affiliationObjectsEqual(newaffiliation,item))
+              return 'duplicate author'
+          }
+          return true
         }
       }
     }
