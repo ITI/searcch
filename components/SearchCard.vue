@@ -219,7 +219,7 @@ export default {
       submitted: false,
       adopen: [1],
       advanced: {
-        types: ['dataset', 'software'],
+        types: ['dataset', 'presentation', 'publication', 'software', 'other'],
         author: '',
         org: '',
         badge_ids: []
