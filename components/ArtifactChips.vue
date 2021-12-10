@@ -44,7 +44,9 @@
         {{ item.tag }}
       </div>
       <div v-else-if="type === 'role'">
-        {{ item.affiliation.person.name }} <span v-if="item.affiliation.org && item.affiliation.org.name">({{ item.affiliation.org.name }})</span>
+        {{ item.affiliation.person.name }}
+        <span v-if="item.affiliation.org && item.affiliation.org.name">({{ item.affiliation.org.name }})</span>
+        <span v-if="edit && item.affiliation.person && item.affiliation.person.email">({{ item.affiliation.person.email }})</span>
       </div>
       <div v-else-if="type === 'relation'">
         {{ item.artifact_id }} {{ item.relation | titlecase }}
