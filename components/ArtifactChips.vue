@@ -31,7 +31,7 @@
           :placeholder="placeholder"
           v-model="field[index]"
           v-bind:readonly="!create"
-          :rules="[rules.required, rules.exists]"
+          :rules="[rules.required, rules.exists, rules.validated]"
           required
         >
           {{ field[index] }}
@@ -60,6 +60,7 @@
       v-if="create"
       @click="field.push('')"
       class="success ml-2 mb-2"
+      :disabled="typeof this.formModel !== 'undefined' ? !formModel : false"
       fab
       x-small
     >
@@ -113,6 +114,16 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    validator: {
+      type: Function,
+      default: undefined,
+      required: false
+    },
+    formModel: {
+      type: Boolean,
+      default: undefined,
+      required: false
     }
   },
   data() {
@@ -121,7 +132,10 @@ export default {
         required: value => !!value || 'required',
         exists: value => {
           return typeof value === 'string' ? value.length > 0 : false
-        }
+        },
+        validated: value => {
+          return (typeof this.validator !== "undefined") ? this.validator(value) : true
+        },
       }
     }
   },

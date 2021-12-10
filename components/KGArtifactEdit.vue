@@ -190,6 +190,8 @@
           :field="meta.keywords"
           type="keyword"
           placeholder="Enter Keyword"
+          :validator="validateKeyword"
+          :formModel="valid"
           edit
           create
         ></ArtifactChips>
@@ -500,6 +502,22 @@ function affiliationObjectsEqual(o1,o2) {
           || o1.affiliation.person.name == o2.affiliation.person.name)
       && ((ea.includes(o1.affiliation.person.email) && ea.includes(o2.affiliation.person.email))
           || o1.affiliation.person.email == o2.affiliation.person.email)) {
+    console.log("o1 == o2")
+    return true
+  }
+  else {
+    //console.log("o1 != o2")
+    return false
+  }
+}
+
+function tagObjectsEqual(o1,o2) {
+  //console.log("o1: ",o1)
+  //console.log("o2: ",o2)
+  let ea = ["",null]
+  if (((ea.includes(o1.source) && ea.includes(o2.source))
+       || o1.source == o2.source)
+      && o1.tag == o2.tag) {
     console.log("o1 == o2")
     return true
   }
@@ -874,6 +892,29 @@ export default {
         },
         roles: 'Author'
       })
+    },
+    validateKeyword(value) {
+      let newTagObj = new Object({
+        tag: value,
+        source: null
+      })
+      for (let i = 0; i < this.artifact_local.tags.length; ++i) {
+        let item = this.artifact_local.tags[i]
+        if (tagObjectsEqual(newTagObj,item)) {
+          console.log("validateKeyword: duplicate of existing: ",value,item)
+          return 'duplicate tag'
+        }
+      }
+      if (typeof this.meta.keywords !== "undefined") {
+        for (let i = 0; i < this.meta.keywords.length - 1; ++i) {
+          if (value == this.meta.keywords[i]) {
+            console.log("validateKeyword: duplicate of new: ",value,this.meta.keywords[i])
+            return 'duplicate author'
+          }
+        }
+      }
+      console.log("validateKeyword: unique: ",value)
+      return true
     }
   }
 }
