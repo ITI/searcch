@@ -96,7 +96,7 @@
       </div>
 
       <div v-if="languages.length > 0">
-        <v-card-title class="py-0">Languages</v-card-title>
+        <v-card-title class="py-0">Programming Languages</v-card-title>
         <ArtifactChips
           :field="languages"
           type="software"

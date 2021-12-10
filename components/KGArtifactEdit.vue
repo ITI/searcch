@@ -198,7 +198,7 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-title class="py-0">Languages</v-card-title>
+        <v-card-title class="py-0">Programming Languages</v-card-title>
         <ArtifactChips
           :field="meta.languages"
           type="software"
