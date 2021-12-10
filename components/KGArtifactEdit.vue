@@ -691,6 +691,10 @@ export default {
       // process affiliations
       this.meta.creators.forEach((affil, index, object) => {
         if (typeof affil.affiliation.org === 'string') {
+          if (affil.affiliation.org === "") {
+            affil.affiliation.org = null
+            return
+          }
           let org = this.orgs.find(a => a.name === affil.affiliation.org)
           if (typeof org !== 'undefined') {
             affil.affiliation.org = JSON.parse(JSON.stringify(org))
