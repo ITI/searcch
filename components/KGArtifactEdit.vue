@@ -131,7 +131,7 @@
                           label="Author Name"
                           v-model="affiliation.affiliation.person.name"
                           :rules="[rules.required, rules.exists,
-				   rules.notwhitespace, rules.unique_creator]"
+                                   rules.notwhitespace, rules.unique_creator]"
                           required
                         ></v-text-field>
                       </v-col>
@@ -493,11 +493,14 @@ import { zipArray, EventBus } from '@/helpers'
 function affiliationObjectsEqual(o1,o2) {
   //console.log("o1: ",o1)
   //console.log("o2: ",o2)
-  if (((["",null].includes(o1.affiliation.org) && ["",null].includes(o2.affiliation.org))
-           || o1.affiliation.org == o2.affiliation.org)
-          && o1.affiliation.person.name == o2.affiliation.person.name
-          && o1.affiliation.person.email == o2.affiliation.person.email) {
-    //console.log("o1 == o2")
+  let ea = ["",null]
+  if (((ea.includes(o1.affiliation.org) && ea.includes(o2.affiliation.org))
+       || o1.affiliation.org == o2.affiliation.org)
+      && ((ea.includes(o1.affiliation.person.name) && ea.includes(o2.affiliation.person.name))
+          || o1.affiliation.person.name == o2.affiliation.person.name)
+      && ((ea.includes(o1.affiliation.person.email) && ea.includes(o2.affiliation.person.email))
+          || o1.affiliation.person.email == o2.affiliation.person.email)) {
+    console.log("o1 == o2")
     return true
   }
   else {
@@ -565,13 +568,14 @@ export default {
           let newaffiliation = this.affiliation
           if ("affiliations" in this.artifact_local
               && this.artifact_local.affiliations !== undefined) {
-            //console.log("affiliations: ",this.artifact_local.affiliations)
+            //console.log("local.affiliations: ",this.artifact_local.affiliations)
             for (let i = 0; i < this.artifact_local.affiliations.length; ++i) {
               let item = this.artifact_local.affiliations[i]
               if (affiliationObjectsEqual(newaffiliation,item))
                 return 'duplicate author'
             }
           }
+          //console.log("creators: ",this.meta.creators)
           for (let i = 0; i < this.meta.creators.length; ++i) {
             let item = this.meta.creators[i]
             if (affiliationObjectsEqual(newaffiliation,item))
