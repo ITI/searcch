@@ -37,7 +37,7 @@
           {{ field[index] }}
         </v-text-field>
         <div v-else>
-          {{ field[index] | titlecase }}
+          {{ field[index] }}
         </div>
       </div>
       <div v-else-if="type === 'keyword'">

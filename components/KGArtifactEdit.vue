@@ -2,7 +2,7 @@
   <div v-if="artifact_local">
     <div>
       <v-card class="mx-auto my-2">
-        <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
+        <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
             {{ artifact_local.url }}
