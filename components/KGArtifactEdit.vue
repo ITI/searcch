@@ -203,6 +203,7 @@
           :field="meta.languages"
           type="software"
           placeholder="Enter Language"
+          :formModel="valid"
           edit
           create
         ></ArtifactChips>
