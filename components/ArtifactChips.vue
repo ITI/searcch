@@ -143,6 +143,8 @@ export default {
         switch (this.type) {
           case 'keyword':
             return '/search?keywords=' + item
+          case 'role':
+            return '/search?author_keywords=' + item.affiliation.person.name
           case 'relation':
             return '/artifact/' + item.related_artifact_id
           case 'reverse-relation':

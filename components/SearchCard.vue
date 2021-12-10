@@ -239,7 +239,11 @@ export default {
     if (this.$route.query.keywords) {
       this.search = this.$route.query.keywords
       this.onSubmit()
-    } else {
+    } else if (this.$route.query.author_keywords) {
+      this.author = this.$route.query.author_keywords
+      this.onSubmit()
+      this.adopen = [0]
+    } else{
       this.search = this.search_init
     }
     if (this.all) {

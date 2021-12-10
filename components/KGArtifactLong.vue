@@ -77,6 +77,7 @@
           :field="record.artifact.affiliations"
           type="role"
           display
+          link
         ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
