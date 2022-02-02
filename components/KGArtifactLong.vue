@@ -78,6 +78,14 @@
           type="role"
           display
         ></ArtifactChips>
+        <v-btn
+          v-if="!record.artifact.affiliations.length"
+          class="ma-2"
+          color="secondary"
+          @click="claimThis"
+        >
+          Claim
+        </v-btn>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -422,6 +430,13 @@ export default {
         }
       }
     },
+    // async claimThis() {
+    //   if (!this.$auth.loggedIn) {
+    //     this.$router.push('/login')
+    //   } else {
+    //     // await this.
+    //   }
+    // },
     iconColor(type) {
       return artifactColor(type)
     },
