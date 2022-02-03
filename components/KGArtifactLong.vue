@@ -79,12 +79,11 @@
           display
         ></ArtifactChips>
         <v-btn
-          v-if="!record.artifact.affiliations.length"
           class="ma-2"
           color="secondary"
           @click="claimThis"
         >
-          Claim
+          {{ claimText }}
         </v-btn>
 
         <v-divider class="mx-4"></v-divider>
@@ -413,6 +412,10 @@ export default {
     overflowIcon() {
       if (!this.expanded) return 'mdi-chevron-down'
       else return 'mdi-chevron-up'
+    },
+    claimText() {
+      if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
+      else return 'Claim Role'
     }
   },
   methods: {
@@ -430,13 +433,6 @@ export default {
         }
       }
     },
-    // async claimThis() {
-    //   if (!this.$auth.loggedIn) {
-    //     this.$router.push('/login')
-    //   } else {
-    //     // await this.
-    //   }
-    // },
     iconColor(type) {
       return artifactColor(type)
     },
