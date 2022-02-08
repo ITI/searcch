@@ -20,12 +20,9 @@
                   icon="mdi-help"
                 >
                   <v-card color="primary" dark>
-                    <v-card-title class="text-h6" v-text="faq.q">
-                      Lorem Ipsum Dolor
-                    </v-card-title>
+                    <v-card-title class="text-h6" v-text="faq.q"/>
                     <br />
-                    <v-card-text class="white text--primary" v-html="faq.a">
-                    </v-card-text>
+                    <v-card-text class="white text--primary" v-html="faq.a"/>
                   </v-card>
                 </v-timeline-item>
               </v-timeline>
