@@ -78,6 +78,13 @@
           type="role"
           display
         ></ArtifactChips>
+        <v-btn
+          class="ma-2"
+          color="secondary"
+          @click="claimThis"
+        >
+          {{ claimText }}
+        </v-btn>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -405,6 +412,10 @@ export default {
     overflowIcon() {
       if (!this.expanded) return 'mdi-chevron-down'
       else return 'mdi-chevron-up'
+    },
+    claimText() {
+      if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
+      else return 'Claim Role'
     }
   },
   methods: {
