@@ -158,6 +158,11 @@ export default {
           to: '/favorites'
         })
         items.push({
+          icon: 'mdi-table-heart',
+          title: 'My Artifacts',
+          to: '/myartifacts'
+        })
+        items.push({
           icon: 'mdi-database-import',
           title: 'Submit Artifact',
           to: '/import'
