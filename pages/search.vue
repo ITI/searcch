@@ -1,10 +1,8 @@
 <template>
   <div>
-    <div class="text-center">
+    <div class="text-center mb-16">
       <logo />
     </div>
-    <h1>Search</h1>
-    <v-divider></v-divider><br />
     <SearchCard />
   </div>
 </template>
