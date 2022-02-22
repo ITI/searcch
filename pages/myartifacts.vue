@@ -39,18 +39,13 @@ export default {
 
   data() {
     return {
-      limit: 20
+      limit: 20,
+      artifacts: []
     }
   },
   async mounted() {
     let response = await this.$userArtifactsEndpoint.index()
-    console.log(response)
+    this.artifacts = response.owned_artifacts;
   },
-  computed: {
-    ...mapState({
-      artifacts: state => state.artifacts.favorites,
-      userid: state => state.user.userid
-    })
-  }
 }
 </script>
