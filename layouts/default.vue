@@ -158,7 +158,7 @@ export default {
           to: '/favorites'
         })
         items.push({
-          icon: 'mdi-table-heart',
+          icon: 'mdi-box',
           title: 'My Artifacts',
           to: '/myartifacts'
         })
