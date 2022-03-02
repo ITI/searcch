@@ -7,10 +7,11 @@
       <LazyHydrate never>
         <div>
           <v-card>
-            <v-card-title class="headline">
-              Welcome to SEARCCH
+            <v-card-title class="primary white--text">
+              Welcome to the SEARCCH Hub
             </v-card-title>
             <v-card-text>
+              <br />
               <p>
                 SEARCCH is a collaborative, community-driven platform for
                 cybersecurity research artifact cataloguing that facilitates
@@ -77,10 +78,11 @@
             </v-card-actions> </v-card
           ><br />
           <v-card>
-            <v-card-title class="headline">
+            <v-card-title class="primary white--text">
               Current Features
             </v-card-title>
             <v-card-text>
+              <br />
               <p>
                 SEARCCH has five major functions. Four may be accessed using the
                 left-hand navigation menu. A summary of each follows.
@@ -125,6 +127,10 @@
           </v-card>
         </div>
       </LazyHydrate>
+      <br />
+      <div>
+        <supporters />
+      </div>
     </v-flex>
   </v-layout>
 </template>
@@ -133,7 +139,8 @@
 export default {
   components: {
     Logo: () => import('@/components/Logo'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    LazyHydrate: () => import('vue-lazy-hydration'),
+    Supporters: () => import('@/components/Supporters')
   },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")
