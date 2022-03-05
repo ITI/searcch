@@ -12,7 +12,9 @@
         <v-list-item
           v-for="(item, i) in items"
           :key="`main${i}`"
-          :to="item.to"
+          :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined"
+          :to="!('href' in item) ? item.to : undefined"
           router
           exact
         >
@@ -34,7 +36,9 @@
         <v-list-item
           v-for="(item, i) in adminItems"
           :key="`main${i}`"
-          :to="item.to"
+          :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined"
+          :to="!('href' in item) ? item.to : undefined"
           router
           exact
         >
@@ -56,7 +60,9 @@
         <v-list-item
           v-for="(item, i) in footerItems"
           :key="`footer${i}`"
-          :to="item.to"
+          :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined"
+          :to="!('href' in item) ? item.to : undefined"
           router
           exact
         >
@@ -98,7 +104,7 @@
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
         >Logout</v-btn
       >
-      <v-btn v-else class="primary" nuxt @click="login()">Login</v-btn>
+      <v-btn v-else class="primary" nuxt @click="login()">GitHub Login</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -209,8 +215,13 @@ export default {
           to: '/'
         },
         {
+          icon: 'mdi-information',
+          title: 'Best Practices',
+          href: 'https://searcch.cyberexperimentation.org/best-practices'
+        },
+        {
           icon: 'mdi-frequently-asked-questions',
-          title: 'FAQs',
+          title: 'FAQ',
           to: '/faqs'
         }
       ]
