@@ -12,11 +12,10 @@
         hide-details
         @keydown="onChange"
         @change="onSubmit"
-        solo
-        dense
+        filled
       >
       </v-text-field>
-      <v-expansion-panels v-model="adopen" multiple>
+      <v-expansion-panels v-model="adopen" flat popup>
         <v-expansion-panel class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
