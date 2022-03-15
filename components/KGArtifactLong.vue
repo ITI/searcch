@@ -1,7 +1,7 @@
 <template>
   <div v-if="record.artifact">
     <v-card class="mx-auto my-2">
-      <v-card-title> {{ record.artifact.title | titlecase }} </v-card-title>
+      <v-card-title> {{ record.artifact.title }} </v-card-title>
       <v-card-subtitle>
         Artifact ID:
         {{ record.artifact.id }}
@@ -34,7 +34,7 @@
         <div v-html="sanitizedDescription"></div>
       </v-card-text>
 
-      <div v-if="record.artifact.type === 'software'">
+      <div v-if="markdown">
         <v-divider class="mx-4"></v-divider>
         <v-card-title>
           <v-row class="mx-1"
@@ -72,11 +72,12 @@
       <v-divider class="mx-4"></v-divider>
 
       <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Roles</v-card-title>
+        <v-card-title class="py-0">Authors</v-card-title>
         <ArtifactChips
           :field="record.artifact.affiliations"
           type="role"
           display
+          link
         ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
@@ -95,7 +96,7 @@
       </div>
 
       <div v-if="languages.length > 0">
-        <v-card-title class="py-0">Languages</v-card-title>
+        <v-card-title class="py-0">Programming Languages</v-card-title>
         <ArtifactChips
           :field="languages"
           type="software"
@@ -253,7 +254,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
-          v-if="isOwner()"
+          v-if="isOwner() && !published"
           color="success"
           small
           :to="`/artifact/${record.artifact.id}?edit=true`"
@@ -390,7 +391,6 @@ export default {
         readmes = f.members.find(m => m.name.toUpperCase() == 'README.MD')
       })
       if (typeof readmes !== 'undefined') return readmes.content
-      else return this.sanitizedDescription
     },
     hideOverflow() {
       return {
@@ -405,6 +405,9 @@ export default {
     overflowIcon() {
       if (!this.expanded) return 'mdi-chevron-down'
       else return 'mdi-chevron-up'
+    },
+    published() {
+      return this.record.artifact.publication ? true : false
     }
   },
   methods: {
