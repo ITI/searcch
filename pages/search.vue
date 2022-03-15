@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-center mb-16">
+    <div class="text-center">
       <logo />
     </div>
     <h1>
