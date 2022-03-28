@@ -236,11 +236,15 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   mounted() {
-    if (this.$route.query.keywords) {
+    if (this.related) {
+      this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
+    } else if (this.$route.query.keywords) {
       this.search = this.$route.query.keywords
+      console.log('keywords: ', this.search)
       this.onSubmit()
     } else if (this.$route.query.author_keywords) {
       this.author = this.$route.query.author_keywords
+      console.log('author_keywords: ', this.author)
       this.onSubmit()
       this.adopen = [0]
     } else{
@@ -255,6 +259,7 @@ export default {
     ...mapState({
       badges: state => state.user.badges,
       artifacts: state => state.artifacts.artifacts.artifacts,
+      artifact: state => state.artifacts.artifact.artifact,
       pages: state => state.artifacts.artifacts.pages,
       total: state => state.artifacts.artifacts.total,
       search_init: state => state.artifacts.search,
@@ -295,19 +300,23 @@ export default {
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'
       this.$store.commit('artifacts/RESET_ARTIFACTS') // clear artifacts so the Searching... message is shown
-      let payload = {
-        keywords: this.search,
-        page: this.page,
-        items_per_page: this.limit,
-        type: this.advanced.types
+      if (this.search.trim() !== '') {
+        let payload = {
+          keywords: this.search,
+          page: this.page,
+          items_per_page: this.limit,
+          type: this.advanced.types
+        }
+
+        this.author ? (payload['author'] = this.author) : false
+        this.owner ? (payload['owner'] = this.owner) : false
+        this.organization ? (payload['organization'] = this.organization) : false
+        this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
+
+        this.$store.dispatch('artifacts/fetchArtifacts', payload)
+      } else {
+        this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
       }
-
-      this.author ? (payload['author'] = this.author) : false
-      this.owner ? (payload['owner'] = this.owner) : false
-      this.organization ? (payload['organization'] = this.organization) : false
-      this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
-
-      this.$store.dispatch('artifacts/fetchArtifacts', payload)
       this.searchInterval = setTimeout(() => {
         if (!this.searchLoading) {
           this.searchMessage = 'No results found'

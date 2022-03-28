@@ -102,6 +102,27 @@ export const actions = {
     }
     commit('SET_LOADING', false)
   },
+  async fetchMyArtifacts({ commit }) {
+    commit('SET_LOADING', true)
+    let response = await this.$userArtifactsEndpoint.index()
+    console.log(response)
+    if (response !== undefined) {
+      commit('SET_ARTIFACTS', { artifacts: response.owned_artifacts })
+    }
+    commit('SET_LOADING', false)
+  },
+  async fetchRelatedArtifacts({ commit, dispatch }, payload) {
+    commit('SET_LOADING', true)
+    console.log(payload)
+    let response = await this.$artifactRecommendationEndpoint.show(payload.id)
+    if (response.artifacts === undefined) {
+      return dispatch('fetchMyArtifacts')
+    }
+    if (response !== undefined) {
+      commit('SET_ARTIFACTS', response)
+    }
+    commit('SET_LOADING', false)
+  },
   async fetchArtifact({ commit, state }, payload) {
     commit('SET_LOADING', true)
     console.log('fetching entry ' + payload.id)
