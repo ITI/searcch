@@ -108,37 +108,14 @@
 
       <div
         v-if="
-          typeof record.artifact.relationships !== 'undefined' &&
-            record.artifact.relationships.length
+          (typeof record.artifact.relationships !== 'undefined' &&
+            record.artifact.relationships.length) ||
+          (typeof record.artifact.reverse_relationships !== 'undefined' &&
+            record.artifact.reverse_relationships.length)
         "
       >
         <v-card-title class="py-0">Relations</v-card-title>
 
-        <!-- <ArtifactChips
-          :field="record.artifact.relationships"
-          type="relation"
-          display
-          link
-        ></ArtifactChips> -->
-        <ArtifactRelationshipGraph :artifact="record.artifact"/>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div
-        v-if="
-          typeof record.artifact.reverse_relationships !== 'undefined' &&
-            record.artifact.reverse_relationships.length
-        "
-      >
-        <v-card-title class="py-0">Reverse Relations</v-card-title>
-
-        <!-- <ArtifactChips
-          :field="record.artifact.reverse_relationships"
-          type="reverse-relation"
-          display
-          link
-        ></ArtifactChips> -->
         <ArtifactRelationshipGraph :artifact="record.artifact"/>
 
         <v-divider class="mx-4"></v-divider>
