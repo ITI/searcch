@@ -106,6 +106,7 @@ export const actions = {
     commit('SET_LOADING', true)
     console.log('fetching entry ' + payload.id)
     let response = await this.$artifactEndpoint.show(payload.id)
+    console.log('entry object: ', response)
     if (typeof response !== 'undefined') {
       commit('SET_ARTIFACT', response)
     }

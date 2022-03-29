@@ -114,12 +114,13 @@
       >
         <v-card-title class="py-0">Relations</v-card-title>
 
-        <ArtifactChips
+        <!-- <ArtifactChips
           :field="record.artifact.relationships"
           type="relation"
           display
           link
-        ></ArtifactChips>
+        ></ArtifactChips> -->
+        <ArtifactRelationshipGraph :artifact="record.artifact"/>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -132,12 +133,13 @@
       >
         <v-card-title class="py-0">Reverse Relations</v-card-title>
 
-        <ArtifactChips
+        <!-- <ArtifactChips
           :field="record.artifact.reverse_relationships"
           type="reverse-relation"
           display
           link
-        ></ArtifactChips>
+        ></ArtifactChips> -->
+        <ArtifactRelationshipGraph :artifact="record.artifact"/>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -284,7 +286,8 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: () => import('@/components/ArtifactChips'),
+    ArtifactRelationshipGraph: () => import('@/components/ArtifactRelationshipGraph')
   },
   data() {
     return {
