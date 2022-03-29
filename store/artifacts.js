@@ -111,15 +111,16 @@ export const actions = {
     }
     commit('SET_LOADING', false)
   },
-  async fetchRelatedArtifacts({ commit, dispatch }, payload) {
+  async fetchRelatedArtifacts({ commit, dispatch, state }, payload) {
     commit('SET_LOADING', true)
-    console.log(payload)
-    let response = await this.$artifactRecommendationEndpoint.show(payload.id)
-    if (response.artifacts === undefined) {
-      return dispatch('fetchMyArtifacts')
-    }
-    if (response !== undefined) {
-      commit('SET_ARTIFACTS', response)
+    // fetch user artifacts first
+    await dispatch('fetchMyArtifacts')
+    if (!state.artifacts.length) {
+      // recommend artifacts if the user has no artifact
+      let response = await this.$artifactRecommendationEndpoint.show(payload.id)
+      if (response !== undefined) {
+        commit('SET_ARTIFACTS', response)
+      }
     }
     commit('SET_LOADING', false)
   },
