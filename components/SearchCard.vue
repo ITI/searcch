@@ -300,7 +300,9 @@ export default {
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'
       this.$store.commit('artifacts/RESET_ARTIFACTS') // clear artifacts so the Searching... message is shown
-      if (this.search.trim() !== '') {
+      if (this.related && this.search.trim() === '') {
+        this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
+      } else {
         let payload = {
           keywords: this.search,
           page: this.page,
@@ -314,9 +316,7 @@ export default {
         this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
 
         this.$store.dispatch('artifacts/fetchArtifacts', payload)
-      } else {
-        this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
-      }
+      } 
       this.searchInterval = setTimeout(() => {
         if (!this.searchLoading) {
           this.searchMessage = 'No results found'
