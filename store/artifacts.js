@@ -18,6 +18,9 @@ export const state = () => ({
     total: 0
   },
   artifact: {},
+  myArtifacts: {
+    owned_artifacts: [],
+  },
   search: '',
   favorites: [],
   favoritesIDs: {},
@@ -32,6 +35,9 @@ export const getters = {
   },
   artifact: state => {
     return state.artifact
+  },
+  myArtifacts: state => {
+    return state.myArtifacts
   },
   search: state => {
     return state.search
@@ -70,6 +76,9 @@ export const mutations = {
   SET_SEARCH(state, search) {
     state.search = search
   },
+  SET_MY_ARTIFACTS(state, myArtifacts) {
+    state.myArtifacts = myArtifacts
+  },
   SET_FAVORITES(state, favorites) {
     state.favorites = favorites
   },
@@ -107,7 +116,7 @@ export const actions = {
     let response = await this.$userArtifactsEndpoint.index()
     console.log(response)
     if (response !== undefined) {
-      commit('SET_ARTIFACTS', { artifacts: response.owned_artifacts })
+      commit('SET_MY_ARTIFACTS', response)
     }
     commit('SET_LOADING', false)
   },

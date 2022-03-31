@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     ...mapState({
-      artifacts: state => state.artifacts.artifacts.artifacts,
+      artifacts: state => state.artifacts.myArtifacts.owned_artifacts,
     })
   },
   async mounted() {
