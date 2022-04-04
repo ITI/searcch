@@ -16,6 +16,11 @@ export default (ctx, inject) => {
     repositoryWithAxios('kg/' + 'artifact/search')
   )
 
+  inject(
+    'artifactRecommendationEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/recommendation')
+  )
+
   // imports array view/add API
   inject('importsEndpoint', repositoryWithAxios('kg/' + 'artifact/imports'))
 

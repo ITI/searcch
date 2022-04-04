@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -39,12 +40,15 @@ export default {
   data() {
     return {
       limit: 20,
-      artifacts: []
     }
   },
+  computed: {
+    ...mapState({
+      artifacts: state => state.artifacts.myArtifacts.owned_artifacts,
+    })
+  },
   async mounted() {
-    let response = await this.$userArtifactsEndpoint.index()
-    this.artifacts = response.owned_artifacts;
+    await this.$store.dispatch('artifacts/fetchMyArtifacts')
   },
 }
 </script>

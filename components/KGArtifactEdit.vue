@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
     <div>
-      <v-card class="mx-auto my-2">
+      <v-card class="mx-auto my-2" outlined>
         <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
@@ -11,7 +11,7 @@
       </v-card>
     </div>
     <v-form v-model="valid" ref="artifact">
-      <v-card class="mx-auto my-2">
+      <v-card class="mx-auto my-2" outlined>
         <v-card-title
           ><v-text-field
             label="Title"
@@ -208,55 +208,6 @@
           create
         ></ArtifactChips>
 
-        <v-divider class="mx-4"></v-divider>
-
-        <v-card-title class="py-0">Related</v-card-title>
-
-        <ArtifactChips
-          :field="artifact_local.relationships"
-          type="relation"
-          edit
-        ></ArtifactChips>
-
-        <div>
-          <v-dialog
-            transition="dialog-bottom-transition"
-            persistent
-            fullscreen
-            v-model="artifactdialog"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="success ml-2 mb-2"
-                fab
-                x-small
-                v-bind="attrs"
-                v-on="on"
-                :disabled="artifact_local.id ? false : true"
-              >
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:default="artifactdialog">
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Search for Related Artifacts</span>
-                </v-card-title>
-                <SearchCard :search="search" related all></SearchCard>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    class="error ml-2 mb-2"
-                    text
-                    @click="artifactdialog.value = false"
-                  >
-                    Close
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </template>
-          </v-dialog>
-        </div>
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Badges</v-card-title>
@@ -458,7 +409,59 @@
           <v-btn color="success" :disabled="!valid || disabled" @click="save()">
             Save
           </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card class="mx-auto my-2" outlined>
+        
+        <v-card-title class="py-0">Relationship</v-card-title>
 
+        <ArtifactChips
+          :field="artifact_local.relationships"
+          type="relation"
+          edit
+        ></ArtifactChips>
+
+        <div>
+          <v-dialog
+            transition="dialog-bottom-transition"
+            persistent
+            fullscreen
+            v-model="artifactdialog"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="success ml-2 mb-2"
+                fab
+                x-small
+                v-bind="attrs"
+                v-on="on"
+                :disabled="artifact_local.id ? false : true"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <template v-slot:default="artifactdialog">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Search for Related Artifacts</span>
+                </v-card-title>
+                <SearchCard :search="search" related all></SearchCard>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    class="error ml-2 mb-2"
+                    text
+                    @click="artifactdialog.value = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn
             color="primary"
             :disabled="!valid || disabled"
@@ -467,6 +470,7 @@
             Publish
           </v-btn>
         </v-card-actions>
+
       </v-card>
     </v-form>
 
@@ -806,21 +810,19 @@ export default {
       // console.log(this.artifact_local)
 
       let response = null
+      let artifact = this.artifact_local
       if (this.create) {
         // console.log('creating new artifact')
         response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
         // console.log('curating')
-        response = await this.$artifactEndpoint.update(
-          this.artifact_local.id,
-          this.artifact_local
-        )
+        response = await this.$artifactEndpoint.update(artifact.id, artifact)
       }
       // console.log('response artifact')
       // console.log(response)
 
       this.artifact_local =
-        typeof response !== 'undefined' ? response.artifact : {}
+        typeof response !== 'undefined' ? response.artifact : artifact
 
       this.disabled = false
       this.snackbar = true
@@ -849,7 +851,9 @@ export default {
     },
     getPossibleTags() {
       let tags = []
-      if (this.artifact_local.tags.length > 0) return []
+      // console.log(this.artifact_local)
+      if (typeof this.artifact_local.tags === 'undefined' 
+        || this.artifact_local.tags.length > 0) return []
       let top = this.artifact_local.meta
         ? this.artifact_local.meta.find(o => o.name == 'top_keywords')
         : null
