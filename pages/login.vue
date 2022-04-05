@@ -6,7 +6,7 @@
           <v-col cols="12" sm="8" md="6">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Login</v-toolbar-title>
+                <v-toolbar-title>Login with GitHub</v-toolbar-title>
               </v-toolbar>
               <v-card-actions>
                 <v-spacer />

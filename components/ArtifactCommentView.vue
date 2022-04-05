@@ -10,7 +10,7 @@
           <v-card-title class="align-start">
             <div>
               <span class="headline">{{
-                artifact.artifact.title | titlecase
+                artifact.artifact.title
               }}</span>
             </div>
           </v-card-title>

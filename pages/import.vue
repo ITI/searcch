@@ -9,7 +9,7 @@
     </v-layout>
     <v-layout column justify-left align-top>
       <v-row class="ml-1 mb-2"
-        ><h1>Import</h1>
+        ><h1>Artifact Import</h1>
         <v-dialog transition="dialog-bottom-transition" max-width="600">
           <template v-slot:activator="{ on, attrs }">
             <v-btn class="primary ml-4" fab small v-bind="attrs" v-on="on"
@@ -22,29 +22,32 @@
               <v-card-text>
                 <div class="text-h6 pa-12">
                   <p>
-                    To start importing, place the URL of an artifact in the
-                    input field and click Start Import.
-                  </p>
-                  <p></p>
-                  <p>
-                    Once an import has started, it will show up in your imports
-                    list, below the URL field.
+                    Artifacts published on GitHub, ACM digital library, IEEE
+                    Xplore, USENIX web site publication, arXiv, Papers With
+                    Code, Zenodo, and generic git repositories can be processed
+                    using our import assistant. All other artifact sources must
+                    be manually processed.
                   </p>
                   <p>
-                    The importer will have to process through a few stages to
-                    get all of the information scraped and formatted properly.
-                    Once the progress bar shows the process is complete, you
-                    will have the option to view the imported artifact by
-                    clicking Read More.
+                    To start the import assistant, type the URL of an artifact
+                    in the input field and click START IMPORT.
                   </p>
                   <p>
-                    We have provided an edit button to all you to edit the
-                    automated import details.
+                    When the import processing starts, it will show up in your
+                    imports list below the URL field.
                   </p>
                   <p>
-                    Once you are ready to add your artifact to the list of
-                    searchable artifacts, you can click Publish. Press Archive
-                    to hide a completed import from your list.
+                    The import assistant works in multiple stages to scrape all
+                    of the information and format it properly. Once the progress
+                    bar shows the process is complete, you should review and
+                    correct the information (as needed) by clicking EDIT.
+                  </p>
+                  <p>
+                    When you are ready to make your artifact available in the
+                    catalog of searchable artifacts, click PUBLISH.
+                  </p>
+                  <p>
+                    Click ARCHIVE to hide a completed import from your list.
                   </p>
                 </div>
               </v-card-text>
@@ -56,8 +59,16 @@
         </v-dialog>
       </v-row>
       <v-divider></v-divider><br />
-      Enter the URL where your artifact is located.
-      <v-form v-model="valid">
+      <h2>Artifact Import Assistant</h2>
+      <p>
+        Supported artifact locations are: GitHub, ACM digital library, IEEE
+        Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo,
+        and openly-accessible generic git repositories.
+      </p>
+      <p>
+        Enter the supported URL for your artifact:
+      </p>
+      <v-form v-model="valid" ref="importform">
         <v-row>
           <v-col cols="10">
             <v-text-field
@@ -81,10 +92,12 @@
       </v-form>
       <br />
       <v-row class="ml-1 mb-2">
-        If you would like to enter your artifact information manually, please
-        &nbsp; <NuxtLink to="/create">click here.</NuxtLink>
+        Artifacts stored on unsupported sources may be manually imported. &nbsp;
+        <NuxtLink to="/create">Click here</NuxtLink> &nbsp; to start a manual
+        import.
       </v-row>
       <br /><v-divider></v-divider><br />
+      <h2>Imported Artifacts</h2>
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
@@ -156,6 +169,7 @@ export default {
       let response = await this.$importsEndpoint.create({
         url: this.url
       })
+      this.$refs.importform.reset()
       this.updateImports()
       clearInterval(this.pollingID)
       this.pollingID = setInterval(

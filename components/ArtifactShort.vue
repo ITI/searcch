@@ -17,7 +17,6 @@
           </v-col>
         </v-row>
       </v-container>
-
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
         {{ artifact.num_reviews }}
         {{ artifact.num_reviews == 1 ? 'review' : 'reviews' }}
