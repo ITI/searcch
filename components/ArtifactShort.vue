@@ -1,21 +1,22 @@
 <template>
   <div>
     <v-card class="mx-auto overflow-hidden" elevation="3">
-      <v-row>
-        <v-col cols="10">
-          <v-card-title class="align-start">
-            <div>
+      <v-container>
+        <v-row>
+          <v-col cols="9">
+            <v-card-title class="align-start">
               <span class="headline">{{ artifact.title | titlecase }}</span>
-            </div>
-          </v-card-title>
-        </v-col>
-        <v-col cols="2" class="text-lg-right">
-          <ArtifactChips
-            :field="[artifact.type]"
-            :type="artifact.type"
-          ></ArtifactChips>
-        </v-col>
-      </v-row>
+            </v-card-title>
+          </v-col>
+          <v-col cols="3">
+            <ArtifactChips
+              class="card-chip"
+              :field="[artifact.type]"
+              :type="artifact.type"
+            ></ArtifactChips>
+          </v-col>
+        </v-row>
+      </v-container>
 
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
         {{ artifact.num_reviews }}
@@ -221,6 +222,12 @@ export default {
 </script>
 
 <style scoped>
+.card-chip {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
 .v-card__title {
   word-break: normal;
 }
