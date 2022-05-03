@@ -114,30 +114,20 @@
       >
         <v-card-title class="py-0">Relations</v-card-title>
 
-        <ArtifactChips
-          :field="record.artifact.relationships"
-          type="relation"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div
-        v-if="
-          typeof record.artifact.reverse_relationships !== 'undefined' &&
-            record.artifact.reverse_relationships.length
-        "
-      >
-        <v-card-title class="py-0">Reverse Relations</v-card-title>
-
-        <ArtifactChips
-          :field="record.artifact.reverse_relationships"
-          type="reverse-relation"
-          display
-          link
-        ></ArtifactChips>
+        <v-card-text>
+          <v-card elevation="0" outlined>
+              <v-tabs vertical>
+                <v-tab v-for="type in Object.keys(relationshipsByTypes)" :key="type">{{ type }}</v-tab>
+                <v-tab-item v-for="key,i in Object.keys(relationshipsByTypes)" :key="i">
+                  <v-list dense>
+                    <v-list-item v-for="relationship in relationshipsByTypes[key]" :key="relationship.id">
+                      {{ relationship.related_artifact_id }}
+                    </v-list-item>
+                  </v-list>
+                </v-tab-item>
+              </v-tabs>
+          </v-card>
+        </v-card-text>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -298,6 +288,8 @@ export default {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
+    console.log(this.record.artifact.relationships)
+    console.log(this.record.artifact.reverse_relationships)
   },
   computed: {
     ...mapState({
@@ -408,6 +400,20 @@ export default {
     },
     published() {
       return this.record.artifact.publication ? true : false
+    },
+    relationshipsByTypes() {
+      let relationships = [
+        ...this.record.artifact.relationships,
+        ...this.record.artifact.reverse_relationships
+      ]
+      let relationshipsByTypes = {}
+      for (let relationship of relationships) {
+        if (relationshipsByTypes[relationship.relation] === undefined) {
+          relationshipsByTypes[relationship.relation] = []
+        }
+        relationshipsByTypes[relationship.relation].push(relationship)
+      }
+      return relationshipsByTypes
     }
   },
   methods: {
@@ -440,7 +446,7 @@ export default {
         ? this.record.artifact.owner.id == this.userid
         : false
     }
-  }
+  },
 }
 </script>
 
