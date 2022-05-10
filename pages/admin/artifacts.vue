@@ -2,86 +2,59 @@
   <div>
     <v-layout column justify-left align-top>
       <v-row align="center">
+        <v-btn icon @click="updateArtifacts()">
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
         <v-col cols="1">
           <h3>Filters:</h3>
         </v-col>
-        <v-col cols="1">
-          <v-subheader>
-            Type
-          </v-subheader>
-        </v-col>
         <v-col cols="2">
           <v-select
+            clearable
             v-model="type_select"
             label="Type"
             :items="type_items"
-            single-line
             @change="updateArtifacts()"
           ></v-select>
         </v-col>
-        <v-col cols="1">
-          <v-subheader>
-            Published
-          </v-subheader>
+        <v-col cols="2">
+          <v-select
+            clearable
+            v-model="publication_select"
+            label="Publication Status"
+            :items="publication_items"
+            @change="updateArtifacts()"
+          ></v-select>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="2">
           <v-checkbox
-            v-model="published"
-            @change="
-              notpublished = false
-              updateArtifacts()
-            "
+            v-model="allversions"
+            label="All Versions"
+            @change="updateArtifacts()"
           ></v-checkbox>
         </v-col>
-        <v-col cols="1">
-          <v-subheader>
-            Not Published
-          </v-subheader>
-        </v-col>
-        <v-col cols="1">
-          <v-checkbox
-            v-model="notpublished"
-            @change="
-              published = false
-              updateArtifacts()
-            "
-          ></v-checkbox>
-        </v-col>
-
         <v-col cols="2">
           <v-text-field
+            clearable
             v-model="owner_filter"
             hint="Case-insensitive substring of user name or email"
             label="Owner"
             @change="updateArtifacts()"
           ></v-text-field>
         </v-col>
-        <v-col cols="2"></v-col>
-        <v-col cols="1">
-          <h3>Refresh:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-btn icon @click="updateArtifacts()">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
+        <v-col cols="2">
+          <v-text-field
+            clearable
+            v-model="artifact_group_id"
+            hint="Integer artifact group ID"
+            label="Artifact Group ID"
+            @change="updateArtifacts()"
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
     </v-layout>
     <v-card>
-      <v-card-title>
-        Artifacts
-        <v-spacer></v-spacer>
-        <!-- <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          dense
-        ></v-text-field> -->
-      </v-card-title>
-
       <v-data-table
         :headers="headers"
         :items="items"
@@ -124,7 +97,7 @@
             <template v-slot:activator="{ on }">
               <a
                 v-if="item.id"
-                :href="`/artifact/${item.id}`"
+                :href="`/artifact/${item.artifact_group_id}/${item.id}`"
                 target="_blank"
                 rel="noopener"
               >
@@ -136,8 +109,8 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <a
-                v-if="item.id && user_is_admin"
-                :href="`/artifact/${item.id}?edit=true`"
+                v-if="item.id && !item.publication"
+                :href="`/artifact/${item.artifact_group_id}/${item.id}?edit=true`"
                 target="_blank"
                 rel="noopener"
               >
@@ -146,7 +119,7 @@
             </template>
             <span>Edit</span>
           </v-tooltip>
-          {{ item.id }}
+          <a v-bind:item="item" @click="setArtifactGroupIdFilter(item.artifact_group_id)">{{ item.artifact_group_id }}</a>/{{ item.id }}
         </template>
         <template v-slot:item.ctime="{ item }">
           {{ $moment.utc(item.ctime).fromNow() }}
@@ -187,12 +160,26 @@
                 v-on="on"
                 small
                 color="error"
-                @click="deleteItem(item)"
+                @click="deleteItem(item, false)"
               >
                 mdi-delete
               </v-icon>
             </template>
-            <span>Delete Artifact {{ item.id }} </span>
+            <span>Delete Artifact Version {{ item.id }}</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                v-if="item.id"
+                v-on="on"
+                small
+                color="error"
+                @click="deleteItem(item, true)"
+              >
+                mdi-delete-alert
+              </v-icon>
+            </template>
+            <span>Delete Artifact Group {{ item.artifact_group_id }}</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -221,9 +208,15 @@ export default {
         'software',
         'other'
       ],
-      published: false,
-      notpublished: false,
+      publication_select: 'published',
+      publication_items: [
+        '',
+        'published',
+        'draft'
+      ],
+      allversions: false,
       owner_filter: '',
+      artifact_group_id: null,
       headers: [
         { text: 'Artifact', value: 'id', align: 'start', sortable: true },
         { text: 'Type', value: 'type', sortable: true },
@@ -256,6 +249,7 @@ export default {
       search: '',
       dialogDelete: false,
       editedIndex: -1,
+      deleteAllVersions: false,
       items: []
     }
   },
@@ -293,12 +287,20 @@ export default {
           short_view_include: 'owner,publication'
         }
         if (this.type_select) payload['type'] = this.type_select
-        if (this.published) payload['published'] = 1
-        if (this.notpublished) payload['published'] = 0
+        if (this.publication_select) {
+          if (this.publication_select === "published") payload['published'] = 1
+          if (this.publication_select === "draft") payload['published'] = 0
+        }
+        if (this.allversions) payload['allversions'] = 1
         if (this.owner_filter) payload['owner'] = this.owner_filter
+        if (this.artifact_group_id) payload['artifact_group_id'] = this.artifact_group_id
         this.$store.dispatch('system/fetchArtifacts', payload)
       }
       clearTimeout(this.timeoutID)
+    },
+    setArtifactGroupIdFilter(id) {
+      this.artifact_group_id = id
+      this.updateArtifacts()
     },
     iconColor(type) {
       return artifactColor(type)
@@ -306,12 +308,21 @@ export default {
     iconImage(type) {
       return artifactIcon(type)
     },
-    deleteItem(item) {
+    deleteItem(item, allversions) {
       this.editedIndex = this.items.indexOf(item)
       this.dialogDelete = true
+      this.deleteAllVersions = true
     },
     async deleteItemConfirm() {
-      await this.$artifactEndpoint.delete(this.items[this.editedIndex].id)
+      if (this.deleteAllVersions) {
+        await this.$artifactEndpoint.delete(
+          this.items[this.editedIndex].artifact_group_id)
+      }
+      else {
+        await this.$artifactEndpoint.delete(
+          [ this.items[this.editedIndex].artifact_group_id,
+            this.items[this.editedIndex].id ])
+      }
       this.items.splice(this.editedIndex, 1)
       this.closeDelete()
       this.updateArtifacts()
@@ -320,6 +331,7 @@ export default {
       this.dialogDelete = false
       this.$nextTick(() => {
         this.editedIndex = -1
+        this.deleteAllVersions = true
       })
     }
   },

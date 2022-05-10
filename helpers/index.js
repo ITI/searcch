@@ -21,6 +21,8 @@ export const artifactIcon = type => {
       return 'mdi-relation-one-to-one'
     case 'reverse-relation':
       return 'mdi-relation-one-to-one'
+    case 'field':
+      return 'mdi-text-box'
     default:
       return 'mdi-help'
   }

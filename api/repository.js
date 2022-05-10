@@ -31,8 +31,17 @@ export default $axios => (resource, error) => ({
       })
   },
 
-  show(id) {
-    return $axios.$get(`${resource}/${id}`).catch(function(e) {
+  show(id, params = null) {
+    var rparams = {}
+    if (params) {
+      rparams = {
+        params: params,
+        paramsSerializer: function(params) {
+          return qs.stringify(params, { arrayFormat: 'repeat' })
+        }
+      }
+    }
+    return $axios.$get(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, rparams).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -76,7 +85,7 @@ export default $axios => (resource, error) => ({
   },
 
   update(id, payload) {
-    return $axios.$put(`${resource}/${id}`, payload).catch(function(e) {
+    return $axios.$put(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, payload).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -119,7 +128,7 @@ export default $axios => (resource, error) => ({
   },
   // FIXME: backend API
   post(id, payload) {
-    return $axios.$post(`${resource}/${id}`, payload).catch(function(e) {
+    return $axios.$post(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, payload).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -140,7 +149,7 @@ export default $axios => (resource, error) => ({
     })
   },
   delete(id) {
-    return $axios.$delete(`${resource}/${id}`).catch(function(e) {
+    return $axios.$delete(`${resource}/${Array.isArray(id) ? id.join('/') : id}`).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
