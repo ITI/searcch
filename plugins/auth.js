@@ -16,9 +16,10 @@ export default function({ $loginEndpoint, store, $auth }) {
     // if (!validUsers.includes($auth.user.login.toLowerCase())) {
     //   $auth.logout('github')
     // } else {
+    let strategy = $auth.$storage.getUniversal('strategy')
     let payload = {
-      strategy: 'github',
-      token: $auth.getToken('github')
+      strategy: strategy,
+      token: $auth.getToken(strategy)
     }
     $loginEndpoint
       .create(payload)

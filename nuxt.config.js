@@ -187,7 +187,8 @@ export default {
   publicRuntimeConfig: {},
   privateRuntimeConfig: {
     gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
-    gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET || 'undefined'
+    gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET || 'undefined',
+    googleClientID: process.env.GOOGLE_CLIENT_ID || 'undefined'
   },
   /*
    ** Build configuration
@@ -208,8 +209,18 @@ export default {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         scope: ['read:user', 'user:email']
-      }
+      },
+      google: {
+        client_id: process.env.GOOGLE_CLIENT_ID
+      },
     },
-    plugins: ['~/plugins/auth.js', '~/plugins/axios.js']
+    plugins: ['~/plugins/auth.js', '~/plugins/axios.js'],
+    localStorage: false
+  },
+  cookie: {
+    options: {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: 'lax'
+    }
   }
 }
