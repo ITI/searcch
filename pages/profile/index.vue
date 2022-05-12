@@ -192,7 +192,7 @@
                             class="v-btn--simple"
                             color="primary"
                             icon
-                            :to="`/artifact/${item.id}`"
+                            :to="`/artifact/${item.artifact_group_id}/${item.id}`"
                             nuxt
                           >
                             <v-icon color="primary">
@@ -227,7 +227,7 @@
                               color="amber"
                               class="ma-2"
                               label
-                              :to="`/artifact/review/${item.id}`"
+                              :to="`/artifact/review/${item.artifact_group_id}`"
                               nuxt
                             >
                               <v-avatar left>
@@ -268,7 +268,7 @@
                               icon
                               v-bind="attrs"
                               v-on="on"
-                              :to="`/artifact/${item.id}`"
+                              :to="`/artifact/${item.artifact_group_id}`"
                               nuxt
                             >
                               <v-icon color="primary">

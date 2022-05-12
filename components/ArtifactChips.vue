@@ -78,7 +78,7 @@ export default {
   components: {},
   props: {
     field: {
-      type: [Array, Object],
+      type: [Array, Object, String],
       required: true,
       default: function() {
         return []
@@ -154,6 +154,9 @@ export default {
     isObject(item) {
       return typeof item === 'object'
     },
+    isString(item) {
+      return typeof item === 'string'
+    },
     whereTo(item) {
       if (this.link) {
         switch (this.type) {
@@ -162,9 +165,9 @@ export default {
           case 'role':
             return '/search?author_keywords=' + item.affiliation.person.name
           case 'relation':
-            return '/artifact/' + item.related_artifact_id
+            return '/artifact/' + item.related_artifact_group_id
           case 'reverse-relation':
-            return '/artifact/' + item.artifact_id
+            return '/artifact/' + item.artifact_group_id
         }
       }
       return null

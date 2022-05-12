@@ -126,7 +126,8 @@ export const actions = {
     await dispatch('fetchMyArtifacts')
     if (!state.artifacts.length) {
       // recommend artifacts if the user has no artifact
-      let response = await this.$artifactRecommendationEndpoint.show(payload.id)
+      let response = await this.$artifactRecommendationEndpoint.show(
+          [ payload.artifact_group_id, payload.id])
       if (response !== undefined) {
         commit('SET_ARTIFACTS', response)
       }
@@ -135,8 +136,12 @@ export const actions = {
   },
   async fetchArtifact({ commit, state }, payload) {
     commit('SET_LOADING', true)
-    console.log('fetching entry ' + payload.id)
-    let response = await this.$artifactEndpoint.show(payload.id)
+    console.log('fetching entry ' + payload.artifact_group_id + "/" + payload.id)
+    var ids = payload.artifact_group_id
+    if (payload.id) {
+        ids = [ payload.artifact_group_id, payload.id ]
+    }
+    let response = await this.$artifactEndpoint.show(ids)
     if (typeof response !== 'undefined') {
       commit('SET_ARTIFACT', response)
     }
@@ -148,7 +153,7 @@ export const actions = {
     if (typeof response !== 'undefined' && response.artifacts) {
       commit('SET_FAVORITES', response.artifacts)
       for (let fav in response.artifacts) {
-        commit('ADD_FAVORITE', response.artifacts[fav].id)
+        commit('ADD_FAVORITE', response.artifacts[fav].artifact_group_id)
       }
     }
     commit('SET_LOADING', false)
@@ -173,12 +178,13 @@ export const actions = {
   },
   async setRelated({ commit, state, dispatch }, payload) {
     commit('SET_LOADING', true)
+    console.log(payload)
     let response = await this.$relationshipsEndpoint.create({
-      artifact_id: state.artifact.artifact.id,
-      related_artifact_id: payload.id,
+      artifact_group_id: state.artifact.artifact.artifact_group_id,
+      related_artifact_group_id: payload.id,
       relation: payload.relation
     })
-    dispatch('fetchArtifact', { id: state.artifact.artifact.id })
+      dispatch('fetchArtifact', { artifact_group_id: state.artifact.artifact.artifact_group_id, id: state.artifact.artifact.id })
     commit('SET_LOADING', false)
   }
 }

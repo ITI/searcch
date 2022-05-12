@@ -96,7 +96,7 @@
         <template v-slot:item.artifact_id="{ item }">
           <a
             v-if="item.artifact_id"
-            :href="`/artifact/${item.artifact_id}`"
+            :href="`/artifact/${item.artifact_group_id}/${item.artifact_id}`"
             target="_blank"
             rel="noopener"
             >View</a

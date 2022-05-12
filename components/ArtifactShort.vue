@@ -72,7 +72,7 @@
         <v-btn
           icon
           v-if="!related"
-          :to="`/artifact/review/${artifact.id}`"
+          :to="`/artifact/review/${artifact.artifact_group_id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -88,7 +88,7 @@
         <v-btn
           v-if="!related"
           color="primary"
-          :to="`/artifact/${artifact.id}`"
+          :to="`/artifact/${artifact.artifact_group_id}`"
           nuxt
         >
           Read More
@@ -96,7 +96,7 @@
         <v-btn
           v-else
           color="success"
-          @click="addRelated(artifact.id, relation)"
+          @click="addRelated(artifact.artifact_group_id, relation)"
           :disabled="relation.length == 0"
         >
           Add Related
@@ -104,7 +104,7 @@
         <v-btn
           v-if="isOwner()"
           color="success"
-          :to="`/artifact/${artifact.id}?edit=true`"
+          :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
         >
           Edit
@@ -173,12 +173,12 @@ export default {
     },
     favorite: {
       get() {
-        return this.favorites[this.artifact.id] ? true : false
+        return this.favorites[this.artifact.artifact_group_id] ? true : false
       },
       set(value) {
         if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact_group_id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
     }
   },
@@ -191,9 +191,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          await this.$favoritesEndpoint.post(this.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.artifact.artifact_group_id, {})
         } else {
-          await this.$favoritesEndpoint.delete(this.artifact.id)
+          await this.$favoritesEndpoint.delete(this.artifact.artifact_group_id)
         }
       }
     },
