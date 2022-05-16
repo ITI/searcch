@@ -102,9 +102,35 @@
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
       </v-btn>
       <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
-        >Logout</v-btn
+        >Logout&nbsp;<v-icon small>mdi-logout</v-icon></v-btn
       >
-      <v-btn v-else class="primary" nuxt @click="login()">GitHub Login</v-btn>
+      <v-menu v-else
+        open-on-click
+        bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="primary"
+            v-bind="attrs"
+            v-on="on"
+          >
+            Login&nbsp;<v-icon small>mdi-login</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item>
+            <v-btn class="primary" nuxt @click="gitHubLogin()">
+              GitHub&nbsp;<v-icon small>mdi-github</v-icon>
+            </v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-btn class="primary" nuxt @click="googleLogin()">
+              Google&nbsp;<v-icon small>mdi-google</v-icon>
+            </v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -234,8 +260,11 @@ export default {
     }
   },
   methods: {
-    async login() {
+    async gitHubLogin() {
       let response = await this.$auth.loginWith('github')
+    },
+    async googleLogin() {
+      let response = await this.$auth.loginWith('google')
     },
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
