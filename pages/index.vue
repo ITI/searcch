@@ -144,6 +144,9 @@ export default {
   },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")
+    
+    //Set session id per user
+    document.cookie = `session_id=${Date.now()}`;
   }
 }
 </script>
