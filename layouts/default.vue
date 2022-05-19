@@ -129,6 +129,11 @@
               Google&nbsp;<v-icon small>mdi-google</v-icon>
             </v-btn>
           </v-list-item>
+          <v-list-item>
+            <v-btn class="primary" nuxt @click="cilogonLogin()">
+              CILogon&nbsp;<v-icon small>mdi-login</v-icon>
+            </v-btn>
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
@@ -264,7 +269,10 @@ export default {
       let response = await this.$auth.loginWith('github')
     },
     async googleLogin() {
-      let response = await this.$auth.loginWith('google')
+      let response = await this.$auth.loginWith('googlecustom')
+    },
+    async cilogonLogin() {
+      let response = await this.$auth.loginWith('cilogon')
     },
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
