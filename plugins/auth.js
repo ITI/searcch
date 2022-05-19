@@ -12,14 +12,18 @@ export default function({ $loginEndpoint, store, $auth }) {
   if (!$auth.loggedIn) {
     return
   } else {
+      $auth.onError(function(error, payload) { console.log("auth error: ", error, payload) })
     // TODO: Note, this is validusers for development
     // if (!validUsers.includes($auth.user.login.toLowerCase())) {
     //   $auth.logout('github')
     // } else {
     let strategy = $auth.$storage.getUniversal('strategy')
+    if (strategy === "googlecustom") {
+      strategy = "google"
+    }
     let payload = {
       strategy: strategy,
-      token: $auth.getToken(strategy)
+      token: $auth.strategy.token.get()
     }
     $loginEndpoint
       .create(payload)

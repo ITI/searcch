@@ -95,7 +95,9 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
+    '@nuxtjs/auth-next',
+    '~modules/auth-cilogon',
+    '~modules/auth-googlecustom',
     '@nuxtjs/proxy',
     [
       '@dansmaculotte/nuxt-security',
@@ -121,7 +123,7 @@ export default {
               "'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"
             ],
             connectSrc: [
-              "'self' https://api.github.com https://www.gravatar.com"
+              "'self' https://api.github.com https://cilogon.org https://www.gravatar.com"
             ],
             // asterisk here due to badge images
             imgSrc: [
@@ -188,7 +190,10 @@ export default {
   privateRuntimeConfig: {
     gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
     gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET || 'undefined',
-    googleClientID: process.env.GOOGLE_CLIENT_ID || 'undefined'
+    googleClientID: process.env.GOOGLE_CLIENT_ID || 'undefined',
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || 'undefined',
+    cilogonClientID: process.env.CILOGON_CLIENT_ID || 'undefined',
+    cilogonClientSecret: process.env.CILOGON_CLIENT_SECRET || 'undefined'
   },
   /*
    ** Build configuration
@@ -206,13 +211,26 @@ export default {
     strategies: {
       local: false,
       github: {
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
-        scope: ['read:user', 'user:email']
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        // NB: workaround for v5 defu-based setDefaults that concats array
+        // values *onto* defaults.  Surely this will change eventually; it
+        // is not backwards-compat to v4.9.1 .
+        scope: 'read:user user:email'
       },
-      google: {
-        client_id: process.env.GOOGLE_CLIENT_ID
+      googlecustom: {
+        provider: '~modules/auth-googlecustom.js',
+        scheme: 'oauth2',
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        //accessType: 'offline',
       },
+      cilogon: {
+        provider: '~modules/auth-cilogon.js',
+        scheme: 'oauth2',
+        clientId: process.env.CILOGON_CLIENT_ID,
+        clientSecret: process.env.CILOGON_CLIENT_SECRET
+      }
     },
     plugins: ['~/plugins/auth.js', '~/plugins/axios.js'],
     localStorage: false
