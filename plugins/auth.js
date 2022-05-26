@@ -35,6 +35,7 @@ export default function({ $loginEndpoint, store, $auth }) {
           store.commit('user/SET_USER_IS_ADMIN', response.is_admin)
           store.commit('user/SET_USER_CAN_ADMIN', response.can_admin)
           store.dispatch('artifacts/fetchFavorites', response.userid)
+          document.cookie = `session_id=${payload.token}`;
         }
       })
       .catch(error => {

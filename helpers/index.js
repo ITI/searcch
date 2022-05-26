@@ -92,6 +92,15 @@ export const convertArrayToObject = (array, key) => {
   }, initialValue)
 }
 
+export const getCookie = (cookieName) => {
+  let cookie = {};
+  document.cookie.split(';').forEach(function(el) {
+    let [key,value] = el.split('=');
+    cookie[key.trim()] = value;
+  })
+  return cookie[cookieName];
+}
+
 export const zipArray = (tag, input) => {
   let zip = [[tag]]
   input.map(e => zip.push([e]))
