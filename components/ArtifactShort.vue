@@ -1,22 +1,22 @@
 <template>
   <div>
     <v-card class="mx-auto overflow-hidden" elevation="3">
-      <v-row>
-        <v-col cols="10">
-          <v-card-title class="align-start">
-            <div>
+      <v-container>
+        <v-row>
+          <v-col cols="9">
+            <v-card-title class="align-start">
               <span class="headline">{{ artifact.title | titlecase }}</span>
-            </div>
-          </v-card-title>
-        </v-col>
-        <v-col cols="2" class="text-lg-right">
-          <ArtifactChips
-            :field="[artifact.type]"
-            :type="artifact.type"
-          ></ArtifactChips>
-        </v-col>
-      </v-row>
-
+            </v-card-title>
+          </v-col>
+          <v-col cols="3">
+            <ArtifactChips
+              class="card-chip"
+              :field="[artifact.type]"
+              :type="artifact.type"
+            ></ArtifactChips>
+          </v-col>
+        </v-row>
+      </v-container>
       <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
         {{ artifact.num_reviews }}
         {{ artifact.num_reviews == 1 ? 'review' : 'reviews' }}
@@ -72,7 +72,7 @@
         <v-btn
           icon
           v-if="!related"
-          :to="`/artifact/review/${artifact.id}`"
+          :to="`/artifact/review/${artifact.artifact_group_id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -88,7 +88,7 @@
         <v-btn
           v-if="!related"
           color="primary"
-          :to="`/artifact/${artifact.id}`"
+          :to="`/artifact/${artifact.artifact_group_id}`"
           nuxt
         >
           Read More
@@ -96,7 +96,7 @@
         <v-btn
           v-else
           color="success"
-          @click="addRelated(artifact.id, relation)"
+          @click="addRelated(artifact.artifact_group_id, relation)"
           :disabled="relation.length == 0"
         >
           Add Related
@@ -104,7 +104,7 @@
         <v-btn
           v-if="isOwner()"
           color="success"
-          :to="`/artifact/${artifact.id}?edit=true`"
+          :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
         >
           Edit
@@ -173,12 +173,12 @@ export default {
     },
     favorite: {
       get() {
-        return this.favorites[this.artifact.id] ? true : false
+        return this.favorites[this.artifact.artifact_group_id] ? true : false
       },
       set(value) {
         if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact_group_id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
     }
   },
@@ -191,9 +191,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          await this.$favoritesEndpoint.post(this.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.artifact.artifact_group_id, {})
         } else {
-          await this.$favoritesEndpoint.delete(this.artifact.id)
+          await this.$favoritesEndpoint.delete(this.artifact.artifact_group_id)
         }
       }
     },
@@ -221,6 +221,12 @@ export default {
 </script>
 
 <style scoped>
+.card-chip {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
 .v-card__title {
   word-break: normal;
 }

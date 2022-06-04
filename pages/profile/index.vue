@@ -192,7 +192,7 @@
                             class="v-btn--simple"
                             color="primary"
                             icon
-                            :to="`/artifact/${item.id}`"
+                            :to="`/artifact/${item.artifact_group_id}/${item.id}`"
                             nuxt
                           >
                             <v-icon color="primary">
@@ -227,7 +227,7 @@
                               color="amber"
                               class="ma-2"
                               label
-                              :to="`/artifact/review/${item.id}`"
+                              :to="`/artifact/review/${item.artifact_group_id}`"
                               nuxt
                             >
                               <v-avatar left>
@@ -268,7 +268,7 @@
                               icon
                               v-bind="attrs"
                               v-on="on"
-                              :to="`/artifact/${item.id}`"
+                              :to="`/artifact/${item.artifact_group_id}`"
                               nuxt
                             >
                               <v-icon color="primary">
@@ -354,7 +354,7 @@ export default {
       userid: state => state.user.userid,
       orgs: state => state.user.orgs,
       interests: state => state.user.interests,
-      githubUser: state => state.auth.user
+      authUser: state => state.auth.user
     }),
     orgNames: {
       get: function() {
@@ -455,9 +455,10 @@ export default {
       return artifactIcon(type)
     },
     profileImage(email) {
-      if (typeof this.githubUser !== 'undefined') {
-        if (this.githubUser.avatar_url.length > 0) {
-          return this.githubUser.avatar_url + '&size=130'
+      if (typeof this.authUser !== 'undefined') {
+        if (typeof this.authUser.avatar_url !== 'undefined'
+            && this.authUser.avatar_url.length > 0) {
+          return this.authUser.avatar_url + '&size=130'
         }
       }
       var md5 = require('md5')

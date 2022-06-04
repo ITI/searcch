@@ -7,17 +7,39 @@
       <LazyHydrate never>
         <div>
           <v-card>
-            <v-card-title class="headline">
+            <v-card-title class="primary white--text">
               Welcome to the SEARCCH Hub
             </v-card-title>
             <v-card-text>
+              <br />
               <p>
-                The SEARCCH hub is a collaborative, community-driven platform
-                that lowers the barrier to sharing by aiding researchers in
-                packaging, importing, locating, understanding, and reusing
-                experiment artifacts. The artifacts organized by the hub,
-                including tools, methodologies, documentation, and data, can be
-                deployed to community testbeds for performing new experiments.
+                SEARCCH is a collaborative, community-driven platform for
+                cybersecurity research artifact cataloguing that facilitates
+                sharing and reuse. Artifacts that can be catalogued include
+                tools, data, experiment methodologies and setups, publications,
+                and the like.
+              </p>
+              <p>
+                SEARCCH builds and maintains a database of metadata about
+                research artifacts that are housed in different places on the
+                internet. It lowers the barrier for sharing these artifacts
+                through automated submission assistant tools that process and
+                extract metadata from artifacts stored in standard locations
+                such as Github.
+              </p>
+              <p>
+                SEARCCH helps researchers to rapidly find relevant artifacts
+                that will help with their own research by enabling searching
+                over domain-specific keywords and other metadata. In addition to
+                authors, license information, and keywords, SEARCCH also stores
+                information about relationships between related artifacts,
+                making it easier to find multiple artifacts associated with a
+                particular research effort.
+              </p>
+              <p>
+                SEARCCH also facilitates a community around these artifacts. It
+                allows researchers to share the location of their artifacts with
+                the community and their experience with different artifacts.
               </p>
               <p>
                 For more information on SEARCCH, check out the
@@ -30,7 +52,7 @@
                 </a>
               </p>
               <p>
-                To get started click continue...
+                To get started click CONTINUE.
               </p>
               <v-row align="center">
                 <v-col cols="12" sm="1" align="right">
@@ -43,7 +65,7 @@
                 <v-col align="left">
                   <em>
                     SEARCCH is supported by the National Science Foundation
-                    under Grant Numbers 1925773, 1925616, 1925588, 1925564
+                    (NSF) under Grant Numbers 1925773, 1925616, 1925588, 1925564
                   </em>
                 </v-col>
               </v-row>
@@ -56,44 +78,59 @@
             </v-card-actions> </v-card
           ><br />
           <v-card>
-            <v-card-title class="headline">
+            <v-card-title class="primary white--text">
               Current Features
             </v-card-title>
             <v-card-text>
+              <br />
               <p>
-                There are four navigation tabs on the left hand pane: Search
-                Artifacts, Favorite Artifacts, Submit Artifact, and Manage
-                Account.
+                SEARCCH has five major functions. Four may be accessed using the
+                left-hand navigation menu. A summary of each follows.
               </p>
               <p>
-                The Search page allows users to perform keyword searches to find
-                artifacts of interest. You may click the favorites icon on any
-                artifact to store it in your favorites list for quick, future
-                recall.
+                <b>Search Artifacts.</b>
+                Users may perform keyword searches to find artifacts of
+                interest.
               </p>
               <p>
-                Each artifact has a review button which you can use to add a
-                rating and a review to any artifact. Ratings and reviews are
-                visible to the community and used by others to help them decide
-                whether to invest their time in trying to use the reviewed/rated
-                artifact.
+                <b>Favorite artifacts.</b>
+                Users may click on the heart icon on an artifact to add it to a
+                favorites list. Favorited artifacts are displayed on the
+                Favorite Artifacts menu for quick recall.
               </p>
               <p>
-                The Submit Artifact page is used to import your own artifacts
-                into the hub. To import an artifact, it must first be published
-                on the Internet. Provide the artifact URL, and our intelligent
-                import tool will prepare the artifact for review and publishing.
-                For the beta release, github, ACM digital library, ieeexplore,
-                and Zenodo are the only supported internet repositories.
+                <b>Submit artifact.</b>
+                Users may submit their own artifacts to the SEARCCH catalog.
+                Artifacts published on supported sites may be automatically
+                processed by import assistant tools.
               </p>
               <p>
-                Please provide comments and report bugs using the Send Us
-                Feedback button at the bottom right hand side of the page.
+                <b>Manage Account.</b>
+                Users may add information about themselves such as their
+                research interests and institution affiliation. They may also
+                access the list of their own artifacts, artifacts they have
+                rated, and their favorites.
+              </p>
+              <p>
+                The fifth function is reviewing artifacts. Users may provide
+                reviews for an artifact when viewing it. Presently, reviews
+                consist of a 1 to 5 star rating and a comment. Ratings and
+                reviews are visible to the community and used by others to help
+                them decide whether to invest their time in trying to use a
+                specific artifact.
+              </p>
+              <p>
+                Please provide comments and report bugs using the SEND US
+                FEEDBACK button at the bottom right hand side of the page.
               </p>
             </v-card-text>
           </v-card>
         </div>
       </LazyHydrate>
+      <br />
+      <div>
+        <supporters />
+      </div>
     </v-flex>
   </v-layout>
 </template>
@@ -102,7 +139,8 @@
 export default {
   components: {
     Logo: () => import('@/components/Logo'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    LazyHydrate: () => import('vue-lazy-hydration'),
+    Supporters: () => import('@/components/Supporters')
   },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")

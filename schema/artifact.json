@@ -65,14 +65,23 @@
           "type": "string"
         },
         "type": {
-          "enum": ["dataset", "presentation", "publication", "software", "other"],
+          "enum": [
+            "publication",
+            "presentation",
+            "dataset",
+            "software",
+            "other"
+          ],
           "type": "string"
         },
         "url": {
           "type": "string"
         }
       },
-      "required": ["url", "title"],
+      "required": [
+        "url",
+        "title"
+      ],
       "type": "object"
     },
     "ArtifactAffiliation": {
@@ -82,11 +91,17 @@
           "$ref": "#/definitions/Affiliation"
         },
         "roles": {
-          "enum": ["Author", "ContactPerson", "Other"],
+          "enum": [
+            "Author",
+            "ContactPerson",
+            "Other"
+          ],
           "type": "string"
         }
       },
-      "required": ["roles"],
+      "required": [
+        "roles"
+      ],
       "type": "object"
     },
     "ArtifactBadge": {
@@ -102,8 +117,8 @@
     "ArtifactFile": {
       "description": "ArtifactFile",
       "properties": {
-        "content": {
-          "type": "string"
+        "file_content": {
+          "$ref": "#/definitions/FileContent"
         },
         "filetype": {
           "type": "string"
@@ -127,17 +142,20 @@
           "type": "string"
         }
       },
-      "required": ["url", "filetype"],
+      "required": [
+        "url",
+        "filetype"
+      ],
       "type": "object"
     },
     "ArtifactFileMember": {
       "description": "ArtifactFileMember",
       "properties": {
-        "content": {
-          "type": "string"
-        },
         "download_url": {
           "type": "string"
+        },
+        "file_content": {
+          "$ref": "#/definitions/FileContent"
         },
         "filetype": {
           "type": "string"
@@ -158,7 +176,10 @@
           "type": "string"
         }
       },
-      "required": ["pathname", "filetype"],
+      "required": [
+        "pathname",
+        "filetype"
+      ],
       "type": "object"
     },
     "ArtifactMetadata": {
@@ -177,7 +198,10 @@
           "type": "string"
         }
       },
-      "required": ["name", "value"],
+      "required": [
+        "name",
+        "value"
+      ],
       "type": "object"
     },
     "ArtifactRelease": {
@@ -221,7 +245,10 @@
           "type": "string"
         }
       },
-      "required": ["tag", "source"],
+      "required": [
+        "tag",
+        "source"
+      ],
       "type": "object"
     },
     "Badge": {
@@ -258,7 +285,35 @@
           "type": "string"
         }
       },
-      "required": ["title", "url", "version", "organization", "verified"],
+      "required": [
+        "title",
+        "url",
+        "version",
+        "organization",
+        "verified"
+      ],
+      "type": "object"
+    },
+    "FileContent": {
+      "description": "FileContent",
+      "properties": {
+        "content": {
+          "format": "byte",
+          "type": "string"
+        },
+        "hash": {
+          "format": "byte",
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "hash",
+        "size"
+      ],
       "type": "object"
     },
     "License": {
@@ -277,7 +332,11 @@
           "type": "string"
         }
       },
-      "required": ["long_name", "url", "verified"],
+      "required": [
+        "long_name",
+        "url",
+        "verified"
+      ],
       "type": "object"
     },
     "Organization": {
@@ -312,11 +371,18 @@
           ],
           "type": "string"
         },
+        "url": {
+          "type": "string"
+        },
         "verified": {
           "type": "string"
         }
       },
-      "required": ["name", "type", "verified"],
+      "required": [
+        "name",
+        "type",
+        "verified"
+      ],
       "type": "object"
     },
     "Person": {
@@ -329,6 +395,7 @@
           "type": "string"
         },
         "profile_photo": {
+          "format": "byte",
           "type": "string"
         },
         "research_interests": {
@@ -394,13 +461,22 @@
       "type": "string"
     },
     "type": {
-      "enum": ["dataset", "presentation", "publication", "software", "other"],
+      "enum": [
+        "publication",
+        "presentation",
+        "dataset",
+        "software",
+        "other"
+      ],
       "type": "string"
     },
     "url": {
       "type": "string"
     }
   },
-  "required": ["url", "title"],
+  "required": [
+    "url",
+    "title"
+  ],
   "type": "object"
 }

@@ -73,7 +73,7 @@
         <v-btn
           v-if="artifact.artifact_id"
           :to="{
-            path: `/artifact/${artifact.artifact_id}`,
+            path: `/artifact/${artifact.artifact_group_id}/${artifact.artifact_id}`,
             query: { edit: 'true' }
           }"
           color="success"
@@ -87,16 +87,16 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn
+        <!-- <v-btn
           :disabled="!artifact.artifact_id"
           @click="publish()"
           color="success"
         >
           Publish
-        </v-btn>
+        </v-btn> -->
 
         <v-btn
-          :to="`/artifact/${artifact.artifact_id}`"
+          :to="`/artifact/${artifact.artifact_group_id}/${artifact.artifact_id}`"
           :disabled="!artifact.artifact_id"
           color="primary"
         >
@@ -163,7 +163,7 @@ export default {
       if (!confirm('Are you sure you want to publish this artifact?')) return
 
       let response = await this.$artifactEndpoint.update(
-        this.artifact.artifact_id,
+        [this.artifact.artifact_group_id, this.artifact.id],
         {
           publication: {}
         }
