@@ -241,6 +241,7 @@ export default {
           value: 'mtime'
         },
         { text: 'Owner', value: 'owner.person', sortable: false },
+        { text: 'Views', value: 'view_count', sortable: false },
         { text: 'Actions', value: 'actions', sortable: false }
 
         // { text: '', value: 'data-table-expand' }
