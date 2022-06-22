@@ -180,6 +180,13 @@
           display
           link
         ></ArtifactChips>
+        <v-btn
+          class="ma-2"
+          color="secondary"
+          @click="claimThis"
+        >
+          {{ claimText }}
+        </v-btn>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -587,6 +594,10 @@ export default {
     },
     published() {
       return this.record.artifact.publication ? true : false
+    }
+    claimText() {
+      if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
+      else return 'Claim Role'
     }
   },
   methods: {
