@@ -240,6 +240,11 @@ export default {
           title: 'Importer Status',
           to: '/admin/importers'
         })
+        adminItems.push({
+          icon: 'mdi-wrench',
+          title: 'Claims',
+          to: '/admin/claims'
+        })
       }
       return adminItems
     },
