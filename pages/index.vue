@@ -144,6 +144,17 @@ export default {
   },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")
+    
+    //Generate hash from current time
+    var sha1 = require('sha1');
+    var hash = sha1(Date.now());
+    //Get expire time
+    let offset = 24*60*60*1000;
+    let expireTime = new Date();
+    offset += expireTime.getTime();
+    expireTime.setTime(offset);
+    //Set session id per user
+    document.cookie = `session_id=${hash};expires=${expireTime.toUTCString()}`;
   }
 }
 </script>

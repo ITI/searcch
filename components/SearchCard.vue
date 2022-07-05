@@ -178,6 +178,7 @@
 <script>
 import { mapState } from 'vuex'
 import goTo from 'vuetify/es5/services/goto'
+import { getCookie } from '~/helpers'
 
 export default {
   components: {
