@@ -1,11 +1,6 @@
 <template>
   <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
+    <h1> {{ errTitle }} </h1>
     <h2 v-if="error.message">
       {{ error.message }}
     </h2>
@@ -23,7 +18,7 @@
       :value="error.request.response"
     ></pretty-print>
 
-    <a href="/">Start Over</a>
+    <a @click="navigate">Start over</a>
   </v-app>
 </template>
 
@@ -37,20 +32,23 @@ export default {
     }
   },
   components: {
-    PrettyPrint: () => import('@/components/pretty-print')
+    PrettyPrint: () => import('@/components/pretty-print'),
   },
-
-  data() {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
+  computed: {
+    isNotFound() {
+      return this.error.statusCode === 404;
+    },
+    errTitle() {
+      return this.isNotFound ? '404 Not Found' : 'An error occurred';
+    },
   },
-  head() {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title
+  methods: {
+    navigate() {
+      if (this.error.statusCode >= 500) {
+        window.history.go(0);
+      } else {
+        this.$router.push('/');
+      }
     }
   },
   mounted() {
@@ -65,7 +63,8 @@ export default {
 
       // auto log them back in
       alert('Your session expired. The system will now log you back in')
-      this.$auth.loginWith('github')
+      let strategy = this.$auth.$storage.getUniversal('strategy')
+      this.$auth.loginWith(strategy)
     }
   }
 }

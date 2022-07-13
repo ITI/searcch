@@ -1,8 +1,8 @@
 <template>
   <div v-if="artifact_local">
     <div>
-      <v-card class="mx-auto my-2">
-        <v-card-title> {{ artifact_local.title | titlecase }} </v-card-title>
+      <v-card class="mx-auto my-2" outlined>
+        <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
             {{ artifact_local.url }}
@@ -11,7 +11,7 @@
       </v-card>
     </div>
     <v-form v-model="valid" ref="artifact">
-      <v-card class="mx-auto my-2">
+      <v-card class="mx-auto my-2" outlined>
         <v-card-title
           ><v-text-field
             label="Title"
@@ -60,7 +60,7 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-title class="py-0">Roles</v-card-title>
+        <v-card-title class="py-0">Authors</v-card-title>
 
         <ArtifactChips
           :field="artifact_local.affiliations"
@@ -89,6 +89,7 @@
             </template>
             <template v-slot:default="dialog">
               <v-card>
+              <v-form v-model="dialogvalid" ref="dialogform">
                 <v-card-title>
                   <span class="text-h5">Add Author</span>
                 </v-card-title>
@@ -108,6 +109,7 @@
                           :search-input.sync="search"
                           item-value="org.name"
                           item-text="org.name"
+                          :rules="[rules.notwhitespace, rules.unique_creator]"
                           return-object
                         >
                           <template v-slot:no-data>
@@ -128,6 +130,8 @@
                         <v-text-field
                           label="Author Name"
                           v-model="affiliation.affiliation.person.name"
+                          :rules="[rules.required, rules.exists,
+                                   rules.notwhitespace, rules.unique_creator]"
                           required
                         ></v-text-field>
                       </v-col>
@@ -135,7 +139,7 @@
                         <v-text-field
                           label="Email Address"
                           v-model="affiliation.affiliation.person.email"
-                          required
+                          :rules="[rules.notwhitespace, rules.unique_creator]"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -148,7 +152,9 @@
                       meta.creators.push(affiliation)
                       dialog.value = false
                       affiliation = affiliationObject()
+                      $refs.dialogform.reset()
                     "
+                    :disabled="!dialogvalid"
                     class="success ml-2 mb-2"
                     text
                     >Add</v-btn
@@ -156,11 +162,16 @@
                   <v-btn
                     class="error ml-2 mb-2"
                     text
-                    @click="dialog.value = false"
+                    @click="
+                      dialog.value = false
+                      affiliation = affiliationObject()
+                      $refs.dialogform.reset()
+                    "
                   >
                     Close
                   </v-btn>
                 </v-card-actions>
+              </v-form>
               </v-card>
             </template>
           </v-dialog>
@@ -179,70 +190,24 @@
           :field="meta.keywords"
           type="keyword"
           placeholder="Enter Keyword"
+          :validator="validateKeyword"
+          :formModel="valid"
           edit
           create
         ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-title class="py-0">Languages</v-card-title>
+        <v-card-title class="py-0">Programming Languages</v-card-title>
         <ArtifactChips
           :field="meta.languages"
           type="software"
           placeholder="Enter Language"
+          :formModel="valid"
           edit
           create
         ></ArtifactChips>
 
-        <v-divider class="mx-4"></v-divider>
-
-        <v-card-title class="py-0">Related</v-card-title>
-
-        <ArtifactChips
-          :field="artifact_local.relationships"
-          type="relation"
-          edit
-        ></ArtifactChips>
-
-        <div>
-          <v-dialog
-            transition="dialog-bottom-transition"
-            persistent
-            fullscreen
-            v-model="artifactdialog"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="success ml-2 mb-2"
-                fab
-                x-small
-                v-bind="attrs"
-                v-on="on"
-                :disabled="artifact_local.id ? false : true"
-              >
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:default="artifactdialog">
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Search for Related Artifacts</span>
-                </v-card-title>
-                <SearchCard :search="search" related all></SearchCard>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    class="error ml-2 mb-2"
-                    text
-                    @click="artifactdialog.value = false"
-                  >
-                    Close
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </template>
-          </v-dialog>
-        </div>
         <v-divider class="mx-4"></v-divider>
 
         <v-card-title class="py-0">Badges</v-card-title>
@@ -274,10 +239,11 @@
 
             <v-select
               label="Badges"
-              v-bind:items="possibleBadges"
+              v-bind:items="badges"
               v-model="meta.badges[index]"
               item-text="id"
               item-value="title"
+              :rules="[rules.required]"
               return-object
             >
               <template slot="item" slot-scope="data">
@@ -366,7 +332,7 @@
               {{ data.item.short_name }} ({{ data.item.long_name }})
             </template>
           </v-autocomplete>
-          <v-icon @click="artifact_local.license = []" right>mdi-close</v-icon>
+          <v-icon @click="artifact_local.license = null" right>mdi-close</v-icon>
         </v-chip>
         <v-divider class="mx-4"></v-divider>
 
@@ -423,6 +389,8 @@
                 prepend-icon="mdi-file"
                 append-outer-icon="mdi-close"
                 @click:append-outer="meta.files.splice(index, 1)"
+                :rules="[rules.required, rules.url]"
+                required
               ></v-textarea>
             </v-card-text>
             <v-btn
@@ -438,18 +406,137 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn
+            v-if="canReplayCurations"
+            color="success"
+            @click="replayCurations"
+            nuxt
+          >
+            Reapply Prior Version Edits
+          </v-btn>
+          <v-divider
+            v-if="!record.artifact.curations && record.artifact.importer"
+            vertical>
+          </v-divider>
+          &nbsp;
           <v-btn color="success" :disabled="!valid || disabled" @click="save()">
             Save
           </v-btn>
-
-          <v-btn
-            color="primary"
-            :disabled="!valid || disabled"
-            @click="publish()"
+          &nbsp;
+          &nbsp;
+          <v-divider
+            vertical
           >
-            Publish
+          </v-divider>
+          <v-dialog
+            v-model="publish_dialog"
+            width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="primary"
+                :disabled="!valid || disabled"
+              >
+                Publish
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="text-h5 lighten-2">
+                Publish this version
+              </v-card-title>
+              <v-card-text>
+                Describe the changes you made in this version in the field below.
+              </v-card-text>
+              <v-card-text>
+                <v-textarea
+                  outlined
+                  auto-grow
+                  rows="1"
+                  label="Publication notes"
+                  v-model="publish_notes"
+                ></v-textarea>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="primary"
+                  :disabled="!valid || disabled"
+                  @click="publish()"
+                >
+                  Publish
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          &nbsp;
+          &nbsp;
+          <v-divider
+            vertical
+          >
+          </v-divider>
+          &nbsp;
+          &nbsp;
+          <v-btn
+            v-if="!record.artifact.publication"
+            color="error"
+            @click="deleteDraft()"
+            nuxt
+          >
+            Delete Draft
           </v-btn>
         </v-card-actions>
+      </v-card>
+      <v-card class="mx-auto my-2" outlined>
+        
+        <v-card-title class="py-0">Relationship</v-card-title>
+
+        <ArtifactChips
+          :field="artifact_local.artifact_group.relationships"
+          type="relation"
+          edit
+        ></ArtifactChips>
+
+        <div>
+          <v-dialog
+            transition="dialog-bottom-transition"
+            persistent
+            fullscreen
+            v-model="artifactdialog"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="success ml-2 mb-2"
+                fab
+                x-small
+                v-bind="attrs"
+                v-on="on"
+                :disabled="artifact_local.id ? false : true"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <template v-slot:default="artifactdialog">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Search for Related Artifacts</span>
+                </v-card-title>
+                <SearchCard :search="search" related all></SearchCard>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    class="error ml-2 mb-2"
+                    text
+                    @click="artifactdialog.value = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </div>
       </v-card>
     </v-form>
 
@@ -461,6 +548,29 @@
         </v-btn>
       </template>
     </v-snackbar>
+
+    <template>
+      <v-dialog v-model="replay_results_dialog" scrollable>
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Curation Reapply Results</span>
+          </v-card-title>
+          <v-card-text>
+            <ArtifactCurationList :curations="replay_results"></ArtifactCurationList>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="replay_results_dialog = false"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </template>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
@@ -475,6 +585,41 @@ import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { zipArray, EventBus } from '@/helpers'
+
+function affiliationObjectsEqual(o1,o2) {
+  //console.log("o1: ",o1)
+  //console.log("o2: ",o2)
+  let ea = ["",null]
+  if (((ea.includes(o1.affiliation.org) && ea.includes(o2.affiliation.org))
+       || o1.affiliation.org == o2.affiliation.org)
+      && ((ea.includes(o1.affiliation.person.name) && ea.includes(o2.affiliation.person.name))
+          || o1.affiliation.person.name == o2.affiliation.person.name)
+      && ((ea.includes(o1.affiliation.person.email) && ea.includes(o2.affiliation.person.email))
+          || o1.affiliation.person.email == o2.affiliation.person.email)) {
+    console.log("o1 == o2")
+    return true
+  }
+  else {
+    //console.log("o1 != o2")
+    return false
+  }
+}
+
+function tagObjectsEqual(o1,o2) {
+  //console.log("o1: ",o1)
+  //console.log("o2: ",o2)
+  let ea = ["",null]
+  if (((ea.includes(o1.source) && ea.includes(o2.source))
+       || o1.source == o2.source)
+      && o1.tag == o2.tag) {
+    console.log("o1 == o2")
+    return true
+  }
+  else {
+    //console.log("o1 != o2")
+    return false
+  }
+}
 
 export default {
   name: 'KGArtifactEdit',
@@ -491,13 +636,18 @@ export default {
   components: {
     LazyHydrate: () => import('vue-lazy-hydration'),
     SearchCard: () => import('@/components/SearchCard'),
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: () => import('@/components/ArtifactChips'),
+    ArtifactCurationList: () => import('@/components/ArtifactCurationList')
   },
   data() {
     return {
       loading: true,
       publish_local: false,
+      publish_dialog: false,
+      publish_notes: "",
       snackbar: false,
+      replay_results_dialog: false,
+      replay_results: [],
       loadingMessage: 'Loading...',
       artifact_local: {},
       meta: {
@@ -514,19 +664,41 @@ export default {
       schemaLoaded: false,
       valid: true,
       dialog: false,
+      dialogvalid: true,
       disabled: false,
       artifactdialog: false,
       search: '',
-      possibleBadges: [],
       possibleLicenses: [],
       rules: {
         required: value => !!value || 'required',
         exists: value => {
           return typeof value === 'string' ? value.length > 0 : false
         },
+        notwhitespace: value => {
+          return !value ? true : (value.trim().length > 0 || 'empty string invalid')
+        },
         url: value => {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
+        },
+        unique_creator: X => {
+          let newaffiliation = this.affiliation
+          if ("affiliations" in this.artifact_local
+              && this.artifact_local.affiliations !== undefined) {
+            //console.log("local.affiliations: ",this.artifact_local.affiliations)
+            for (let i = 0; i < this.artifact_local.affiliations.length; ++i) {
+              let item = this.artifact_local.affiliations[i]
+              if (affiliationObjectsEqual(newaffiliation,item))
+                return 'duplicate author'
+            }
+          }
+          //console.log("creators: ",this.meta.creators)
+          for (let i = 0; i < this.meta.creators.length; ++i) {
+            let item = this.meta.creators[i]
+            if (affiliationObjectsEqual(newaffiliation,item))
+              return 'duplicate author'
+          }
+          return true
         }
       }
     }
@@ -555,9 +727,7 @@ export default {
     this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
     this.meta.languages = this.getLanguages()
     this.meta.keywords = this.getPossibleTags()
-    let response = await this.$badgesEndpoint.index({ verified: 1 })
-    this.possibleBadges = typeof response !== 'undefined' ? response.badges : []
-    response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
+    let response = await this.$licenseEndpoint.index({ verified: 1, all: 1 })
     this.possibleLicenses =
       typeof response !== 'undefined' ? response.licenses : []
   },
@@ -569,10 +739,12 @@ export default {
     }, 5000)
     EventBus.$on('close', this.closeHandler)
     this.$store.dispatch('user/fetchOrgs')
+    this.$store.dispatch('user/fetchBadges')
   },
   computed: {
     ...mapState({
-      orgs: state => state.user.orgs
+      orgs: state => state.user.orgs,
+      badges: state => state.user.badges
     }),
     orgNames: {
       get: function() {
@@ -622,6 +794,12 @@ export default {
     published() {
       if (this.artifact_local.publication) return true
       return false
+    },
+    canReplayCurations: function() {
+      return (this.record.artifact.importer
+              && this.record.artifact.parent_id != null
+              && (this.record.artifact.curations === 'undefined'
+                  || this.record.artifact.curations.length < 1))
     }
   },
   watch: {
@@ -638,22 +816,22 @@ export default {
   methods: {
     async publish() {
       if (!this.valid) return
-      if (!confirm('Are you sure you want to publish this artifact?')) return
 
       // save the artifact first
       await this.save()
 
       let response = await this.$artifactEndpoint.update(
-        this.artifact_local.id,
+        [this.artifact_local.artifact_group_id, this.artifact_local.id],
         {
-          publication: {}
+          publication: { notes: this.publish_notes }
         }
       )
       this.$store.dispatch('artifacts/fetchArtifact', {
+        artifact_group_id: this.artifact_local.artifact_group_id,
         id: this.artifact_local.id
       })
 
-      this.$router.push(`/artifact/${this.artifact_local.id}`)
+      this.$router.push(`/artifact/${this.artifact_local.artifact_group_id}`)
     },
     async save() {
       if (!this.valid) return
@@ -676,6 +854,10 @@ export default {
       // process affiliations
       this.meta.creators.forEach((affil, index, object) => {
         if (typeof affil.affiliation.org === 'string') {
+          if (affil.affiliation.org === "") {
+            affil.affiliation.org = null
+            return
+          }
           let org = this.orgs.find(a => a.name === affil.affiliation.org)
           if (typeof org !== 'undefined') {
             affil.affiliation.org = JSON.parse(JSON.stringify(org))
@@ -728,21 +910,21 @@ export default {
       // console.log(this.artifact_local)
 
       let response = null
+      let artifact = this.artifact_local
       if (this.create) {
         // console.log('creating new artifact')
         response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
         // console.log('curating')
         response = await this.$artifactEndpoint.update(
-          this.artifact_local.id,
-          this.artifact_local
-        )
+          [artifact.artifact_group_id, artifact.id],
+          artifact)
       }
       // console.log('response artifact')
       // console.log(response)
 
       this.artifact_local =
-        typeof response !== 'undefined' ? response.artifact : {}
+        typeof response !== 'undefined' ? response.artifact : artifact
 
       this.disabled = false
       this.snackbar = true
@@ -756,9 +938,33 @@ export default {
 
       if (this.create) {
         this.create = false
-        this.$router.push(`/artifact/${this.artifact_local.id}?edit=true`)
+        this.$router.push(`/artifact/{$this.artifact_local.artifact_group_id}/${this.artifact_local.id}?edit=true`)
       } else {
       }
+    },
+    async replayCurations() {
+      // console.log('curating')
+      let response = await this.$artifactEndpoint.update(
+        [this.artifact_local.artifact_group_id, this.artifact_local.id],
+        {replay_curations: true}
+      )
+      this.replay_results = response.replay_results
+      for (var i = 0; i < this.replay_results.length; ++i) {
+          this.replay_results[i]._id = i
+          this.replay_results[i].curation.opdata =
+            JSON.parse(this.replay_results[i].curation.opdata)
+      }
+      this.replay_results_dialog = true
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        artifact_group_id: this.artifact_local.artifact_group_id,
+        id: this.artifact_local.id
+      })
+    },
+    async deleteDraft() {
+      // console.log('deleting draft')
+      let response = await this.$artifactEndpoint.delete(
+        [this.artifact_local.artifact_group_id, this.artifact_local.id])
+      this.$router.back()
     },
     iconColor(type) {
       return artifactColor(type)
@@ -771,7 +977,9 @@ export default {
     },
     getPossibleTags() {
       let tags = []
-      if (this.artifact_local.tags.length > 0) return []
+      // console.log(this.artifact_local)
+      if (typeof this.artifact_local.tags === 'undefined' 
+        || this.artifact_local.tags.length > 0) return []
       let top = this.artifact_local.meta
         ? this.artifact_local.meta.find(o => o.name == 'top_keywords')
         : null
@@ -815,6 +1023,29 @@ export default {
         },
         roles: 'Author'
       })
+    },
+    validateKeyword(value) {
+      let newTagObj = new Object({
+        tag: value,
+        source: null
+      })
+      for (let i = 0; i < this.artifact_local.tags.length; ++i) {
+        let item = this.artifact_local.tags[i]
+        if (tagObjectsEqual(newTagObj,item)) {
+          console.log("validateKeyword: duplicate of existing: ",value,item)
+          return 'duplicate tag'
+        }
+      }
+      if (typeof this.meta.keywords !== "undefined") {
+        for (let i = 0; i < this.meta.keywords.length - 1; ++i) {
+          if (value == this.meta.keywords[i]) {
+            console.log("validateKeyword: duplicate of new: ",value,this.meta.keywords[i])
+            return 'duplicate author'
+          }
+        }
+      }
+      console.log("validateKeyword: unique: ",value)
+      return true
     }
   }
 }

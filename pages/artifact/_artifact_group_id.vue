@@ -54,6 +54,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('artifacts/fetchArtifact', {
+      artifact_group_id: this.$route.params.artifact_group_id,
       id: this.$route.params.id
     })
   }

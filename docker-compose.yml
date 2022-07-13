@@ -9,10 +9,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /data/caddy/data:/data
-      - /data/caddy/config:/config
-      - /data/caddy/ssl/:/etc/ssl/certs/searcch/
+      - ${DATADIR:-/data}/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ${DATADIR:-/data}/caddy/data:${DATADIR:-/data}
+      - ${DATADIR:-/data}/caddy/config:/config
+      - ${DATADIR:-/data}/caddy/ssl/:/etc/ssl/certs/searcch/
     networks:
       - searcch-frontend-prod-net
       - searcch-frontend-dev-net
@@ -27,7 +27,7 @@ services:
     env_file:
       - env/searcch-frontend-prod.env
     volumes:
-      - /data/searcch-frontend-prod/nuxt.config.js:/app/nuxt.config.js
+      - ${DATADIR:-/data}/searcch-frontend-prod/nuxt.config.js:/app/nuxt.config.js
     networks:
       - searcch-frontend-prod-net
 
@@ -41,7 +41,7 @@ services:
     env_file:
       - env/searcch-frontend-dev.env
     volumes:
-      - /data/searcch-frontend-dev/nuxt.config.js:/app/nuxt.config.js
+      - ${DATADIR:-/data}/searcch-frontend-dev/nuxt.config.js:/app/nuxt.config.js
     networks:
       - searcch-frontend-dev-net
 

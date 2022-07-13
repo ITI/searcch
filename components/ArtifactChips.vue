@@ -31,18 +31,22 @@
           :placeholder="placeholder"
           v-model="field[index]"
           v-bind:readonly="!create"
+          :rules="[rules.required, rules.exists, rules.validated]"
+          required
         >
           {{ field[index] }}
         </v-text-field>
         <div v-else>
-          {{ field[index] | titlecase }}
+          {{ field[index] }}
         </div>
       </div>
       <div v-else-if="type === 'keyword'">
         {{ item.tag }}
       </div>
       <div v-else-if="type === 'role'">
-        {{ item.affiliation.person.name }} ({{ item.roles }})
+        {{ item.affiliation.person.name }}
+        <span v-if="item.affiliation.org && item.affiliation.org.name">({{ item.affiliation.org.name }})</span>
+        <span v-if="edit && item.affiliation.person && item.affiliation.person.email">({{ item.affiliation.person.email }})</span>
       </div>
       <div v-else-if="type === 'relation'">
         {{ item.artifact_id }} {{ item.relation | titlecase }}
@@ -58,6 +62,7 @@
       v-if="create"
       @click="field.push('')"
       class="success ml-2 mb-2"
+      :disabled="typeof this.formModel !== 'undefined' ? !formModel : false"
       fab
       x-small
     >
@@ -73,7 +78,7 @@ export default {
   components: {},
   props: {
     field: {
-      type: [Array, Object],
+      type: [Array, Object, String],
       required: true,
       default: function() {
         return []
@@ -111,6 +116,29 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    validator: {
+      type: Function,
+      default: undefined,
+      required: false
+    },
+    formModel: {
+      type: Boolean,
+      default: undefined,
+      required: false
+    }
+  },
+  data() {
+    return {
+      rules: {
+        required: value => !!value || 'required',
+        exists: value => {
+          return typeof value === 'string' ? value.length > 0 : false
+        },
+        validated: value => {
+          return (typeof this.validator !== "undefined") ? this.validator(value) : true
+        },
+      }
     }
   },
   methods: {
@@ -126,15 +154,20 @@ export default {
     isObject(item) {
       return typeof item === 'object'
     },
+    isString(item) {
+      return typeof item === 'string'
+    },
     whereTo(item) {
       if (this.link) {
         switch (this.type) {
           case 'keyword':
             return '/search?keywords=' + item
+          case 'role':
+            return '/search?author_keywords=' + item.affiliation.person.name
           case 'relation':
-            return '/artifact/' + item.related_artifact_id
+            return '/artifact/' + item.related_artifact_group_id
           case 'reverse-relation':
-            return '/artifact/' + item.artifact_id
+            return '/artifact/' + item.artifact_group_id
         }
       }
       return null
