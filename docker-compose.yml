@@ -16,6 +16,7 @@ services:
     networks:
       - searcch-frontend-prod-net
       - searcch-frontend-dev-net
+      - searcch-frontend-local-dev-net
 
   searcch-frontend-prod:
     image: searcch-frontend-production
