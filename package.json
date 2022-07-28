@@ -5,6 +5,7 @@
   "author": "SEARCCH Development Team",
   "private": true,
   "scripts": {
+    "dev-any": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt",
     "dev": "cross-env NUXT_HOST=localhost NUXT_PORT=3000 nuxt",
     "build": "nuxt build",
     "start": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=80 nuxt start",

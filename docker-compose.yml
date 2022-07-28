@@ -50,7 +50,9 @@ services:
     image: searcch-frontend-local-dev
     container_name: searcch-frontend-local-dev
     restart: unless-stopped
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
     env_file:
       - env/searcch-frontend-local-dev.env
     ports:
