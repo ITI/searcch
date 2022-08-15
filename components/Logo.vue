@@ -3,9 +3,9 @@
     <div>
       <img
         src="/images/horiz-tagline.png"
-        width="433"
-        height="138"
-        alt="SEARCCH Tagline"
+        width="503"
+        height="100"
+        alt="COMUNDA Tagline"
         srcset=""
       />
     </div>

@@ -144,9 +144,9 @@
     </v-main>
     <v-footer app>
       <span
-        >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
-        National Science Foundation under Grant Numbers 1925773, 1925616,
-        1925588, 1925564</span
+        >&copy; {{ new Date().getFullYear() }} - COMUNDA is supported by the
+        National Science Foundation under grant number 8115780.
+	</span
       ><v-spacer></v-spacer>
       <v-btn
         color="error"
@@ -171,7 +171,7 @@ export default {
       drawer: true,
       miniVariant: false,
       right: true,
-      title: 'SEARCCH Hub'
+      title: 'COMUNDA Portal'
     }
   },
   computed: {
@@ -184,25 +184,15 @@ export default {
       let items = [
         {
           icon: 'mdi-cloud-search',
-          title: 'Search Artifacts',
+          title: 'Search Datasets',
           to: '/search'
         }
       ]
       if (this.$auth.loggedIn) {
         items.push({
           icon: 'mdi-table-heart',
-          title: 'Favorite Artifacts',
+          title: 'Favorite Datasets',
           to: '/favorites'
-        })
-        items.push({
-          icon: 'mdi-box',
-          title: 'My Artifacts',
-          to: '/myartifacts'
-        })
-        items.push({
-          icon: 'mdi-database-import',
-          title: 'Submit Artifact',
-          to: '/import'
         })
         items.push({
           icon: 'mdi-account-cog',
@@ -217,12 +207,12 @@ export default {
       if (this.$auth.loggedIn && this.user_is_admin) {
         adminItems.push({
           icon: 'mdi-wrench',
-          title: 'Artifacts',
+          title: 'Datasets',
           to: '/admin/artifacts'
         })
         adminItems.push({
           icon: 'mdi-wrench',
-          title: 'Artifact Imports',
+          title: 'Dataset Imports',
           to: '/admin/imports'
         })
         adminItems.push({
@@ -275,7 +265,7 @@ export default {
       let response = await this.$auth.loginWith('cilogon')
     },
     async logout() {
-      if (confirm('Log out of SEARCCH?')) {
+      if (confirm('Log out of COMUNDA?')) {
         console.log('Logging out')
         this.$store.commit('user/LOGOUT')
         this.$store.commit('system/LOGOUT')

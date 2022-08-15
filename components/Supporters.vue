@@ -9,8 +9,8 @@
           <br />
           <ul>
             <li>
-              The SEARCCH hub is community infrastructure supported by the
-              National Science Foundation's CCRI and SATC programs. Visit the
+              The COMUNDA portal is community infrastructure supported by the
+              National Science Foundation's CCRI program. Visit the
               <a href="https://www.ccrivo.org/">CCRI-VO website</a> to discover
               other infrastructure supported by the CCRI program.
             </li>

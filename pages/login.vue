@@ -40,12 +40,12 @@ export default {
   },
   head() {
     return {
-      title: 'SEARCCH Login Screen',
+      title: 'COMUNDA Login Screen',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'SEARCCH Login Screen'
+          content: 'COMUNDA Login Screen'
         }
       ]
     }
