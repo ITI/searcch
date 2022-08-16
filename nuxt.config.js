@@ -149,7 +149,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
+    proxy: true,
+    debug: process.env.AXIOS_DEBUG == 'true'
   },
   proxy: {
     '/kg/': {
