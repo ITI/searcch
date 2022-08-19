@@ -317,6 +317,7 @@ export default {
   @media screen and (max-width: 992px) {
     .v-footer {
       flex-direction: column;
+      position: relative;
     }
   }
 </style>
