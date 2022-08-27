@@ -16,6 +16,7 @@ services:
     networks:
       - searcch-frontend-prod-net
       - searcch-frontend-dev-net
+      - searcch-frontend-local-dev-net
 
   searcch-frontend-prod:
     image: searcch-frontend-production
@@ -49,7 +50,9 @@ services:
     image: searcch-frontend-local-dev
     container_name: searcch-frontend-local-dev
     restart: unless-stopped
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
     env_file:
       - env/searcch-frontend-local-dev.env
     ports:
