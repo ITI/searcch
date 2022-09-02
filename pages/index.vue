@@ -47,7 +47,7 @@
                 <v-col align="left">
 		<em>
                   COMUNDA is supported by the National Science Foundation
-                  (NSF) under grant number 8115780.
+                  (NSF) under grant number 8115780 and 1823192.
                   </em>
                 </v-col>
               </v-row>

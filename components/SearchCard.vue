@@ -220,12 +220,12 @@ export default {
       submitted: false,
       adopen: [1],
       advanced: {
-        types: ['dataset', 'presentation', 'publication', 'software', 'other'],
+        types: ['dataset', 'presentation', 'publication', 'software', 'pcap'],
         author: '',
         org: '',
         badge_ids: []
       },
-      types: ['dataset', 'presentation', 'publication', 'software', 'other'],
+      types: ['dataset', 'presentation', 'publication', 'software', 'pcap'],
       filters: ['Name', 'Organization'],
       showScrollToTop: 0
     }
