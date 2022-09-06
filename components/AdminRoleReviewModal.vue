@@ -26,44 +26,57 @@
         id="modalDescription">
 
         <slot name="body">
-          <div>
-            User
-          </div>
-          <div class="claimDetails">
-            <template>
-              <v-data-table
-                dense
-                :headers="userHeaders"
-                :items="userDetails"
-                item-key="id"
-                :hide-default-footer="true"
-              ></v-data-table>
-            </template>
-          </div>
-          <div>
-            Artifact
-          </div>
-          <div class="claimDetails">
-            <template>
-              <v-data-table
-                dense
-                :headers="artifactHeaders"
-                :items="artifactDetails"
-                item-key="id"
-                :hide-default-footer="true"
-              ></v-data-table>
-            </template>
-          </div>
+
+          <div v-if="!isReject">
             <div>
-                Justification
+              User
+            </div>
+            <div class="claimDetails">
+              <template>
+                <v-data-table
+                  dense
+                  :headers="userHeaders"
+                  :items="userDetails"
+                  item-key="id"
+                  :hide-default-footer="true"
+                ></v-data-table>
+              </template>
             </div>
             <div>
-                <div id="justificationTextarea">{{ justificationMessage }}</div>
+              Artifact
             </div>
+            <div class="claimDetails">
+              <template>
+                <v-data-table
+                  dense
+                  :headers="artifactHeaders"
+                  :items="artifactDetails"
+                  item-key="id"
+                  :hide-default-footer="true"
+                ></v-data-table>
+              </template>
+            </div>
+              <div>
+                  Justification
+              </div>
+              <div>
+                  <div id="justificationTextarea">{{ justificationMessage }}</div>
+              </div>
+          </div>
+          <div v-else>
+              <div>
+                  Rejection Reason
+              </div>
+              <div>
+                <textarea v-model="rejectionMessage" placeholder="Enter your rejection reason" id="rejectionMessageTextArea"></textarea>
+              </div>
+          </div>
+          
         </slot>
        </section>
 
       <footer class="modal-admin-footer">
+        <div v-if="!isReject" class="review-btns"> 
           <v-btn
             color="secondary"
             class="claim-btn"
@@ -75,11 +88,38 @@
           <v-btn
             color="error"
             class="claim-btn"
+            @click="openRejectDialog()"
+            aria-label="Close modal"
+            >
+            Reject
+          </v-btn>
+        </div>
+        <div v-else class="col-flex">
+          <div class="footer-text row-flex">
+           <div class="error-msg" v-if="isError">
+                <img src="/images/exclamation-circle.svg"/>
+                <span>{{ errorMessage }}</span>
+           </div>
+          </div>
+          <div class="review-btns">
+            <v-btn
+            color="secondary"
+            class="claim-btn"
+            @click="closeRejectDialog()"
+            aria-label="Close modal"
+            >
+            Back
+          </v-btn>
+          <v-btn
+            color="error"
+            class="claim-btn"
             @click="reviewRole(false)"
             aria-label="Close modal"
             >
             Reject
           </v-btn>
+          </div>
+        </div>
       </footer>
     </div>
   </div>
@@ -88,12 +128,29 @@
 <script>
   export default {
     name: 'AdminRoleReviewModal',
-    props: ['claimid', 'justificationMessage', 'userDetails', 'artifactDetails'],
+    props: ['claimid', 'justificationMessage', 'userDetails', 'artifactDetails', 'isReject', 'rejectionMessage'],
     methods: {
       close() {
         this.$emit('close');
       },
+      openRejectDialog() {
+        this.isReject = true;
+        this.isError = false;
+      },
+      closeRejectDialog() {
+        this.isReject = false;
+        this.isError = false;
+      },
       reviewRole(approve) {
+        if(!approve) {
+          this.rejectionMessage = this.rejectionMessage.trim();
+          if(this.rejectionMessage == "") {
+            this.isError = true;
+            this.errorMessage = "Please enter a rejection reason";
+            return;
+          }
+        }
+        this.isError = false;
         this.$emit('closeAndReview', approve);
       }
     },
@@ -107,7 +164,9 @@
             artifactHeaders: [
               {text: 'Artifact ID', align: 'start', sortable: false, value: 'id'},
               {text: 'Artifact', sortable: false, value: 'name'}
-            ]
+            ],
+            errorMessage: "",
+            isError: false
         }
     }
   };
@@ -136,7 +195,7 @@
     width: 500px;
   }
 
-  .modal-header, .modal-admin-footer {
+  .modal-header, .modal-admin-footer div {
     display: flex;
   }
 
@@ -152,7 +211,7 @@
     margin-left: 15px;
   }
 
-  .modal-admin-footer {
+  .modal-admin-footer .review-btns {
     padding: 15px;
     border-top: 1px solid #eeeeee;
     justify-content: space-around;
@@ -163,6 +222,17 @@
     margin-bottom: 20px;
     font-size: 12px;
     text-align: center;
+    justify-content: space-around;
+  }
+
+  .col-flex {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row-flex {
+    display: flex;
+    flex-direction: row;
   }
 
   .modal-body {
@@ -170,7 +240,7 @@
     padding: 15px;
   }
 
-  .modal-body #justificationTextarea {
+  .modal-body #justificationTextarea, .modal-body #rejectionMessageTextArea {
     border: solid rgb(157, 157, 157);
     border-radius: 5px;
     padding: 10px;

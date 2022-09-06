@@ -8,7 +8,9 @@
             v-bind:claimid="reviewClaimid"
             v-bind:justificationMessage="justificationMessage"
             v-bind:userDetails="userDetails"
-            v-bind:artifactDetails="artifactDetails">
+            v-bind:artifactDetails="artifactDetails"
+            v-bind:isReject="false"
+            v-bind:rejectionMessage="''">
         </OwnershipReviewModal>
     </transition>
 

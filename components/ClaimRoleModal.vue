@@ -26,25 +26,6 @@
         id="modalDescription">
 
         <slot name="body">
-            <!-- <div>
-              <span>Role Type</span>
-                <v-layout column justify-left align-top>
-                  <v-row align="center">
-                    <v-col cols="3">
-                      <v-checkbox
-                        v-model="isOwnership"
-                        :label="'Ownership'"
-                      ></v-checkbox>
-                    </v-col>
-                    <v-col cols="3">
-                      <v-checkbox
-                        v-model="isAuthorship"
-                        :label="'Authorship'"
-                      ></v-checkbox>
-                    </v-col>
-                  </v-row>
-                </v-layout>
-            </div> -->
             <div>
                 {{ isDisabled ? "Justification" : "Please justify your claim in the textbox below" }}
             </div>
