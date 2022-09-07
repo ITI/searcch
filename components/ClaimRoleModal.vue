@@ -26,6 +26,14 @@
         id="modalDescription">
 
         <slot name="body">
+          <div class="email-info">
+            <div v-if="email">
+              Ownership Claim Request updates will be sent to {{ email }} listed in your profile.
+            </div>
+            <div v-else>
+              Please add an email address to your profile to receive updates on this claim.
+            </div>
+          </div>
             <div>
                 {{ isDisabled ? "Justification" : "Please justify your claim in the textbox below" }}
             </div>
@@ -60,7 +68,7 @@
 <script>
   export default {
     name: 'ClaimRoleModal',
-    props: ['justificationMessage', 'isDisabled', 'artifact_group_id'],
+    props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email'],
     methods: {
       close(message = "") {
         this.$emit('close', message);
@@ -196,5 +204,14 @@
     margin-right: 5px;
     filter: invert(16%) sepia(74%) saturate(7346%) hue-rotate(356deg) brightness(118%) contrast(118%);
   }
+
+  .email-info {
+    margin-bottom: 10px;
+    font-weight: normal;
+    background: #fff0bb;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+}
 
 </style>

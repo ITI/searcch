@@ -95,8 +95,8 @@
           </v-btn>
         </div>
         <div v-else class="col-flex">
-          <div class="footer-text row-flex">
-           <div class="error-msg" v-if="isError">
+          <div class="footer-text row-flex" v-if="isError">
+           <div class="error-msg no-margin">
                 <img src="/images/exclamation-circle.svg"/>
                 <span>{{ errorMessage }}</span>
            </div>
@@ -197,6 +197,10 @@
 
   .modal-header, .modal-admin-footer div {
     display: flex;
+  }
+
+  .no-margin {
+    margin: 0px !important;
   }
 
   .modal-header {

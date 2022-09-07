@@ -193,7 +193,8 @@
           @close="closeModal"
           v-bind:justificationMessage="justificationMessage"
           v-bind:isDisabled="isModalDisabled"
-          v-bind:artifact_group_id="record.artifact.artifact_group_id">
+          v-bind:artifact_group_id="record.artifact.artifact_group_id"
+          v-bind:email="useremail">
         </ClaimRoleModal>
         </transition>
 
@@ -497,6 +498,7 @@ export default {
   computed: {
     ...mapState({
       userid: state => state.user.userid,
+      useremail: state => state.user.user.email,
       favorites: state => state.artifacts.favoritesIDs,
       user_is_admin: state => state.user.user_is_admin,
       artifactClaim: state => state.artifacts.artifactClaim
@@ -696,7 +698,12 @@ export default {
         await this.$store.dispatch('artifacts/fetchArtifactClaim', {
           artifact_group_id: this.record.artifact.artifact_group_id,
         })
-        this.showModal(this.artifactClaim.artifact_owner_request);
+        if(this.artifactClaim.artifact_owner_request && this.artifactClaim.artifact_owner_request.error) {
+          this.ownershipMessage=this.artifactClaim.artifact_owner_request.message;
+          this.showOwnershipMessage = true;
+        } else {
+          this.showModal(this.artifactClaim.artifact_owner_request);
+        }
       }
     },
     showModal(data) {
