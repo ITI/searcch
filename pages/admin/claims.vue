@@ -185,14 +185,14 @@ export default {
       this.isModalVisible = false;
       this.editedIndex = -1;
     },
-    async closeModalAndReview(approve) {
+    async closeModalAndReview(approve, msg=null) {
       var message, action;
       if(approve) {
         action = "approve";
         message = "Claim Request Approved";
       } else {
         action = "reject";
-        message = "Claim Request Rejected";
+        message = msg;
       }
       try {
         await this.$adminArtifactClaimEndpoint.put({ 

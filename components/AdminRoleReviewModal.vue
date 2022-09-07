@@ -151,7 +151,7 @@
           }
         }
         this.isError = false;
-        this.$emit('closeAndReview', approve);
+        this.$emit('closeAndReview', approve, this.rejectionMessage);
       }
     },
     data() {
