@@ -94,7 +94,7 @@
     },
     data() {
         return {
-            approverEmail: "searcch-portal-ops@cyberexperimentation.org",
+            approverEmail: "searcch.hub@cyberexperimentation.org",
             isError: false
         }
     }
