@@ -147,7 +147,7 @@
         >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
         National Science Foundation under Grant Numbers 1925773, 1925616,
         1925588, 1925564</span
-      ><v-spacer></v-spacer>
+      >
       <v-btn
         color="error"
         dark
@@ -173,6 +173,9 @@ export default {
       right: true,
       title: 'SEARCCH Hub'
     }
+  },
+  mounted() {
+    this.miniVariant = window.innerWidth < 992;
   },
   computed: {
     ...mapState({
@@ -303,3 +306,18 @@ export default {
   }
 }
 </script>
+
+<style>
+  .v-footer {
+    flex-wrap: nowrap;
+    z-index: 9;
+    justify-content: space-between;
+  }
+
+  @media screen and (max-width: 992px) {
+    .v-footer {
+      flex-direction: column;
+      position: relative;
+    }
+  }
+</style>
