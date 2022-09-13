@@ -26,7 +26,8 @@ export const state = () => ({
   favoritesIDs: {},
   imports: [],
   import: {},
-  loading: false
+  loading: false,
+  artifactClaim: {}
 })
 
 export const getters = {
@@ -56,6 +57,9 @@ export const getters = {
   },
   loading: state => {
     return state.loading
+  },
+  artifactClaim: state => {
+    return state.artifactClaim
   }
 }
 
@@ -96,6 +100,9 @@ export const mutations = {
   },
   SET_LOADING(state, loading) {
     state.loading = loading
+  },
+  SET_ARTIFACT_CLAIM(state, artifactClaim) {
+    state.artifactClaim = artifactClaim
   }
 }
 
@@ -144,6 +151,16 @@ export const actions = {
     let response = await this.$artifactEndpoint.show(ids)
     if (typeof response !== 'undefined') {
       commit('SET_ARTIFACT', response)
+    }
+    commit('SET_LOADING', false)
+  },
+  async fetchArtifactClaim({ commit, state }, payload) {
+    commit('SET_LOADING', true)
+    console.log('fetching claim ' + payload.artifact_group_id)
+    var id = payload.artifact_group_id
+    let response = await this.$artifactClaimEndpoint.show(id)
+    if (typeof response !== 'undefined') {
+      commit('SET_ARTIFACT_CLAIM', response)
     }
     commit('SET_LOADING', false)
   },

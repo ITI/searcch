@@ -173,13 +173,30 @@
       <v-divider class="mx-4"></v-divider>
 
       <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Authors</v-card-title>
+        <v-card-title class="py-0">Authors<span id="claim-text">(<a @click="claimThis()">Claim</a>)</span></v-card-title>
         <ArtifactChips
           :field="record.artifact.affiliations"
           type="role"
           display
           link
         ></ArtifactChips>
+
+        <transition name="info-message-fade">
+          <div v-if="showOwnershipMessage" class="ownership-info">
+            {{ ownershipMessage }}
+          </div>
+        </transition>
+
+        <transition name="modal-fade">
+          <ClaimRoleModal
+          v-show="isModalVisible"
+          @close="closeModal"
+          v-bind:justificationMessage="justificationMessage"
+          v-bind:isDisabled="isModalDisabled"
+          v-bind:artifact_group_id="record.artifact.artifact_group_id"
+          v-bind:email="useremail">
+        </ClaimRoleModal>
+        </transition>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -438,7 +455,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
+import { artifactIcon, artifactColor, bytesToSize, getCookie } from '@/helpers'
 
 export default {
   name: 'KGArtifactLong',
@@ -449,10 +466,11 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips'),
-    ArtifactCurationList: () => import('@/components/ArtifactCurationList'),
-    JsonPrettyPrint: () => import('@/components/pretty-print')
-  },
+    ArtifactChips: () => import("@/components/ArtifactChips"),
+    ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
+    JsonPrettyPrint: () => import("@/components/pretty-print"),
+    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue")
+},
   data() {
     return {
       loading: true,
@@ -464,7 +482,12 @@ export default {
       diff_results: [],
       diff_results_dialog: false,
       diff_results_tab: "visual",
-      loadingMessage: 'Loading...'
+      loadingMessage: 'Loading...',
+      isModalVisible: false,
+      isModalDisabled: false,
+      ownershipMessage: "",
+      showOwnershipMessage: false,
+      justificationMessage: ""
     }
   },
   mounted() {
@@ -475,8 +498,10 @@ export default {
   computed: {
     ...mapState({
       userid: state => state.user.userid,
+      useremail: state => state.user.user.email,
       favorites: state => state.artifacts.favoritesIDs,
-      user_is_admin: state => state.user.user_is_admin
+      user_is_admin: state => state.user.user_is_admin,
+      artifactClaim: state => state.artifacts.artifactClaim
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
@@ -587,6 +612,10 @@ export default {
     },
     published() {
       return this.record.artifact.publication ? true : false
+    },
+    claimText() {
+      if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
+      else return 'Claim Role'
     }
   },
   methods: {
@@ -660,6 +689,47 @@ export default {
         this.diff_results[i]._id = i
       }
       this.diff_results_dialog = true
+    },
+    async claimThis() {
+      if(getCookie('session_id').includes('no_login_')) {
+        this.ownershipMessage='Kindly login to claim role'
+        this.showOwnershipMessage = true;
+      } else {
+        await this.$store.dispatch('artifacts/fetchArtifactClaim', {
+          artifact_group_id: this.record.artifact.artifact_group_id,
+        })
+        if(this.artifactClaim.artifact_owner_request && this.artifactClaim.artifact_owner_request.error) {
+          this.ownershipMessage=this.artifactClaim.artifact_owner_request.message;
+          this.showOwnershipMessage = true;
+        } else {
+          this.showModal(this.artifactClaim.artifact_owner_request);
+        }
+      }
+    },
+    showModal(data) {
+      this.isModalVisible = true;
+      this.justificationMessage = "";
+      if(data) {
+        this.isModalDisabled = true;
+        this.justificationMessage = data.message;
+      }
+    },
+    closeModal(message) {
+      if(message) {
+        this.ownershipMessage=message;
+        this.showOwnershipMessage = true;
+      }
+      this.isModalVisible = false;
+    },
+    hideOwnershipInfo() {
+      setTimeout(()=>{this.showOwnershipMessage=false}, 5000);
+    }
+  },
+  watch: {
+    showOwnershipMessage(newVal, oldVal) {
+      if(newVal) {
+        this.hideOwnershipInfo();
+      }
     }
   }
 }
@@ -670,4 +740,24 @@ export default {
   max-height: 250px;
   overflow: hidden;
 }
+.ownership-info {
+  margin: 8px;
+  font-weight: normal;
+  background: #fff0bb;
+  padding: 10px;
+  border-radius: 5px;
+}
+.info-message-fade-enter, .info-message-fade-leave-to {
+  opacity: 0;
+}
+
+.info-message-fade-enter-active, .info-message-fade-leave-active {
+  transition: opacity .5s ease;
+}
+
+#claim-text {
+  margin-left: 5px;
+  font-weight: normal;
+}
+
 </style>

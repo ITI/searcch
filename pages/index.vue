@@ -154,7 +154,7 @@ export default {
     offset += expireTime.getTime();
     expireTime.setTime(offset);
     //Set session id per user
-    document.cookie = `session_id=${hash};expires=${expireTime.toUTCString()}`;
+    document.cookie = `session_id=${ 'no_login_' + hash };expires=${ expireTime.toUTCString() }`;
   }
 }
 </script>
