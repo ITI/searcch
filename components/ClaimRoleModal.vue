@@ -47,7 +47,7 @@
         <div class="footer-text">
            {{ isDisabled ? "Email sent to " : "An email will be sent to " }} <a :href="'mailto: ' + approverEmail">{{ approverEmail }}</a> for approval
            <div class="error-msg" v-if="isError">
-                <img src="/images/exclamation-circle.svg"/>
+                <img src="/images/information-outline.svg"/>
                 <span>{{ errorMessage }}</span>
            </div>
         </div>
@@ -198,10 +198,12 @@
     color: red;
     margin-top: 20px;
     justify-content: center;
+    width: 100%;
   }
 
   .error-msg img {
     margin-right: 5px;
+    max-height: 20px;
     filter: invert(16%) sepia(74%) saturate(7346%) hue-rotate(356deg) brightness(118%) contrast(118%);
   }
 

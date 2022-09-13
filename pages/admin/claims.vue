@@ -136,10 +136,10 @@ export default {
   computed: {
     ...mapState({
       user_is_admin: state => state.user.user_is_admin,
-      claims: state => state.claims.claims.artifact_owner_requests,
-      page: state => state.claims.claims.page,
-      pages: state => state.claims.claims.pages,
-      total: state => state.claims.claims.total
+      claims: state => state.system.claims.artifact_owner_requests,
+      page: state => state.system.claims.page,
+      pages: state => state.system.claims.pages,
+      total: state => state.system.claims.total
     })
   },
   methods: {
@@ -155,7 +155,7 @@ export default {
         }
         if (this.user_filter) payload['user'] = this.user_filter
         if (this.artifact_filter) payload['artifact'] = this.artifact_filter
-        this.$store.dispatch('claims/fetchClaims', payload)
+        this.$store.dispatch('system/fetchClaims', payload)
       }
       clearTimeout(this.timeoutID)
     },

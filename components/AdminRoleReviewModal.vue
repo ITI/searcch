@@ -97,7 +97,7 @@
         <div v-else class="col-flex">
           <div class="footer-text row-flex" v-if="isError">
            <div class="error-msg no-margin">
-                <img src="/images/exclamation-circle.svg"/>
+                <img src="/images/information-outline.svg"/>
                 <span>{{ errorMessage }}</span>
            </div>
           </div>
@@ -284,10 +284,12 @@
     color: red;
     margin-top: 20px;
     justify-content: center;
+    width: 100%;
   }
 
   .error-msg img {
     margin-right: 5px;
+    max-height: 20px;
     filter: invert(16%) sepia(74%) saturate(7346%) hue-rotate(356deg) brightness(118%) contrast(118%);
   }
 
