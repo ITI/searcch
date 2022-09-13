@@ -45,7 +45,7 @@
 
       <footer class="modal-footer-claimrole">
         <div class="footer-text">
-           {{ isDisabled ? "Email sent to " : "An email will be sent to " }} <a :href="'mailto: ' + approverEmail">{{ approverEmail }}</a> for approval
+           {{ isDisabled ? "Email sent to " : "An email will be sent to " }} SEARCCH admins for approval
            <div class="error-msg" v-if="isError">
                 <img src="/images/information-outline.svg"/>
                 <span>{{ errorMessage }}</span>
@@ -94,7 +94,6 @@
     },
     data() {
         return {
-            approverEmail: "searcch.hub@cyberexperimentation.org",
             isError: false
         }
     }
