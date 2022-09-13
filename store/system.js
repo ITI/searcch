@@ -44,23 +44,25 @@ export const mutations = {
   SET_IMPORTERS(state, importers) {
     state.importers = importers
   },
+  SET_CLAIMS(state, claims) {
+    state.claims = claims
+  },
   LOGOUT(state) {
     state.artifacts = {}
     state.artifact_imports = {}
     state.users = {}
     state.sessions = {}
     state.importers = []
+    state.claims = {}
   },
   ADMIN_OFF(state) {
-    ;(state.artifacts = {}),
-      (state.artifact_imports = {}),
-      (state.users = {}),
-      (state.sessions = {})
+    state.artifacts = {},
+    state.artifact_imports = {},
+    state.users = {},
+    state.sessions = {},
+    state.claims = {},
     state.importers = []
-  },
-  SET_CLAIMS(state, claims) {
-    state.claims = claims
-  } 
+  }
 }
 
 export const actions = {
