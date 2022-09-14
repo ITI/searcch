@@ -139,11 +139,16 @@
         <template v-slot:item.publication="{ item }">
           <v-icon v-if="item.publication">mdi-check</v-icon>
         </template>
-        <template v-slot:item.owner.person="{ item }">
-          {{ item.owner.person.email
+        <template v-slot:item.artifact_group.owner.person="{ item }">
+	  <a
+	    :href="`/profile/${item.artifact_group.owner_id}`"
+            target="_blank"
+            rel="noopener"
+          >{{ item.artifact_group.owner.person.email
           }}{{
-            item.owner.person.name ? ' (' + item.owner.person.name + ')' : ''
+            item.artifact_group.owner.person.name ? ' ' + item.artifact_group.owner.person.name + '' : ''
           }}
+	  </a>
         </template>
         <template v-slot:item.type="{ item }">
           <ArtifactChips
@@ -233,7 +238,7 @@ export default {
           sortable: true,
           value: 'mtime'
         },
-        { text: 'Owner', value: 'owner.person', sortable: false },
+        { text: 'Owner', value: 'artifact_group.owner.person', sortable: false },
         { text: 'Views', value: 'view_count', sortable: false },
         { text: 'Actions', value: 'actions', sortable: false }
 
@@ -285,7 +290,7 @@ export default {
           sort: this.options.sortBy,
           sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1,
-          short_view_include: 'owner,publication'
+          short_view_include: 'artifact_group,owner,publication'
         }
         if (this.type_select) payload['type'] = this.type_select
         if (this.publication_select) {
