@@ -194,7 +194,7 @@
           v-bind:justificationMessage="justificationMessage"
           v-bind:isDisabled="isModalDisabled"
           v-bind:artifact_group_id="record.artifact.artifact_group_id"
-          v-bind:email="useremail">
+          v-bind:email="user.email">
         </ClaimRoleModal>
         </transition>
 
@@ -497,8 +497,7 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
-      useremail: state => state.user.user.email,
+      user: state => state.user,
       favorites: state => state.artifacts.favoritesIDs,
       user_is_admin: state => state.user.user_is_admin,
       artifactClaim: state => state.artifacts.artifactClaim
@@ -646,9 +645,8 @@ export default {
       return this.user_is_admin
     },
     isOwner() {
-      if (this.user_is_admin) return true
       return typeof this.record.artifact.owner !== 'undefined'
-        ? this.record.artifact.owner.id == this.userid
+        ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.owner.id == this.user.id)
         : false
     },
     async newVersion() {
@@ -691,7 +689,7 @@ export default {
       this.diff_results_dialog = true
     },
     async claimThis() {
-      if(getCookie('session_id').includes('no_login_')) {
+      if (!this.$auth.loggedIn) {
         this.ownershipMessage='Kindly login to claim role'
         this.showOwnershipMessage = true;
       } else {
