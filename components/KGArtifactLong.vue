@@ -50,6 +50,16 @@
               {{ record.artifact.artifact_group_id + "/" + record.artifact.id }}</a>)
           </span>
         </v-row>
+        <v-row align="center" class="mx-0">
+          <span v-if="this.$auth.loggedIn">
+	    Owner:
+	    <a
+	      :href="`/profile/${record.artifact.artifact_group.owner_id}`"
+	      rel="noopener"
+	      >{{ record.artifact.artifact_group.owner.person.name }}
+	    </a>
+	  </span>
+	</v-row>
         <v-row
           v-if="record.artifact.artifact_group.publications.length"
           align="center"
