@@ -136,7 +136,7 @@ export const actions = {
       let response = await this.$artifactRecommendationEndpoint.show(
           [ payload.artifact_group_id, payload.id])
       if (response !== undefined) {
-        commit('SET_ARTIFACTS', response)
+        commit('SET_ARTIFACTS', response.artifacts)
       }
     }
     commit('SET_LOADING', false)
