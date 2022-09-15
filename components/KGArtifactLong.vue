@@ -72,7 +72,30 @@
           >
             {{ !history_expanded ? 'Show Record History' : 'Hide Record History' }}
           </v-btn>
+	  <v-btn
+	    x-small
+	    @click="claimThis()"
+	    >Claim This Record
+	  </v-btn>
         </v-row>
+
+        <transition name="modal-fade">
+          <ClaimRoleModal
+          v-show="isModalVisible"
+          @close="closeModal"
+          v-bind:justificationMessage="justificationMessage"
+          v-bind:isDisabled="isModalDisabled"
+          v-bind:artifact_group_id="record.artifact.artifact_group_id"
+          v-bind:email="user.email">
+        </ClaimRoleModal>
+        </transition>
+
+        <transition name="info-message-fade">
+          <div v-if="showOwnershipMessage" class="ownership-info">
+            {{ ownershipMessage }}
+          </div>
+        </transition>
+
       </v-card-text>
 
       <v-card-text v-if="history_expanded">
@@ -183,30 +206,13 @@
       <v-divider class="mx-4"></v-divider>
 
       <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Authors<span id="claim-text">(<a @click="claimThis()">Claim</a>)</span></v-card-title>
+        <v-card-title class="py-0">Authors</v-card-title>
         <ArtifactChips
           :field="record.artifact.affiliations"
           type="role"
           display
           link
         ></ArtifactChips>
-
-        <transition name="info-message-fade">
-          <div v-if="showOwnershipMessage" class="ownership-info">
-            {{ ownershipMessage }}
-          </div>
-        </transition>
-
-        <transition name="modal-fade">
-          <ClaimRoleModal
-          v-show="isModalVisible"
-          @close="closeModal"
-          v-bind:justificationMessage="justificationMessage"
-          v-bind:isDisabled="isModalDisabled"
-          v-bind:artifact_group_id="record.artifact.artifact_group_id"
-          v-bind:email="user.email">
-        </ClaimRoleModal>
-        </transition>
 
         <v-divider class="mx-4"></v-divider>
       </div>
