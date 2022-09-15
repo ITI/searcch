@@ -938,7 +938,7 @@ export default {
 
       if (this.create) {
         this.create = false
-        this.$router.push(`/artifact/{$this.artifact_local.artifact_group_id}/${this.artifact_local.id}?edit=true`)
+        this.$router.push(`/artifact/${this.artifact_local.artifact_group_id}/${this.artifact_local.id}?edit=true`)
       } else {
       }
     },
