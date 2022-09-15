@@ -102,7 +102,7 @@
           Add Related
         </v-btn>
         <v-btn
-          v-if="isOwner()"
+          v-if="isOwner() || isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
@@ -204,16 +204,19 @@ export default {
       return artifactIcon(type)
     },
     addRelated(id, relation) {
+      console.log(this.artifact)
       this.$store.dispatch('artifacts/setRelated', {
         id: id,
         relation: relation
       })
       EventBus.$emit('close', 'artifactdialog')
     },
+    isAdmin() {
+      this.user_is_admin
+    },
     isOwner() {
-      if (this.user_is_admin) return true
       return typeof this.artifact.owner !== 'undefined'
-        ? this.artifact.owner.id == this.userid
+        ? this.artifact.artifact_group.owner_id == this.userid
         : false
     }
   }

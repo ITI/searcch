@@ -645,8 +645,8 @@ export default {
       return this.user_is_admin
     },
     isOwner() {
-      return typeof this.record.artifact.owner !== 'undefined'
-        ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.owner.id == this.user.id)
+      return typeof this.record.artifact.artifact_group.owner_id !== 'undefined'
+        ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.artifact_group.owner_id == this.user.userid)
         : false
     },
     async newVersion() {
