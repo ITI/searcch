@@ -164,7 +164,7 @@ export default {
         'X-Api-Key':
           process.env.PRODUCTION == 'true'
             ? process.env.KG_API_KEY
-            : process.env.KG_DEV_API_KEY
+            : process.env.KG_API_KEY
       },
       changeOrigin: true
     },
