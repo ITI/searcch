@@ -100,7 +100,7 @@
           :disabled="!artifact.artifact_id"
           color="primary"
         >
-          Read More
+          Request
         </v-btn>
       </v-card-actions>
     </v-card>

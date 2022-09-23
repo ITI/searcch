@@ -91,7 +91,7 @@
           :to="`/artifact/${artifact.artifact_group_id}`"
           nuxt
         >
-          Read More
+          Request
         </v-btn>
         <v-btn
           v-else

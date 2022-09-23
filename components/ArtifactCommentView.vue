@@ -65,7 +65,7 @@
         <v-spacer></v-spacer>
 
         <v-btn color="primary" :to="`/artifact/${artifact.artifact.artifact_group_id}`" nuxt>
-          Read More
+          Request
         </v-btn>
       </v-card-actions>
     </v-card>
