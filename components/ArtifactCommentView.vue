@@ -64,7 +64,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="primary" :to="`/artifact/${artifact.artifact.artifact_group_id}`" nuxt>
+        <v-btn color="primary" :to="`/artifact/request/${artifact.artifact.artifact_group_id}`" nuxt>
           Request
         </v-btn>
       </v-card-actions>

@@ -96,7 +96,7 @@
         </v-btn> -->
 
         <v-btn
-          :to="`/artifact/${artifact.artifact_group_id}/${artifact.artifact_id}`"
+          :to="`/artifact/request/${artifact.artifact_group_id}/${artifact.artifact_id}`"
           :disabled="!artifact.artifact_id"
           color="primary"
         >
