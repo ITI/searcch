@@ -1,9 +1,7 @@
-comunda-dev.isi.edu {
-tls cert.pem key.pem
+comunda.ant.isi.edu {
 reverse_proxy /* localhost:3000 {
       header_down Strict-Transport-Security "max-age=15552000;"
       header_up X-Real-IP {remote_host}
       header_up X-Forwarded-For {remote_host}
-	}
+        }
 }
-
