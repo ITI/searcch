@@ -14,37 +14,7 @@ services:
       - ${DATADIR:-/data}/caddy/config:/config
       - ${DATADIR:-/data}/caddy/ssl/:/etc/ssl/certs/searcch/
     networks:
-      - searcch-frontend-prod-net
-      - searcch-frontend-dev-net
       - searcch-frontend-local-dev-net
-
-  searcch-frontend-prod:
-    image: searcch-frontend-production
-    restart: unless-stopped
-    build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git"
-    ports:
-      - 127.0.0.1:3000:3000
-    container_name: searcch-frontend-prod
-    env_file:
-      - env/searcch-frontend-prod.env
-    volumes:
-      - ${DATADIR:-/data}/searcch-frontend-prod/nuxt.config.js:/app/nuxt.config.js
-    networks:
-      - searcch-frontend-prod-net
-
-  searcch-frontend-dev:
-    image: searcch-frontend-development
-    restart: unless-stopped
-    build: "https://${TOKEN:-githubapitoken}:@github.com/ITI/searcch.git#dev-branch"
-    ports:
-      - 127.0.0.1:3000:3000
-    container_name: searcch-frontend-dev
-    env_file:
-      - env/searcch-frontend-dev.env
-    volumes:
-      - ${DATADIR:-/data}/searcch-frontend-dev/nuxt.config.js:/app/nuxt.config.js
-    networks:
-      - searcch-frontend-dev-net
 
   searcch-frontend-local-dev:
     image: searcch-frontend-local-dev
@@ -61,9 +31,5 @@ services:
       - searcch-frontend-local-dev-net
 
 networks:
-  searcch-frontend-dev-net:
-    name: searcch-frontend-dev-net
-  searcch-frontend-prod-net:
-    name: searcch-frontend-prod-net
   searcch-frontend-local-dev-net:
     name: searcch-frontend-local-dev-net
