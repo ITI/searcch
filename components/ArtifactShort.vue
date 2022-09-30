@@ -88,7 +88,7 @@
         <v-btn
           v-if="!related"
           color="primary"
-          :to="`/artifact/${artifact.artifact_group_id}`"
+          :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}`"
           nuxt
         >
           Read More
