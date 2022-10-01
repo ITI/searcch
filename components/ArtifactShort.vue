@@ -88,7 +88,7 @@
         <v-btn
           v-if="!related"
           color="primary"
-          :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}`"
+          :to="getArtifactLink()"
           nuxt
         >
           Read More
@@ -195,6 +195,13 @@ export default {
         } else {
           await this.$favoritesEndpoint.delete(this.artifact.artifact_group_id)
         }
+      }
+    },
+    getArtifactLink() {
+      if (this.artifact.artifact_group !== 'undefined' && this.artifact.artifact_group.publication !== 'undefined' && this.artifact.artifact_group.publication.artifact.id == this.artifact.id) {
+        return `/artifact/${this.artifact.artifact_group_id}`;
+      } else {
+        return `/artifact/${this.artifact.artifact_group_id}/${this.artifact.id}`;
       }
     },
     iconColor(type) {
