@@ -1,5 +1,5 @@
-comunda.ant.isi.edu {
-reverse_proxy /* localhost:3000 {
+comunda.isi.edu {
+reverse_proxy /* searcch-frontend-local-dev:3000 {
       header_down Strict-Transport-Security "max-age=15552000;"
       header_up X-Real-IP {remote_host}
       header_up X-Forwarded-For {remote_host}
