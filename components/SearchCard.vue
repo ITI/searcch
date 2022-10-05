@@ -220,12 +220,12 @@ export default {
       submitted: false,
       adopen: [1],
       advanced: {
-        types: ['dataset', 'presentation', 'publication', 'software', 'pcap'],
+        types: ['dataset', 'presentation', 'publication', 'software', 'pcap',  'netflow', 'flowtools', 'flowride', 'fsdb', 'csv', 'custom'],
         author: '',
         org: '',
         badge_ids: []
       },
-      types: ['dataset', 'presentation', 'publication', 'software', 'pcap'],
+      types: ['dataset', 'presentation', 'publication', 'software', 'pcap',  'netflow', 'flowtools', 'flowride', 'fsdb', 'csv', 'custom'],	
       filters: ['Name', 'Organization'],
       showScrollToTop: 0
     }

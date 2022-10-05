@@ -70,11 +70,21 @@
             "presentation",
             "dataset",
             "software",
-            "pcap"
+              "pcap",
+	      "netflow",
+	      "flowtools",
+	      "flowride",
+	      "fsdb",
+	      "csv",
+	      "custom"
+	      
           ],
           "type": "string"
         },
         "url": {
+          "type": "string"
+        },
+	"collection": {
           "type": "string"
         }
       },

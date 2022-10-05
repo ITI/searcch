@@ -160,7 +160,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0"> Artifact Type </v-card-title>
+      <v-card-title class="py-0"> Artifact Types </v-card-title>
 
       <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
         <v-avatar left>
@@ -294,6 +294,20 @@
           <v-divider class="mx-4"></v-divider>
         </div>
       </div>
+
+
+      <v-divider class="mx-4"></v-divider>
+      <v-card-title class="py-0"> Collection </v-card-title>
+
+      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{ iconImage(record.artifact.collection) }}</v-icon>
+        </v-avatar>
+
+        <div>{{ record.artifact.collection | titlecase }}</div>
+      </v-chip>
+
+      <v-divider class="mx-4"></v-divider>
 
       <div v-if="license">
         <v-card-title class="py-0">License</v-card-title>
