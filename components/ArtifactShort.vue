@@ -5,7 +5,18 @@
         <v-row>
           <v-col cols="9">
             <v-card-title class="align-start">
-              <span class="headline">{{ artifact.title | titlecase }}</span>
+              <span class="headline">{{ artifact.title | titlecase }}</span> 
+              <v-chip
+                class="ma-2"
+                cols="12"
+                label
+                :color="'blue white--text'"
+                v-if="showContributionIcon()">
+                <v-avatar left>
+                  <v-icon>mdi-check-circle</v-icon>
+                </v-avatar>
+                <span style="font-weight: normal;">contributor</span>
+              </v-chip>
             </v-card-title>
           </v-col>
           <v-col cols="3">
@@ -180,6 +191,9 @@ export default {
           this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact_group_id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
+    },
+    currentRouteName() {
+      return this.$route.name;
     }
   },
   methods: {
@@ -198,7 +212,10 @@ export default {
       }
     },
     getArtifactLink() {
-      if (this.artifact.artifact_group !== 'undefined' && this.artifact.artifact_group.publication !== 'undefined' && this.artifact.artifact_group.publication.artifact.id == this.artifact.id) {
+      if(this.artifact === undefined) {
+        return;
+      }
+      if (this.artifact.artifact_group !== undefined && this.artifact.artifact_group.publication !== undefined && this.artifact.artifact_group.publication.artifact.id == this.artifact.id) {
         return `/artifact/${this.artifact.artifact_group_id}`;
       } else {
         return `/artifact/${this.artifact.artifact_group_id}/${this.artifact.id}`;
@@ -225,6 +242,9 @@ export default {
       return typeof this.artifact.owner !== 'undefined'
         ? this.artifact.artifact_group.owner_id == this.userid
         : false
+    },
+    showContributionIcon() {
+      return this.currentRouteName == 'myartifacts' && !this.isOwner();
     }
   }
 }
@@ -239,5 +259,9 @@ export default {
 
 .v-card__title {
   word-break: normal;
+}
+
+.headline {
+  align-self: center;
 }
 </style>

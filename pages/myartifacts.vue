@@ -14,11 +14,6 @@
         <ArtifactList :artifacts="myArtifacts.owned_artifacts" :limit="limit"></ArtifactList>
         <span v-if="doArtifactsExist()">No artifacts yet</span>
       </div>
-      <div v-if="doContributionsExist()" class="my-artifacts-header">
-        <h1>Contributed Artifacts</h1>
-        <v-divider></v-divider>
-        <ArtifactList :artifacts="myArtifacts.contributed_artifacts" :limit="limit"></ArtifactList>
-      </div>
     </v-layout>
   </span>
 </template>
@@ -50,9 +45,6 @@ export default {
     }
   },
   methods: {
-    doContributionsExist() {
-      return this.myArtifacts.contributed_artifacts !== undefined && this.myArtifacts.contributed_artifacts.length > 0;
-    },
     doArtifactsExist() {
       return this.myArtifacts.owned_artifacts !== undefined && this.myArtifacts.owned_artifacts.length == 0;
     }
