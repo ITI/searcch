@@ -76,8 +76,7 @@
 	      "flowride",
 	      "fsdb",
 	      "csv",
-	      "custom"
-	      
+	      "custom"	      
           ],
           "type": "string"
         },
@@ -85,6 +84,36 @@
           "type": "string"
         },
 	"collection": {
+          "type": "string"
+        },
+	"provider": {
+          "type": "string"
+        },
+	"size": {
+          "type": "string"
+        },
+	 "from_time": {
+          "type": "string"
+          },
+	 "to_time": {
+          "type": "string"
+         },
+	  "access": {
+          "enum": [
+            "download",
+            "onsite",
+            "cloud"
+          ],
+          "type": "string"
+        },
+	  "anonymization": {
+          "enum": [
+            "cryptopan-full",
+              "cryptopan-host",
+	      "remove-host",
+	      "none",
+            "custom"
+          ],
           "type": "string"
         }
       },
