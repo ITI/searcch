@@ -242,8 +242,10 @@
 
       <div
         v-if="
-          typeof record.artifact.artifact_group.relationships !== 'undefined' &&
-            record.artifact.artifact_group.relationships.length
+          (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
+            record.artifact.artifact_group.relationships.length) ||
+          (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
+            record.artifact.artifact_group.reverse_relationships.length)
         "
       >
         <v-card-title class="py-0">Relations</v-card-title>
@@ -281,7 +283,7 @@
         <v-divider class="mx-4"></v-divider>
       </div>
 
-      <div
+      <!-- <div
         v-if="
           typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
             record.artifact.artifact_group.reverse_relationships.length
@@ -297,7 +299,7 @@
         ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
-      </div>
+      </div> -->
 
       <div v-if="badgesPresent">
         <v-card-title class="py-0">Badges</v-card-title>
@@ -494,7 +496,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor, bytesToSize, getCookie } from '@/helpers'
+import { artifactIcon, artifactColor, bytesToSize, reverseRelation } from '@/helpers'
 
 export default {
   name: 'KGArtifactLong',
@@ -680,10 +682,10 @@ export default {
 
       if (hasReverseRelation) {
         this.record.artifact.artifact_group.reverse_relationships.forEach((relationItem) => {
-          if (typeof dict[relationItem.relation] === 'undefined') {
-            dict[relationItem.relation] = [relationItem]
+          if (typeof dict[reverseRelation(relationItem.relation)] === 'undefined') {
+            dict[reverseRelation(relationItem.relation)] = [relationItem]
           } else {
-            dict[relationItem.relation].push(relationItem)
+            dict[reverseRelation(relationItem.relation)].push(relationItem)
           }
         })
       }
