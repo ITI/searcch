@@ -29,7 +29,9 @@ export default {
           description: '',
           url: '',
           tags: [],
-          relationships: [],
+          artifact_group: {
+            relationships: [],
+          },
           files: [],
           meta: []
         }

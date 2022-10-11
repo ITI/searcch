@@ -72,7 +72,7 @@
         <v-btn
           icon
           v-if="!related"
-          :to="`/artifact/review/${artifact.id}`"
+          :to="`/artifact/review/${artifact.artifact_group_id}`"
           nuxt
         >
           <v-icon>mdi-comment</v-icon>
@@ -88,7 +88,7 @@
         <v-btn
           v-if="!related"
           color="primary"
-          :to="`/artifact/${artifact.id}`"
+          :to="`/artifact/${artifact.artifact_group_id}`"
           nuxt
         >
           Read More
@@ -96,15 +96,15 @@
         <v-btn
           v-else
           color="success"
-          @click="addRelated(artifact.id, relation)"
+          @click="addRelated(artifact.artifact_group_id, relation)"
           :disabled="relation.length == 0"
         >
           Add Related
         </v-btn>
         <v-btn
-          v-if="isOwner()"
+          v-if="isOwner() || isAdmin()"
           color="success"
-          :to="`/artifact/${artifact.id}?edit=true`"
+          :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
         >
           Edit
@@ -173,12 +173,12 @@ export default {
     },
     favorite: {
       get() {
-        return this.favorites[this.artifact.id] ? true : false
+        return this.favorites[this.artifact.artifact_group_id] ? true : false
       },
       set(value) {
         if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.id)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact_group_id)
+        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
     }
   },
@@ -191,9 +191,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          await this.$favoritesEndpoint.post(this.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.artifact.artifact_group_id, {})
         } else {
-          await this.$favoritesEndpoint.delete(this.artifact.id)
+          await this.$favoritesEndpoint.delete(this.artifact.artifact_group_id)
         }
       }
     },
@@ -204,16 +204,19 @@ export default {
       return artifactIcon(type)
     },
     addRelated(id, relation) {
+      console.log(this.artifact)
       this.$store.dispatch('artifacts/setRelated', {
         id: id,
         relation: relation
       })
       EventBus.$emit('close', 'artifactdialog')
     },
+    isAdmin() {
+      this.user_is_admin
+    },
     isOwner() {
-      if (this.user_is_admin) return true
       return typeof this.artifact.owner !== 'undefined'
-        ? this.artifact.owner.id == this.userid
+        ? this.artifact.artifact_group.owner_id == this.userid
         : false
     }
   }

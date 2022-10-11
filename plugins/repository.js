@@ -10,6 +10,12 @@ export default (ctx, inject) => {
   // artifact retrieval
   inject('artifactEndpoint', repositoryWithAxios('kg/' + 'artifact'))
 
+  //artifact claim retrieval
+  inject('artifactClaimEndpoint', repositoryWithAxios('kg/' + 'artifact/request/owner'))
+
+  //admin artifact claims retrieval
+  inject('adminArtifactClaimEndpoint', repositoryWithAxios('kg/' + 'artifact/requests/owner'))
+
   // artifact searching
   inject(
     'artifactSearchEndpoint',
@@ -37,6 +43,12 @@ export default (ctx, inject) => {
   inject(
     'relationshipEndpoint',
     repositoryWithAxios('kg/' + 'artifact/relationship')
+  )
+
+  // compare artifacts
+  inject(
+    'artifactCompareEndpoint',
+    repositoryWithAxios('kg/' + 'artifact/compare')
   )
 
   // badges
@@ -101,4 +113,7 @@ export default (ctx, inject) => {
 
   // sessions index API
   inject('sessionsEndpoint', repositoryWithAxios('kg/' + 'sessions'))
+
+  // user request ownership API
+  inject('requestOwnershipEndpoint', repositoryWithAxios('/kg' + '/requests/ownership'))
 }

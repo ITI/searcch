@@ -64,7 +64,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="primary" :to="`/artifact/${artifact.artifact.id}`" nuxt>
+        <v-btn color="primary" :to="`/artifact/${artifact.artifact.artifact_group_id}`" nuxt>
           Read More
         </v-btn>
       </v-card-actions>
@@ -125,18 +125,18 @@ export default {
     },
     favorite: {
       get() {
-        return this.favorites[this.artifact.artifact.id] ? true : false
+        return this.favorites[this.artifact.artifact.artifact_group_id] ? true : false
       },
       set(value) {
         if (value)
           this.$store.commit(
             'artifacts/ADD_FAVORITE',
-            this.artifact.artifact.id
+            this.artifact.artifact.artifact_group_id
           )
         else
           this.$store.commit(
             'artifacts/REMOVE_FAVORITE',
-            this.artifact.artifact.id
+            this.artifact.artifact.artifact_group_id
           )
       }
     },
@@ -159,9 +159,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          await this.$favoritesEndpoint.post(this.artifact.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.artifact.artifact.artifact_group_id, {})
         } else {
-          await this.$favoritesEndpoint.delete(this.artifact.artifact.id)
+          await this.$favoritesEndpoint.delete(this.artifact.artifact.artifact_group_id)
         }
       }
     },

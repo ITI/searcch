@@ -63,7 +63,8 @@ export default {
 
       // auto log them back in
       alert('Your session expired. The system will now log you back in')
-      this.$auth.loginWith('github')
+      let strategy = this.$auth.$storage.getUniversal('strategy')
+      this.$auth.loginWith(strategy)
     }
   }
 }

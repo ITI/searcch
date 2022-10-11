@@ -21,6 +21,8 @@ export const artifactIcon = type => {
       return 'mdi-relation-one-to-one'
     case 'reverse-relation':
       return 'mdi-relation-one-to-one'
+    case 'field':
+      return 'mdi-text-box'
     default:
       return 'mdi-help'
   }
@@ -88,6 +90,15 @@ export const convertArrayToObject = (array, key) => {
       [item[key]]: item
     }
   }, initialValue)
+}
+
+export const getCookie = (cookieName) => {
+  let cookie = {};
+  document.cookie.split(';').forEach(function(el) {
+    let [key,value] = el.split('=');
+    cookie[key.trim()] = value;
+  })
+  return cookie[cookieName];
 }
 
 export const zipArray = (tag, input) => {

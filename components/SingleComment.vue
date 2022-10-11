@@ -115,7 +115,7 @@ export default {
       // FIXME: backend API
       await this.$reviewsEndpoint.post(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.$route.params.id
+        artifact_group_id: this.$route.params.id
       })
     },
     async deleteReview() {
@@ -126,7 +126,7 @@ export default {
       }
       await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
       this.$store.dispatch('artifacts/fetchArtifact', {
-        id: this.$route.params.id
+        artifact_group_id: this.$route.params.id
       })
     }
   }

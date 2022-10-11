@@ -1,16 +1,22 @@
 <template>
   <div v-if="record.artifact">
     <v-card class="mx-auto my-2">
-      <v-card-title> {{ record.artifact.title }} </v-card-title>
+      <v-card-title>{{ record.artifact.title }}</v-card-title>
       <v-card-subtitle>
-        Artifact ID:
-        {{ record.artifact.id }}
-      </v-card-subtitle>
-      <v-card-text>
+        <div
+          v-if="record.artifact.artifact_group.publication != null &&
+                record.artifact.artifact_group.publication.artifact_id != record.artifact.id"
+          align="left"
+          class="mx-0"
+        >
+          &nbsp;&nbsp;(<a :href="`/artifact/${record.artifact.artifact_group_id}`">newest version</a>)
+        </div>
+        <div>
         <a target="_blank" :href="record.artifact.url" rel="noopener">
           {{ record.artifact.url }}
         </a>
-      </v-card-text>
+        </div>
+      </v-card-subtitle>
 
       <v-card-text>
         <v-row align="center" class="mx-0">
@@ -24,37 +30,165 @@
           ></v-rating>
           <div class="grey--text ml-4">({{ record.num_ratings }})</div>
         </v-row>
+        <v-row align="center" class="mx-0">
+          <span v-if="record.artifact.publication">
+            Published: {{ $moment(record.artifact.publication.time) }}
+            &nbsp;(record version
+            <a
+              :href="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}`"
+              rel="noopener"
+              >
+              {{ record.artifact.publication.version }}</a>)
+          </span>
+          <span v-else>
+            Draft: {{ $moment(record.artifact.mtime || record.artifact.ctime) }}
+            &nbsp;(version
+            <a
+              :href="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}`"
+              rel="noopener"
+              >
+              {{ record.artifact.artifact_group_id + "/" + record.artifact.id }}</a>)
+          </span>
+        </v-row>
+        <v-row align="center" class="mx-0">
+          <span v-if="this.$auth.loggedIn">
+	    Owner:
+	    <a
+	      :href="`/profile/${record.artifact.artifact_group.owner_id}`"
+	      rel="noopener"
+	      >{{ record.artifact.artifact_group.owner.person.name }}
+	    </a>
+	  </span>
+	</v-row>
+        <v-row
+          v-if="record.artifact.artifact_group.publications.length"
+          align="center"
+          class="mx-0"
+        >
+          <v-btn
+            v-if="record.artifact.artifact_group.publications"
+            x-small
+            @click="history_expanded = !history_expanded"
+          >
+            {{ !history_expanded ? 'Show Record History' : 'Hide Record History' }}
+          </v-btn>
+	  <v-btn
+	    x-small
+	    @click="claimThis()"
+	    >Claim This Record
+	  </v-btn>
+        </v-row>
+
+        <transition name="modal-fade">
+          <ClaimRoleModal
+          v-show="isModalVisible"
+          @close="closeModal"
+          v-bind:justificationMessage="justificationMessage"
+          v-bind:isDisabled="isModalDisabled"
+          v-bind:artifact_group_id="record.artifact.artifact_group_id"
+          v-bind:email="user.email">
+        </ClaimRoleModal>
+        </transition>
+
+        <transition name="info-message-fade">
+          <div v-if="showOwnershipMessage" class="ownership-info">
+            {{ ownershipMessage }}
+          </div>
+        </transition>
+
+      </v-card-text>
+
+      <v-card-text v-if="history_expanded">
+        <v-container
+          align="center" class="mx-0"
+          v-for="publication in record.artifact.artifact_group.publications.slice().reverse()"
+          :key="publication.id"
+        >
+          <v-row align="center" class="mx-0">
+            <v-container>
+              <v-row>
+                <v-icon
+                  v-if="publication.artifact.id === record.artifact.id"
+                >
+                  mdi-arrow-right-thin
+                </v-icon>
+                Record Version: &nbsp;
+                <a
+                  :href="`/artifact/${publication.artifact.artifact_group_id}/${publication.artifact.id}`"
+                  rel="noopener"
+                >
+                  {{ publication.version }}
+                </a>
+                &nbsp;
+                <span v-if="publication.artifact.id !== record.artifact.id">
+                  (compare:&nbsp;
+                  <a
+                    rel="noopener"
+                    @click="getDiff(publication.artifact.id,record.artifact.id)"
+                  >from</a>,
+                  <a
+                    rel="noopener"
+                    @click="getDiff(record.artifact.id,publication.artifact.id)"
+                  >
+                    to</a>)
+                </span>
+              </v-row>
+              <v-row align="center" class="mx-0">
+                Published: {{ $moment(publication.time) }}
+              </v-row>
+              <v-row align="center" class="mx-0">
+                Publisher: &nbsp; <a :href="`/profile/${publication.publisher.id}`" rel="noopener">{{ publication.publisher.person.name }}</a>
+              </v-row>
+              <v-row
+                align="center"
+                class="mx-0"
+                v-if="publication.notes && publication.notes != ''">
+                Notes: {{ publication.notes }}
+              </v-row>
+            </v-container>
+          </v-row>
+        </v-container>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-card-title>Description</v-card-title>
 
-      <v-card-text ref="descDiv" :class="hideOverflow">
+      <v-card-text>
         <div v-html="sanitizedDescription"></div>
       </v-card-text>
 
-      <div v-if="markdown">
+      <div v-if="markdown" :class="hideOverflow">
         <v-divider class="mx-4"></v-divider>
         <v-card-title>
-          <v-row class="mx-1"
-            >Readme<v-spacer></v-spacer
-            ><v-btn v-if="isOverflow" @click="expanded = !expanded">{{
-              !expanded ? 'Expand' : 'Collapse'
-            }}</v-btn></v-row
-          >
+          <v-row class="mx-1">
+            Readme
+            <v-spacer></v-spacer>
+            <v-btn :v-if="false && isOverflow" @click="expanded = !expanded">
+              {{ overflowText }}
+              <v-icon>{{ overflowIcon }}</v-icon>
+            </v-btn>
+          </v-row>
         </v-card-title>
         <v-card-text>
           <vue-simple-markdown :source="markdown"></vue-simple-markdown>
         </v-card-text>
-        <v-btn
-          elevation="0"
-          tile
-          v-if="isOverflow"
-          @click="expanded = !expanded"
-          block
-          ><v-icon>{{ overflowIcon }}</v-icon></v-btn
-        >
+      </div>
+      <div>
+        <v-card-text>
+          <v-row class="mx-1">
+            <v-btn
+              elevation="0"
+              tile
+              :v-if="isOverflow"
+              @click="expanded = !expanded"
+              block
+              >
+              {{ overflowText }}
+              <v-icon>{{ overflowIcon }}</v-icon>
+            </v-btn>
+          </v-row>
+        </v-card-text>
       </div>
 
       <v-divider class="mx-4"></v-divider>
@@ -108,8 +242,8 @@
 
       <div
         v-if="
-          typeof record.artifact.relationships !== 'undefined' &&
-            record.artifact.relationships.length
+          typeof record.artifact.artifact_group.relationships !== 'undefined' &&
+            record.artifact.artifact_group.relationships.length
         "
       >
         <v-card-title class="py-0">Relations</v-card-title>
@@ -272,21 +406,85 @@
           <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         </v-btn>
 
-        <v-btn icon :to="`/artifact/review/${record.artifact.id}`" nuxt>
+        <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" nuxt>
           <v-icon>mdi-comment</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn
-          v-if="isOwner() && !published"
-          color="success"
-          small
-          :to="`/artifact/${record.artifact.id}?edit=true`"
-          nuxt
-        >
-          Edit
-        </v-btn>
+        <span v-if="(isOwner() || isAdmin()) && !published">
+          <v-btn
+            color="success"
+            small
+            :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit=true`"
+            nuxt
+            >
+            Edit
+          </v-btn>
+        </span>
+        <span v-if="(isOwner() || isAdmin()) && published">
+          <v-btn
+            color="success"
+            small
+            @click="newVersion()"
+            nuxt
+            >
+            Edit New Version
+          </v-btn>
+          <v-btn
+            color="success"
+            small
+            @click="reImportNewVersion()"
+            nuxt
+            >
+            Reimport New Version
+          </v-btn>
+        </span>
       </v-card-actions>
     </v-card>
+
+    <template>
+      <v-dialog v-model="diff_results_dialog" scrollable>
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Comparison Results</span>
+            <v-spacer/>
+            <span class="text-h7">
+              (from
+              {{ this.record.artifact.artifact_group_id + "/" + this.diff_from }}
+              to
+              {{ this.record.artifact.artifact_group_id + "/" + this.diff_to }}
+              )
+            </span>
+          </v-card-title>
+          <v-card-text>
+            <v-tabs v-model="diff_results_tab">
+              <v-tab>Visual</v-tab>
+              <v-tab>Raw</v-tab>
+            </v-tabs>
+
+            <v-tabs-items v-model="diff_results_tab">
+              <v-tab-item :key="visual">
+                <ArtifactCurationList
+                  :curations="diff_results">
+                </ArtifactCurationList>
+              </v-tab-item>
+              <v-tab-item :key="raw">
+                <JsonPrettyPrint :value="diff_results"></JsonPrettyPrint>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="diff_results_dialog = false"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </template>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
@@ -296,7 +494,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
+import { artifactIcon, artifactColor, bytesToSize, getCookie } from '@/helpers'
 
 export default {
   name: 'KGArtifactLong',
@@ -307,14 +505,28 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips')
-  },
+    ArtifactChips: () => import("@/components/ArtifactChips"),
+    ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
+    JsonPrettyPrint: () => import("@/components/pretty-print"),
+    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue")
+},
   data() {
     return {
       loading: true,
       loaded: false,
       expanded: false,
-      loadingMessage: 'Loading...'
+      history_expanded: false,
+      diff_from: -1,
+      diff_to: -1,
+      diff_results: [],
+      diff_results_dialog: false,
+      diff_results_tab: "visual",
+      loadingMessage: 'Loading...',
+      isModalVisible: false,
+      isModalDisabled: false,
+      ownershipMessage: "",
+      showOwnershipMessage: false,
+      justificationMessage: ""
     }
   },
   mounted() {
@@ -326,24 +538,25 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.user.userid,
+      user: state => state.user,
       favorites: state => state.artifacts.favoritesIDs,
-      user_is_admin: state => state.user.user_is_admin
+      user_is_admin: state => state.user.user_is_admin,
+      artifactClaim: state => state.artifacts.artifactClaim
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
     },
     favorite: {
       get() {
-        return this.favorites[this.record.artifact.id] ? true : false
+        return this.favorites[this.record.artifact.artifact_group_id] ? true : false
       },
       set(value) {
         if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.id)
+          this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.artifact_group_id)
         else
           this.$store.commit(
             'artifacts/REMOVE_FAVORITE',
-            this.record.artifact.id
+            this.record.artifact.artifact_group_id
           )
       }
     },
@@ -415,7 +628,9 @@ export default {
       this.record.artifact.files.map(f => {
         readmes = f.members.find(m => m.name.toUpperCase() == 'README.MD')
       })
-      if (typeof readmes !== 'undefined') return readmes.content
+      console.log(readmes)
+      if (typeof readmes !== 'undefined' && readmes.file_content)
+         return atob(readmes.file_content.content)
     },
     hideOverflow() {
       return {
@@ -424,12 +639,16 @@ export default {
     },
     isOverflow() {
       if (!this.loaded) return false
-      let element = this.$refs['descDiv']
-      return element.offsetHeight >= 700
+      let element = this.$refs['markdown']
+      return element.offsetHeight >= 250
     },
     overflowIcon() {
       if (!this.expanded) return 'mdi-chevron-down'
       else return 'mdi-chevron-up'
+    },
+    overflowText() {
+      if (!this.expanded) return 'Show All'
+      else return 'Collapse'
     },
     published() {
       return this.record.artifact.publication ? true : false
@@ -481,9 +700,9 @@ export default {
         this.favorite = !this.favorite
         if (action) {
           // FIXME: backend API
-          await this.$favoritesEndpoint.post(this.record.artifact.id, {})
+          await this.$favoritesEndpoint.post(this.record.artifact.artifact_group_id, {})
         } else {
-          await this.$favoritesEndpoint.delete(this.record.artifact.id)
+          await this.$favoritesEndpoint.delete(this.record.artifact.artifact_group_id)
         }
       }
     },
@@ -496,10 +715,12 @@ export default {
     convertSize(size) {
       return bytesToSize(size)
     },
+    isAdmin() {
+      return this.user_is_admin
+    },
     isOwner() {
-      if (this.user_is_admin) return true
-      return typeof this.record.artifact.owner !== 'undefined'
-        ? this.record.artifact.owner.id == this.userid
+      return typeof this.record.artifact.artifact_group.owner_id !== 'undefined'
+        ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.artifact_group.owner_id == this.user.userid)
         : false
     },
     getSearcchLinkForArtifact(id) {
@@ -584,7 +805,27 @@ export default {
 
 <style scoped>
 .hideoverflow {
-  max-height: 700px;
+  max-height: 250px;
   overflow: hidden;
 }
+.ownership-info {
+  margin: 8px;
+  font-weight: normal;
+  background: #fff0bb;
+  padding: 10px;
+  border-radius: 5px;
+}
+.info-message-fade-enter, .info-message-fade-leave-to {
+  opacity: 0;
+}
+
+.info-message-fade-enter-active, .info-message-fade-leave-active {
+  transition: opacity .5s ease;
+}
+
+#claim-text {
+  margin-left: 5px;
+  font-weight: normal;
+}
+
 </style>

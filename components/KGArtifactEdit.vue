@@ -406,8 +406,85 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn
+            v-if="canReplayCurations"
+            color="success"
+            @click="replayCurations"
+            nuxt
+          >
+            Reapply Prior Version Edits
+          </v-btn>
+          <v-divider
+            v-if="!record.artifact.curations && record.artifact.importer"
+            vertical>
+          </v-divider>
+          &nbsp;
           <v-btn color="success" :disabled="!valid || disabled" @click="save()">
             Save
+          </v-btn>
+          &nbsp;
+          &nbsp;
+          <v-divider
+            vertical
+          >
+          </v-divider>
+          <v-dialog
+            v-model="publish_dialog"
+            width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                color="primary"
+                :disabled="!valid || disabled"
+              >
+                Publish
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="text-h5 lighten-2">
+                Publish this version
+              </v-card-title>
+              <v-card-text>
+                Describe the changes you made in this version in the field below.
+              </v-card-text>
+              <v-card-text>
+                <v-textarea
+                  outlined
+                  auto-grow
+                  rows="1"
+                  label="Publication notes"
+                  v-model="publish_notes"
+                ></v-textarea>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="primary"
+                  :disabled="!valid || disabled"
+                  @click="publish()"
+                >
+                  Publish
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          &nbsp;
+          &nbsp;
+          <v-divider
+            vertical
+          >
+          </v-divider>
+          &nbsp;
+          &nbsp;
+          <v-btn
+            v-if="!record.artifact.publication"
+            color="error"
+            @click="deleteDraft()"
+            nuxt
+          >
+            Delete Draft
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -416,7 +493,7 @@
         <v-card-title class="py-0">Relationship</v-card-title>
 
         <ArtifactChips
-          :field="artifact_local.relationships"
+          :field="artifact_local.artifact_group.relationships"
           type="relation"
           edit
         ></ArtifactChips>
@@ -460,17 +537,6 @@
             </template>
           </v-dialog>
         </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            :disabled="!valid || disabled"
-            @click="publish()"
-          >
-            Publish
-          </v-btn>
-        </v-card-actions>
-
       </v-card>
     </v-form>
 
@@ -482,6 +548,29 @@
         </v-btn>
       </template>
     </v-snackbar>
+
+    <template>
+      <v-dialog v-model="replay_results_dialog" scrollable>
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Curation Reapply Results</span>
+          </v-card-title>
+          <v-card-text>
+            <ArtifactCurationList :curations="replay_results"></ArtifactCurationList>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="replay_results_dialog = false"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </template>
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
@@ -547,13 +636,18 @@ export default {
   components: {
     LazyHydrate: () => import('vue-lazy-hydration'),
     SearchCard: () => import('@/components/SearchCard'),
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: () => import('@/components/ArtifactChips'),
+    ArtifactCurationList: () => import('@/components/ArtifactCurationList')
   },
   data() {
     return {
       loading: true,
       publish_local: false,
+      publish_dialog: false,
+      publish_notes: "",
       snackbar: false,
+      replay_results_dialog: false,
+      replay_results: [],
       loadingMessage: 'Loading...',
       artifact_local: {},
       meta: {
@@ -700,6 +794,12 @@ export default {
     published() {
       if (this.artifact_local.publication) return true
       return false
+    },
+    canReplayCurations: function() {
+      return (this.record.artifact.importer
+              && this.record.artifact.parent_id != null
+              && (this.record.artifact.curations === 'undefined'
+                  || this.record.artifact.curations.length < 1))
     }
   },
   watch: {
@@ -716,22 +816,22 @@ export default {
   methods: {
     async publish() {
       if (!this.valid) return
-      if (!confirm('Are you sure you want to publish this artifact?')) return
 
       // save the artifact first
       await this.save()
 
       let response = await this.$artifactEndpoint.update(
-        this.artifact_local.id,
+        [this.artifact_local.artifact_group_id, this.artifact_local.id],
         {
-          publication: {}
+          publication: { notes: this.publish_notes }
         }
       )
       this.$store.dispatch('artifacts/fetchArtifact', {
+        artifact_group_id: this.artifact_local.artifact_group_id,
         id: this.artifact_local.id
       })
 
-      this.$router.push(`/artifact/${this.artifact_local.id}`)
+      this.$router.push(`/artifact/${this.artifact_local.artifact_group_id}`)
     },
     async save() {
       if (!this.valid) return
@@ -816,7 +916,9 @@ export default {
         response = await this.$artifactsEndpoint.create(this.artifact_local)
       } else {
         // console.log('curating')
-        response = await this.$artifactEndpoint.update(artifact.id, artifact)
+        response = await this.$artifactEndpoint.update(
+          [artifact.artifact_group_id, artifact.id],
+          artifact)
       }
       // console.log('response artifact')
       // console.log(response)
@@ -836,9 +938,33 @@ export default {
 
       if (this.create) {
         this.create = false
-        this.$router.push(`/artifact/${this.artifact_local.id}?edit=true`)
+        this.$router.push(`/artifact/${this.artifact_local.artifact_group_id}/${this.artifact_local.id}?edit=true`)
       } else {
       }
+    },
+    async replayCurations() {
+      // console.log('curating')
+      let response = await this.$artifactEndpoint.update(
+        [this.artifact_local.artifact_group_id, this.artifact_local.id],
+        {replay_curations: true}
+      )
+      this.replay_results = response.replay_results
+      for (var i = 0; i < this.replay_results.length; ++i) {
+          this.replay_results[i]._id = i
+          this.replay_results[i].curation.opdata =
+            JSON.parse(this.replay_results[i].curation.opdata)
+      }
+      this.replay_results_dialog = true
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        artifact_group_id: this.artifact_local.artifact_group_id,
+        id: this.artifact_local.id
+      })
+    },
+    async deleteDraft() {
+      // console.log('deleting draft')
+      let response = await this.$artifactEndpoint.delete(
+        [this.artifact_local.artifact_group_id, this.artifact_local.id])
+      this.$router.back()
     },
     iconColor(type) {
       return artifactColor(type)
