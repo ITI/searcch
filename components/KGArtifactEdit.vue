@@ -635,7 +635,7 @@ export default {
     SearchCard: () => import("@/components/SearchCard"),
     ArtifactChips: () => import("@/components/ArtifactChips"),
     ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
-    ArtifactRelationView
+    ArtifactRelationView: () => import("@/components/ArtifactRelationView.vue"),
 },
   data() {
     return {

@@ -490,8 +490,6 @@ export default {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
-    console.log(this.record.artifact.relationships)
-    console.log(this.record.artifact.reverse_relationships)
   },
   computed: {
     ...mapState({
