@@ -283,24 +283,6 @@
         <v-divider class="mx-4"></v-divider>
       </div>
 
-      <!-- <div
-        v-if="
-          typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
-            record.artifact.artifact_group.reverse_relationships.length
-        "
-      >
-        <v-card-title class="py-0">Reverse Relations</v-card-title>
-
-        <ArtifactChips
-          :field="record.artifact.artifact_group.reverse_relationships"
-          type="reverse-relation"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div> -->
-
       <div v-if="badgesPresent">
         <v-card-title class="py-0">Badges</v-card-title>
 
