@@ -492,11 +492,7 @@
         
         <v-card-title class="py-0">Relationship</v-card-title>
 
-        <ArtifactChips
-          :field="artifact_local.artifact_group.relationships"
-          type="relation"
-          edit
-        ></ArtifactChips>
+        <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
 
         <div>
           <v-dialog
@@ -585,6 +581,7 @@ import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { zipArray, EventBus } from '@/helpers'
+import ArtifactRelationView from './ArtifactRelationView.vue'
 
 function affiliationObjectsEqual(o1,o2) {
   //console.log("o1: ",o1)
@@ -634,11 +631,12 @@ export default {
     }
   },
   components: {
-    LazyHydrate: () => import('vue-lazy-hydration'),
-    SearchCard: () => import('@/components/SearchCard'),
-    ArtifactChips: () => import('@/components/ArtifactChips'),
-    ArtifactCurationList: () => import('@/components/ArtifactCurationList')
-  },
+    LazyHydrate: () => import("vue-lazy-hydration"),
+    SearchCard: () => import("@/components/SearchCard"),
+    ArtifactChips: () => import("@/components/ArtifactChips"),
+    ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
+    ArtifactRelationView
+},
   data() {
     return {
       loading: true,

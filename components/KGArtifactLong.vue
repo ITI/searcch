@@ -250,35 +250,7 @@
       >
         <v-card-title class="py-0">Relations</v-card-title>
 
-        <v-tabs vertical>
-          <v-tab 
-            v-for="relationName in Object.keys(relationsMap)"
-            :key="`${relationName}-tab`"
-          >
-            {{ relationName }}
-          </v-tab>
-          <v-tab-item
-            v-for="relationName in Object.keys(relationsMap)"
-            :key="`${relationName}-content`"
-          >
-            <v-list-item 
-              v-for="relatedItem in relationsMap[relationName]"
-              :key="`${relatedItem.artifact_id}-${relationname}-${relatedItem.related_artifact_id}`"
-            >
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ relatedItem.related_artifact_group.publication.artifact.title }}
-                  <v-btn class="mb-1" fab x-small text :href="getSearcchLinkForArtifact(relatedItem.related_artifact_group.publication.artifact.id)">
-                    <v-icon small>mdi-open-in-new</v-icon>
-                  </v-btn>
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ relatedItem.related_artifact_group.publication.artifact.description }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-tab-item>
-        </v-tabs>
+        <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -492,7 +464,8 @@ export default {
     ArtifactChips: () => import("@/components/ArtifactChips"),
     ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
     JsonPrettyPrint: () => import("@/components/pretty-print"),
-    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue")
+    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue"),
+    ArtifactRelationView: () => import("@/components/ArtifactRelationView.vue"),
 },
   data() {
     return {
@@ -641,39 +614,6 @@ export default {
       if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
       else return 'Claim Role'
     },
-    relationsMap() {
-      const hasReverseRelation = typeof this.record.artifact.artifact_group.reverse_relationships !== 'undefined'
-        && this.record.artifact.artifact_group.reverse_relationships.length
-      const hasRelation = typeof this.record.artifact.artifact_group.relationships !== 'undefined'
-        && this.record.artifact.artifact_group.relationships.length
-        
-      if (!hasRelation && !hasReverseRelation) {
-        return undefined
-      }
-
-      let dict = {}
-      if (hasRelation) {
-        this.record.artifact.artifact_group.relationships.forEach((relationItem) => {
-          if (typeof dict[relationItem.relation] === 'undefined') {
-            dict[relationItem.relation] = [relationItem]
-          } else {
-            dict[relationItem.relation].push(relationItem)
-          }
-        })
-      }
-
-      if (hasReverseRelation) {
-        this.record.artifact.artifact_group.reverse_relationships.forEach((relationItem) => {
-          if (typeof dict[reverseRelation(relationItem.relation)] === 'undefined') {
-            dict[reverseRelation(relationItem.relation)] = [relationItem]
-          } else {
-            dict[reverseRelation(relationItem.relation)].push(relationItem)
-          }
-        })
-      }
-      
-      return dict
-    },
   },
   methods: {
     async favoriteThis() {
@@ -706,9 +646,6 @@ export default {
       return typeof this.record.artifact.artifact_group.owner_id !== 'undefined'
         ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.artifact_group.owner_id == this.user.userid)
         : false
-    },
-    getSearcchLinkForArtifact(id) {
-      return "/artifact/" + id
     },
     async newVersion() {
       let response = await this.$artifactEndpoint.post(
