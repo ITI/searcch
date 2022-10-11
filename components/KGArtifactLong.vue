@@ -114,20 +114,53 @@
       >
         <v-card-title class="py-0">Relations</v-card-title>
 
-        <v-card-text>
-          <v-card elevation="0" outlined>
-              <v-tabs vertical>
-                <v-tab v-for="type in Object.keys(relationshipsByTypes)" :key="type">{{ type }}</v-tab>
-                <v-tab-item v-for="key,i in Object.keys(relationshipsByTypes)" :key="i">
-                  <v-list dense>
-                    <v-list-item v-for="relationship in relationshipsByTypes[key]" :key="relationship.id">
-                      {{ relationship.related_artifact_id }}
-                    </v-list-item>
-                  </v-list>
-                </v-tab-item>
-              </v-tabs>
-          </v-card>
-        </v-card-text>
+        <v-tabs vertical>
+          <v-tab 
+            v-for="relationName in Object.keys(relationsMap)"
+            :key="`${relationName}-tab`"
+          >
+            {{ relationName }}
+          </v-tab>
+          <v-tab-item
+            v-for="relationName in Object.keys(relationsMap)"
+            :key="`${relationName}-content`"
+          >
+            <v-list-item 
+              v-for="relatedItem in relationsMap[relationName]"
+              :key="`${relatedItem.artifact_id}-${relationname}-${relatedItem.related_artifact_id}`"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ relatedItem.related_artifact_group.publication.artifact.title }}
+                  <v-btn class="mb-1" fab x-small text :href="getSearcchLinkForArtifact(relatedItem.related_artifact_group.publication.artifact.id)">
+                    <v-icon small>mdi-open-in-new</v-icon>
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ relatedItem.related_artifact_group.publication.artifact.description }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-tab-item>
+        </v-tabs>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div
+        v-if="
+          typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
+            record.artifact.artifact_group.reverse_relationships.length
+        "
+      >
+        <v-card-title class="py-0">Reverse Relations</v-card-title>
+
+        <ArtifactChips
+          :field="record.artifact.artifact_group.reverse_relationships"
+          type="reverse-relation"
+          display
+          link
+        ></ArtifactChips>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -401,20 +434,43 @@ export default {
     published() {
       return this.record.artifact.publication ? true : false
     },
-    relationshipsByTypes() {
-      let relationships = [
-        ...this.record.artifact.relationships,
-        ...this.record.artifact.reverse_relationships
-      ]
-      let relationshipsByTypes = {}
-      for (let relationship of relationships) {
-        if (relationshipsByTypes[relationship.relation] === undefined) {
-          relationshipsByTypes[relationship.relation] = []
-        }
-        relationshipsByTypes[relationship.relation].push(relationship)
+    claimText() {
+      if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
+      else return 'Claim Role'
+    },
+    relationsMap() {
+      const hasReverseRelation = typeof this.record.artifact.artifact_group.reverse_relationships !== 'undefined'
+        && this.record.artifact.artifact_group.reverse_relationships.length
+      const hasRelation = typeof this.record.artifact.artifact_group.relationships !== 'undefined'
+        && this.record.artifact.artifact_group.relationships.length
+        
+      if (!hasRelation && !hasReverseRelation) {
+        return undefined
       }
-      return relationshipsByTypes
-    }
+
+      let dict = {}
+      if (hasRelation) {
+        this.record.artifact.artifact_group.relationships.forEach((relationItem) => {
+          if (typeof dict[relationItem.relation] === 'undefined') {
+            dict[relationItem.relation] = [relationItem]
+          } else {
+            dict[relationItem.relation].push(relationItem)
+          }
+        })
+      }
+
+      if (hasReverseRelation) {
+        this.record.artifact.artifact_group.reverse_relationships.forEach((relationItem) => {
+          if (typeof dict[relationItem.relation] === 'undefined') {
+            dict[relationItem.relation] = [relationItem]
+          } else {
+            dict[relationItem.relation].push(relationItem)
+          }
+        })
+      }
+      
+      return dict
+    },
   },
   methods: {
     async favoriteThis() {
@@ -445,6 +501,82 @@ export default {
       return typeof this.record.artifact.owner !== 'undefined'
         ? this.record.artifact.owner.id == this.userid
         : false
+    },
+    getSearcchLinkForArtifact(id) {
+      return "/artifact/" + id
+    },
+    async newVersion() {
+      let response = await this.$artifactEndpoint.post(
+        [this.record.artifact.artifact_group_id, this.record.artifact.id],{})
+      this.$store.dispatch('artifacts/fetchArtifact', {
+        artifact_group_id: response.artifact.artifact_group_id,
+        id: response.artifact.id
+      })
+      this.$router.push("/artifact/" + response.artifact.artifact_group_id
+        + "/" + response.artifact.id + "?edit=true")
+    },
+    async reImportNewVersion() {
+      let response = await this.$artifactEndpoint.post(
+        [this.record.artifact.artifact_group_id, this.record.artifact.id],
+        { reimport: true })
+      this.$router.push("/import")
+    },
+    async getDiff(from, to) {
+      this.diff_from = from
+      this.diff_to = to
+      let response = await this.$artifactCompareEndpoint.show(
+        [this.record.artifact.artifact_group_id, from],
+        { target_artifact_id: to}
+      )
+      this.diff_results = response.curations.map(
+        function(x) { return { curation: x }; }
+      )
+      console.log(this.diff_results)
+      for (var i = 0; i < this.diff_results.length; ++i) {
+        // NB: opdata from server is a string, not JSON itself.
+        this.diff_results[i].curation.opdata =
+          JSON.parse(this.diff_results[i].curation.opdata)
+
+        // NB: curations might not have IDs, as in this case,
+        // where the server generated a diff.  So we have to
+        // cons up an id for the ArtifactCurationList component.
+        this.diff_results[i]._id = i
+      }
+      this.diff_results_dialog = true
+    },
+    async claimThis() {
+      if (!this.$auth.loggedIn) {
+        this.ownershipMessage='Kindly login to claim role'
+        this.showOwnershipMessage = true;
+      } else {
+        await this.$store.dispatch('artifacts/fetchArtifactClaim', {
+          artifact_group_id: this.record.artifact.artifact_group_id,
+        })
+        if(this.artifactClaim.artifact_owner_request && this.artifactClaim.artifact_owner_request.error) {
+          this.ownershipMessage=this.artifactClaim.artifact_owner_request.message;
+          this.showOwnershipMessage = true;
+        } else {
+          this.showModal(this.artifactClaim.artifact_owner_request);
+        }
+      }
+    },
+    showModal(data) {
+      this.isModalVisible = true;
+      this.justificationMessage = "";
+      if(data) {
+        this.isModalDisabled = true;
+        this.justificationMessage = data.message;
+      }
+    },
+    closeModal(message) {
+      if(message) {
+        this.ownershipMessage=message;
+        this.showOwnershipMessage = true;
+      }
+      this.isModalVisible = false;
+    },
+    hideOwnershipInfo() {
+      setTimeout(()=>{this.showOwnershipMessage=false}, 5000);
     }
   },
 }
