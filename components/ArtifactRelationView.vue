@@ -1,30 +1,54 @@
 <template>
-  <v-tabs vertical>
-    <v-tab v-for="relationName in Object.keys(relationsMap)" :key="`${relationName}-tab`">
-      {{ relationName }}
-    </v-tab>
-    <v-tab-item v-for="relationName in Object.keys(relationsMap)" :key="`${relationName}-content`">
-      <v-list-item v-for="relation, idx in relationsMap[relationName]"
-        :key="`${relation.artifact_id}-${relationName}-${idx}`">
-        <v-list-item-content>
-          <v-list-item-title>
-            <v-btn v-if="edit" class="mb-1" fab x-small text
-              @click="deleteRelationship(relation)">
-              <v-icon small>mdi-close</v-icon>
-            </v-btn>
-            {{ relation.related_artifact_group.publication.artifact.title }}
-            <v-btn class="mb-1" fab x-small text
-              :href="getSearcchLinkForArtifact(relation)">
-              <v-icon small>mdi-open-in-new</v-icon>
-            </v-btn>
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ relation.related_artifact_group.publication.artifact.description }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
+  <div>
+    <v-card elevation="0">
+      <v-card-text class="pb-0">
+        <v-row class="d-flex align-center">
+          <v-col class="pb-0 pb-md-3" cols="12" md="3">
+            <v-select
+              v-model="displayMode"
+              :items="availableModes"
+              label="Relation Direction"
+              outlined dense
+            ></v-select>
+          </v-col>
+          <v-col class="pt-0 pt-md-3" cols="12" md="9">
+            <v-select
+              v-model="filters"
+              :items="availableFilters"
+              label="Relation Type"
+              outlined dense multiple
+            ></v-select>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-list dense>
+      <v-list-item v-for="relation, idx in relations"
+        :key="`${relation.artifact_id}-${idx}`">
+        <v-row>
+          <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 grey--text text--darken-2">
+            <v-list-item-title>{{ relation.relation | titlecase }}</v-list-item-title>
+          </v-col>
+          <v-col cols="12" md="10" class="pt-0">
+            <v-list-item-content>
+              <v-list-item-title>
+                <v-btn v-if="edit" class="mb-1" fab x-small text
+                  @click="deleteRelationship(relation)">
+                  <v-icon small>mdi-close</v-icon>
+                </v-btn>
+                {{ relation.related_artifact_group.publication.artifact.title }}
+                <v-btn class="mb-1" fab x-small text
+                  :href="getSearcchLinkForArtifact(relation)">
+                  <v-icon small>mdi-open-in-new</v-icon>
+                </v-btn>
+              </v-list-item-title>
+              <p class="text-caption">{{ relation.related_artifact_group.publication.artifact.description }}</p>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
       </v-list-item>
-    </v-tab-item>
-  </v-tabs>
+    </v-list>
+  </div>
 </template>
 
 <script>
@@ -46,40 +70,35 @@ export default {
       default: false,
     }
   },
+  data() {
+    return {
+      displayMode: 'Positive & Reversed',
+      filters: ['cites','supplements','extends','uses','describes','requires','processes','produces'],
+      availableModes: ['Positive & Reversed', 'Positive', 'Reversed'],
+      availableFilters: ['cites','supplements','extends','uses','describes','requires','processes','produces']
+    }
+  },
   computed: {
-    relationsMap() {
-      const hasReverseRelation = typeof this.artifact_group.reverse_relationships !== 'undefined'
-        && this.artifact_group.reverse_relationships.length
-      const hasRelation = typeof this.artifact_group.relationships !== 'undefined'
-        && this.artifact_group.relationships.length
-        
-      if (!hasRelation && !hasReverseRelation) {
-        return undefined
-      }
-
-      let dict = {}
-      if (hasRelation) {
-        this.artifact_group.relationships.forEach((relationItem, i) => {
-          if (typeof dict[relationItem.relation] === 'undefined') {
-            dict[relationItem.relation] = [relationItem]
-          } else {
-            dict[relationItem.relation].push(relationItem)
-          }
-        })
-      }
-
-      // reverse relation won't display in edit mode
-      if (hasReverseRelation && !this.edit) {
-        this.artifact_group.reverse_relationships.forEach((relationItem) => {
-          if (typeof dict[reverseRelation(relationItem.relation)] === 'undefined') {
-            dict[reverseRelation(relationItem.relation)] = [relationItem]
-          } else {
-            dict[reverseRelation(relationItem.relation)].push(relationItem)
-          }
-        })
-      }
+    relations() {
+      let results = []
+      const showReversedRelation = typeof this.artifact_group.reverse_relationships !== 'undefined'
+        && this.artifact_group.reverse_relationships.length && this.displayMode !== 'Positive'
+      const showPositiveRelation = typeof this.artifact_group.relationships !== 'undefined'
+        && this.artifact_group.relationships.length && this.displayMode !== 'Reversed'
       
-      return dict
+      if (showPositiveRelation) {
+        results.push(...this.artifact_group.relationships.filter(v => this.filters.includes(v.relation)))
+      }
+
+
+      if (showReversedRelation) {
+        results.push(...this.artifact_group.reverse_relationships
+          .filter(v => this.filters.includes(v.relation))
+          .map(e => ({ ...e, relation: reverseRelation(e.relation)}))
+        )
+      }
+
+      return results
     },
   },
   methods: {
