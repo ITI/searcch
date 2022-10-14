@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="9">
             <v-card-title class="align-start">
-              <span class="headline">{{ artifact.title | titlecase }}</span>
+              <span class="headline">{{ artifact.title | titlecase }}</span> 
             </v-card-title>
           </v-col>
           <v-col cols="3">
@@ -77,6 +77,18 @@
         >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
+        <span style="padding: 0 5 0 5; font-weight bold;" v-if="contributionTypeText"> | </span>
+        <v-chip
+          class="ma-2"
+          cols="12"
+          label
+          :color="getContributionChipColor()"
+          v-if="contributionTypeText">
+          <v-avatar left>
+            <v-icon>mdi-check-circle</v-icon>
+          </v-avatar>
+          <span style="font-weight: normal;">{{ contributionTypeText }}</span>
+        </v-chip>
 
         <v-spacer></v-spacer>
         <v-select
@@ -88,7 +100,7 @@
         <v-btn
           v-if="!related"
           color="primary"
-          :to="`/artifact/${artifact.artifact_group_id}`"
+          :to="getArtifactLink()"
           nuxt
         >
           Read More
@@ -180,6 +192,27 @@ export default {
           this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact_group_id)
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
+    },
+    contributionTypeText() {
+      if (this.artifact === undefined) {
+        return false;
+      }
+      if (this.artifact.artifact_group.owner_id == this.userid) {
+        return 'owner';
+      }
+      if(this.artifact.owner.id != this.userid) {
+        return false;
+      }
+      let isDraft = this.artifact.artifact_group.publications ? true : false;
+      this.artifact.artifact_group.publications && this.artifact.artifact_group.publications.forEach(publication => {
+        if (publication.artifact_id == this.artifact.id) {
+          isDraft = false;
+        }
+      });
+      if (isDraft) {
+        return 'draft';
+      }
+      return 'contributor';
     }
   },
   methods: {
@@ -195,6 +228,16 @@ export default {
         } else {
           await this.$favoritesEndpoint.delete(this.artifact.artifact_group_id)
         }
+      }
+    },
+    getArtifactLink() {
+      if(this.artifact === undefined) {
+        return;
+      }
+      if (this.artifact.artifact_group !== undefined && this.artifact.artifact_group.publication !== undefined && this.artifact.artifact_group.publication.artifact.id == this.artifact.id) {
+        return `/artifact/${this.artifact.artifact_group_id}`;
+      } else {
+        return `/artifact/${this.artifact.artifact_group_id}/${this.artifact.id}`;
       }
     },
     iconColor(type) {
@@ -218,6 +261,18 @@ export default {
       return typeof this.artifact.owner !== 'undefined'
         ? this.artifact.artifact_group.owner_id == this.userid
         : false
+    },
+    getContributionChipColor() {
+      switch(this.contributionTypeText) {
+        case 'owner':
+          return 'green white--text';
+        case 'contributor':
+          return 'blue white--text';
+        case 'draft':
+          return 'orange white--text';
+        default:
+          return 'grey';
+      }
     }
   }
 }
@@ -232,5 +287,9 @@ export default {
 
 .v-card__title {
   word-break: normal;
+}
+
+.headline {
+  align-self: center;
 }
 </style>

@@ -8,10 +8,12 @@
       </v-flex>
     </v-layout>
     <v-layout column justify-left align-top>
-      <h1>My artifacts</h1>
-      <v-divider></v-divider>
-      <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
-      <span v-if="artifacts.length == 0">No artifacts yet</span>
+      <div class="my-artifacts-header">
+        <h1>My Artifacts</h1>
+        <v-divider></v-divider>
+        <ArtifactList :artifacts="myArtifacts.owned_artifacts" :limit="limit"></ArtifactList>
+        <span v-if="doArtifactsExist()">No artifacts yet</span>
+      </div>
     </v-layout>
   </span>
 </template>
@@ -39,12 +41,17 @@ export default {
 
   data() {
     return {
-      limit: 20,
+      limit: 20
+    }
+  },
+  methods: {
+    doArtifactsExist() {
+      return this.myArtifacts.owned_artifacts !== undefined && this.myArtifacts.owned_artifacts.length == 0;
     }
   },
   computed: {
     ...mapState({
-      artifacts: state => state.artifacts.myArtifacts.owned_artifacts,
+      myArtifacts: state => state.artifacts.myArtifacts
     })
   },
   async mounted() {
@@ -52,3 +59,11 @@ export default {
   },
 }
 </script>
+
+<style>
+
+  .my-artifacts-header {
+    margin-top: 20px;
+  }
+
+</style>
