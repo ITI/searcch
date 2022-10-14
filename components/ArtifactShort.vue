@@ -6,17 +6,6 @@
           <v-col cols="9">
             <v-card-title class="align-start">
               <span class="headline">{{ artifact.title | titlecase }}</span> 
-              <v-chip
-                class="ma-2"
-                cols="12"
-                label
-                :color="'blue white--text'"
-                v-if="showContributionIcon()">
-                <v-avatar left>
-                  <v-icon>mdi-check-circle</v-icon>
-                </v-avatar>
-                <span style="font-weight: normal;">contributor</span>
-              </v-chip>
             </v-card-title>
           </v-col>
           <v-col cols="3">
@@ -88,6 +77,18 @@
         >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
+        <span style="padding: 0 5 0 5; font-weight bold;" v-if="contributionTypeText"> | </span>
+        <v-chip
+          class="ma-2"
+          cols="12"
+          label
+          :color="getContributionChipColor()"
+          v-if="contributionTypeText">
+          <v-avatar left>
+            <v-icon>mdi-check-circle</v-icon>
+          </v-avatar>
+          <span style="font-weight: normal;">{{ contributionTypeText }}</span>
+        </v-chip>
 
         <v-spacer></v-spacer>
         <v-select
@@ -192,8 +193,26 @@ export default {
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
     },
-    currentRouteName() {
-      return this.$route.name;
+    contributionTypeText() {
+      if (this.artifact === undefined) {
+        return false;
+      }
+      if (this.artifact.artifact_group.owner_id == this.userid) {
+        return 'owner';
+      }
+      if(this.artifact.owner.id != this.userid) {
+        return false;
+      }
+      let isDraft = this.artifact.artifact_group.publications ? true : false;
+      this.artifact.artifact_group.publications && this.artifact.artifact_group.publications.forEach(publication => {
+        if (publication.artifact_id == this.artifact.id) {
+          isDraft = false;
+        }
+      });
+      if (isDraft) {
+        return 'draft';
+      }
+      return 'contributor';
     }
   },
   methods: {
@@ -243,8 +262,17 @@ export default {
         ? this.artifact.artifact_group.owner_id == this.userid
         : false
     },
-    showContributionIcon() {
-      return this.currentRouteName == 'myartifacts' && !this.isOwner();
+    getContributionChipColor() {
+      switch(this.contributionTypeText) {
+        case 'owner':
+          return 'green white--text';
+        case 'contributor':
+          return 'blue white--text';
+        case 'draft':
+          return 'orange white--text';
+        default:
+          return 'grey';
+      }
     }
   }
 }
