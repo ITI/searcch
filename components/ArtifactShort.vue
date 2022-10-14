@@ -234,7 +234,10 @@ export default {
       if(this.artifact === undefined) {
         return;
       }
-      if (this.artifact.artifact_group !== undefined && this.artifact.artifact_group.publication !== undefined && this.artifact.artifact_group.publication.artifact.id == this.artifact.id) {
+      if (this.artifact.artifact_group !== undefined
+          && this.artifact.artifact_group.publication !== undefined
+          && this.artifact.artifact_group.publication !== null
+          && this.artifact.artifact_group.publication.artifact_id == this.artifact.id) {
         return `/artifact/${this.artifact.artifact_group_id}`;
       } else {
         return `/artifact/${this.artifact.artifact_group_id}/${this.artifact.id}`;
