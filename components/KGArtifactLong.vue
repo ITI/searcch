@@ -719,6 +719,13 @@ export default {
       setTimeout(()=>{this.showOwnershipMessage=false}, 5000);
     }
   },
+  watch: {
+    showOwnershipMessage(newVal, oldVal) {
+      if(newVal) {
+        this.hideOwnershipInfo();
+      }
+    }
+  }
 }
 </script>
 
