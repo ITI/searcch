@@ -74,7 +74,7 @@ export default {
     return {
       displayMode: 'Positive & Reversed',
       filters: ['cites','supplements','extends','uses','describes','requires','processes','produces'],
-      availableModes: ['Positive & Reversed', 'Positive', 'Reversed'],
+      availableModes: ['Forward & Backward', 'Forward', 'Backward'],
       availableFilters: ['cites','supplements','extends','uses','describes','requires','processes','produces']
     }
   },
@@ -82,9 +82,9 @@ export default {
     relations() {
       let results = []
       const showReversedRelation = typeof this.artifact_group.reverse_relationships !== 'undefined'
-        && this.artifact_group.reverse_relationships.length && this.displayMode !== 'Positive'
+        && this.artifact_group.reverse_relationships.length && this.displayMode !== 'Forward'
       const showPositiveRelation = typeof this.artifact_group.relationships !== 'undefined'
-        && this.artifact_group.relationships.length && this.displayMode !== 'Reversed'
+        && this.artifact_group.relationships.length && this.displayMode !== 'Backward'
       
       if (showPositiveRelation) {
         results.push(...this.artifact_group.relationships.filter(v => this.filters.includes(v.relation)))
