@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      displayMode: 'Positive & Reversed',
+      displayMode: 'Forward & Backward',
       filters: ['cites','supplements','extends','uses','describes','requires','processes','produces'],
       availableModes: ['Forward & Backward', 'Forward', 'Backward'],
       availableFilters: ['cites','supplements','extends','uses','describes','requires','processes','produces']
