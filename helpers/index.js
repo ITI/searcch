@@ -2,15 +2,10 @@ import Vue from 'vue'
 
 export const artifactIcon = type => {
   switch (type) {
-    case 'dataset':
-      return 'mdi-database'
     case 'presentation':
       return 'mdi-presentation-play'
     case 'publication':
       return 'mdi-newspaper-variant-outline'
-    case 'software':
-      return 'mdi-code-braces'
-    // FIXME: eventually remove code
     case 'code':
       return 'mdi-code-braces'
     case 'keyword':
@@ -30,15 +25,10 @@ export const artifactIcon = type => {
 
 export const artifactColor = type => {
   switch (type) {
-    case 'dataset':
-      return 'green white--text'
     case 'presentation':
       return 'orange white--text'
     case 'publication':
       return 'red white--text'
-    case 'software':
-      return 'purple white--text'
-    // FIXME: eventually remove code
     case 'code':
       return 'purple white--text'
     case 'role':

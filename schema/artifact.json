@@ -68,8 +68,8 @@
           "enum": [
             "publication",
             "presentation",
-            "dataset",
-            "software",
+            "dag",
+            "argus",
               "pcap",
 	      "netflow",
 	      "flowtools",
@@ -500,12 +500,18 @@
       "type": "string"
     },
     "type": {
-      "enum": [
-        "publication",
-        "presentation",
-        "dataset",
-        "software",
-        "pcap"
+	"enum": [
+            "publication",
+            "presentation",
+            "dag",
+            "argus",
+            "pcap",
+	    "netflow",
+	    "flowtools",
+	    "flowride",
+	    "fsdb",
+	    "csv",
+	    "custom"	      
       ],
       "type": "string"
     },

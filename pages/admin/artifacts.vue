@@ -201,12 +201,17 @@ export default {
       timeoutID: null,
       type_select: '',
       type_items: [
-        '',
-        'dataset',
-        'presentation',
         'publication',
-        'software',
-        'other'
+	'presentation',
+	'dag',
+	'argus',
+        'pcap',
+	'netflow',
+	'flowtools',
+	'flowride',
+	'fsdb',
+	'csv',
+	'custom'
       ],
       publication_select: 'published',
       publication_items: [
