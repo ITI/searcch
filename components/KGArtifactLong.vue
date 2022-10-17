@@ -242,36 +242,15 @@
 
       <div
         v-if="
-          typeof record.artifact.artifact_group.relationships !== 'undefined' &&
-            record.artifact.artifact_group.relationships.length
+          (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
+            record.artifact.artifact_group.relationships.length) ||
+          (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
+            record.artifact.artifact_group.reverse_relationships.length)
         "
       >
         <v-card-title class="py-0">Relations</v-card-title>
 
-        <ArtifactChips
-          :field="record.artifact.artifact_group.relationships"
-          type="relation"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div
-        v-if="
-          typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
-            record.artifact.artifact_group.reverse_relationships.length
-        "
-      >
-        <v-card-title class="py-0">Reverse Relations</v-card-title>
-
-        <ArtifactChips
-          :field="record.artifact.artifact_group.reverse_relationships"
-          type="reverse-relation"
-          display
-          link
-        ></ArtifactChips>
+        <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
 
         <v-divider class="mx-4"></v-divider>
       </div>
@@ -471,7 +450,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor, bytesToSize, getCookie } from '@/helpers'
+import { artifactIcon, artifactColor, bytesToSize, reverseRelation } from '@/helpers'
 
 export default {
   name: 'KGArtifactLong',
@@ -485,7 +464,8 @@ export default {
     ArtifactChips: () => import("@/components/ArtifactChips"),
     ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
     JsonPrettyPrint: () => import("@/components/pretty-print"),
-    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue")
+    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue"),
+    ArtifactRelationView: () => import("@/components/ArtifactRelationView.vue"),
 },
   data() {
     return {
@@ -631,7 +611,7 @@ export default {
     claimText() {
       if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
       else return 'Claim Role'
-    }
+    },
   },
   methods: {
     async favoriteThis() {
