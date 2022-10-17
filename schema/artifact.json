@@ -92,10 +92,10 @@
 	"size": {
           "type": "string"
         },
-	 "from_time": {
+	 "fromtime": {
           "type": "string"
           },
-	 "to_time": {
+	 "totime": {
           "type": "string"
          },
 	  "access": {
