@@ -12,9 +12,6 @@
           &nbsp;&nbsp;(<a :href="`/artifact/${record.artifact.artifact_group_id}`">newest version</a>)
         </div>
         <div>
-        <a target="_blank" :href="record.artifact.url" rel="noopener">
-          {{ record.artifact.url }}
-        </a>
         </div>
       </v-card-subtitle>
 
@@ -170,19 +167,6 @@
         <div>{{ record.artifact.type | titlecase }}</div>
       </v-chip>
 
-      <v-divider class="mx-4"></v-divider>
-
-      <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Authors</v-card-title>
-        <ArtifactChips
-          :field="record.artifact.affiliations"
-          type="role"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
 
       <div v-if="tags.length">
         <v-card-title class="py-0">Keywords</v-card-title>
@@ -307,6 +291,28 @@
         <div>{{ record.artifact.collection | titlecase }}</div>
       </v-chip>
 
+
+      <v-divider class="mx-4"></v-divider>
+      <v-card-title class="py-0"> Start/end </v-card-title>
+
+      <v-chip :color="iconColor(record.artifact.fromtime)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{ iconImage(record.artifact.fromtime) }}</v-icon>
+        </v-avatar>
+
+        <div>
+    	{{ new Date(record.artifact.fromtime + 'Z').toUTCString() }}
+	</div>
+      </v-chip>
+
+      <v-chip :color="iconColor(record.artifact.totime)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{iconImage(record.artifact.totime) }}</v-icon>
+        </v-avatar>
+
+        <div>{{ new Date(record.artifact.totime + 'Z').toUTCString() }}</div>
+      </v-chip>
+
       <v-divider class="mx-4"></v-divider>
 
       <div v-if="license">
@@ -333,10 +339,7 @@
         >
           <v-list-group :value="true" no-action sub-group>
             <template v-slot:activator>
-              <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
-                v.url
-              }}</a>
-              &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
+              type: {{ v.filetype }}, size: {{ convertSize(v.size) }}
             </template>
             <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
               <a

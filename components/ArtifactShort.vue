@@ -91,7 +91,7 @@
           :to="`/artifact/request/${artifact.artifact_group_id}`"
           nuxt
         >
-          Request
+          View
         </v-btn>
         <v-btn
           v-else
@@ -168,7 +168,7 @@ export default {
       description = this.artifact.description
       return clip(this.$sanitize(description), 2000, {
         html: true,
-        maxLines: 40
+        maxLines: 10
       })
     },
     favorite: {
