@@ -26,7 +26,17 @@
             readonly
           ></v-rating>
           <div class="grey--text ml-4">({{ record.num_ratings }})</div>
-        </v-row>
+	 </v-row>
+	<v-row>
+	 <v-btn         
+          color="primary"
+          :to="`/artifact/request/${record.artifact.artifact_group_id}`"
+          nuxt
+        >
+	 Request
+        </v-btn>       
+	</v-row>
+
         <v-row align="center" class="mx-0">
           <span v-if="record.artifact.publication">
             Published: {{ $moment(record.artifact.publication.time) }}
@@ -116,11 +126,6 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>Description</v-card-title>
-
-      <v-card-text>
-        <div v-html="sanitizedDescription"></div>
-      </v-card-text>
 
       <div v-if="markdown" :class="hideOverflow">
         <v-divider class="mx-4"></v-divider>
@@ -358,6 +363,13 @@
         <v-divider class="mx-4"></v-divider>
       </div>
 
+      <v-card-title>Description</v-card-title>
+
+      <v-card-text>
+        <div v-html="sanitizedDescription"></div>
+      </v-card-text>
+
+
       <v-card-actions>
         <v-btn
           icon
@@ -447,7 +459,6 @@
       </v-dialog>
     </template>
   </div>
-  <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
     {{ loadingMessage }}
   </div>
