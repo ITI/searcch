@@ -27,15 +27,6 @@
           ></v-rating>
           <div class="grey--text ml-4">({{ record.num_ratings }})</div>
 	 </v-row>
-	<v-row>
-	 <v-btn         
-          color="primary"
-          :to="`/artifact/request/${record.artifact.artifact_group_id}`"
-          nuxt
-        >
-	 Request
-        </v-btn>       
-	</v-row>
 
         <v-row align="center" class="mx-0">
           <span v-if="record.artifact.publication">
