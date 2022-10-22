@@ -56,6 +56,22 @@
         :server-items-length="total"
         dense
       >
+      <template v-slot:top>
+          <v-dialog v-model="dialogModify" max-width="500px">
+            <v-sheet
+              class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
+              color="blue-grey darken-3"
+              dark
+            >
+              <div class="grey--text text--lighten-1 text-body-2 mb-4">
+                Are you sure you want to modify the admin privileges of user {{user_details.id}}?
+              </div>
+
+              <v-btn plain color="success" @click="confirmChangeAdminPrivilege()">OK</v-btn>
+              <v-btn plain color="error" @click="modifyPrivilegeDialog(false)">Cancel</v-btn>
+            </v-sheet>
+          </v-dialog>
+        </template>
         <template v-slot:item.id="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -77,7 +93,14 @@
           <v-tooltip bottom :disabled="user_id == item.id">
             <template v-slot:activator="{ on }">
               <span>
-                <v-simple-checkbox style="padding: 10px" v-model="item.can_admin" :disabled="user_id == item.id" v-on="on" :color="'primary'"></v-simple-checkbox>
+                <v-simple-checkbox 
+                  style="padding: 10px" 
+                  :value="item.can_admin" 
+                  :disabled="user_id == item.id" 
+                  v-on="on" 
+                  :color="'primary'"
+                  @click="user_id != item.id ? modifyPrivilegeDialog(true, item) : () => {}"
+                ></v-simple-checkbox>
               </span>
             </template>
             <span>Modify User Admin Privilege</span>
@@ -110,7 +133,9 @@ export default {
         page: 1,
         sortDesc: [true]
       },
-      search: ''
+      search: '',
+      dialogModify: false,
+      user_details: {}
     }
   },
   async mounted() {
@@ -147,6 +172,20 @@ export default {
         this.$store.dispatch('system/fetchUsers', payload)
       }
       clearTimeout(this.timeoutID)
+    },
+    modifyPrivilegeDialog(show, item = {}) {
+      this.user_details = {...item};
+      this.user_details.index = this.items.indexOf(item);
+      this.dialogModify = show;
+    },
+    async confirmChangeAdminPrivilege() {
+      var payload = {
+        user_id: this.user_details.id,
+        can_admin: this.user_details.can_admin ? 'f' : 't',
+        idx: this.user_details.index // use this index to update the user list
+      }
+      await this.$store.dispatch('system/modifyAdminPrivilege', payload);
+      this.modifyPrivilegeDialog(false);
     }
   },
   watch: {
