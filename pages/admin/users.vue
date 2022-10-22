@@ -74,7 +74,14 @@
           </v-tooltip>
         </template>
         <template v-slot:item.can_admin="{ item }">
-          <v-icon v-if="item.can_admin">mdi-check</v-icon>
+          <v-tooltip bottom :disabled="user_id == item.id">
+            <template v-slot:activator="{ on }">
+              <span>
+                <v-simple-checkbox style="padding: 10px" v-model="item.can_admin" :disabled="user_id == item.id" v-on="on" :color="'primary'"></v-simple-checkbox>
+              </span>
+            </template>
+            <span>Modify User Admin Privilege</span>
+          </v-tooltip>
         </template>
       </v-data-table>
     </v-card>
@@ -95,7 +102,7 @@ export default {
         { text: 'User ID', value: 'id', align: 'start', sortable: true },
         { text: 'User Email', value: 'person.email' },
         { text: 'User Name', value: 'person.name' },
-        { text: 'Can Admin', value: 'can_admin' }
+        { text: 'Can Admin', value: 'can_admin', align: 'center' }
       ],
       loading: true,
       options: {
@@ -120,7 +127,8 @@ export default {
       items: state => state.system.users.users,
       page: state => state.system.users.page,
       pages: state => state.system.users.pages,
-      total: state => state.system.users.total
+      total: state => state.system.users.total,
+      user_id: state => state.user.userid
     })
   },
   methods: {
