@@ -89,6 +89,7 @@
                   </template>
                 </v-select>
               </v-col>
+              
               <v-col cols="12">
                 <v-select
                   v-model="advanced.badge_ids"
@@ -129,6 +130,18 @@
                     {{ `${item.organization} ${item.title}` }}
                   </template>
                 </v-select>
+              </v-col>
+
+              <v-col cols="12" sm ="8">
+                <v-select label="Sort Results" :items="['None','date', 'views', 'rating']" @change = "showOptions">
+                </v-select>
+              </v-col>
+              
+              <v-col cols="12" sm="4">
+                <v-radio-group v-model="row" v-if = "sortEnabled" row @change = "setSortType">
+                  <v-radio label="Ascending" value="asc"></v-radio>
+                  <v-radio label="Descending" value="desc"></v-radio>
+                </v-radio-group>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -214,6 +227,9 @@ export default {
       search: '',
       author: '',
       owner: '',
+      sort_type: '',
+      sort_criteria : '',
+      sortEnabled : false,
       organization: '',
       searchMessage: '',
       searchInterval: null,
@@ -315,7 +331,8 @@ export default {
         this.owner ? (payload['owner'] = this.owner) : false
         this.organization ? (payload['organization'] = this.organization) : false
         this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
-
+        this.sort_criteria ? (payload['sort'] = this.sort_criteria): false
+        this.sort_type ? (payload['order'] = this.sort_type) :false
         this.$store.dispatch('artifacts/fetchArtifacts', payload)
       } 
       this.searchInterval = setTimeout(() => {
@@ -351,6 +368,18 @@ export default {
     },
     handleScroll() {
       this.showScrollToTop = window.scrollY
+    },
+    showOptions(val){
+        if (val != "None"){
+          this.sortEnabled = true
+          this.sort_criteria = val
+        }
+        else{
+          this.sortEnabled = false
+        }
+    },
+    setSortType(val){
+      this.sort_type = val
     }
   },
   watch: {
