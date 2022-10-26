@@ -143,6 +143,22 @@
       ],
       "type": "object"
     },
+    "DUA": {
+      "description": "DUA",
+	"properties": {
+        "dua_url": {
+          "type": "string"
+        },
+	"collection": {
+          "type": "string"
+        },
+	"provider": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    },
     "ArtifactBadge": {
       "description": "ArtifactBadge",
       "properties": {
