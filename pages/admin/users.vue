@@ -179,12 +179,12 @@ export default {
       this.dialogModify = show;
     },
     async confirmChangeAdminPrivilege() {
-      var payload = {
-        user_id: this.user_details.id,
+      var data = {
         can_admin: this.user_details.can_admin ? 'f' : 't',
-        idx: this.user_details.index // use this index to update the user list
+        user_id: this.user_details.id,
+        idx: this.user_details.index  // use this index to update the user list
       }
-      await this.$store.dispatch('system/modifyAdminPrivilege', payload);
+      await this.$store.dispatch('system/modifyAdminPrivilege', data);
       this.modifyPrivilegeDialog(false);
     }
   },

@@ -105,8 +105,9 @@ export default $axios => (resource, error) => ({
       $nuxt.error(e)
     })
   },
-  put(payload) {
-    return $axios.$put(`${resource}`, payload).catch(function(e) {
+  put(payload, ...args) {
+    let complete_path = [resource, ...args].join('/');
+    return $axios.$put(`${complete_path}`, payload).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx

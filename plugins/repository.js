@@ -79,7 +79,7 @@ export default (ctx, inject) => {
   inject('userEndpoint', repositoryWithAxios('kg/' + 'user'))
 
   // admin update privilege API
-  inject('adminUpdatePrivilegeEndpoint', repositoryWithAxios('kg/' + 'admin/update_privileges'))
+  inject('adminUpdateUserEndpoint', repositoryWithAxios('kg/' + 'admin/user'))
 
   // user owned artifacts API
   inject('userArtifactsEndpoint', repositoryWithAxios('kg/' + 'user/artifacts'))
