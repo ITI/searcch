@@ -171,7 +171,9 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <vue-simple-markdown :source="markdown"></vue-simple-markdown>
+          <div class="markdown-content">
+            <vue-showdown :markdown="markdown"></vue-showdown>
+          </div>
         </v-card-text>
       </div>
       <div>
@@ -274,7 +276,7 @@
 
       <div v-if="record.artifact.type == 'software'">
         <div v-if="stars || watchers">
-          <v-card-title class="py-0">Github Metrics</v-card-title>
+          <v-card-title class="py-0">GitHub Metrics</v-card-title>
 
           <v-chip color="primary" cols="12" class="ma-2" label>
             <v-avatar left>
@@ -753,5 +755,4 @@ export default {
   margin-left: 5px;
   font-weight: normal;
 }
-
 </style>

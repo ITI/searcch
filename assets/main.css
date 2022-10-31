@@ -11,3 +11,22 @@
 .page-leave-to {
   opacity: 0;
 }
+
+.markdown-content {
+  padding: 0.5rem;
+}
+
+.markdown-content p {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  padding-top: 2rem;
+  padding-bottom: 0.3rem;
+}

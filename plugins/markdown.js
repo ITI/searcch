@@ -1,6 +1,20 @@
 import Vue from 'vue'
-import VueSimpleMarkdown from 'vue-simple-markdown'
-// You need a specific loader for CSS files like https://github.com/webpack/css-loader
-import 'vue-simple-markdown/dist/vue-simple-markdown.css'
+import { VueShowdown } from 'vue-showdown'
+import sanitizeHtml from 'sanitize-html'
 
-Vue.use(VueSimpleMarkdown)
+const NewVueShowdown = {
+    ...VueShowdown,
+    computed: {
+        ...VueShowdown.computed,
+        outputHtml() {
+            if (this.converter) {
+                this.converter.setFlavor(this.flavor || 'allOn')
+                const html = this.converter.makeHtml(this.inputMarkdown)
+                return sanitizeHtml(html)
+            }
+            return ''
+        },
+    },
+}
+
+Vue.component('VueShowdown', NewVueShowdown);
