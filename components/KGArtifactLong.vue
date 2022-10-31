@@ -159,9 +159,40 @@
 
           <v-card-title>Description</v-card-title>
 
-          <v-card-text>
+      <div v-if="markdown" :class="hideOverflow">
+        <v-divider class="mx-4"></v-divider>
+        <v-card-title>
+          <v-row class="mx-1">
+            Readme
+            <v-spacer></v-spacer>
+            <v-btn :v-if="false && isOverflow" @click="expanded = !expanded">
+              {{ overflowText }}
+              <v-icon>{{ overflowIcon }}</v-icon>
+            </v-btn>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <div class="markdown-content">
             <div v-html="sanitizedDescription"></div>
-          </v-card-text>
+          </div>
+        </v-card-text>
+      </div>
+      <div>
+        <v-card-text>
+          <v-row class="mx-1">
+            <v-btn
+              elevation="0"
+              tile
+              :v-if="isOverflow"
+              @click="expanded = !expanded"
+              block
+              >
+              {{ overflowText }}
+              <v-icon>{{ overflowIcon }}</v-icon>
+            </v-btn>
+          </v-row>
+        </v-card-text>
+      </div>
 
           <div v-if="markdown" :class="hideOverflow">
             <v-divider class="mx-4"></v-divider>
@@ -177,7 +208,7 @@
             </v-card-title>
             <v-card-text>
               <div class="markdown-content">
-                <vue-showdown :markdown="markdown"></vue-showdown>
+                <div v-html="markdown"></div>
               </div>
             </v-card-text>
           </div>
@@ -198,6 +229,116 @@
             </v-card-text>
           </div>
 
+      <v-card-title class="py-0"> Artifact Type </v-card-title>
+
+      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
+        </v-avatar>
+
+        <div>{{ record.artifact.type | titlecase }}</div>
+      </v-chip>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <div v-if="record.artifact.affiliations">
+        <v-card-title class="py-0">Authors</v-card-title>
+        <ArtifactChips
+          :field="record.artifact.affiliations"
+          type="role"
+          display
+          link
+        ></ArtifactChips>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div v-if="tags.length">
+        <v-card-title class="py-0">Keywords</v-card-title>
+        <ArtifactChips
+          :field="tags"
+          type="keyword"
+          display
+          link
+        ></ArtifactChips>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div v-if="languages.length > 0">
+        <v-card-title class="py-0">Programming Languages</v-card-title>
+        <ArtifactChips
+          :field="languages"
+          type="software"
+          display
+        ></ArtifactChips>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div
+        v-if="
+          (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
+            record.artifact.artifact_group.relationships.length) ||
+          (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
+            record.artifact.artifact_group.reverse_relationships.length)
+        "
+      >
+        <v-card-title class="py-0">Relations</v-card-title>
+
+        <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div v-if="badgesPresent">
+        <v-card-title class="py-0">Badges</v-card-title>
+
+        <span v-for="(b, index) in record.artifact.badges">
+          <v-img
+            :key="`badgeimg${index}`"
+            max-height="100"
+            max-width="100"
+            :src="b.badge.image_url"
+          ></v-img>
+          <a :href="b.badge.url" target="_blank" rel="noopener">
+            {{ b.badge.title }}
+          </a>
+        </span>
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
+      <div v-if="record.artifact.type == 'software'">
+        <div v-if="stars || watchers">
+          <v-card-title class="py-0">GitHub Metrics</v-card-title>
+
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon color="yellow">mdi-star</v-icon>
+            </v-avatar>
+
+            {{ stars }}
+          </v-chip>
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-eye</v-icon>
+            </v-avatar>
+
+            {{ watchers }}
+          </v-chip>
+        </div>
+
+        <div v-if="record.artifact.importer">
+          <v-card-title class="py-0">Importer</v-card-title>
+
+          <v-chip color="primary" cols="12" class="ma-2" label>
+            <v-avatar left>
+              <v-icon>mdi-file-download-outline</v-icon>
+            </v-avatar>
+            {{
+              `${record.artifact.importer.name} v${record.artifact.importer.version}`
+            }}
+          </v-chip>
           <v-divider class="mx-4"></v-divider>
 
           <v-card-title class="py-0"> Artifact Type </v-card-title>
