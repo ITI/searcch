@@ -279,7 +279,7 @@
 
             <v-chip color="primary" cols="12" class="ma-2" label>
               <v-avatar left>
-              <v-icon color="yellow">mdi-star</v-icon>
+                <v-icon color="yellow">mdi-star</v-icon>
               </v-avatar>
 
               {{ stars }}
