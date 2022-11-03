@@ -47,6 +47,9 @@ export const mutations = {
   SET_CLAIMS(state, claims) {
     state.claims = claims
   },
+  UPDATE_ADMIN_PRIVILEGE(state, idx) {
+    state.users.users[idx].can_admin = !state.users.users[idx].can_admin;
+  },
   LOGOUT(state) {
     state.artifacts = {}
     state.artifact_imports = {}
@@ -117,6 +120,22 @@ export const actions = {
     if (typeof response !== 'undefined') {
       commit('SET_CLAIMS', response)
       console.log('fetched claims (admin)')
+    }
+  },
+  async modifyAdminPrivilege({ commit, state }, data) {
+    let response = {};
+    let idx = data.idx;
+    let user_id = data.user_id;
+    let payload = data;
+    delete payload.idx;
+    delete payload.user_id;
+    console.log('modifying admin privilege');
+    response = await this.$adminUpdateUserEndpoint.put(payload, user_id);
+    if (typeof response !== 'undefined') {
+      console.log('modified admin privilege');
+      commit('UPDATE_ADMIN_PRIVILEGE', idx);
+    } else {
+      console.error('failed to modify admin privilege');
     }
   }
 }
