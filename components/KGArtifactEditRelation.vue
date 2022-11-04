@@ -192,6 +192,13 @@ export default {
         return []
       }
     },
+    closeHandler(dialog) {
+      switch (dialog) {
+        case 'artifactdialog': {
+          this.artifactdialog = false
+        }
+      }
+    },
   }
 }
 </script>
