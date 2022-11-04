@@ -3,14 +3,19 @@
     <a @click="$router.go(-1)">Back</a>
 
     <div v-if="artifact.artifact">
-      <div v-if="!editing">
-        <LazyHydrate when-visible>
-          <KGArtifactLong :record="artifact"></KGArtifactLong>
-        </LazyHydrate>
-      </div>
-      <div v-else>
+      <div v-if="editing">
         <LazyHydrate when-visible>
           <KGArtifactEdit :record="artifact"></KGArtifactEdit>
+        </LazyHydrate>
+      </div>
+      <div v-if="editingRelation">
+        <LazyHydrate when-visible>
+          <KGArtifactEdit :record="artifact"></KGArtifactEdit>
+        </LazyHydrate>
+      </div>
+      <div v-if="!editing && !editingRelation">
+        <LazyHydrate when-visible>
+          <KGArtifactEditRelation :record="artifact"></KGArtifactEditRelation>
         </LazyHydrate>
       </div>
     </div>
@@ -20,13 +25,15 @@
 
 <script>
 import { mapState } from 'vuex'
+import KGArtifactEditRelation from '~/components/KGArtifactEditRelation.vue'
 
 export default {
   components: {
-    KGArtifactLong: () => import('@/components/KGArtifactLong'),
-    KGArtifactEdit: () => import('@/components/KGArtifactEdit'),
-    LazyHydrate: () => import('vue-lazy-hydration')
-  },
+    KGArtifactLong: () => import("@/components/KGArtifactLong"),
+    KGArtifactEdit: () => import("@/components/KGArtifactEdit"),
+    KGArtifactEditRelation: () => import("@/components/KGArtifactEditRelation"),
+    LazyHydrate: () => import("vue-lazy-hydration"),
+},
   head() {
     return {
       title: this.artifact.title,
@@ -49,7 +56,12 @@ export default {
       artifact: state => state.artifacts.artifact
     }),
     editing() {
-      return this.$route.query.edit == 'true' ? true : false
+      return this.$route.query.edit !== undefined
+        && this.$route.query.edit == 'true' ? true : false
+    },
+    editingRelation() {
+      return this.$route.query.editRelation !== undefined
+        && this.$route.query.editRelation == 'true' ? true : false
     }
   },
   mounted() {
