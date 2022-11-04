@@ -116,6 +116,14 @@
         <v-btn
           v-if="isOwner() || isAdmin()"
           color="success"
+          :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit_relation=true`"
+          nuxt
+        >
+          Edit Relation
+        </v-btn>
+        <v-btn
+          v-if="isOwner() || isAdmin()"
+          color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
         >
