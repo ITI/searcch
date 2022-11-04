@@ -8,14 +8,14 @@
           <KGArtifactEdit :record="artifact"></KGArtifactEdit>
         </LazyHydrate>
       </div>
-      <div v-if="editingRelation">
-        <LazyHydrate when-visible>
-          <KGArtifactEdit :record="artifact"></KGArtifactEdit>
-        </LazyHydrate>
-      </div>
-      <div v-if="!editing && !editingRelation">
+      <div v-else-if="editingRelation">
         <LazyHydrate when-visible>
           <KGArtifactEditRelation :record="artifact"></KGArtifactEditRelation>
+        </LazyHydrate>
+      </div>
+      <div v-else>
+        <LazyHydrate when-visible>
+          <KGArtifactLong :record="artifact"></KGArtifactLong>
         </LazyHydrate>
       </div>
     </div>
@@ -60,8 +60,8 @@ export default {
         && this.$route.query.edit == 'true' ? true : false
     },
     editingRelation() {
-      return this.$route.query.editRelation !== undefined
-        && this.$route.query.editRelation == 'true' ? true : false
+      return this.$route.query.edit_relation !== undefined
+        && this.$route.query.edit_relation == 'true' ? true : false
     }
   },
   mounted() {
