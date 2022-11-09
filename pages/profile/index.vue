@@ -174,7 +174,7 @@
               <v-tabs-items v-model="tabs">
                 <v-tab-item>
                   <!-- artifacts -->
-                  <v-timeline align-top dense v-if="dashboard.owned_artifacts">
+                  <v-timeline align-top dense v-if="myArtifacts">
                     <v-timeline-item
                       v-for="item in sortedArtifacts"
                       :key="item.id"
@@ -344,9 +344,11 @@ export default {
       userAffiliation: [],
       orgSearch: null,
       interestSearch: null,
-      localuser: null
+      localuser: null,
+      myArtifacts:{}
     }
   },
+  
   computed: {
     ...mapState({
       user: state => state.user.user,
@@ -354,7 +356,7 @@ export default {
       userid: state => state.user.userid,
       orgs: state => state.user.orgs,
       interests: state => state.user.interests,
-      authUser: state => state.auth.user
+      authUser: state => state.auth.user,
     }),
     orgNames: {
       get: function() {
@@ -377,14 +379,15 @@ export default {
       } else return []
     },
     sortedArtifacts: function() {
-      if (typeof this.dashboard.owned_artifacts !== 'undefined') {
-        return this.dashboard.owned_artifacts.sort(function(a, b) {
+      if (Array.isArray(this.myArtifacts)) {
+        return this.myArtifacts.sort(function(a, b) {
           // reverse sort order
           if (a.ctime < b.ctime) return 1
           if (a.ctime > b.ctime) return -1
           return 0
         })
-      } else return []
+      }
+       else return []
     }
   },
   watch: {
@@ -418,6 +421,9 @@ export default {
     this.dashboard = response
     this.userAffiliation = this.organization ? this.organization : []
     this.localuser = JSON.parse(JSON.stringify(this.user))
+    let res = await this.$userArtifactsEndpoint.index()
+    this.myArtifacts = res["owned_artifacts"]
+
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -430,6 +436,7 @@ export default {
         this.schemaLoaded = true
       }
     })
+    
   },
   methods: {
     async updateProfile() {
