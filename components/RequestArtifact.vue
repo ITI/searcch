@@ -38,11 +38,12 @@
         type="text"
         hint="Enter researcher names and emails, one per line" 
       /><br>
-      <input 
-        class="submit" 
-        type="submit" 
-        value="Submit"
-      >
+      <v-btn
+          color="success"
+          @click="submitRequest"
+          >
+          Submit
+      </v-btn>
     </form>
     <div v-if="formSubmitted">
       <h3>Form Submitted</h3>
@@ -291,6 +292,12 @@ export default {
         this.diff_results[i]._id = i
       }
       this.diff_results_dialog = true
+    },
+    async submitRequest() {
+      let payload = {};
+      let response = await this.$artifactRequestEndpoint.post(
+        [this.record.artifact.artifact_group_id, this.record.artifact.id],payload)
+      console.warn(response);
     }
   }
 }
