@@ -150,253 +150,272 @@
         </v-container>
       </v-card-text>
 
-      <v-divider class="mx-4"></v-divider>
+      <v-divider class="mt-4 grey lighten-2"></v-divider>
+      <v-tabs v-model="tab" background-color="grey lighten-4">
+        <v-tab>Content</v-tab>
+        <v-tab>Relationship</v-tab>
 
-      <v-card-title>Description</v-card-title>
+        <v-tab-item>
 
-      <v-card-text>
-        <div v-html="sanitizedDescription"></div>
-      </v-card-text>
+          <v-card-title>Description</v-card-title>
 
-      <div v-if="markdown" :class="hideOverflow">
-        <v-divider class="mx-4"></v-divider>
-        <v-card-title>
-          <v-row class="mx-1">
-            Readme
-            <v-spacer></v-spacer>
-            <v-btn :v-if="false && isOverflow" @click="expanded = !expanded">
-              {{ overflowText }}
-              <v-icon>{{ overflowIcon }}</v-icon>
-            </v-btn>
-          </v-row>
-        </v-card-title>
-        <v-card-text>
-          <div class="markdown-content">
-            <vue-showdown :markdown="markdown"></vue-showdown>
+          <v-card-text>
+            <div v-html="sanitizedDescription"></div>
+          </v-card-text>
+
+          <div v-if="markdown" :class="hideOverflow">
+            <v-divider class="mx-4"></v-divider>
+            <v-card-title>
+              <v-row class="mx-1">
+                Readme
+                <v-spacer></v-spacer>
+                <v-btn :v-if="false && isOverflow" @click="expanded = !expanded">
+                  {{ overflowText }}
+                  <v-icon>{{ overflowIcon }}</v-icon>
+                </v-btn>
+              </v-row>
+            </v-card-title>
+            <v-card-text>
+              <div class="markdown-content">
+                <vue-showdown :markdown="markdown"></vue-showdown>
+              </div>
+            </v-card-text>
           </div>
-        </v-card-text>
-      </div>
-      <div>
-        <v-card-text>
-          <v-row class="mx-1">
-            <v-btn
-              elevation="0"
-              tile
-              :v-if="isOverflow"
-              @click="expanded = !expanded"
-              block
-              >
-              {{ overflowText }}
-              <v-icon>{{ overflowIcon }}</v-icon>
-            </v-btn>
-          </v-row>
-        </v-card-text>
-      </div>
+          <div>
+            <v-card-text>
+              <v-row class="mx-1">
+                <v-btn
+                  elevation="0"
+                  tile
+                  :v-if="isOverflow"
+                  @click="expanded = !expanded"
+                  block
+                  >
+                  {{ overflowText }}
+                  <v-icon>{{ overflowIcon }}</v-icon>
+                </v-btn>
+              </v-row>
+            </v-card-text>
+          </div>
 
-      <v-divider class="mx-4"></v-divider>
-
-      <v-card-title class="py-0"> Artifact Type </v-card-title>
-
-      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
-        <v-avatar left>
-          <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
-        </v-avatar>
-
-        <div>{{ record.artifact.type | titlecase }}</div>
-      </v-chip>
-
-      <v-divider class="mx-4"></v-divider>
-
-      <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Authors</v-card-title>
-        <ArtifactChips
-          :field="record.artifact.affiliations"
-          type="role"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div v-if="tags.length">
-        <v-card-title class="py-0">Keywords</v-card-title>
-        <ArtifactChips
-          :field="tags"
-          type="keyword"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div v-if="languages.length > 0">
-        <v-card-title class="py-0">Programming Languages</v-card-title>
-        <ArtifactChips
-          :field="languages"
-          type="software"
-          display
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div
-        v-if="
-          (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
-            record.artifact.artifact_group.relationships.length) ||
-          (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
-            record.artifact.artifact_group.reverse_relationships.length)
-        "
-      >
-        <v-card-title class="py-0">Relations</v-card-title>
-
-        <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div v-if="badgesPresent">
-        <v-card-title class="py-0">Badges</v-card-title>
-
-        <span v-for="(b, index) in record.artifact.badges">
-          <v-img
-            :key="`badgeimg${index}`"
-            max-height="100"
-            max-width="100"
-            :src="b.badge.image_url"
-          ></v-img>
-          <a :href="b.badge.url" target="_blank" rel="noopener">
-            {{ b.badge.title }}
-          </a>
-        </span>
-        <v-divider class="mx-4"></v-divider>
-      </div>
-
-      <div v-if="record.artifact.type == 'software'">
-        <div v-if="stars || watchers">
-          <v-card-title class="py-0">GitHub Metrics</v-card-title>
-
-          <v-chip color="primary" cols="12" class="ma-2" label>
-            <v-avatar left>
-              <v-icon color="yellow">mdi-star</v-icon>
-            </v-avatar>
-
-            {{ stars }}
-          </v-chip>
-          <v-chip color="primary" cols="12" class="ma-2" label>
-            <v-avatar left>
-              <v-icon>mdi-eye</v-icon>
-            </v-avatar>
-
-            {{ watchers }}
-          </v-chip>
-        </div>
-
-        <div v-if="record.artifact.importer">
-          <v-card-title class="py-0">Importer</v-card-title>
-
-          <v-chip color="primary" cols="12" class="ma-2" label>
-            <v-avatar left>
-              <v-icon>mdi-file-download-outline</v-icon>
-            </v-avatar>
-            {{
-              `${record.artifact.importer.name} v${record.artifact.importer.version}`
-            }}
-          </v-chip>
           <v-divider class="mx-4"></v-divider>
-        </div>
-      </div>
 
-      <div v-if="license">
-        <v-card-title class="py-0">License</v-card-title>
-        <a :href="record.artifact.license.url">
-          <v-chip color="primary" cols="12" class="ma-2" label>
+          <v-card-title class="py-0"> Artifact Type </v-card-title>
+
+          <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
             <v-avatar left>
-              <v-icon>mdi-scale-balance</v-icon>
+              <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
             </v-avatar>
 
-            {{ license }}
+            <div>{{ record.artifact.type | titlecase }}</div>
           </v-chip>
-        </a>
-        <v-divider class="mx-4"></v-divider>
-      </div>
 
-      <div v-if="record.artifact.files.length">
-        <v-card-title class="py-0">Files</v-card-title>
+          <v-divider class="mx-4"></v-divider>
 
-        <v-list-item
-          v-for="(v, k) in record.artifact.files"
-          :key="`file${k}`"
-          dense
-        >
-          <v-list-group :value="true" no-action sub-group>
-            <template v-slot:activator>
-              <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
-                v.url
-              }}</a>
-              &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
-            </template>
-            <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
-              <a
-                target="_blank"
-                :href="vm.html_url || vm.download_url"
-                rel="noopener"
-                >{{
-                  vm.pathname || vm.name || vm.html_url || vm.download_url
-                }}</a
-              >
-              &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
+          <div v-if="record.artifact.affiliations">
+            <v-card-title class="py-0">Authors</v-card-title>
+            <ArtifactChips
+              :field="record.artifact.affiliations"
+              type="role"
+              display
+              link
+            ></ArtifactChips>
+
+            <v-divider class="mx-4"></v-divider>
+          </div>
+
+          <div v-if="tags.length">
+            <v-card-title class="py-0">Keywords</v-card-title>
+            <ArtifactChips
+              :field="tags"
+              type="keyword"
+              display
+              link
+            ></ArtifactChips>
+
+            <v-divider class="mx-4"></v-divider>
+          </div>
+
+          <div v-if="languages.length > 0">
+            <v-card-title class="py-0">Programming Languages</v-card-title>
+            <ArtifactChips
+              :field="languages"
+              type="software"
+              display
+            ></ArtifactChips>
+
+            <v-divider class="mx-4"></v-divider>
+          </div>
+
+          <div v-if="badgesPresent">
+            <v-card-title class="py-0">Badges</v-card-title>
+
+            <span v-for="(b, index) in record.artifact.badges">
+              <v-img
+                :key="`badgeimg${index}`"
+                max-height="100"
+                max-width="100"
+                :src="b.badge.image_url"
+              ></v-img>
+              <a :href="b.badge.url" target="_blank" rel="noopener">
+                {{ b.badge.title }}
+              </a>
+            </span>
+            <v-divider class="mx-4"></v-divider>
+          </div>
+
+          <div v-if="record.artifact.type == 'software'">
+            <div v-if="stars || watchers">
+              <v-card-title class="py-0">GitHub Metrics</v-card-title>
+
+              <v-chip color="primary" cols="12" class="ma-2" label>
+                <v-avatar left>
+                  <v-icon color="yellow">mdi-star</v-icon>
+                </v-avatar>
+
+                {{ stars }}
+              </v-chip>
+              <v-chip color="primary" cols="12" class="ma-2" label>
+                <v-avatar left>
+                  <v-icon>mdi-eye</v-icon>
+                </v-avatar>
+
+                {{ watchers }}
+              </v-chip>
+            </div>
+
+            <div v-if="record.artifact.importer">
+              <v-card-title class="py-0">Importer</v-card-title>
+
+              <v-chip color="primary" cols="12" class="ma-2" label>
+                <v-avatar left>
+                  <v-icon>mdi-file-download-outline</v-icon>
+                </v-avatar>
+                {{
+                  `${record.artifact.importer.name} v${record.artifact.importer.version}`
+                }}
+              </v-chip>
+              <v-divider class="mx-4"></v-divider>
+            </div>
+          </div>
+
+          <div v-if="license">
+            <v-card-title class="py-0">License</v-card-title>
+            <a :href="record.artifact.license.url">
+              <v-chip color="primary" cols="12" class="ma-2" label>
+                <v-avatar left>
+                  <v-icon>mdi-scale-balance</v-icon>
+                </v-avatar>
+
+                {{ license }}
+              </v-chip>
+            </a>
+            <v-divider class="mx-4"></v-divider>
+          </div>
+
+          <div v-if="record.artifact.files.length">
+            <v-card-title class="py-0">Files</v-card-title>
+
+            <v-list-item
+              v-for="(v, k) in record.artifact.files"
+              :key="`file${k}`"
+              dense
+            >
+              <v-list-group :value="true" no-action sub-group>
+                <template v-slot:activator>
+                  <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
+                    v.url
+                  }}</a>
+                  &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
+                </template>
+                <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
+                  <a
+                    target="_blank"
+                    :href="vm.html_url || vm.download_url"
+                    rel="noopener"
+                    >{{
+                      vm.pathname || vm.name || vm.html_url || vm.download_url
+                    }}</a
+                  >
+                  &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
+                </v-list-item>
+              </v-list-group>
             </v-list-item>
-          </v-list-group>
-        </v-list-item>
 
-        <v-divider class="mx-4"></v-divider>
-      </div>
+            <v-divider class="mx-4"></v-divider>
+          </div>
 
-      <v-card-actions>
-        <v-btn
-          icon
-          @click="favoriteThis()"
-          :color="favorite == true ? 'red' : ''"
-        >
-          <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-        </v-btn>
+          <v-card-actions>
+            <v-btn
+              icon
+              @click="favoriteThis()"
+              :color="favorite == true ? 'red' : ''"
+            >
+              <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+            </v-btn>
 
-        <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" nuxt>
-          <v-icon>mdi-comment</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <span v-if="(isOwner() || isAdmin()) && !published">
-          <v-btn
-            color="success"
-            small
-            :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit=true`"
-            nuxt
-            >
-            Edit
-          </v-btn>
-        </span>
-        <span v-if="(isOwner() || isAdmin()) && published">
-          <v-btn
-            color="success"
-            small
-            @click="newVersion()"
-            nuxt
-            >
-            Edit New Version
-          </v-btn>
-          <v-btn
-            color="success"
-            small
-            @click="reImportNewVersion()"
-            nuxt
-            >
-            Reimport New Version
-          </v-btn>
-        </span>
-      </v-card-actions>
+            <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" nuxt>
+              <v-icon>mdi-comment</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <span v-if="(isOwner() || isAdmin()) && !published">
+              <v-btn
+                color="success"
+                small
+                :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit=true`"
+                nuxt
+                >
+                Edit
+              </v-btn>
+            </span>
+            <span v-if="(isOwner() || isAdmin()) && published">
+              <v-btn
+                color="success"
+                small
+                @click="newVersion()"
+                nuxt
+                >
+                Edit New Version
+              </v-btn>
+              <v-btn
+                color="success"
+                small
+                @click="reImportNewVersion()"
+                nuxt
+                >
+                Reimport New Version
+              </v-btn>
+            </span>
+          </v-card-actions>
+
+        </v-tab-item>
+
+        <v-tab-item>
+          <div
+            v-if="
+              (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
+                record.artifact.artifact_group.relationships.length) ||
+              (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
+                record.artifact.artifact_group.reverse_relationships.length)
+            "
+          >
+            <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
+          </div>
+          <div v-else>
+            <v-card-subtitle>No relation yet</v-card-subtitle>
+          </div>
+          <v-divider></v-divider>
+          <v-card-actions class="justify-end" v-if="(isOwner() || isAdmin()) && published">
+            <v-btn
+              color="success"
+              small
+              :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit_relation=true`"
+              nuxt>
+              Edit Relation
+            </v-btn>
+          </v-card-actions>
+        </v-tab-item>
+      </v-tabs>
     </v-card>
 
     <template>
@@ -485,7 +504,8 @@ export default {
       isModalDisabled: false,
       ownershipMessage: "",
       showOwnershipMessage: false,
-      justificationMessage: ""
+      justificationMessage: "",
+      tab: 'content'
     }
   },
   mounted() {

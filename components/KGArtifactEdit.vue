@@ -12,6 +12,14 @@
     </div>
     <v-form v-model="valid" ref="artifact">
       <v-card class="mx-auto my-2" outlined>
+        <v-card-title>Edit Artifact</v-card-title>
+        <v-card-text>Want to edit relationship? 
+          <v-btn 
+            text small color="primary" 
+            :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit_relation=true`">
+            Click here
+          </v-btn>
+        </v-card-text>
         <v-card-title
           ><v-text-field
             label="Title"
@@ -488,52 +496,6 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-      <v-card class="mx-auto my-2" outlined>
-        
-        <v-card-title class="py-0">Relationship</v-card-title>
-
-        <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
-
-        <div>
-          <v-dialog
-            transition="dialog-bottom-transition"
-            persistent
-            fullscreen
-            v-model="artifactdialog"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="success ml-2 mb-2"
-                fab
-                x-small
-                v-bind="attrs"
-                v-on="on"
-                :disabled="artifact_local.id ? false : true"
-              >
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:default="artifactdialog">
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Search for Related Artifacts</span>
-                </v-card-title>
-                <SearchCard :search="search" related all></SearchCard>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    class="error ml-2 mb-2"
-                    text
-                    @click="artifactdialog.value = false"
-                  >
-                    Close
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </template>
-          </v-dialog>
-        </div>
-      </v-card>
     </v-form>
 
     <v-snackbar v-model="snackbar" timeout:3000>
@@ -581,7 +543,6 @@ import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { zipArray, EventBus } from '@/helpers'
-import ArtifactRelationView from './ArtifactRelationView.vue'
 
 function affiliationObjectsEqual(o1,o2) {
   //console.log("o1: ",o1)
@@ -632,10 +593,8 @@ export default {
   },
   components: {
     LazyHydrate: () => import("vue-lazy-hydration"),
-    SearchCard: () => import("@/components/SearchCard"),
     ArtifactChips: () => import("@/components/ArtifactChips"),
     ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
-    ArtifactRelationView: () => import("@/components/ArtifactRelationView"),
 },
   data() {
     return {
@@ -664,8 +623,8 @@ export default {
       dialog: false,
       dialogvalid: true,
       disabled: false,
-      artifactdialog: false,
-      search: '',
+      // artifactdialog: false,
+      // search: '',
       possibleLicenses: [],
       rules: {
         required: value => !!value || 'required',
