@@ -21,7 +21,7 @@
        </v-card>
 
    <div>
-     <form @submit.prevent="submitForm" v-if="!formSubmitted">
+     <form @submit.prevent="submitForm">
      <span>Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></span><br>
       <span>Upload filled data use agreement here  <input type="file" @change="uploadFile" ref="file"></span><br>
      <span>Briefly describe the research to be done with the dataset</span><br>
@@ -299,9 +299,11 @@ export default {
       this.diff_results_dialog = true
     },
     async submitRequest() {
+      this.formSubmitted = false;
       if(!(this.research && this.Images && this.people)) {
         this.formSubmittedError = true;
         this.formSubmittedErrorMessage = "Please fill all the fields";
+        this.formSubmitted = true;
         return;
       } else {
         this.formSubmittedError = false;
@@ -315,13 +317,13 @@ export default {
       let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
-      this.formSubmitted = true;
       if(response.status == 1) {
         this.formSubmittedError = true;
         this.formSubmittedErrorMessage = response.error;
       } else {
         this.formSubmittedError = false;
       }
+      this.formSubmitted = true;
     }
   }
 }
