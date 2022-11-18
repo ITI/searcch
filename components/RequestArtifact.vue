@@ -294,10 +294,14 @@ export default {
       this.diff_results_dialog = true
     },
     async submitRequest() {
-      let payload = {};
-      let response = await this.$artifactRequestEndpoint.post(
-        [this.record.artifact.artifact_group_id, this.record.artifact.id],payload)
-      console.warn(response);
+      const payload = new FormData();
+      let file = this.Images;
+      payload.append('file', file);
+      payload.append('research_desc', this.research);
+      payload.append('research_that_interact', this.people);
+      await this.$artifactRequestEndpoint.post(
+        [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
+      );
     }
   }
 }
