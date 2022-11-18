@@ -46,9 +46,12 @@
       </v-btn>
     </form>
     <div v-if="formSubmitted">
-      <h3>Form Submitted</h3>
-      <p>Research: {{ research }}</p>
-      <p>People: {{ people }}</p>
+      <div v-if="formSubmittedError" class="form-submit-error">
+        <p>{{formSubmittedErrorMessage}}</p>
+      </div>
+      <div v-else class="form-submit-success">
+        <p>Request submitted successfully!</p>
+      </div>
     </div>
   </div>
 
@@ -90,7 +93,9 @@ export default {
       research: "",
       people: "",
       Images: null,
-      formSubmitted: false
+      formSubmitted: false,
+      formSubmittedError: false,
+      formSubmittedErrorMessage: ""
     }
   },
   mounted() {
@@ -294,14 +299,29 @@ export default {
       this.diff_results_dialog = true
     },
     async submitRequest() {
+      if(!(this.research && this.Images && this.people)) {
+        this.formSubmittedError = true;
+        this.formSubmittedErrorMessage = "Please fill all the fields";
+        return;
+      } else {
+        this.formSubmittedError = false;
+        this.formSubmittedErrorMessage = "";
+      }
       const payload = new FormData();
       let file = this.Images;
       payload.append('file', file);
       payload.append('research_desc', this.research);
       payload.append('research_that_interact', this.people);
-      await this.$artifactRequestEndpoint.post(
+      let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
+      this.formSubmitted = true;
+      if(response.status == 1) {
+        this.formSubmittedError = true;
+        this.formSubmittedErrorMessage = response.error;
+      } else {
+        this.formSubmittedError = false;
+      }
     }
   }
 }
@@ -314,17 +334,15 @@ export default {
 }
 </style>
 
-style>
+<style>
   form {
     padding: 10px;
-    border: 2px solid black;
     border-radius: 5px;
   }
 
   input {
     padding: 4px 8px;
     margin: 4px;
-    border: 2px solid black;
   }
 
   span {
@@ -336,12 +354,22 @@ style>
   .submit {
     font-size: 15px;
     color: #fff;
-    background: #222;
     padding: 6px 12px;
     border: none;
     margin-top: 8px;
     cursor: pointer;
     border-radius: 5px;
   }
+
+  .form-submit-error {
+    color: red;
+    padding: 10px;
+  }
+
+  .form-submit-success {
+    color: green;
+    padding: 10px;
+  }
+
 
 </style>
