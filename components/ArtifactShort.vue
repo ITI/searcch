@@ -88,6 +88,14 @@
         <v-btn
           v-if="!related"
           color="primary"
+          :to="`/artifact/view/${artifact.artifact_group_id}`"
+          nuxt
+        >
+          View
+        </v-btn>
+        <v-btn
+          v-if="!related"
+          color="primary"
           :to="`/artifact/request/${artifact.artifact_group_id}`"
           nuxt
         >
@@ -168,7 +176,7 @@ export default {
       description = this.artifact.description
       return clip(this.$sanitize(description), 2000, {
         html: true,
-        maxLines: 40
+        maxLines: 10
       })
     },
     favorite: {

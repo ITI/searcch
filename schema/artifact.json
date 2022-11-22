@@ -68,13 +68,52 @@
           "enum": [
             "publication",
             "presentation",
-            "dataset",
-            "software",
-            "pcap"
+            "dag",
+            "argus",
+              "pcap",
+	      "netflow",
+	      "flowtools",
+	      "flowride",
+	      "fsdb",
+	      "csv",
+	      "custom"	      
           ],
           "type": "string"
         },
         "url": {
+          "type": "string"
+        },
+	"collection": {
+          "type": "string"
+        },
+	"provider": {
+          "type": "string"
+        },
+	"size": {
+          "type": "string"
+        },
+	 "fromtime": {
+          "type": "string"
+          },
+	 "totime": {
+          "type": "string"
+         },
+	  "access": {
+          "enum": [
+            "download",
+            "onsite",
+            "cloud"
+          ],
+          "type": "string"
+        },
+	  "anonymization": {
+          "enum": [
+            "cryptopan-full",
+              "cryptopan-host",
+	      "remove-host",
+	      "none",
+            "custom"
+          ],
           "type": "string"
         }
       },
@@ -102,6 +141,22 @@
       "required": [
         "roles"
       ],
+      "type": "object"
+    },
+    "DUA": {
+      "description": "DUA",
+	"properties": {
+        "dua_url": {
+          "type": "string"
+        },
+	"collection": {
+          "type": "string"
+        },
+	"provider": {
+          "type": "string"
+        }
+      },
+      "required": [],
       "type": "object"
     },
     "ArtifactBadge": {
@@ -461,12 +516,18 @@
       "type": "string"
     },
     "type": {
-      "enum": [
-        "publication",
-        "presentation",
-        "dataset",
-        "software",
-        "pcap"
+	"enum": [
+            "publication",
+            "presentation",
+            "dag",
+            "argus",
+            "pcap",
+	    "netflow",
+	    "flowtools",
+	    "flowride",
+	    "fsdb",
+	    "csv",
+	    "custom"	      
       ],
       "type": "string"
     },

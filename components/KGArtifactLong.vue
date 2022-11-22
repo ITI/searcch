@@ -12,9 +12,6 @@
           &nbsp;&nbsp;(<a :href="`/artifact/${record.artifact.artifact_group_id}`">newest version</a>)
         </div>
         <div>
-        <a target="_blank" :href="record.artifact.url" rel="noopener">
-          {{ record.artifact.url }}
-        </a>
         </div>
       </v-card-subtitle>
 
@@ -29,7 +26,8 @@
             readonly
           ></v-rating>
           <div class="grey--text ml-4">({{ record.num_ratings }})</div>
-        </v-row>
+	 </v-row>
+
         <v-row align="center" class="mx-0">
           <span v-if="record.artifact.publication">
             Published: {{ $moment(record.artifact.publication.time) }}
@@ -119,11 +117,6 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title>Description</v-card-title>
-
-      <v-card-text>
-        <div v-html="sanitizedDescription"></div>
-      </v-card-text>
 
       <div v-if="markdown" :class="hideOverflow">
         <v-divider class="mx-4"></v-divider>
@@ -160,7 +153,7 @@
 
       <v-divider class="mx-4"></v-divider>
 
-      <v-card-title class="py-0"> Artifact Type </v-card-title>
+      <v-card-title class="py-0"> Artifact Types </v-card-title>
 
       <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
         <v-avatar left>
@@ -170,19 +163,6 @@
         <div>{{ record.artifact.type | titlecase }}</div>
       </v-chip>
 
-      <v-divider class="mx-4"></v-divider>
-
-      <div v-if="record.artifact.affiliations">
-        <v-card-title class="py-0">Authors</v-card-title>
-        <ArtifactChips
-          :field="record.artifact.affiliations"
-          type="role"
-          display
-          link
-        ></ArtifactChips>
-
-        <v-divider class="mx-4"></v-divider>
-      </div>
 
       <div v-if="tags.length">
         <v-card-title class="py-0">Keywords</v-card-title>
@@ -295,6 +275,42 @@
         </div>
       </div>
 
+
+      <v-divider class="mx-4"></v-divider>
+      <v-card-title class="py-0"> Collection </v-card-title>
+
+      <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{ iconImage(record.artifact.collection) }}</v-icon>
+        </v-avatar>
+
+        <div>{{ record.artifact.collection | titlecase }}</div>
+      </v-chip>
+
+
+      <v-divider class="mx-4"></v-divider>
+      <v-card-title class="py-0"> Start/end </v-card-title>
+
+      <v-chip :color="iconColor(record.artifact.fromtime)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{ iconImage(record.artifact.fromtime) }}</v-icon>
+        </v-avatar>
+
+        <div>
+    	{{ new Date(record.artifact.fromtime + 'Z').toUTCString() }}
+	</div>
+      </v-chip>
+
+      <v-chip :color="iconColor(record.artifact.totime)" class="ma-2" label>
+        <v-avatar left>
+          <v-icon>{{iconImage(record.artifact.totime) }}</v-icon>
+        </v-avatar>
+
+        <div>{{ new Date(record.artifact.totime + 'Z').toUTCString() }}</div>
+      </v-chip>
+
+      <v-divider class="mx-4"></v-divider>
+
       <div v-if="license">
         <v-card-title class="py-0">License</v-card-title>
         <a :href="record.artifact.license.url">
@@ -319,10 +335,7 @@
         >
           <v-list-group :value="true" no-action sub-group>
             <template v-slot:activator>
-              <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
-                v.url
-              }}</a>
-              &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
+              type: {{ v.filetype }}, size: {{ convertSize(v.size) }}
             </template>
             <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
               <a
@@ -340,6 +353,13 @@
 
         <v-divider class="mx-4"></v-divider>
       </div>
+
+      <v-card-title>Description</v-card-title>
+
+      <v-card-text>
+        <div v-html="sanitizedDescription"></div>
+      </v-card-text>
+
 
       <v-card-actions>
         <v-btn
@@ -430,7 +450,6 @@
       </v-dialog>
     </template>
   </div>
-  <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
   <div v-else>
     {{ loadingMessage }}
   </div>
