@@ -1,7 +1,8 @@
-comunda.isi.edu {
-reverse_proxy /* searcch-frontend-local-dev:3000 {
-      header_down Strict-Transport-Security "max-age=15552000;"
-      header_up X-Real-IP {remote_host}
-      header_up X-Forwarded-For {remote_host}
-        }
+comunda-dev.isi.edu {
+	tls /var/lib/caddy/cert.pem /var/lib/caddy/key.pem
+	reverse_proxy /* searcch-frontend-local-dev:3000 {
+		header_down Strict-Transport-Security "max-age=15552000;"
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+	}
 }
