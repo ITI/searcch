@@ -2,9 +2,12 @@ version: '3.7'
 services:
 
   caddy:
-    image: caddy:latest
+#    image: caddy:latest
     container_name: caddy
     restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
     ports:
       - "80:80"
       - "443:443"
@@ -12,7 +15,7 @@ services:
       - ${DATADIR:-/data}/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ${DATADIR:-/data}/caddy/data:${DATADIR:-/data}
       - ${DATADIR:-/data}/caddy/config:/config
-      - ${DATADIR:-/data}/caddy/ssl/:/etc/ssl/certs/searcch/
+      - ${DATADIR:-/data}/caddy/ssl/:/var/lib/caddy
     networks:
       - searcch-frontend-local-dev-net
 
