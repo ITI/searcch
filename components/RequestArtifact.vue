@@ -22,28 +22,70 @@
 
    <div>
      <form @submit.prevent="submitForm">
-     <span>Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></span><br>
-      <span>Upload filled data use agreement here  <input type="file" @change="uploadFile" ref="file"></span><br>
-     <span>Briefly describe the research to be done with the dataset</span><br>
+     <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></div>
+      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here  <input type="file" @change="uploadFile" ref="file"></div>
+     <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
       <v-textarea
         name="research"
-	v-model="research"
+	      v-model="research"
         type="text"
         hint="Enter your research purpose" 
-      /></v-textarea><br>
-      <span>Please enter names and emails of researchers that will interact with the data:</span><br>
-      <v-textarea 
-        name="people"
-	v-model="people"
-        type="text"
-        hint="Enter researcher names and emails, one per line" 
-      /><br>
-      <v-btn
+        auto-grow
+        clearable
+      ></v-textarea>
+      <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
+      <div v-for="(researcher, index) in researchers" :key="index">
+        <v-container>
+          <v-row align="center">
+            <v-col md="6">
+              <v-text-field
+                v-model="researcher.name"
+                label="Name"
+                type="text"
+                hint="Enter researcher name"
+              ></v-text-field>
+            </v-col>
+            <v-col md="5">
+              <v-text-field
+                v-model="researcher.email"
+                label="Email"
+                type="email"
+                hint="Enter researcher email"
+              ></v-text-field>
+            </v-col>
+            <v-col md="1">
+              <div>
+                <v-icon
+                  v-if="researchers.length > 1"
+                  color="error"
+                  @click="deleteResearcher(index)"
+                >
+                  mdi-delete
+                </v-icon>
+              </div>
+            </v-col>
+          </v-row> 
+        </v-container>
+      </div>
+      <div>
+        <v-btn
+          class="success ml-2 mb-2"
+          fab
+          x-small
+          @click="addResearcher"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </div>
+      <div>
+        <v-btn
           color="success"
           @click="submitRequest"
+          style="margin-top: 20px;"
           >
           Submit
       </v-btn>
+      </div>
     </form>
     <div v-if="formSubmitted">
       <div v-if="formSubmittedError" class="form-submit-error">
@@ -95,7 +137,8 @@ export default {
       Images: null,
       formSubmitted: false,
       formSubmittedError: false,
-      formSubmittedErrorMessage: ""
+      formSubmittedErrorMessage: "",
+      researchers: [{name: "", email: ""}]
     }
   },
   mounted() {
@@ -221,6 +264,16 @@ export default {
     }
   },
   methods: {
+    async deleteResearcher(index) {
+      this.researchers.splice(index, 1);
+    },
+    async addResearcher() {
+      let researcherObj = {
+        name: "",
+        email: ""
+      }
+      this.researchers.push(researcherObj);
+    },
     async favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
@@ -300,7 +353,13 @@ export default {
     },
     async submitRequest() {
       this.formSubmitted = false;
-      if(!(this.research && this.Images && this.people)) {
+      let isEntryEmpty = false;
+      this.researchers.forEach((researcher) => {
+        if (researcher.name == "" || researcher.email == "") {
+          isEntryEmpty = true;
+        }
+      });
+      if(!(this.research && this.Images) || isEntryEmpty) {
         this.formSubmittedError = true;
         this.formSubmittedErrorMessage = "Please fill all the fields";
         this.formSubmitted = true;
@@ -311,9 +370,10 @@ export default {
       }
       const payload = new FormData();
       let file = this.Images;
+      let researchersJSON = JSON.stringify(this.researchers);
       payload.append('file', file);
       payload.append('research_desc', this.research);
-      payload.append('research_that_interact', this.people);
+      payload.append('research_that_interact', researchersJSON);
       let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
