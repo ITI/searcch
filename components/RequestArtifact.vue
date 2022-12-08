@@ -21,9 +21,9 @@
        </v-card>
 
    <div>
-     <form @submit.prevent="submitForm">
+     <form @submit.prevent="submitForm" ref="request_form">
      <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></div>
-      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here  <input type="file" @change="uploadFile" ref="file"></div>
+      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div>
      <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
       <v-textarea
         name="research"
@@ -32,6 +32,7 @@
         hint="Enter your research purpose" 
         auto-grow
         clearable
+        required
       ></v-textarea>
       <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
       <div v-for="(researcher, index) in researchers" :key="index">
@@ -43,6 +44,7 @@
                 label="Name"
                 type="text"
                 hint="Enter researcher name"
+                required
               ></v-text-field>
             </v-col>
             <v-col md="5">
@@ -51,6 +53,7 @@
                 label="Email"
                 type="email"
                 hint="Enter researcher email"
+                required
               ></v-text-field>
             </v-col>
             <v-col md="1">
@@ -78,13 +81,7 @@
         </v-btn>
       </div>
       <div>
-        <v-btn
-          color="success"
-          @click="submitRequest"
-          style="margin-top: 20px;"
-          >
-          Submit
-      </v-btn>
+      <input type="submit" value="Submit" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
       </div>
     </form>
     <div v-if="formSubmitted">
@@ -138,7 +135,8 @@ export default {
       formSubmitted: false,
       formSubmittedError: false,
       formSubmittedErrorMessage: "",
-      researchers: [{name: "", email: ""}]
+      researchers: [{name: "", email: ""}],
+      requestMode: false
     }
   },
   mounted() {
@@ -291,8 +289,17 @@ export default {
     uploadFile() {
         this.Images = this.$refs.file.files[0];
     },
-    submitForm: function () {
-        this.formSubmitted = true
+    submitForm() {
+      this.research = this.research.trim();
+      this.researchers.forEach((researcher) => {
+        researcher.name = researcher.name.trim();
+        researcher.email = researcher.email.trim();
+      });
+      if (this.$refs.request_form.checkValidity()) {
+        this.submitRequest();
+      } else {
+        this.$refs.request_form.reportValidity();
+      }
     },
     iconColor(type) {
       return artifactColor(type)
@@ -368,12 +375,14 @@ export default {
         this.formSubmittedError = false;
         this.formSubmittedErrorMessage = "";
       }
+      this.requestMode = true;
       const payload = new FormData();
       let file = this.Images;
       let researchersJSON = JSON.stringify(this.researchers);
       payload.append('file', file);
       payload.append('research_desc', this.research);
       payload.append('research_that_interact', researchersJSON);
+      payload.append('dataset', this.record.artifact.title)
       let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
@@ -384,6 +393,7 @@ export default {
         this.formSubmittedError = false;
       }
       this.formSubmitted = true;
+      this.requestMode = false;
     }
   }
 }
@@ -431,6 +441,15 @@ export default {
   .form-submit-success {
     color: green;
     padding: 10px;
+  }
+
+  .btn-submit {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100px;
   }
 
 
