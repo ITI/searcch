@@ -21,33 +21,76 @@
        </v-card>
 
    <div>
-     <form @submit.prevent="submitForm" v-if="!formSubmitted">
-     <span>Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></span><br>
-      <span>Upload filled data use agreement here  <input type="file" @change="uploadFile" ref="file"></span><br>
-     <span>Briefly describe the research to be done with the dataset</span><br>
+     <form @submit.prevent="submitForm" ref="request_form">
+     <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></div>
+      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div>
+     <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
       <v-textarea
         name="research"
-	v-model="research"
+	      v-model="research"
         type="text"
         hint="Enter your research purpose" 
-      /></v-textarea><br>
-      <span>Please enter names and emails of researchers that will interact with the data:</span><br>
-      <v-textarea 
-        name="people"
-	v-model="people"
-        type="text"
-        hint="Enter researcher names and emails, one per line" 
-      /><br>
-      <input 
-        class="submit" 
-        type="submit" 
-        value="Submit"
-      >
+        auto-grow
+        clearable
+        required
+      ></v-textarea>
+      <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
+      <div v-for="(researcher, index) in researchers" :key="index">
+        <v-container>
+          <v-row align="center">
+            <v-col md="6">
+              <v-text-field
+                v-model="researcher.name"
+                label="Name"
+                type="text"
+                hint="Enter researcher name"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col md="5">
+              <v-text-field
+                v-model="researcher.email"
+                label="Email"
+                type="email"
+                hint="Enter researcher email"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col md="1">
+              <div>
+                <v-icon
+                  v-if="researchers.length > 1"
+                  color="error"
+                  @click="deleteResearcher(index)"
+                >
+                  mdi-delete
+                </v-icon>
+              </div>
+            </v-col>
+          </v-row> 
+        </v-container>
+      </div>
+      <div>
+        <v-btn
+          class="success ml-2 mb-2"
+          fab
+          x-small
+          @click="addResearcher"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </div>
+      <div>
+      <input type="submit" value="Submit" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
+      </div>
     </form>
     <div v-if="formSubmitted">
-      <h3>Form Submitted</h3>
-      <p>Research: {{ research }}</p>
-      <p>People: {{ people }}</p>
+      <div v-if="formSubmittedError" class="form-submit-error">
+        <p>{{formSubmittedErrorMessage}}</p>
+      </div>
+      <div v-else class="form-submit-success">
+        <p>Request submitted successfully!</p>
+      </div>
     </div>
   </div>
 
@@ -89,7 +132,11 @@ export default {
       research: "",
       people: "",
       Images: null,
-      formSubmitted: false
+      formSubmitted: false,
+      formSubmittedError: false,
+      formSubmittedErrorMessage: "",
+      researchers: [{name: "", email: ""}],
+      requestMode: false
     }
   },
   mounted() {
@@ -215,6 +262,16 @@ export default {
     }
   },
   methods: {
+    async deleteResearcher(index) {
+      this.researchers.splice(index, 1);
+    },
+    async addResearcher() {
+      let researcherObj = {
+        name: "",
+        email: ""
+      }
+      this.researchers.push(researcherObj);
+    },
     async favoriteThis() {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
@@ -232,8 +289,17 @@ export default {
     uploadFile() {
         this.Images = this.$refs.file.files[0];
     },
-    submitForm: function () {
-        this.formSubmitted = true
+    submitForm() {
+      this.research = this.research.trim();
+      this.researchers.forEach((researcher) => {
+        researcher.name = researcher.name.trim();
+        researcher.email = researcher.email.trim();
+      });
+      if (this.$refs.request_form.checkValidity()) {
+        this.submitRequest();
+      } else {
+        this.$refs.request_form.reportValidity();
+      }
     },
     iconColor(type) {
       return artifactColor(type)
@@ -291,6 +357,43 @@ export default {
         this.diff_results[i]._id = i
       }
       this.diff_results_dialog = true
+    },
+    async submitRequest() {
+      this.formSubmitted = false;
+      let isEntryEmpty = false;
+      this.researchers.forEach((researcher) => {
+        if (researcher.name == "" || researcher.email == "") {
+          isEntryEmpty = true;
+        }
+      });
+      if(!(this.research && this.Images) || isEntryEmpty) {
+        this.formSubmittedError = true;
+        this.formSubmittedErrorMessage = "Please fill all the fields";
+        this.formSubmitted = true;
+        return;
+      } else {
+        this.formSubmittedError = false;
+        this.formSubmittedErrorMessage = "";
+      }
+      this.requestMode = true;
+      const payload = new FormData();
+      let file = this.Images;
+      let researchersJSON = JSON.stringify(this.researchers);
+      payload.append('file', file);
+      payload.append('research_desc', this.research);
+      payload.append('research_that_interact', researchersJSON);
+      payload.append('dataset', this.record.artifact.title)
+      let response = await this.$artifactRequestEndpoint.post(
+        [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
+      );
+      if(response.status == 1) {
+        this.formSubmittedError = true;
+        this.formSubmittedErrorMessage = response.error;
+      } else {
+        this.formSubmittedError = false;
+      }
+      this.formSubmitted = true;
+      this.requestMode = false;
     }
   }
 }
@@ -303,17 +406,15 @@ export default {
 }
 </style>
 
-style>
+<style>
   form {
     padding: 10px;
-    border: 2px solid black;
     border-radius: 5px;
   }
 
   input {
     padding: 4px 8px;
     margin: 4px;
-    border: 2px solid black;
   }
 
   span {
@@ -325,12 +426,31 @@ style>
   .submit {
     font-size: 15px;
     color: #fff;
-    background: #222;
     padding: 6px 12px;
     border: none;
     margin-top: 8px;
     cursor: pointer;
     border-radius: 5px;
   }
+
+  .form-submit-error {
+    color: red;
+    padding: 10px;
+  }
+
+  .form-submit-success {
+    color: green;
+    padding: 10px;
+  }
+
+  .btn-submit {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100px;
+  }
+
 
 </style>
