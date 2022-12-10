@@ -1,4 +1,5 @@
 <template>
+  
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
       <div class="text-center">
@@ -100,19 +101,102 @@
         <supporters />
       </div>
     </v-flex>
+    <v-row justify="center">
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="500"
+    >
+      <template v-slot:activator="{ on, attrs }">
+      </template>
+      <v-card>
+        <v-card-title>
+          Enter Affiliation and Designation
+        </v-card-title>
+        <v-col cols="12">
+                <v-text-field
+                  label="Position*"
+                  required
+                  v-model ="localuser.position"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                    <v-combobox
+                      label="Affiliation*"
+                      multiple
+                      small-chips
+                      deletable-chips
+                      persistent-hint
+                      :items="orgNames"
+                      v-model="userAffiliation"
+                      hint="Select applicable organization from the list or type in your own"
+                      :search-input.sync="orgSearch"
+                      item-text="org.name"
+                      item-value="org.name"
+                      return-object
+                      required
+                    >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              No results matching "<strong>{{
+                                orgSearch
+                              }}</strong
+                              >". Press <kbd>tab</kbd> to create a new one
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-combobox>
+                  </v-col>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="addFields"
+          >
+            Done
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
   </v-layout>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+  data () {
+      return {
+        dialog: false,
+        localuser:'',
+        userAffiliation:[],
+        userPosition:null,
+      }
+    },
   components: {
     Logo: () => import('@/components/Logo'),
     LazyHydrate: () => import('vue-lazy-hydration'),
     Supporters: () => import('@/components/Supporters')
   },
+  computed:{
+    ...mapState({
+      user: state => state.user,
+      person:state =>state.user.user,
+      organization: state => state.user.organization,
+      userid: state => state.user.userid,
+    })
+  },
+  watch:{
+    person(val) {
+      this.localuser = JSON.parse(JSON.stringify(val))
+    },
+  },
   async mounted() {
     // let emails = await this.$axios.$get("https://api.github.com/user/emails")
-    
     //Generate hash from current time
     var sha1 = require('sha1');
     var hash = sha1(Date.now());
@@ -123,6 +207,51 @@ export default {
     expireTime.setTime(offset);
     //Set session id per user
     document.cookie = `session_id=${hash};expires=${expireTime.toUTCString()}`;
+    console.log(this.user)
+    if (this.$auth.loggedIn){
+    this.$store.dispatch('user/fetchUser')
+    this.$store.dispatch('user/fetchOrgs')
+
+      let payload = {
+      verified: 1,
+      all: 1
+    }
+    let response = await this.$organizationEndpoint.index(payload)
+    console.log(response )
+      if(this.user.organization.length == 0){
+        this.dialog = true
+      }
+      this.localuser = JSON.parse(JSON.stringify(this.person))
+      this.userAffiliation = this.organization ? this.organization : []
+      this.localuser.position = this.localuser.position ? this.localuser.position : ''
+      console.log(this.localuser)
+      //this.userPosition = this.position
+    }
+  },
+  methods:{
+    async addFields(){
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        await this.$userEndpoint.update(this.userid, this.localuser)
+
+        // create any affiliations that were added
+        this.userAffiliation.forEach((affil, index, object) => {
+          if (typeof affil === 'string') {
+            this.$store.dispatch('user/createAffiliation', affil)
+            object.splice(index, 1)
+          }
+        })
+        this.$store.dispatch('user/fetchUser')
+      }
+      if(this.localuser.position && this.userAffiliation){
+        this.dialog=false
+      }
+      
+    }
   }
+  // async computed(){
+    
+  // }
 }
 </script>

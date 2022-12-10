@@ -124,7 +124,13 @@
                       </template>
                     </v-combobox>
                   </v-col>
-
+                  <v-col cols="12" md="12">
+                    <v-text-field
+                      label="Position"
+                      class="primary-input"
+                      v-model="localuser.position"
+                    />
+                  </v-col>
                   <v-col cols="12" class="text-right">
                     <v-btn color="success" @click="updateProfile">
                       Update Profile
@@ -344,7 +350,8 @@ export default {
       userAffiliation: [],
       orgSearch: null,
       interestSearch: null,
-      localuser: null
+      localuser: null,
+      userPosition:null
     }
   },
   computed: {
@@ -354,7 +361,8 @@ export default {
       userid: state => state.user.userid,
       orgs: state => state.user.orgs,
       interests: state => state.user.interests,
-      authUser: state => state.auth.user
+      authUser: state => state.auth.user,
+      position: state => state.user.user.position
     }),
     orgNames: {
       get: function() {
@@ -408,7 +416,10 @@ export default {
     },
     user(val) {
       this.localuser = JSON.parse(JSON.stringify(val))
-    }
+    },
+    userPosition(val){
+      this.userPosition = val
+    },
   },
   async mounted() {
     this.$store.dispatch('user/fetchUser')
@@ -418,6 +429,7 @@ export default {
     this.dashboard = response
     this.userAffiliation = this.organization ? this.organization : []
     this.localuser = JSON.parse(JSON.stringify(this.user))
+    this.userPosition = this.position
   },
   created() {
     $RefParser.dereference(schemaWithPointers, (err, schema) => {
@@ -436,6 +448,7 @@ export default {
       if (!this.$auth.loggedIn) {
         this.$router.push('/login')
       } else {
+        console.log(this.localuser)
         await this.$userEndpoint.update(this.userid, this.localuser)
 
         // create any affiliations that were added
@@ -445,6 +458,7 @@ export default {
             object.splice(index, 1)
           }
         })
+       
         this.$store.dispatch('user/fetchUser')
       }
     },
