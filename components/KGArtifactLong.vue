@@ -374,6 +374,7 @@
           <v-icon>mdi-comment</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
+
         <span v-if="(isOwner() || isAdmin()) && !published">
           <v-btn
             color="success"
@@ -402,9 +403,18 @@
             Reimport New Version
           </v-btn>
         </span>
+        <v-btn
+          v-if="!(isOwner() || isAdmin())"
+          color="primary"
+          :to="`/artifact/request/${record.artifact.artifact_group_id}`"
+          nuxt
+        >
+          Request
+        </v-btn>
       </v-card-actions>
+      
     </v-card>
-
+    
     <template>
       <v-dialog v-model="diff_results_dialog" scrollable>
         <v-card>

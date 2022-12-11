@@ -93,14 +93,14 @@
         >
           View
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           v-if="!related"
           color="primary"
           :to="`/artifact/request/${artifact.artifact_group_id}`"
           nuxt
         >
           Request
-        </v-btn>
+        </v-btn> -->
         <v-btn
           v-else
           color="success"

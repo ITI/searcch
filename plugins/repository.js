@@ -90,6 +90,14 @@ export default (ctx, inject) => {
     repositoryWithAxios('kg/' + 'user/affiliation')
   )
 
+  // user affiliations
+  inject(
+    'userPositionEndpoint',
+    repositoryWithAxios('kg/' + 'user/affiliations')
+  )
+
+
+
   // organization API
   inject('organizationEndpoint', repositoryWithAxios('kg/' + 'organizations'))
 

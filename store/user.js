@@ -19,6 +19,9 @@ export const getters = {
   organization: state => {
     return state.organization
   },
+  position: state =>{
+    return state.user.position
+  },
   orgs: state => {
     return state.orgs
   },
@@ -82,6 +85,9 @@ export const mutations = {
   SET_INTERESTS(state, interests) {
     state.interests = interests
   },
+  SET_POSITION(state, position){
+    state.user.position = position
+  },
   LOGOUT(state) {
     state.user = null
     state.organization = []
@@ -92,6 +98,7 @@ export const mutations = {
     state.userid = null
     state.user_is_admin = false
     state.user_can_admin = false
+    
   },
   ADMIN_OFF(state) {}
 }
@@ -101,6 +108,7 @@ export const actions = {
     let response = {}
     console.log('fetching user')
     response = await this.$userEndpoint.index()
+    console.log(response)
     if (typeof response !== 'undefined' && response.user) {
       commit('SET_USER', response.user.person)
       commit('SET_USERID', response.user.id)
