@@ -748,7 +748,7 @@ export default {
       })
       console.log(readmes)
       if (typeof readmes !== 'undefined' && readmes.file_content)
-         return atob(readmes.file_content.content)
+         return this.$sanitize(this.$md.render(atob(readmes.file_content.content)))
     },
     hideOverflow() {
       return {
