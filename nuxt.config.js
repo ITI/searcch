@@ -67,7 +67,6 @@ export default {
     '~/plugins/components',
     '~/plugins/sanitize',
     '~/plugins/moment',
-    '~/plugins/markdown'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -99,6 +98,7 @@ export default {
     '~modules/auth-cilogon',
     '~modules/auth-googlecustom',
     '@nuxtjs/proxy',
+    '@nuxtjs/markdownit',
     [
       '@dansmaculotte/nuxt-security',
       {
@@ -144,6 +144,11 @@ export default {
       }
     ]
   ],
+
+  markdownit: {
+    runtime: true,
+    html: true,
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options

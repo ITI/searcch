@@ -177,7 +177,7 @@
             </v-card-title>
             <v-card-text>
               <div class="markdown-content">
-                <vue-showdown :markdown="markdown"></vue-showdown>
+                <div v-html="markdown"></div>
               </div>
             </v-card-text>
           </div>
@@ -202,7 +202,7 @@
 
           <v-card-title class="py-0"> Artifact Type </v-card-title>
 
-          <v-chip :color="iconColor(record.artifact.type)" class="ma-2" label>
+          <v-chip :color="iconColor(record.artifact.type)" class="ma-2 ml-6" label>
             <v-avatar left>
               <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
             </v-avatar>
@@ -214,7 +214,7 @@
 
           <div v-if="record.artifact.affiliations">
             <v-card-title class="py-0">Authors</v-card-title>
-            <ArtifactChips
+            <ArtifactChips class="ml-4"
               :field="record.artifact.affiliations"
               type="role"
               display
@@ -226,7 +226,7 @@
 
           <div v-if="tags.length">
             <v-card-title class="py-0">Keywords</v-card-title>
-            <ArtifactChips
+            <ArtifactChips class="ml-4"
               :field="tags"
               type="keyword"
               display
@@ -238,7 +238,7 @@
 
           <div v-if="languages.length > 0">
             <v-card-title class="py-0">Programming Languages</v-card-title>
-            <ArtifactChips
+            <ArtifactChips class="ml-4"
               :field="languages"
               type="software"
               display
@@ -268,14 +268,14 @@
             <div v-if="stars || watchers">
               <v-card-title class="py-0">GitHub Metrics</v-card-title>
 
-              <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
                 <v-avatar left>
                   <v-icon color="yellow">mdi-star</v-icon>
                 </v-avatar>
 
                 {{ stars }}
               </v-chip>
-              <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
                 <v-avatar left>
                   <v-icon>mdi-eye</v-icon>
                 </v-avatar>
@@ -287,7 +287,7 @@
             <div v-if="record.artifact.importer">
               <v-card-title class="py-0">Importer</v-card-title>
 
-              <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
                 <v-avatar left>
                   <v-icon>mdi-file-download-outline</v-icon>
                 </v-avatar>
@@ -302,7 +302,7 @@
           <div v-if="license">
             <v-card-title class="py-0">License</v-card-title>
             <a :href="record.artifact.license.url">
-              <v-chip color="primary" cols="12" class="ma-2" label>
+              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
                 <v-avatar left>
                   <v-icon>mdi-scale-balance</v-icon>
                 </v-avatar>
@@ -607,7 +607,7 @@ export default {
       })
       console.log(readmes)
       if (typeof readmes !== 'undefined' && readmes.file_content)
-         return atob(readmes.file_content.content)
+         return this.$sanitize(this.$md.render(atob(readmes.file_content.content)))
     },
     hideOverflow() {
       return {

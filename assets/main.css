@@ -30,3 +30,12 @@
   padding-top: 2rem;
   padding-bottom: 0.3rem;
 }
+
+.markdown-content table,
+.markdown-content td,
+.markdown-content th,
+.markdown-content tr {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
