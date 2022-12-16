@@ -249,7 +249,8 @@ export default {
       this.onSubmit()
       this.adopen = [0]
     } else{
-      this.search = this.search_init
+      this.search = this.search_init;
+      this.onSubmit();
     }
     if (this.all) {
       this.advanced.types = this.types
