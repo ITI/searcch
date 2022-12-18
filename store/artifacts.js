@@ -22,6 +22,15 @@ export const state = () => ({
     owned_artifacts: [],
   },
   search: '',
+  search_advanced_enabled: true,
+  search_advanced: {
+    types: ['dataset', 'presentation', 'publication', 'software', 'other'],
+    author: '',
+    org: '',
+    badge_ids: [],
+    sort_criteria: '',
+    sort_type: 'desc',
+  },
   favorites: [],
   favoritesIDs: {},
   imports: [],
@@ -42,6 +51,12 @@ export const getters = {
   },
   search: state => {
     return state.search
+  },
+  search_advanced_enabled: state => {
+    return state.search_advanced_enabled
+  },
+  search_advanced: state => {
+    return state.search_advanced
   },
   favorites: state => {
     return state.favorites
@@ -80,6 +95,24 @@ export const mutations = {
   SET_SEARCH(state, search) {
     state.search = search
   },
+  SET_SEARCH_ADVANCED(state, search_advanced) {
+    state.search_advanced = search_advanced
+    if (!search_advanced)
+      state.search_advanced_enabled = false
+    
+  },
+  RESET_SEARCH(state) {
+    state.search = ''
+    state.search_advanced_enabled = false
+    state.search_advanced = {
+      types: ['dataset', 'presentation', 'publication', 'software', 'other'],
+      author: '',
+      org: '',
+      badge_ids: [],
+      sort_criteria: '',
+      sort_type: 'desc',
+    }
+  },
   SET_MY_ARTIFACTS(state, myArtifacts) {
     state.myArtifacts = myArtifacts
   },
@@ -107,12 +140,12 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchArtifacts({ commit, state }, payload) {
+  async fetchArtifacts({ commit, state }, { payload, advanced }) {
     commit('SET_LOADING', true)
+    commit('RESET_SEARCH')
     commit('SET_SEARCH', payload.keywords)
-    let response = await this.$artifactSearchEndpoint.index({
-      ...payload
-    })
+    commit('SET_SEARCH_ADVANCED', { ...advanced })
+    let response = await this.$artifactSearchEndpoint.index(payload)
     if (typeof response !== 'undefined') {
       commit('SET_ARTIFACTS', response)
     }
