@@ -439,12 +439,12 @@
             </v-tabs>
 
             <v-tabs-items v-model="diff_results_tab">
-              <v-tab-item :key="visual">
+              <v-tab-item key="visual">
                 <ArtifactCurationList
                   :curations="diff_results">
                 </ArtifactCurationList>
               </v-tab-item>
-              <v-tab-item :key="raw">
+              <v-tab-item key="raw">
                 <JsonPrettyPrint :value="diff_results"></JsonPrettyPrint>
               </v-tab-item>
             </v-tabs-items>

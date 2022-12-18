@@ -16,7 +16,7 @@
         dense
       >
       </v-text-field>
-      <v-expansion-panels v-model="adopen" multiple>
+      <v-expansion-panels v-model="adopen">
         <v-expansion-panel class="rounded-0">
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -40,7 +40,7 @@
                 <v-text-field
                   label="Author"
                   placeholder="Search for artifacts by author name..."
-                  v-model="author"
+                  v-model="advanced.author"
                 >
                 </v-text-field>
               </v-col>
@@ -48,7 +48,7 @@
                 <v-text-field
                   label="Organization"
                   placeholder="Search for artifacts by organization name..."
-                  v-model="organization"
+                  v-model="advanced.org"
                 >
                 </v-text-field>
               </v-col>
@@ -133,12 +133,12 @@
               </v-col>
 
               <v-col cols="12" sm ="8">
-                <v-select label="Sort Results" :items="['None','date', 'views', 'rating']" @change = "showOptions">
+                <v-select v-model="advanced.search_criteria" label="Sort Results" :items="['None','date', 'views', 'rating']" @change = "showOptions">
                 </v-select>
               </v-col>
               
               <v-col cols="12" sm="4">
-                <v-radio-group v-model="row" v-if = "sortEnabled" row @change = "setSortType">
+                <v-radio-group v-model="advanced.search_type" v-if="sortEnabled" @change="setSortType" row>
                   <v-radio label="Ascending" value="asc"></v-radio>
                   <v-radio label="Descending" value="desc"></v-radio>
                 </v-radio-group>
@@ -193,6 +193,8 @@ import { mapState } from 'vuex'
 import goTo from 'vuetify/es5/services/goto'
 import { getCookie } from '~/helpers'
 
+const deepClone = (obj) => JSON.parse(JSON.stringify(obj))
+
 export default {
   components: {
     Logo: () => import('@/components/Logo'),
@@ -200,10 +202,6 @@ export default {
   },
   props: {
     related: {
-      type: Boolean,
-      required: false
-    },
-    all: {
       type: Boolean,
       required: false
     }
@@ -225,21 +223,19 @@ export default {
       limit: 10,
       page: 1,
       search: '',
-      author: '',
       owner: '',
-      sort_type: '',
-      sort_criteria : '',
       sortEnabled : false,
-      organization: '',
       searchMessage: '',
       searchInterval: null,
       submitted: false,
-      adopen: [1],
+      adopen: 1,
       advanced: {
         types: ['dataset', 'presentation', 'publication', 'software', 'other'],
         author: '',
         org: '',
-        badge_ids: []
+        badge_ids: [],
+        sort_criteria: '',
+        sort_type: 'desc',
       },
       types: ['dataset', 'presentation', 'publication', 'software', 'other'],
       filters: ['Name', 'Organization'],
@@ -260,15 +256,14 @@ export default {
       console.log('keywords: ', this.search)
       this.onSubmit()
     } else if (this.$route.query.author_keywords) {
-      this.author = this.$route.query.author_keywords
-      console.log('author_keywords: ', this.author)
+      this.advanced.author = this.$route.query.author_keywords
+      console.log('author_keywords: ', this.advanced.author)
       this.onSubmit()
-      this.adopen = [0]
+      this.adopen = 0
     } else{
       this.search = this.search_init
-    }
-    if (this.all) {
-      this.advanced.types = this.types
+      this.advanced = deepClone(this.search_advanced_init)
+      this.sortEnabled = this.advanced.search_criteria !== ''
     }
     this.$store.dispatch('user/fetchBadges')
   },
@@ -280,9 +275,10 @@ export default {
       pages: state => state.artifacts.artifacts.pages,
       total: state => state.artifacts.artifacts.total,
       search_init: state => state.artifacts.search,
+      search_advanced_init: state => state.artifacts.search_advanced,
       searchLoading: state => state.artifacts.loading,
       user_is_admin: state => state.user.user_is_admin,
-      user_can_admin: state => state.user.user_can_admin
+      user_can_admin: state => state.user.user_can_admin,
     }),
     allArtifacts() {
       return this.advanced.types.length === this.types.length
@@ -327,13 +323,13 @@ export default {
           type: this.advanced.types
         }
 
-        this.author ? (payload['author'] = this.author) : false
-        this.owner ? (payload['owner'] = this.owner) : false
-        this.organization ? (payload['organization'] = this.organization) : false
+        this.advanced.author ? (payload['author'] = this.advanced.author) : false
         this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
-        this.sort_criteria ? (payload['sort'] = this.sort_criteria): false
-        this.sort_type ? (payload['order'] = this.sort_type) :false
-        this.$store.dispatch('artifacts/fetchArtifacts', payload)
+        this.advanced.org ? (payload['organization'] = this.advanced.org) : false
+        this.advanced.sort_criteria ? (payload['sort'] = this.advanced.sort_criteria): false
+        this.advanced.sort_type ? (payload['order'] = this.advanced.sort_type) :false
+        this.owner ? (payload['owner'] = this.owner) : false
+        this.$store.dispatch('artifacts/fetchArtifacts', { payload, advanced: this.advanced })
       } 
       this.searchInterval = setTimeout(() => {
         if (!this.searchLoading) {
@@ -372,14 +368,14 @@ export default {
     showOptions(val){
         if (val != "None"){
           this.sortEnabled = true
-          this.sort_criteria = val
+          this.advanced.sort_criteria = val
         }
         else{
           this.sortEnabled = false
         }
     },
     setSortType(val){
-      this.sort_type = val
+      this.advanced.sort_type = val
     }
   },
   watch: {
