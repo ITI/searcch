@@ -11,6 +11,15 @@ const renameKeys = (keysMap, obj) =>
       )
     : obj
 
+const search_advanced_defaults = {
+  types: ['dataset', 'presentation', 'publication', 'software', 'other'],
+  author: '',
+  org: '',
+  badge_ids: [],
+  sort_criteria: '',
+  sort_type: 'desc',
+}
+
 export const state = () => ({
   artifacts: {
     artifacts: [],
@@ -23,14 +32,8 @@ export const state = () => ({
   },
   search: '',
   search_advanced_enabled: true,
-  search_advanced: {
-    types: ['dataset', 'presentation', 'publication', 'software', 'other'],
-    author: '',
-    org: '',
-    badge_ids: [],
-    sort_criteria: '',
-    sort_type: 'desc',
-  },
+  search_advanced_isopen: false,
+  search_advanced: JSON.parse(JSON.stringify(search_advanced_defaults)),
   favorites: [],
   favoritesIDs: {},
   imports: [],
@@ -99,7 +102,10 @@ export const mutations = {
     state.search_advanced = search_advanced
     if (!search_advanced)
       state.search_advanced_enabled = false
-    
+    if (JSON.stringify(state.search_advanced) === JSON.stringify(search_advanced_defaults))
+      state.search_advanced_isopen = false
+    else
+      state.search_advanced_isopen = true
   },
   RESET_SEARCH(state) {
     state.search = ''

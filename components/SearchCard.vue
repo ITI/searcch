@@ -263,6 +263,7 @@ export default {
     } else{
       this.search = this.search_init
       this.advanced = deepClone(this.search_advanced_init)
+      this.adopen = +(!this.search_advanced_isopen)
       this.sortEnabled = this.advanced.search_criteria !== ''
     }
     this.$store.dispatch('user/fetchBadges')
@@ -276,6 +277,7 @@ export default {
       total: state => state.artifacts.artifacts.total,
       search_init: state => state.artifacts.search,
       search_advanced_init: state => state.artifacts.search_advanced,
+      search_advanced_isopen: state => state.artifacts.search_advanced_isopen,
       searchLoading: state => state.artifacts.loading,
       user_is_admin: state => state.user.user_is_admin,
       user_can_admin: state => state.user.user_can_admin,
