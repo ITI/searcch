@@ -417,11 +417,11 @@ export default {
     margin: 4px;
   }
 
-  span {
+  /* span {
     font-size: 18px;
     margin: 4px;
     font-weight: 500;
-  }
+  } */
 
   .submit {
     font-size: 15px;
