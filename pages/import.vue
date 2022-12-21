@@ -69,25 +69,49 @@
         Enter the supported URL for your artifact:
       </p>
       <v-form v-model="valid" ref="importform">
-        <v-row>
-          <v-col cols="10">
+        <v-row dense>
+          <v-col cols="10" class="ma-1 pa-1">
             <v-text-field
               label="URL"
               v-model="url"
               placeholder="http://github.com/iti/project"
               outlined
+	      hide-details="auto"
               :rules="[rules.required, rules.url]"
             ></v-text-field>
           </v-col>
-          <v-col cols="2">
+        </v-row>
+        <v-row align="center" dense>
+          <v-col cols="2" class="ma-1 pa-1">
             <v-btn
-              class="primary mt-2"
+              class="primary"
               :disabled="importing"
               @click="startImport()"
               block
               >Start Import</v-btn
             >
           </v-col>
+          <v-divider class="mx-4" vertical></v-divider>
+          <v-checkbox class="ma-1 pa-1"
+            label="Disable Fetch"
+            v-model="nofetch"
+            hide-details="auto"
+            dense
+          ></v-checkbox>
+          <v-checkbox class="ma-1 pa-1"
+            label="Disable Extraction"
+            v-model="noextract"
+            hide-details="auto"
+            dense
+          ></v-checkbox>
+          <v-checkbox class="ma-1 pa-1"
+            label="Disable Removal"
+            v-model="noremove"
+            hide-details="auto"
+            dense
+          ></v-checkbox>
+        </v-row>
+        <v-row>
         </v-row>
       </v-form>
       <br />
@@ -134,6 +158,9 @@ export default {
       dialog: false,
       valid: false,
       url: null,
+      nofetch: null,
+      noextract: null,
+      noremove: null,
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
@@ -167,7 +194,10 @@ export default {
       if (!this.valid) return
       this.importing = true
       let response = await this.$importsEndpoint.create({
-        url: this.url
+        url: this.url,
+        nofetch: this.nofetch,
+        noextract: this.noextract,
+        noremove: this.noremove
       })
       this.$refs.importform.reset()
       this.updateImports()
@@ -179,6 +209,9 @@ export default {
         3000
       )
       this.url = undefined
+      this.nofetch = false
+      this.noextract = false
+      this.noremove = false
       this.importing = false
     },
     updateImports() {
