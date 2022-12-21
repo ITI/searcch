@@ -16,6 +16,7 @@ const search_advanced_defaults = {
   author: '',
   org: '',
   badge_ids: [],
+  venue_ids: [],
   sort_criteria: '',
   sort_type: 'desc',
 }

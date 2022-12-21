@@ -224,6 +224,18 @@
             <v-divider class="mx-4"></v-divider>
           </div>
 
+          <div v-if="record.artifact.venues && record.artifact.venues.length">
+            <v-card-title class="py-0">Venues</v-card-title>
+            <ArtifactChips class="ml-4"
+              :field="record.artifact.venues"
+              type="venue"
+              display
+              link
+            ></ArtifactChips>
+
+            <v-divider class="mx-4"></v-divider>
+          </div>
+
           <div v-if="tags.length">
             <v-card-title class="py-0">Keywords</v-card-title>
             <ArtifactChips class="ml-4"

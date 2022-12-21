@@ -187,6 +187,15 @@
 
         <v-divider class="mx-4"></v-divider>
 
+        <v-card-title class="py-0">Venues</v-card-title>
+        <ArtifactChips class="ml-4"
+          :field="artifact_local.venues"
+          type="venue"
+          edit
+        ></ArtifactChips>
+
+        <v-divider class="mx-4"></v-divider>
+
         <v-card-title class="py-0">Keywords</v-card-title>
         <ArtifactChips
           :field="artifact_local.tags"
@@ -613,7 +622,8 @@ export default {
         files: [],
         languages: [],
         relations: [],
-        badges: []
+        badges: [],
+	venues: []
       },
       affiliation: this.affiliationObject(),
       schema: {},
@@ -697,11 +707,13 @@ export default {
     EventBus.$on('close', this.closeHandler)
     this.$store.dispatch('user/fetchOrgs')
     this.$store.dispatch('user/fetchBadges')
+    this.$store.dispatch('user/fetchVenues')
   },
   computed: {
     ...mapState({
       orgs: state => state.user.orgs,
-      badges: state => state.user.badges
+      badges: state => state.user.badges,
+      venues: state => state.user.venues
     }),
     orgNames: {
       get: function() {
@@ -841,6 +853,15 @@ export default {
             )
           : zipArray('badge', this.meta.badges)
 
+      // venues
+      this.artifact_local.venues =
+        typeof this.artifact_local.venues !== 'undefined' &&
+        this.artifact_local.venues !== null
+          ? this.artifact_local.venues.concat(
+              zipArray('venue', this.meta.venues)
+            )
+          : zipArray('venue', this.meta.venues)
+
       // languages
       let langs =
         this.artifact_local.meta !== null
@@ -890,6 +911,7 @@ export default {
       this.meta.files = []
       this.meta.creators = []
       this.meta.badges = []
+      this.meta.venues = []
       this.meta.languages = []
       this.meta.relations = []
 

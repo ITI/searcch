@@ -108,7 +108,6 @@
 </template>
 
 <script>
-import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   props: {
@@ -173,12 +172,6 @@ export default {
     },
     updateImports() {
       this.$store.dispatch('artifacts/fetchImports', {})
-    },
-    iconColor(type) {
-      return artifactColor(type)
-    },
-    iconImage(type) {
-      return artifactIcon(type)
     }
   }
 }

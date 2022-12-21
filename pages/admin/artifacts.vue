@@ -194,7 +194,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor } from '@/helpers'
 
 export default {
   components: {
@@ -307,12 +306,6 @@ export default {
     setArtifactGroupIdFilter(id) {
       this.artifact_group_id = id
       this.updateArtifacts()
-    },
-    iconColor(type) {
-      return artifactColor(type)
-    },
-    iconImage(type) {
-      return artifactIcon(type)
     },
     deleteItem(item, allversions) {
       this.editedIndex = this.items.indexOf(item)

@@ -135,7 +135,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/affiliation.json'
 
@@ -229,12 +228,6 @@ export default {
     })
   },
   methods: {
-    iconColor(type) {
-      return artifactColor(type)
-    },
-    iconImage(type) {
-      return artifactIcon(type)
-    },
     profileImage(email) {
       if (typeof this.authUser !== 'undefined') {
         if (typeof this.authUser.avatar_url !== 'undefined'

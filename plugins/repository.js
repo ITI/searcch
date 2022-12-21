@@ -54,6 +54,9 @@ export default (ctx, inject) => {
   // badges
   inject('badgesEndpoint', repositoryWithAxios('kg/' + 'badges'))
 
+  // venues
+  inject('venuesEndpoint', repositoryWithAxios('kg/' + 'venues'))
+
   // licenses
   inject('licenseEndpoint', repositoryWithAxios('kg/' + 'licenses'))
 
