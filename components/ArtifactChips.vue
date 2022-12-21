@@ -7,7 +7,7 @@
       cols="12"
       class="ma-2"
       label
-      :color="iconColor(type)"
+      :color="iconColor(type, item)"
       v-bind:close="edit ? !display : undefined"
       :close-icon="edit ? 'mdi-close' : undefined"
       @click:close="
@@ -18,7 +18,7 @@
       v-bind:small="small"
     >
       <v-avatar left>
-        <v-icon>{{ iconImage(type) }}</v-icon>
+        <v-icon>{{ iconImage(type, item) }}</v-icon>
       </v-avatar>
       <div v-if="!isObject(field[index])">
         <v-text-field
@@ -27,7 +27,7 @@
           solo
           dark
           hide-details
-          :background-color="iconColor(type)"
+          :background-color="iconColor(type, field[index])"
           :placeholder="placeholder"
           v-model="field[index]"
           v-bind:readonly="!create"
@@ -42,6 +42,9 @@
       </div>
       <div v-else-if="type === 'keyword'">
         {{ item.tag }}
+      </div>
+      <div v-else-if="type === 'venue'">
+        {{ item.venue.abbrev || item.venue.title }}
       </div>
       <div v-else-if="type === 'role'">
         {{ item.affiliation.person.name }}
@@ -72,7 +75,7 @@
 </template>
 
 <script>
-import { artifactIcon, artifactColor, reverseRelation } from '@/helpers'
+import { artifactIcon, artifactColor, venueIcon, reverseRelation } from '@/helpers'
 
 export default {
   components: {},
@@ -145,10 +148,14 @@ export default {
     flipRelation(type) {
       return reverseRelation(type)
     },
-    iconColor(type) {
+    iconColor(type, item) {
+      if (type == "venue")
+        return 'green white--text'
       return artifactColor(type)
     },
-    iconImage(type) {
+    iconImage(type, item) {
+      if (type == "venue")
+        return venueIcon(item.venue.type)
       return artifactIcon(type)
     },
     isObject(item) {
@@ -168,6 +175,8 @@ export default {
             return '/artifact/' + item.related_artifact_group_id
           case 'reverse-relation':
             return '/artifact/' + item.artifact_group_id
+          case 'venue':
+            return '/search?venue_ids=' + item.id
         }
       }
       return null

@@ -131,6 +131,48 @@
                   </template>
                 </v-select>
               </v-col>
+              
+              <v-col cols="12">
+                <v-select
+                  v-model="advanced.venue_ids"
+                  :items="venues"
+                  :item-value="item => item.id"
+                  label="Artifact venues"
+                  multiple
+                  class="rounded-0"
+                  hide-details
+                >
+                  <template v-slot:prepend-item>
+                    <v-list-item ripple @click="toggleVenues">
+                      <v-list-item-action>
+                        <v-icon
+                          :color="
+                            advanced.venue_ids.length > 0 ? 'indigo darken-4' : ''
+                          "
+                        >
+                          {{ venueIcon }}
+                        </v-icon>
+                      </v-list-item-action>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          Select All
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+                  <template v-slot:selection="{ item, index }">
+                    <span v-if="index === 0">{{ `${item.title}` }}</span>
+                    <span></span>
+                    <span v-if="index === 1" class="grey--text caption">
+                      (+{{ advanced.venue_ids.length - 1 }} others)
+                    </span>
+                  </template>
+                  <template v-slot:item="{ item, index }">
+                    {{ `${item.title}` }}
+                  </template>
+                </v-select>
+              </v-col>
 
               <v-col cols="12" sm ="8">
                 <v-select v-model="advanced.search_criteria" label="Sort Results" :items="['None','date', 'views', 'rating']" @change = "showOptions">
@@ -234,6 +276,7 @@ export default {
         author: '',
         org: '',
         badge_ids: [],
+        venue_ids: [],
         sort_criteria: '',
         sort_type: 'desc',
       },
@@ -260,17 +303,29 @@ export default {
       console.log('author_keywords: ', this.advanced.author)
       this.onSubmit()
       this.adopen = 0
-    } else{
+    } else if (this.$route.query.badge_ids) {
+      this.advanced.badge_ids = this.$route.query.badge_ids
+      console.log('badge_ids: ', this.advanced.badge_ids)
+      this.onSubmit()
+      this.adopen = 0
+    } else if (this.$route.query.venue_ids) {
+      this.advanced.venue_ids = this.$route.query.venue_ids
+      console.log('venue_ids: ', this.advanced.venue_ids)
+      this.onSubmit()
+      this.adopen = 0
+    } else {
       this.search = this.search_init
       this.advanced = deepClone(this.search_advanced_init)
       this.adopen = +(!this.search_advanced_isopen)
       this.sortEnabled = this.advanced.search_criteria !== ''
     }
     this.$store.dispatch('user/fetchBadges')
+    this.$store.dispatch('user/fetchVenues')
   },
   computed: {
     ...mapState({
       badges: state => state.user.badges,
+      venues: state => state.user.venues,
       artifacts: state => state.artifacts.artifacts.artifacts,
       artifact: state => state.artifacts.artifact.artifact,
       pages: state => state.artifacts.artifacts.pages,
@@ -304,6 +359,17 @@ export default {
       if (this.someBadges) return 'mdi-minus-box'
       return 'mdi-checkbox-blank-outline'
     },
+    allVenues() {
+      return this.advanced.venue_ids.length === this.venues.length
+    },
+    someVenues() {
+      return this.advanced.venue_ids.length > 0 && !this.allVenues
+    },
+    venueIcon() {
+      if (this.allVenues) return 'mdi-close-box'
+      if (this.someVenues) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    },
     advancedPlaceholder() {
       if (this.advanced.filter === 'Name') return 'First or Last name'
       if (this.advanced.filter === 'Organization') return 'Organization name'
@@ -327,6 +393,7 @@ export default {
 
         this.advanced.author ? (payload['author'] = this.advanced.author) : false
         this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
+        this.advanced.venue_ids ? (payload['venue_id'] = this.advanced.venue_ids) : false
         this.advanced.org ? (payload['organization'] = this.advanced.org) : false
         this.advanced.sort_criteria ? (payload['sort'] = this.advanced.sort_criteria): false
         this.advanced.sort_type ? (payload['order'] = this.advanced.sort_type) :false
@@ -358,6 +425,15 @@ export default {
           this.advanced.badge_ids = []
         } else {
           this.advanced.badge_ids = this.badges.map(x => x.id)
+        }
+      })
+    },
+    toggleVenues() {
+      this.$nextTick(() => {
+        if (this.allVenues) {
+          this.advanced.venue_ids = []
+        } else {
+          this.advanced.venue_ids = this.venues.map(x => x.id)
         }
       })
     },

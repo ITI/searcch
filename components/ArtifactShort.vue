@@ -137,7 +137,7 @@
 <script>
 import clip from 'text-clipper'
 import { mapState } from 'vuex'
-import { artifactIcon, artifactColor, EventBus } from '@/helpers'
+import { EventBus } from '@/helpers'
 
 export default {
   props: {
@@ -250,12 +250,6 @@ export default {
       } else {
         return `/artifact/${this.artifact.artifact_group_id}/${this.artifact.id}`;
       }
-    },
-    iconColor(type) {
-      return artifactColor(type)
-    },
-    iconImage(type) {
-      return artifactIcon(type)
     },
     addRelated(id, relation) {
       console.log(this.artifact)

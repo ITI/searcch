@@ -28,6 +28,23 @@ export const artifactIcon = type => {
   }
 }
 
+export const venueIcon = type => {
+    console.log("venue type = " + type)
+  switch (type) {
+    case 'conference':
+    case 'event':
+      return 'mdi-lectern'
+    case 'journal':
+    case 'magazine':
+      return 'mdi-book-open-variant'
+    case 'newspaper':
+    case 'periodical':
+      return 'mdi-newspaper'
+    default:
+      return 'mdi-calendar-text'
+  }
+}
+
 export const artifactColor = type => {
   switch (type) {
     case 'dataset':

@@ -8,6 +8,7 @@ export const state = () => ({
   organization: [],
   orgs: [],
   badges: [],
+  venues: [],
   user_token: null,
   interests: null
 })
@@ -24,6 +25,9 @@ export const getters = {
   },
   badges: state => {
     return state.badges
+  },
+  venues: state => {
+    return state.venues
   },
   name: state => {
     return state.user.name
@@ -79,6 +83,9 @@ export const mutations = {
   SET_BADGES(state, badges) {
     state.badges = badges
   },
+  SET_VENUES(state, venues) {
+    state.venues = venues
+  },
   SET_INTERESTS(state, interests) {
     state.interests = interests
   },
@@ -87,6 +94,7 @@ export const mutations = {
     state.organization = []
     state.orgs = []
     state.badges = []
+    state.venues = []
     state.interests = null
     state.user_token = null
     state.userid = null
@@ -140,6 +148,21 @@ export const actions = {
     response = await this.$badgesEndpoint.index(payload)
     if (typeof response !== 'undefined' && response.badges) {
       commit('SET_BADGES', response.badges)
+    }
+  },
+  async fetchVenues({ commit, state }) {
+    if (typeof state.venues === 'object' && state.venues.length > 0) {
+      return
+    }
+    let response = {}
+    console.log('fetching venues')
+    let payload = {
+      verified: 1,
+      all: 1
+    }
+    response = await this.$venuesEndpoint.index(payload)
+    if (typeof response !== 'undefined' && response.venues) {
+      commit('SET_VENUES', response.venues)
     }
   },
   async fetchInterests({ commit, state }) {
