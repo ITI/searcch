@@ -76,7 +76,7 @@
               v-model="url"
               placeholder="http://github.com/iti/project"
               outlined
-	      hide-details="auto"
+              hide-details="auto"
               :rules="[rules.required, rules.url]"
             ></v-text-field>
           </v-col>
@@ -92,24 +92,106 @@
             >
           </v-col>
           <v-divider class="mx-4" vertical></v-divider>
-          <v-checkbox class="ma-1 pa-1"
-            label="Disable Fetch"
-            v-model="nofetch"
-            hide-details="auto"
-            dense
-          ></v-checkbox>
-          <v-checkbox class="ma-1 pa-1"
-            label="Disable Extraction"
-            v-model="noextract"
-            hide-details="auto"
-            dense
-          ></v-checkbox>
-          <v-checkbox class="ma-1 pa-1"
-            label="Disable Removal"
-            v-model="noremove"
-            hide-details="auto"
-            dense
-          ></v-checkbox>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    class="ma-1 pa-1"
+                    label="Import candidates"
+                    v-model="autofollow"
+                    hide-details="auto"
+                    dense
+                    ></v-checkbox>
+                  </span>
+              </template>
+              <span>
+                If the initial import of the URL you enter suggests
+                additional, related <strong>candidate</strong> artifacts to
+                import, selecting this option will automatically import
+                those as artifacts, <strong>and</strong> create the
+                recommended relationships between them.
+              </span>
+            </v-tooltip>
+          </v-col>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    class="ma-1 pa-1"
+                    label="Disable Extraction"
+                    v-model="noextract"
+                    hide-details="auto"
+                    dense
+                  ></v-checkbox>
+                </span>
+              </template>
+              <span>
+                If selected, disables potentially costly metadata extraction
+                (e.g. keyword extraction) from fetched artifact content.
+              </span>
+            </v-tooltip>
+          </v-col>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    class="ma-1 pa-1"
+                    label="Disable Fetch"
+                    v-model="nofetch"
+                    hide-details="auto"
+                    dense
+                  ></v-checkbox>
+                </span>
+              </template>
+              <span>
+                If selected, disables retrieval of the artifact's content --
+                for instance, source code repositories and associated files
+                (e.g papers, presentations, etc).  If your artifact is a
+                fork of the Linux kernel, you might consider selecting this
+                box.
+              </span>
+            </v-tooltip>
+          </v-col>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    v-if="user_is_admin"
+                    class="ma-1 pa-1"
+                    label="Disable Removal"
+                    v-model="noremove"
+                    hide-details="auto"
+                    dense
+                  ></v-checkbox>
+                </span>
+              </template>
+              <span>
+                If selected, disables removal of fetched content at the
+                importer service that performed the import.  This should
+                only be selected by administrators to facilitate debugging.
+              </span>
+            </v-tooltip>
+          </v-col>
         </v-row>
         <v-row>
         </v-row>
@@ -167,6 +249,7 @@ export default {
       nofetch: null,
       noextract: null,
       noremove: null,
+      autofollow: true,
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
@@ -196,6 +279,7 @@ export default {
       imports: state => state.artifacts.imports.artifact_imports,
       pages: state => state.artifacts.imports.pages,
       total: state => state.artifacts.imports.total,
+      user_is_admin: state => state.user.user_is_admin
     })
   },
   methods: {
@@ -206,7 +290,8 @@ export default {
         url: this.url,
         nofetch: this.nofetch,
         noextract: this.noextract,
-        noremove: this.noremove
+        noremove: this.noremove,
+        autofollow: this.autofollow
       })
       this.$refs.importform.reset()
       this.updateImports()
@@ -221,6 +306,7 @@ export default {
       this.nofetch = false
       this.noextract = false
       this.noremove = false
+      this.autofollow = true
       this.importing = false
     },
     updateImports() {
