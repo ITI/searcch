@@ -123,6 +123,12 @@
       <br /><v-divider></v-divider><br />
       <h2>Imported Artifacts</h2>
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
+      <v-pagination
+        v-if="imports.length"
+        v-model="page"
+        :length="pages"
+        circle
+      ></v-pagination>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
   </span>
@@ -167,7 +173,8 @@ export default {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
         }
-      }
+      },
+      page: 1
     }
   },
   async mounted() {
@@ -186,7 +193,9 @@ export default {
   },
   computed: {
     ...mapState({
-      imports: state => state.artifacts.imports
+      imports: state => state.artifacts.imports.artifact_imports,
+      pages: state => state.artifacts.imports.pages,
+      total: state => state.artifacts.imports.total,
     })
   },
   methods: {
@@ -215,7 +224,7 @@ export default {
       this.importing = false
     },
     updateImports() {
-      this.$store.dispatch('artifacts/fetchImports', {})
+      this.$store.dispatch('artifacts/fetchImports', { "page": this.page })
       if (
         !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
       ) {
@@ -227,6 +236,11 @@ export default {
     clearInterval(this.pollingID)
     clearTimeout(this.timeoutID)
     next()
+  },
+  watch: {
+    page() {
+      this.updateImports()
+    },
   }
 }
 </script>
