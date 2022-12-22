@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-card tile class="mx-auto overflow-hidden" elevation="3">
-      <v-row class="px-3">
-        <v-col cols="10">
+    <v-card tile class="mx-auto pa-1 overflow-hidden" elevation="3">
+      <v-row class="px-0">
+        <v-col cols="10" class="pa-1">
           <v-card-title class="align-start">
             <div>
               <span class="headline"
-                >Import ID {{ artifact.id }}:&nbsp;<a
+                >Import:&nbsp;<a
                   target="_blank"
                   :href="artifact.url"
                   rel="noopener"
@@ -24,7 +24,7 @@
         </v-col>
       </v-row>
 
-      <v-card-text>
+      <v-card-text class="pa-2">
         <v-progress-linear
           color="light-blue"
           height="25"
@@ -33,7 +33,7 @@
         >
         {{ artifact.status }} - {{ artifact.phase }}
       </v-card-text>
-      <v-row v-if="artifact.status === 'failed'" class="px-3">
+      <v-row v-if="artifact.status === 'failed'" class="px-2">
         <v-col cols="10">
           <v-card-text>
             message:
@@ -124,6 +124,7 @@ export default {
   },
   computed: {
     artifactType() {
+      if (this.artifact.artifact !== "undefined" && this.artifact.artifact) return this.artifact.artifact.type
       if (this.artifact.type == null) return 'Detecting Type...'
       return this.artifact.type
     },
