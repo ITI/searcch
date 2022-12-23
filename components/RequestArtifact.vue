@@ -22,7 +22,7 @@
 
    <div>
      <form @submit.prevent="submitForm" ref="request_form">
-     <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></div>
+     <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
       <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div>
      <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
       <v-textarea
@@ -136,7 +136,8 @@ export default {
       formSubmittedError: false,
       formSubmittedErrorMessage: "",
       researchers: [{name: "", email: ""}],
-      requestMode: false
+      requestMode: false,
+      dua: null
     }
   },
   mounted() {
@@ -394,7 +395,15 @@ export default {
       }
       this.formSubmitted = true;
       this.requestMode = false;
-    }
+    },
+    async fetchDUA() {
+      let response = await this.$duaEndpoint.show(
+        this.record.artifact.artifact_group_id
+      );
+      this.dua = response.dua;
+      //TODO: Display and accept DUA
+      console.warn(this.dua);
+    },
   }
 }
 </script>

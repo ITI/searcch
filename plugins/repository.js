@@ -118,4 +118,7 @@ export default (ctx, inject) => {
 
   // sessions index API
   inject('sessionsEndpoint', repositoryWithAxios('kg/' + 'sessions'))
+
+  // dua API
+  inject('duaEndpoint', repositoryWithAxios('kg/' + 'dua'))
 }
