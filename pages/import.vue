@@ -266,6 +266,7 @@ export default {
     this.timeoutID = setTimeout(() => {
       this.loadingMessage = 'No imports found'
       clearInterval(this.pollingID)
+      this.pollingID = null
     }, 5000)
     this.pollingID = setInterval(
       function() {
@@ -315,11 +316,13 @@ export default {
         !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
       ) {
         clearInterval(this.pollingID)
+        this.pollingID = null
       }
     }
   },
   beforeRouteLeave(to, from, next) {
     clearInterval(this.pollingID)
+    this.pollingID = null
     clearTimeout(this.timeoutID)
     next()
   },
@@ -327,6 +330,16 @@ export default {
     page() {
       this.updateImports()
     },
+    imports() {
+      if (this.pollingID === null) {
+        this.pollingID = setInterval(
+          function() {
+            this.updateImports()
+          }.bind(this),
+          3000
+        )
+      }
+    }
   }
 }
 </script>
