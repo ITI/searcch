@@ -103,6 +103,75 @@
           Read More
         </v-btn>
       </v-card-actions>
+      <v-row
+        v-if="artifact.artifact !== 'undefined' &&
+              artifact.artifact !== null &&
+              artifact.artifact.candidate_relationships !== 'undefined' &&
+              artifact.artifact.candidate_relationships !== null &&
+              artifact.artifact.candidate_relationships.length"
+      >
+        <div
+          v-for="cr in artifact.artifact.candidate_relationships"
+          :key="cr.id">
+        <v-col cols="12">
+          <v-divider class="ma-2 pa-0"></v-divider>
+          <div>
+            <v-row class="ma-2 pa-0">
+              <span>
+                <b>Related Candidate (<i>{{ cr.relation }}</i>)</b>:&nbsp;
+                <a
+                  target="_blank"
+                  :href="cr.related_candidate.url"
+                  rel="noopener"
+                >{{ cr.related_candidate.url }}</a>
+              </span>
+            </v-row>
+            <v-row
+              class="ma-2 mx-6 pa-0"
+              v-if="cr.related_candidate.artifact_import !== 'undefined'
+                    && cr.related_candidate.artifact_import !== null"
+            >
+              <v-col cols="auto" class="pa-0">
+                  Import status: {{ cr.related_candidate.artifact_import.status }} -
+                  {{ cr.related_candidate.artifact_import.phase }}&nbsp;&nbsp;
+              </v-col>
+              <v-col cols="3" class="pa-0">
+                <v-progress-linear
+                  color="light-blue lighten-3"
+                  height="25"
+                  :value="artifact.progress"
+                >
+                  <strong>{{ cr.related_candidate.artifact_import.progress }}%</strong>
+                </v-progress-linear>
+              </v-col>
+            </v-row>
+            <v-row
+              class="ma-2 mx-6 pa-0"
+              v-else
+            >
+              <v-col cols="auto" class="pa-0">
+                <v-btn
+                  color="primary"
+                  small
+                  @click="importCandidate(cr)"
+                >
+                  Start Import
+                </v-btn>
+              </v-col>
+              <v-col cols="auto" class="pa-0 pl-2">
+                <v-btn
+                  color="error"
+                  small
+                  @click="deleteCandidate(cr)"
+                >
+                  Delete Candidate
+                </v-btn>
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+        </div>
+      </v-row>
     </v-card>
   </div>
 </template>
@@ -169,6 +238,17 @@ export default {
         }
       )
       this.publish_local = true
+      this.updateImports()
+    },
+    async importCandidate(cr) {
+      console.log("importCandidate: ", cr)
+      let response = await this.$importsEndpoint.create({
+        candidate_artifact_id: cr.related_candidate_id
+      })
+      this.updateImports()
+    },
+    async deleteCandidate(cr) {
+      let response = await this.$candidateArtifactEndpoint.delete(cr.related_candidate_id)
       this.updateImports()
     },
     updateImports() {
