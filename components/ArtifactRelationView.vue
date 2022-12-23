@@ -36,13 +36,23 @@
                   @click="deleteRelationship(relation)">
                   <v-icon small>mdi-close</v-icon>
                 </v-btn>
-                {{ relation.related_artifact_group.publication.artifact.title }}
+                <span v-if="relation.related_artifact_group.publication !== null">
+                  {{ relation.related_artifact_group.publication.artifact.title }}
+                </span>
+                <span v-else class="red--text text--lighten-1">
+                  [Related artifact not yet published -- no title available!]
+                </span>
                 <v-btn class="mb-1" fab x-small text
                   :href="getSearcchLinkForArtifact(relation)">
                   <v-icon small>mdi-open-in-new</v-icon>
                 </v-btn>
               </v-list-item-title>
-              <p class="text-caption">{{ relation.related_artifact_group.publication.artifact.description }}</p>
+              <p
+                v-if="relation.related_artifact_group.publication !== null"
+                class="text-caption"
+              >
+                {{ relation.related_artifact_group.publication.artifact.description }}
+              </p>
             </v-list-item-content>
           </v-col>
         </v-row>
@@ -103,7 +113,7 @@ export default {
   },
   methods: {
     getSearcchLinkForArtifact(relation) {
-      return "/artifact/" + relation.related_artifact_group.publication.artifact.id
+      return "/artifact/" + relation.related_artifact_group_id
     },
     deleteRelationship(relation) {
       const idx = this.artifact_group.relationships.indexOf(relation)
