@@ -153,7 +153,7 @@
       <v-divider class="mt-4 grey lighten-2"></v-divider>
       <v-tabs v-model="tab" background-color="grey lighten-4">
         <v-tab>Content</v-tab>
-        <v-tab>Relationship</v-tab>
+        <v-tab>Related{{ numberRelationships ? " (" + numberRelationships + ")" : "" }}</v-tab>
 
         <v-tab-item>
 
@@ -646,6 +646,14 @@ export default {
       if (!this.record.artifact.affiliations.length) return 'Claim Ownership'
       else return 'Claim Role'
     },
+    numberRelationships() {
+        return ((typeof this.record.artifact.artifact_group.relationships !== 'undefined'
+                 && this.record.artifact.artifact_group.relationships.length)
+                ? this.record.artifact.artifact_group.relationships.length : 0)
+            + ((typeof this.record.artifact.artifact_group.reverse_relationships !== 'undefined'
+                && this.record.artifact.artifact_group.reverse_relationships.length)
+               ? this.record.artifact.artifact_group.reverse_relationships.length : 0)
+    }
   },
   methods: {
     async favoriteThis() {
