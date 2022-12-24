@@ -54,8 +54,6 @@
                       label="Email Address"
                       class="primary-input"
                       v-model="localuser.email"
-                      readonly
-                      disabled
                     />
                   </v-col>
 
