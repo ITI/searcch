@@ -21,6 +21,7 @@
     "@sentry/tracing": "^6.9.0",
     "babel-runtime": "^6.26.0",
     "json-schema-ref-parser": "^9.0.9",
+    "marked": "^4.2.5",
     "md5": "^2.3.0",
     "nuxt": "^2.15.7",
     "qs": "^6.9.6",

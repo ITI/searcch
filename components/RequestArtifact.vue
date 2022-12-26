@@ -21,9 +21,17 @@
        </v-card>
 
    <div>
+    <transition name="modal-fade">
+          <DUAReviewModal
+            v-show="isModalVisible"
+            @close="closeModal"
+            @submitRequest="submitRequest"
+            v-bind:duaHTML="duaHTML">
+          </DUAReviewModal>
+        </transition>
      <form @submit.prevent="submitForm" ref="request_form">
-     <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
-      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div>
+     <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
+      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
      <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
       <v-textarea
         name="research"
@@ -80,8 +88,9 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </div>
+      <!-- <div v-html="duaHTML"></div> -->
       <div>
-      <input type="submit" value="Submit" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
+      <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
       </div>
     </form>
     <div v-if="formSubmitted">
@@ -103,6 +112,7 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
+import { marked } from 'marked'
 
 export default {
   name: 'KGArtifactLong',
@@ -115,7 +125,8 @@ export default {
   components: {
     ArtifactChips: () => import('@/components/ArtifactChips'),
     ArtifactCurationList: () => import('@/components/ArtifactCurationList'),
-    JsonPrettyPrint: () => import('@/components/pretty-print')
+    JsonPrettyPrint: () => import('@/components/pretty-print'),
+    DUAReviewModal: () => import('@/components/DUAReviewModal')
   },
   data() {
     return {
@@ -137,7 +148,9 @@ export default {
       formSubmittedErrorMessage: "",
       researchers: [{name: "", email: ""}],
       requestMode: false,
-      dua: null
+      dua: null,
+      duaHTML: null,
+      isModalVisible: false
     }
   },
   mounted() {
@@ -263,6 +276,12 @@ export default {
     }
   },
   methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
     async deleteResearcher(index) {
       this.researchers.splice(index, 1);
     },
@@ -297,7 +316,8 @@ export default {
         researcher.email = researcher.email.trim();
       });
       if (this.$refs.request_form.checkValidity()) {
-        this.submitRequest();
+        // this.submitRequest();
+        this.fetchDUA();
       } else {
         this.$refs.request_form.reportValidity();
       }
@@ -367,7 +387,7 @@ export default {
           isEntryEmpty = true;
         }
       });
-      if(!(this.research && this.Images) || isEntryEmpty) {
+      if(!(this.research) || isEntryEmpty) {
         this.formSubmittedError = true;
         this.formSubmittedErrorMessage = "Please fill all the fields";
         this.formSubmitted = true;
@@ -378,7 +398,8 @@ export default {
       }
       this.requestMode = true;
       const payload = new FormData();
-      let file = this.Images;
+      let blob = new Blob([this.duaHTML], { type: 'text/plain' });
+      let file = new File([blob], "signed_dua.html", {type: "text/plain"});
       let researchersJSON = JSON.stringify(this.researchers);
       payload.append('file', file);
       payload.append('research_desc', this.research);
@@ -395,14 +416,16 @@ export default {
       }
       this.formSubmitted = true;
       this.requestMode = false;
+      this.closeModal();
     },
     async fetchDUA() {
       let response = await this.$duaEndpoint.show(
         this.record.artifact.artifact_group_id
       );
       this.dua = response.dua;
-      //TODO: Display and accept DUA
-      console.warn(this.dua);
+      this.duaHTML = marked(this.dua);
+      this.showModal();
+      //TODO: Sign DUA
     },
   }
 }
@@ -460,6 +483,7 @@ export default {
     padding: 8px;
     width: 100px;
   }
+
 
 
 </style>
