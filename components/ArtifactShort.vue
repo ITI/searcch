@@ -122,7 +122,7 @@
           Edit Relation
         </v-btn>
         <v-btn
-          v-if="isOwner() || isAdmin()"
+          v-if="isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
