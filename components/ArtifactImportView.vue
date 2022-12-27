@@ -207,7 +207,7 @@ export default {
   methods: {
     async deleteArtifact() {
       let response = await this.$artifactEndpoint.delete(
-        this.artifact.artifact_id
+        [this.artifact.artifact_group_id, this.artifact.artifact_id]
       )
       this.updateImports()
     },
