@@ -32,7 +32,17 @@
      <form @submit.prevent="submitForm" ref="request_form">
      <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
       <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
-     <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
+     <div style="font-weight: bold;">Mention the project name</div>
+      <v-textarea
+        name="project"
+	      v-model="project"
+        type="text"
+        hint="Enter your project name" 
+        auto-grow
+        clearable
+        required
+      ></v-textarea>
+      <div style="margin-top: 20px; font-weight: bold;">Briefly describe the research to be done with the dataset</div>
       <v-textarea
         name="research"
 	      v-model="research"
@@ -151,6 +161,7 @@ export default {
       diff_results_tab: "visual",
       loadingMessage: 'Loading...',
       research: "",
+      project: "",
       people: "",
       Images: null,
       formSubmitted: false,
@@ -327,6 +338,7 @@ export default {
         researcher.email = researcher.email.trim();
         researcher.number = researcher.number.trim();
       });
+      this.project = this.project.trim();
       if (this.$refs.request_form.checkValidity()) {
         // this.submitRequest();
         this.fetchDUA();
@@ -399,7 +411,7 @@ export default {
           isEntryEmpty = true;
         }
       });
-      if(!(this.research) || isEntryEmpty) {
+      if(!(this.research) || isEntryEmpty || !(this.project)) {
         this.formSubmittedError = true;
         this.formSubmittedErrorMessage = "Please fill all the fields";
         this.formSubmitted = true;
@@ -433,7 +445,12 @@ export default {
     async fetchDUA() {
       let response = await this.$duaEndpoint.show(
         this.record.artifact.artifact_group_id,
-        {'researchers': JSON.stringify(this.researchers)}
+        {
+          'researchers': JSON.stringify(this.researchers),
+          'research': this.research,
+          'project': this.project,
+          'dataset_name': this.record.artifact.title
+        }
       );
       this.dua = response.dua;
       this.duaHTML = marked(this.dua);
