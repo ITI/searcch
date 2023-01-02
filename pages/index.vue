@@ -96,6 +96,7 @@
       <LazyHydrate never>
         
         <div>
+          
           <v-card>
             <v-card-title class="primary white--text">
               COMUNDA is a collaborative, community-driven platform for network dataset sharing and reuse. 
