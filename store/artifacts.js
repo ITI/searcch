@@ -37,7 +37,11 @@ export const state = () => ({
   search_advanced: JSON.parse(JSON.stringify(search_advanced_defaults)),
   favorites: [],
   favoritesIDs: {},
-  imports: [],
+  imports: {
+    artifact_imports: [],
+    pages: 0,
+    total: 0
+  },
   import: {},
   loading: false,
   artifactClaim: {}
@@ -221,7 +225,7 @@ export const actions = {
       ...payload
     })
     if (typeof response !== 'undefined' && response.artifact_imports) {
-      commit('SET_IMPORTS', response.artifact_imports)
+      commit('SET_IMPORTS', response)
     }
     commit('SET_LOADING', false)
   },

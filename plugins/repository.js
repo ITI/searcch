@@ -51,6 +51,12 @@ export default (ctx, inject) => {
     repositoryWithAxios('kg/' + 'artifact/compare')
   )
 
+  // candidate artifacts
+  inject(
+    'candidateArtifactEndpoint',
+    repositoryWithAxios('kg/' + 'candidate/artifact')
+  )
+
   // badges
   inject('badgesEndpoint', repositoryWithAxios('kg/' + 'badges'))
 

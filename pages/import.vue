@@ -76,7 +76,7 @@
               v-model="url"
               placeholder="http://github.com/iti/project"
               outlined
-	      hide-details="auto"
+              hide-details="auto"
               :rules="[rules.required, rules.url]"
             ></v-text-field>
           </v-col>
@@ -92,24 +92,106 @@
             >
           </v-col>
           <v-divider class="mx-4" vertical></v-divider>
-          <v-checkbox class="ma-1 pa-1"
-            label="Disable Fetch"
-            v-model="nofetch"
-            hide-details="auto"
-            dense
-          ></v-checkbox>
-          <v-checkbox class="ma-1 pa-1"
-            label="Disable Extraction"
-            v-model="noextract"
-            hide-details="auto"
-            dense
-          ></v-checkbox>
-          <v-checkbox class="ma-1 pa-1"
-            label="Disable Removal"
-            v-model="noremove"
-            hide-details="auto"
-            dense
-          ></v-checkbox>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    class="ma-1 pa-1"
+                    label="Import candidates"
+                    v-model="autofollow"
+                    hide-details="auto"
+                    dense
+                    ></v-checkbox>
+                  </span>
+              </template>
+              <span>
+                If the initial import of the URL you enter suggests
+                additional, related <strong>candidate</strong> artifacts to
+                import, selecting this option will automatically import
+                those as artifacts, <strong>and</strong> create the
+                recommended relationships between them.
+              </span>
+            </v-tooltip>
+          </v-col>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    class="ma-1 pa-1"
+                    label="Disable Extraction"
+                    v-model="noextract"
+                    hide-details="auto"
+                    dense
+                  ></v-checkbox>
+                </span>
+              </template>
+              <span>
+                If selected, disables potentially costly metadata extraction
+                (e.g. keyword extraction) from fetched artifact content.
+              </span>
+            </v-tooltip>
+          </v-col>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    class="ma-1 pa-1"
+                    label="Disable Fetch"
+                    v-model="nofetch"
+                    hide-details="auto"
+                    dense
+                  ></v-checkbox>
+                </span>
+              </template>
+              <span>
+                If selected, disables retrieval of the artifact's content --
+                for instance, source code repositories and associated files
+                (e.g papers, presentations, etc).  If your artifact is a
+                fork of the Linux kernel, you might consider selecting this
+                box.
+              </span>
+            </v-tooltip>
+          </v-col>
+          <v-col class="ma-1 pa-1">
+            <v-tooltip
+              color="grey darken-4"
+              max-width="400px"
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <span v-on="on" v-bind="attrs">
+                  <v-checkbox
+                    v-if="user_is_admin"
+                    class="ma-1 pa-1"
+                    label="Disable Removal"
+                    v-model="noremove"
+                    hide-details="auto"
+                    dense
+                  ></v-checkbox>
+                </span>
+              </template>
+              <span>
+                If selected, disables removal of fetched content at the
+                importer service that performed the import.  This should
+                only be selected by administrators to facilitate debugging.
+              </span>
+            </v-tooltip>
+          </v-col>
         </v-row>
         <v-row>
         </v-row>
@@ -123,6 +205,12 @@
       <br /><v-divider></v-divider><br />
       <h2>Imported Artifacts</h2>
       <ImportList v-if="imports.length" :imports="imports"></ImportList>
+      <v-pagination
+        v-if="imports.length"
+        v-model="page"
+        :length="pages"
+        circle
+      ></v-pagination>
       <div v-else>{{ loadingMessage }}</div>
     </v-layout>
   </span>
@@ -161,13 +249,15 @@ export default {
       nofetch: null,
       noextract: null,
       noremove: null,
+      autofollow: true,
       rules: {
         required: value => !!value || 'URL required',
         url: value => {
           let pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://regexr.com/3e6m0
           return pattern.test(value) || 'Invalid URL'
         }
-      }
+      },
+      page: 1
     }
   },
   async mounted() {
@@ -176,6 +266,7 @@ export default {
     this.timeoutID = setTimeout(() => {
       this.loadingMessage = 'No imports found'
       clearInterval(this.pollingID)
+      this.pollingID = null
     }, 5000)
     this.pollingID = setInterval(
       function() {
@@ -186,7 +277,10 @@ export default {
   },
   computed: {
     ...mapState({
-      imports: state => state.artifacts.imports
+      imports: state => state.artifacts.imports.artifact_imports,
+      pages: state => state.artifacts.imports.pages,
+      total: state => state.artifacts.imports.total,
+      user_is_admin: state => state.user.user_is_admin
     })
   },
   methods: {
@@ -197,7 +291,8 @@ export default {
         url: this.url,
         nofetch: this.nofetch,
         noextract: this.noextract,
-        noremove: this.noremove
+        noremove: this.noremove,
+        autofollow: this.autofollow
       })
       this.$refs.importform.reset()
       this.updateImports()
@@ -212,21 +307,39 @@ export default {
       this.nofetch = false
       this.noextract = false
       this.noremove = false
+      this.autofollow = true
       this.importing = false
     },
     updateImports() {
-      this.$store.dispatch('artifacts/fetchImports', {})
+      this.$store.dispatch('artifacts/fetchImports', { "page": this.page })
       if (
         !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
       ) {
         clearInterval(this.pollingID)
+        this.pollingID = null
       }
     }
   },
   beforeRouteLeave(to, from, next) {
     clearInterval(this.pollingID)
+    this.pollingID = null
     clearTimeout(this.timeoutID)
     next()
+  },
+  watch: {
+    page() {
+      this.updateImports()
+    },
+    imports() {
+      if (this.pollingID === null) {
+        this.pollingID = setInterval(
+          function() {
+            this.updateImports()
+          }.bind(this),
+          3000
+        )
+      }
+    }
   }
 }
 </script>
