@@ -84,7 +84,16 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-img
+                    src="/images/comunda logo vertical.png"
+                    alt="comunda Logo"
+                    max-width="15"
+                    max-height = "20"
+                    class="ma-2"
+                  ></v-img>
+      <v-toolbar-title>
+        {{title}}
+      </v-toolbar-title>
       <v-spacer />
       <span v-if="$auth.loggedIn" class="mr-2" v-text="$auth.user.name"></span>
       <v-btn

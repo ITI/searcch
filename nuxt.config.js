@@ -44,7 +44,7 @@ export default {
       { property: 'og:image:type', content: 'image/png' },
       { property: 'og:image:alt', content: 'SEARCCH Logo' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/comunda-favicon.ico' }]
   },
   serverMiddleware: ['~/servermiddleware/seo.js'],
   /*
