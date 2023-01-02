@@ -46,7 +46,7 @@
       <div v-for="(researcher, index) in researchers" :key="index">
         <v-container>
           <v-row align="center">
-            <v-col md="6">
+            <v-col md="5">
               <v-text-field
                 v-model="researcher.name"
                 label="Name"
@@ -55,13 +55,23 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col md="5">
+            <v-col md="3">
               <v-text-field
                 v-model="researcher.email"
                 label="Email"
                 type="email"
                 hint="Enter researcher email"
                 required
+              ></v-text-field>
+            </v-col>
+            <v-col md="3">
+              <v-text-field
+                v-model="researcher.number"
+                label="Number"
+                type="text"
+                hint="Enter researcher contact number"
+                required
+                pattern="[0-9]{10}"
               ></v-text-field>
             </v-col>
             <v-col md="1">
@@ -146,7 +156,7 @@ export default {
       formSubmitted: false,
       formSubmittedError: false,
       formSubmittedErrorMessage: "",
-      researchers: [{name: "", email: ""}],
+      researchers: [{name: "", email: "", number: ""}],
       requestMode: false,
       dua: null,
       duaHTML: null,
@@ -288,7 +298,8 @@ export default {
     async addResearcher() {
       let researcherObj = {
         name: "",
-        email: ""
+        email: "",
+        number: ""
       }
       this.researchers.push(researcherObj);
     },
@@ -314,6 +325,7 @@ export default {
       this.researchers.forEach((researcher) => {
         researcher.name = researcher.name.trim();
         researcher.email = researcher.email.trim();
+        researcher.number = researcher.number.trim();
       });
       if (this.$refs.request_form.checkValidity()) {
         // this.submitRequest();
@@ -383,7 +395,7 @@ export default {
       this.formSubmitted = false;
       let isEntryEmpty = false;
       this.researchers.forEach((researcher) => {
-        if (researcher.name == "" || researcher.email == "") {
+        if (researcher.name == "" || researcher.email == "" || researcher.number == "") {
           isEntryEmpty = true;
         }
       });
@@ -420,7 +432,8 @@ export default {
     },
     async fetchDUA() {
       let response = await this.$duaEndpoint.show(
-        this.record.artifact.artifact_group_id
+        this.record.artifact.artifact_group_id,
+        {'researchers': JSON.stringify(this.researchers)}
       );
       this.dua = response.dua;
       this.duaHTML = marked(this.dua);
@@ -449,11 +462,11 @@ export default {
     margin: 4px;
   }
 
-  span {
+  /* span {
     font-size: 18px;
     margin: 4px;
     font-weight: 500;
-  }
+  } */
 
   .submit {
     font-size: 15px;
