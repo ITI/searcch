@@ -4,7 +4,7 @@ services:
   caddy:
 #    image: caddy:latest
     container_name: caddy
-    restart: unless-stopped
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile.caddy
