@@ -1,8 +1,0 @@
-comunda-dev.isi.edu {
-tls cert.pem key.pem
-reverse_proxy /* searcch-frontend-local-dev:3000 {
-      header_down Strict-Transport-Security "max-age=15552000;"
-      header_up X-Real-IP {remote_host}
-      header_up X-Forwarded-For {remote_host}
-        }
-}
