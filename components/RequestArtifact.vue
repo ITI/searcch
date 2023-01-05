@@ -140,6 +140,36 @@
       </div>
       <div v-if="record.artifact.provider == 'Merit'">
         <!--TODO: Add Dynamic DUA for Merit DUA-->
+        <div style="font-weight: bold;">Mention the organization name</div>
+        <v-text-field
+          name="organization"
+          v-model="organization"
+          type="text"
+          hint="Enter your organization name" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Mention the researcher's name</div>
+        <v-text-field
+          name="merit_researcher"
+          v-model="merit_researcher"
+          type="text"
+          hint="Enter the researcher name" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Mention the researcher's title</div>
+        <v-text-field
+          name="merit_researcher_title"
+          v-model="merit_researcher_title"
+          type="text"
+          hint="Enter the researcher title" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
       </div>
       <div>
       <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
