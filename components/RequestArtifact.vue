@@ -32,83 +32,115 @@
      <form @submit.prevent="submitForm" ref="request_form">
      <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
       <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
-     <div style="font-weight: bold;">Mention the project name</div>
-      <v-textarea
-        name="project"
-	      v-model="project"
-        type="text"
-        hint="Enter your project name" 
-        auto-grow
-        clearable
-        required
-      ></v-textarea>
-      <div style="margin-top: 20px; font-weight: bold;">Briefly describe the research to be done with the dataset</div>
-      <v-textarea
-        name="research"
-	      v-model="research"
-        type="text"
-        hint="Enter your research purpose" 
-        auto-grow
-        clearable
-        required
-      ></v-textarea>
-      <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
-      <div v-for="(researcher, index) in researchers" :key="index">
-        <v-container>
-          <v-row align="center">
-            <v-col md="5">
-              <v-text-field
-                v-model="researcher.name"
-                label="Name"
-                type="text"
-                hint="Enter researcher name"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col md="3">
-              <v-text-field
-                v-model="researcher.email"
-                label="Email"
-                type="email"
-                hint="Enter researcher email"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col md="3">
-              <v-text-field
-                v-model="researcher.number"
-                label="Number"
-                type="text"
-                hint="Enter researcher contact number"
-                required
-                pattern="[0-9]{10}"
-              ></v-text-field>
-            </v-col>
-            <v-col md="1">
-              <div>
-                <v-icon
-                  v-if="researchers.length > 1"
-                  color="error"
-                  @click="deleteResearcher(index)"
-                >
-                  mdi-delete
-                </v-icon>
-              </div>
-            </v-col>
-          </v-row> 
-        </v-container>
+      <div v-if="record.artifact.provider == 'USC'">
+        <div style="font-weight: bold;">Mention the project name</div>
+        <v-text-field
+          name="project"
+          v-model="project"
+          type="text"
+          hint="Enter your project name" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Briefly describe the research to be done with the dataset</div>
+        <v-textarea
+          name="research"
+          v-model="research"
+          type="text"
+          hint="Enter your research purpose" 
+          auto-grow
+          clearable
+          required
+        ></v-textarea>
+        <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
+        <div v-for="(researcher, index) in researchers" :key="index">
+          <v-container>
+            <v-row align="center">
+              <v-col md="5">
+                <v-text-field
+                  v-model="researcher.name"
+                  label="Name"
+                  type="text"
+                  hint="Enter researcher name"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col md="3">
+                <v-text-field
+                  v-model="researcher.email"
+                  label="Email"
+                  type="email"
+                  hint="Enter researcher email"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col md="3">
+                <v-text-field
+                  v-model="researcher.number"
+                  label="Number"
+                  type="text"
+                  hint="Enter researcher contact number"
+                  required
+                  pattern="[0-9]{10}"
+                ></v-text-field>
+              </v-col>
+              <v-col md="1">
+                <div>
+                  <v-icon
+                    v-if="researchers.length > 1"
+                    color="error"
+                    @click="deleteResearcher(index)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </div>
+              </v-col>
+            </v-row> 
+          </v-container>
+        </div>
+        <div>
+          <v-btn
+            class="success ml-2 mb-2"
+            fab
+            x-small
+            @click="addResearcher"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </div>
+        <div style="margin-top: 20px; font-weight: bold;">Please select the researcher representative</div>
+        <v-select
+          v-model="researcher_representative"
+          :items="researchers"
+          item-text="email"
+          item-value="email"
+          label="Researcher Representative"
+          required
+        ></v-select>
+        <div style="margin-top: 20px; font-weight: bold;">Please enter the title of the researcher representative</div>
+        <v-text-field
+          name="researcher_representative_title"
+          v-model="researcher_representative_title"
+          type="text"
+          hint="Enter the title of the researcher representative" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Please select the research point of contact</div>
+        <v-select
+          v-model="research_point_of_contact"
+          :items="researchers"
+          item-text="email"
+          item-value="email"
+          label="Research Point of Contact"
+          required
+        ></v-select>
       </div>
-      <div>
-        <v-btn
-          class="success ml-2 mb-2"
-          fab
-          x-small
-          @click="addResearcher"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
+      <div v-if="record.artifact.provider == 'Merit'">
+        <!--TODO: Add Dynamic DUA for Merit DUA-->
       </div>
-      <!-- <div v-html="duaHTML"></div> -->
       <div>
       <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
       </div>
@@ -171,7 +203,10 @@ export default {
       requestMode: false,
       dua: null,
       duaHTML: null,
-      isModalVisible: false
+      isModalVisible: false,
+      researcher_representative: "",
+      research_point_of_contact: "",
+      researcher_representative_title: ""
     }
   },
   mounted() {
@@ -443,13 +478,30 @@ export default {
       this.closeModal();
     },
     async fetchDUA() {
+      // get representative from researchers
+      let rep = this.researchers[0];
+      this.researchers.forEach((researcher) => {
+        if (researcher['email'] == this.research_point_of_contact) {
+          rep = researcher;
+        }
+      });
+      rep['title'] = this.researcher_representative_title;
+      // get poc from researchers
+      let poc = this.researchers[0];
+      this.researchers.forEach((researcher) => {
+        if (researcher['email'] == this.research_point_of_contact) {
+          poc = researcher;
+        }
+      });
       let response = await this.$duaEndpoint.show(
         this.record.artifact.artifact_group_id,
         {
           'researchers': JSON.stringify(this.researchers),
           'research': this.research,
           'project': this.project,
-          'dataset_name': this.record.artifact.title
+          'dataset_name': this.record.artifact.title,
+          'representative': JSON.stringify(rep),
+          'poc': JSON.stringify(poc)
         }
       );
       this.dua = response.dua;
