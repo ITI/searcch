@@ -236,7 +236,10 @@ export default {
       isModalVisible: false,
       researcher_representative: "",
       research_point_of_contact: "",
-      researcher_representative_title: ""
+      researcher_representative_title: "",
+      merit_researcher: "",
+      merit_researcher_title: "",
+      organization: ""
     }
   },
   mounted() {
@@ -471,29 +474,39 @@ export default {
     async submitRequest() {
       this.formSubmitted = false;
       let isEntryEmpty = false;
-      this.researchers.forEach((researcher) => {
-        if (researcher.name == "" || researcher.email == "" || researcher.number == "") {
-          isEntryEmpty = true;
+      if(this.record.artifact.provider == 'USC') {
+        this.researchers.forEach((researcher) => {
+          if ((researcher.name == "" || researcher.email == "" || researcher.number == "")) {
+            isEntryEmpty = true;
+          }
+        });
+        if(!(this.research) || isEntryEmpty || !(this.project)) {
+          this.formSubmittedError = true;
+          this.formSubmittedErrorMessage = "Please fill all the fields";
+          this.formSubmitted = true;
+          return;
         }
-      });
-      if(!(this.research) || isEntryEmpty || !(this.project)) {
-        this.formSubmittedError = true;
-        this.formSubmittedErrorMessage = "Please fill all the fields";
-        this.formSubmitted = true;
-        return;
-      } else {
-        this.formSubmittedError = false;
-        this.formSubmittedErrorMessage = "";
       }
+      this.formSubmittedError = false;
+      this.formSubmittedErrorMessage = "";
       this.requestMode = true;
       const payload = new FormData();
-      let blob = new Blob([this.duaHTML], { type: 'text/plain' });
-      let file = new File([blob], "signed_dua.html", {type: "text/plain"});
-      let researchersJSON = JSON.stringify(this.researchers);
-      payload.append('file', file);
-      payload.append('research_desc', this.research);
-      payload.append('research_that_interact', researchersJSON);
-      payload.append('dataset', this.record.artifact.title)
+      if(this.record.artifact.provider == 'USC') {
+        let blob = new Blob([this.duaHTML], { type: 'text/plain' });
+        let file = new File([blob], "signed_dua.html", {type: "text/plain"});
+        let researchersJSON = JSON.stringify(this.researchers);
+        payload.append('file', file);
+        payload.append('research_desc', this.research);
+        payload.append('research_that_interact', researchersJSON);
+        payload.append('dataset', this.record.artifact.title)
+      } else if (this.record.artifact.provider == 'Merit') {
+        let blob = new Blob([this.duaHTML], { type: 'text/plain' });
+        let file = new File([blob], "signed_dua.html", {type: "text/plain"});
+        payload.append('file', file);
+        payload.append('merit_org', this.organization);
+        payload.append('merit_researcher', this.merit_researcher);
+        payload.append('merit_researcher_title', this.merit_researcher_title);
+      }
       let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
@@ -531,7 +544,10 @@ export default {
           'project': this.project,
           'dataset_name': this.record.artifact.title,
           'representative': JSON.stringify(rep),
-          'poc': JSON.stringify(poc)
+          'poc': JSON.stringify(poc),
+          'merit_org': this.organization,
+          'merit_researcher': this.merit_researcher,
+          'merit_researcher_title': this.merit_researcher_title
         }
       );
       this.dua = response.dua;
