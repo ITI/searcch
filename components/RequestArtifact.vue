@@ -139,7 +139,6 @@
         ></v-select>
       </div>
       <div v-if="record.artifact.provider == 'Merit'">
-        <!--TODO: Add Dynamic DUA for Merit DUA-->
         <div style="font-weight: bold;">Mention the organization name</div>
         <v-text-field
           name="organization"
