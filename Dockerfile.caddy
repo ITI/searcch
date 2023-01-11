@@ -1,0 +1,12 @@
+FROM caddy:latest
+
+# set the above directory as working directory for the process
+WORKDIR /etc/caddy
+
+# copy everything from the pwd on host to the docker container
+# ignoring what is in .dockerignore
+COPY env/Caddyfile /etc/caddy
+COPY key.pem /etc/caddy
+COPY cert.pem /etc/caddy
+
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
