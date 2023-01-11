@@ -381,11 +381,8 @@
                       multiple
                       small-chips
                       deletable-chips
-                      persistent-hint
-                      :items="orgNames"
                       v-model="userAffiliation"
                       hint="Select applicable organization from the list or type in your own"
-                      :search-input.sync="orgSearch"
                       item-text="org.name"
                       item-value="org.name"
                       return-object
