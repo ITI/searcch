@@ -250,15 +250,30 @@ export default {
           to: '/'
         },
         {
-          icon: 'mdi-information',
-          title: 'Best Practices',
-          href: 'https://searcch.cyberexperimentation.org/best-practices'
+          icon: 'mdi-comment-account',
+          title: 'Rate and comment',
+          href: '/'
         },
         {
-          icon: 'mdi-frequently-asked-questions',
-          title: 'FAQ',
-          to: '/faqs'
-        }
+          icon: 'mdi-label-multiple',
+          title: 'Contribute Labels',
+          href: '/'
+        },
+        {
+          icon: 'mdi-database-import',
+          title: 'Contribute Datasets',
+          href: '/'
+        },
+        // {
+        //   icon: 'mdi-information',
+        //   title: 'Best Practices',
+        //   href: 'https://searcch.cyberexperimentation.org/best-practices'
+        // },
+        // {
+        //   icon: 'mdi-frequently-asked-questions',
+        //   title: 'FAQ',
+        //   to: '/faqs'
+        // }
       ]
       return footerItems
     }

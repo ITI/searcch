@@ -395,8 +395,8 @@ export default {
       all: 1
     }
     let response = await this.$organizationEndpoint.index(payload)
-    console.log(response )
-      if(this.user.organization.length == 0){
+    console.log(this.organization)
+      if(this.organization.length == 0 || !this.localuser.position){
         this.dialog = true
       }
       this.localuser = JSON.parse(JSON.stringify(this.person))
