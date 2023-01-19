@@ -268,6 +268,16 @@ export default {
           icon: 'mdi-frequently-asked-questions',
           title: 'Support',
           href: 'https://steelisi.github.io/CLASSNET-DOCS/support'
+        },
+        {
+          icon: 'mdi-information',
+          title: 'Best Practices',
+          href: 'https://searcch.cyberexperimentation.org/best-practices'
+        },
+        {
+          icon: 'mdi-frequently-asked-questions',
+          title: 'FAQ',
+          to: '/faqs'
         }
       ]
       return footerItems
