@@ -237,9 +237,9 @@ export default {
         return;
       }
       if (this.artifact.artifact_group !== undefined
-          && this.artifact.artifact_group.publications !== undefined
-          && this.artifact.artifact_group.publications !== null
-          && this.artifact.artifact_group.publications.artifact_id == this.artifact.id) {
+          && this.artifact.artifact_group.publication !== undefined
+          && this.artifact.artifact_group.publication !== null
+          && this.artifact.artifact_group.publication.artifact_id == this.artifact.id) {
         return `/artifact/${this.artifact.artifact_group_id}`;
       } else {
         return `/artifact/${this.artifact.artifact_group_id}/${this.artifact.id}`;
