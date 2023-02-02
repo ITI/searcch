@@ -268,7 +268,7 @@ export default {
           return false;
         }
       });
-      return hasPublicationAttr && this.artifact.artifact_group.publications.length ? true : false;
+      return true;
     },
     getContributionChipColor() {
       switch(this.contributionTypeText) {
