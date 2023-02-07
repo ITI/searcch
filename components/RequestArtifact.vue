@@ -78,7 +78,7 @@
               <v-col md="3">
                 <v-text-field
                   v-model="researcher.number"
-                  label="Number"
+                  label="Contact Number"
                   type="text"
                   hint="Enter researcher contact number"
                   required
