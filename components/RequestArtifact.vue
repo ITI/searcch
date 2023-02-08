@@ -78,11 +78,11 @@
               <v-col md="3">
                 <v-text-field
                   v-model="researcher.number"
-                  label="Phone number (XXXXXXXXXX)"
+                  label="Phone number (only digits)"
                   type="text"
                   hint="Enter researcher phone number"
                   required
-                  pattern="[0-9]{10}"
+                  pattern="^[0-9]+$"
                 ></v-text-field>
               </v-col>
               <v-col md="1">
