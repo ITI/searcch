@@ -21,67 +21,157 @@
        </v-card>
 
    <div>
+    <transition name="modal-fade">
+          <DUAReviewModal
+            v-show="isModalVisible"
+            @close="closeModal"
+            @submitRequest="submitRequest"
+            v-bind:duaHTML="duaHTML">
+          </DUAReviewModal>
+        </transition>
      <form @submit.prevent="submitForm" ref="request_form">
-     <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a :href="record.dua_url"> this link</a></div>
-      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div>
-     <div style="font-weight: bold;">Briefly describe the research to be done with the dataset</div>
-      <v-textarea
-        name="research"
-	      v-model="research"
-        type="text"
-        hint="Enter your research purpose" 
-        auto-grow
-        clearable
-        required
-      ></v-textarea>
-      <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
-      <div v-for="(researcher, index) in researchers" :key="index">
-        <v-container>
-          <v-row align="center">
-            <v-col md="6">
-              <v-text-field
-                v-model="researcher.name"
-                label="Name"
-                type="text"
-                hint="Enter researcher name"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col md="5">
-              <v-text-field
-                v-model="researcher.email"
-                label="Email"
-                type="email"
-                hint="Enter researcher email"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col md="1">
-              <div>
-                <v-icon
-                  v-if="researchers.length > 1"
-                  color="error"
-                  @click="deleteResearcher(index)"
-                >
-                  mdi-delete
-                </v-icon>
-              </div>
-            </v-col>
-          </v-row> 
-        </v-container>
+     <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
+      <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
+      <div v-if="record.artifact.provider == 'USC'">
+        <div style="font-weight: bold;">Mention the project name</div>
+        <v-text-field
+          name="project"
+          v-model="project"
+          type="text"
+          hint="Enter your project name" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Briefly describe the research to be done with the dataset</div>
+        <v-textarea
+          name="research"
+          v-model="research"
+          type="text"
+          hint="Enter your research purpose" 
+          auto-grow
+          clearable
+          required
+        ></v-textarea>
+        <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
+        <div v-for="(researcher, index) in researchers" :key="index">
+          <v-container>
+            <v-row align="center">
+              <v-col md="5">
+                <v-text-field
+                  v-model="researcher.name"
+                  label="Name"
+                  type="text"
+                  hint="Enter researcher name"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col md="3">
+                <v-text-field
+                  v-model="researcher.email"
+                  label="Email"
+                  type="email"
+                  hint="Enter researcher email"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col md="3">
+                <v-text-field
+                  v-model="researcher.number"
+                  label="Contact Number"
+                  type="text"
+                  hint="Enter researcher contact number"
+                  required
+                  pattern="[0-9]{10}"
+                ></v-text-field>
+              </v-col>
+              <v-col md="1">
+                <div>
+                  <v-icon
+                    v-if="researchers.length > 1"
+                    color="error"
+                    @click="deleteResearcher(index)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </div>
+              </v-col>
+            </v-row> 
+          </v-container>
+        </div>
+        <div>
+          <v-btn
+            class="success ml-2 mb-2"
+            fab
+            x-small
+            @click="addResearcher"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </div>
+        <div style="margin-top: 20px; font-weight: bold;">Please select the researcher representative</div>
+        <v-select
+          v-model="researcher_representative"
+          :items="researchers"
+          item-text="email"
+          item-value="email"
+          label="Researcher Representative"
+          required
+        ></v-select>
+        <div style="margin-top: 20px; font-weight: bold;">Please enter the title of the researcher representative</div>
+        <v-text-field
+          name="researcher_representative_title"
+          v-model="researcher_representative_title"
+          type="text"
+          hint="Enter the title of the researcher representative" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Please select the research point of contact</div>
+        <v-select
+          v-model="research_point_of_contact"
+          :items="researchers"
+          item-text="email"
+          item-value="email"
+          label="Research Point of Contact"
+          required
+        ></v-select>
+      </div>
+      <div v-if="record.artifact.provider == 'Merit'">
+        <div style="font-weight: bold;">Mention the organization name</div>
+        <v-text-field
+          name="organization"
+          v-model="organization"
+          type="text"
+          hint="Enter your organization name" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Mention the researcher's name</div>
+        <v-text-field
+          name="merit_researcher"
+          v-model="merit_researcher"
+          type="text"
+          hint="Enter the researcher name" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
+        <div style="margin-top: 20px; font-weight: bold;">Mention the researcher's title</div>
+        <v-text-field
+          name="merit_researcher_title"
+          v-model="merit_researcher_title"
+          type="text"
+          hint="Enter the researcher title" 
+          auto-grow
+          clearable
+          required
+        ></v-text-field>
       </div>
       <div>
-        <v-btn
-          class="success ml-2 mb-2"
-          fab
-          x-small
-          @click="addResearcher"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </div>
-      <div>
-      <input type="submit" value="Submit" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
+      <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
       </div>
     </form>
     <div v-if="formSubmitted">
@@ -103,6 +193,7 @@
 <script>
 import { mapState } from 'vuex'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
+import { marked } from 'marked'
 
 export default {
   name: 'KGArtifactLong',
@@ -115,7 +206,8 @@ export default {
   components: {
     ArtifactChips: () => import('@/components/ArtifactChips'),
     ArtifactCurationList: () => import('@/components/ArtifactCurationList'),
-    JsonPrettyPrint: () => import('@/components/pretty-print')
+    JsonPrettyPrint: () => import('@/components/pretty-print'),
+    DUAReviewModal: () => import('@/components/DUAReviewModal')
   },
   data() {
     return {
@@ -130,13 +222,23 @@ export default {
       diff_results_tab: "visual",
       loadingMessage: 'Loading...',
       research: "",
+      project: "",
       people: "",
       Images: null,
       formSubmitted: false,
       formSubmittedError: false,
       formSubmittedErrorMessage: "",
-      researchers: [{name: "", email: ""}],
-      requestMode: false
+      researchers: [{name: "", email: "", number: ""}],
+      requestMode: false,
+      dua: null,
+      duaHTML: null,
+      isModalVisible: false,
+      researcher_representative: "",
+      research_point_of_contact: "",
+      researcher_representative_title: "",
+      merit_researcher: "",
+      merit_researcher_title: "",
+      organization: ""
     }
   },
   mounted() {
@@ -262,13 +364,20 @@ export default {
     }
   },
   methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
     async deleteResearcher(index) {
       this.researchers.splice(index, 1);
     },
     async addResearcher() {
       let researcherObj = {
         name: "",
-        email: ""
+        email: "",
+        number: ""
       }
       this.researchers.push(researcherObj);
     },
@@ -294,9 +403,12 @@ export default {
       this.researchers.forEach((researcher) => {
         researcher.name = researcher.name.trim();
         researcher.email = researcher.email.trim();
+        researcher.number = researcher.number.trim();
       });
+      this.project = this.project.trim();
       if (this.$refs.request_form.checkValidity()) {
-        this.submitRequest();
+        // this.submitRequest();
+        this.fetchDUA();
       } else {
         this.$refs.request_form.reportValidity();
       }
@@ -361,28 +473,39 @@ export default {
     async submitRequest() {
       this.formSubmitted = false;
       let isEntryEmpty = false;
-      this.researchers.forEach((researcher) => {
-        if (researcher.name == "" || researcher.email == "") {
-          isEntryEmpty = true;
+      if(this.record.artifact.provider == 'USC') {
+        this.researchers.forEach((researcher) => {
+          if ((researcher.name == "" || researcher.email == "" || researcher.number == "")) {
+            isEntryEmpty = true;
+          }
+        });
+        if(!(this.research) || isEntryEmpty || !(this.project)) {
+          this.formSubmittedError = true;
+          this.formSubmittedErrorMessage = "Please fill all the fields";
+          this.formSubmitted = true;
+          return;
         }
-      });
-      if(!(this.research && this.Images) || isEntryEmpty) {
-        this.formSubmittedError = true;
-        this.formSubmittedErrorMessage = "Please fill all the fields";
-        this.formSubmitted = true;
-        return;
-      } else {
-        this.formSubmittedError = false;
-        this.formSubmittedErrorMessage = "";
       }
+      this.formSubmittedError = false;
+      this.formSubmittedErrorMessage = "";
       this.requestMode = true;
       const payload = new FormData();
-      let file = this.Images;
-      let researchersJSON = JSON.stringify(this.researchers);
-      payload.append('file', file);
-      payload.append('research_desc', this.research);
-      payload.append('research_that_interact', researchersJSON);
-      payload.append('dataset', this.record.artifact.title)
+      if(this.record.artifact.provider == 'USC') {
+        let blob = new Blob([this.duaHTML], { type: 'text/plain' });
+        let file = new File([blob], "signed_dua.html", {type: "text/plain"});
+        let researchersJSON = JSON.stringify(this.researchers);
+        payload.append('file', file);
+        payload.append('research_desc', this.research);
+        payload.append('research_that_interact', researchersJSON);
+        payload.append('dataset', this.record.artifact.title)
+      } else if (this.record.artifact.provider == 'Merit') {
+        let blob = new Blob([this.duaHTML], { type: 'text/plain' });
+        let file = new File([blob], "signed_dua.html", {type: "text/plain"});
+        payload.append('file', file);
+        payload.append('merit_org', this.organization);
+        payload.append('merit_researcher', this.merit_researcher);
+        payload.append('merit_researcher_title', this.merit_researcher_title);
+      }
       let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
@@ -394,7 +517,43 @@ export default {
       }
       this.formSubmitted = true;
       this.requestMode = false;
-    }
+      this.closeModal();
+    },
+    async fetchDUA() {
+      // get representative from researchers
+      let rep = this.researchers[0];
+      this.researchers.forEach((researcher) => {
+        if (researcher['email'] == this.research_point_of_contact) {
+          rep = researcher;
+        }
+      });
+      rep['title'] = this.researcher_representative_title;
+      // get poc from researchers
+      let poc = this.researchers[0];
+      this.researchers.forEach((researcher) => {
+        if (researcher['email'] == this.research_point_of_contact) {
+          poc = researcher;
+        }
+      });
+      let response = await this.$duaEndpoint.show(
+        this.record.artifact.artifact_group_id,
+        {
+          'researchers': JSON.stringify(this.researchers),
+          'research': this.research,
+          'project': this.project,
+          'dataset_name': this.record.artifact.title,
+          'representative': JSON.stringify(rep),
+          'poc': JSON.stringify(poc),
+          'merit_org': this.organization,
+          'merit_researcher': this.merit_researcher,
+          'merit_researcher_title': this.merit_researcher_title
+        }
+      );
+      this.dua = response.dua;
+      this.duaHTML = marked(this.dua);
+      this.showModal();
+      //TODO: Sign DUA
+    },
   }
 }
 </script>
@@ -451,6 +610,7 @@ export default {
     padding: 8px;
     width: 100px;
   }
+
 
 
 </style>
