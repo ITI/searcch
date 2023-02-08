@@ -3,7 +3,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - SEARCCH Hub ',
+    titleTemplate: '%s',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -14,35 +14,32 @@ export default {
         content: process.env.npm_package_description || ''
       },
       // Twitter Card Meta
-      // Doc: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html
-      { property: 'twitter:card', content: 'summary' },
-      { property: 'twitter:site', value: '@SEARCCH_HUB' },
-      { property: 'twitter:creator', value: '@timyardley' },
-
+	// Doc: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html
+	
       // OpenGraph Meta
       // Doc: http://ogp.me/
       {
         property: 'og:url',
-        content: 'https://hub.cyberexperimentation.org/'
+        content: 'https://ant.isi.edu/classnet/'
       },
       { property: 'og:type', content: 'website' },
       {
         property: 'og:title',
-        content: 'SEARCCH Hub for Cyber Security Artifacts'
+        content: 'CLASSNET Project'
       },
       {
         property: 'og:description',
         content:
-          'SEARCCH: Sharing Expertise and Artifacts for Reuse through a Cybersecurity Community Hub. SEARCCH is creating a collaborative, community-driven platform that lowers the barrier to sharing by aiding researchers in packaging, importing, locating, understanding, and reusing experiment artifacts. The artifacts organized by the platform, including tools, methodologies, documentation, and data, can be deployed to community testbeds for performing new experiments. Concurrently, SEARCCH engages in outreach activities to build an active, diverse, online community around the hub to enable direct sharing of expertise and crowdsourcing research ideas and experiment design. Through a process of continuous learning and improvement, the hub will grow over time to include collections of artifacts covering a broad range of cybersecurity research topics and add support for newly identified community needs. These activities together will transform the way cybersecurity research is conducted in the cybersecurity community, improving the overall scientific quality of cybersecurity research through validation, repeatable sharing and reuse, and a collective approach to building on research results.'
+          'Community Labeling and Sharing of Security and Networking Test datasets (CLASSNET) project supports network and security research with new, labeled, rich and diverse datasets to the research community. The project develops a framework for collaborative, community-driven enrichment and labeling of data, enabling use of our datasets for machine learning in networking and security. Second, the CLASSNET project will make data available to researchers through multiple methods, ensuring privacy of data while enabling flexible data computation. Finally, the project will also generate diverse continuous (constantly, automatically updated) and curated (selected by human) datasets for research use.'
       },
       {
         property: 'og:image',
-        content: 'https://hub.cyberexperimentation.org/images/horiz-tagline.png'
+        content: 'https://comunda.isi.edu/images/horiz-tagline.png'
       },
       { property: 'og:image:width', content: 433 },
       { property: 'og:image:height', content: 138 },
       { property: 'og:image:type', content: 'image/png' },
-      { property: 'og:image:alt', content: 'SEARCCH Logo' }
+      { property: 'og:image:alt', content: 'COMUNDA Logo' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
