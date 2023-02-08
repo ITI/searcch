@@ -247,7 +247,7 @@ export default {
         {
           icon: 'mdi-information',
           title: 'About',
-          to: '/'
+          href: 'https://steelisi.github.io/CLASSNET-DOCS/'
         },
         // {
         //   icon: 'mdi-comment-account',
@@ -267,7 +267,7 @@ export default {
         {
           icon: 'mdi-frequently-asked-questions',
           title: 'Support',
-          href: 'https://steel.isi.edu'
+          href: 'https://steelisi.github.io/CLASSNET-DOCS/support'
         }
       ]
       return footerItems
