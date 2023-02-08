@@ -33,7 +33,7 @@
      <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
       <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
       <div v-if="record.artifact.provider == 'USC'">
-        <div style="font-weight: bold;">Mention the project name</div>
+        <div style="font-weight: bold;">Specify project name</div>
         <v-text-field
           name="project"
           v-model="project"
@@ -53,7 +53,7 @@
           clearable
           required
         ></v-textarea>
-        <div style="margin-top: 20px; font-weight: bold;">Please enter names and emails of researchers that will interact with the data:</div>
+        <div style="margin-top: 20px; font-weight: bold;">Please enter names, emails and phone numbers of researchers that will interact with the data:</div>
         <div v-for="(researcher, index) in researchers" :key="index">
           <v-container>
             <v-row align="center">
@@ -78,9 +78,9 @@
               <v-col md="3">
                 <v-text-field
                   v-model="researcher.number"
-                  label="Contact Number"
+                  label="Phone number (XXXXXXXXXX)"
                   type="text"
-                  hint="Enter researcher contact number"
+                  hint="Enter researcher phone number"
                   required
                   pattern="[0-9]{10}"
                 ></v-text-field>
