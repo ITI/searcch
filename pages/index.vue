@@ -96,7 +96,100 @@
       <LazyHydrate never>
         
         <div>
-          
+          <v-card>
+            <v-card-title class="primary white--text">
+              COMUNDA is a collaborative, community-driven platform for network dataset sharing and reuse. 
+            </v-card-title>
+            <v-card-text>
+              <br />
+              
+              <div class="text-center">
+                <v-row>
+                <v-card
+    class="mx-auto"
+     href ="/search"             
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="indigo" size="150">
+      <v-icon dark size = "120">
+       mdi-cloud-search
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Search Datasets</p>
+    </v-card-text>
+
+      </v-card>
+            <v-divider
+           inset vertical
+></v-divider>
+            <v-card
+    class="mx-auto"
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="orange" size="150">
+      <v-icon dark size = "120">
+       mdi-comment-account
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	     Rate and comment on existing datasets</p>
+    </v-card-text>
+
+      </v-card>
+            <v-divider
+           inset vertical
+></v-divider>
+        <v-card
+    class="mx-auto"
+    href = "/addLabels"
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="teal" size="150">
+      <v-icon dark size = "120">
+       mdi-label-multiple
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Contribute Labels to Existing Datasets</p>
+    </v-card-text>
+
+      </v-card>
+            
+            
+            <v-divider
+           inset vertical
+></v-divider>
+            <v-card
+    class="mx-auto"
+
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="blue" size="150">
+      <v-icon dark size = "120">
+       mdi-database-import
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Contribute datasets to COMUNDA</p>
+    </v-card-text>
+
+      </v-card>
+            
+        </v-row>
+              </div>
+  
+            </v-card-text>
+            </v-card>
+            <br/><br/>
           <v-card>
             <v-card-title class="primary white--text">
               Welcome to the COMUNDA Portal
