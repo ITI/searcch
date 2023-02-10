@@ -5,36 +5,339 @@
       <div class="text-center">
         <logo />
       </div>
+      <v-carousel
+    cycle
+    
+    hide-delimiter-background
+    show-arrows-on-hover
+  >
+      <v-carousel-item>
+        <v-card color="#eef2bf">
+          <v-card-title class="primary white--text">
+            ANT Censuses of the Internet Address Space
+          </v-card-title>
+        <v-card-text class ="body-1" >
+          <br />
+          <v-row>
+            <v-col cols = "8">
+              <p><b>
+              Starting in 2003, researchers at ISI have been collecting data about the Internet address space.
+           As part of this work we have been probing all addresses in the allocated Internet address space.
+            This web page summarizes this research, the datasets, and related papers.
+             We also have a plot of the entire internet at scale (one dot is one address), an interactive,
+              browsable map (details), and video description, and (new Jan. 2015) an animation showing 8 years of Internet censuses.
+            </b></p>
+            <v-btn
+            depressed
+            color="primary"
+            href = "https://ant.isi.edu/address/"
+            target="_blank"
+            rel="noopener"
+            >
+      Link to dataset
+    </v-btn>
+              </v-col>
+            <v-col cols="4">
+              
+              <v-img src="https://ant.isi.edu/address/it.37.all.16-subnet_stats.3px-per-point.annotated.png"
+              height="300"
+              width="300"></v-img>
+            </v-col>
+          </v-row>
+          
+        </v-card-text>
+        
+        </v-card>
+      </v-carousel-item>
+      <v-carousel-item>
+        <v-card color="#eef2bf">
+          <v-card-title class="primary white--text">
+            Covid-Work-from-Home Datasets
+          </v-card-title>
+        <v-card-text class ="body-1" >
+          <br />
+          <v-row>
+            <v-col cols = "8">
+              <p><b>
+                The Covid-19 pandemic disrupted the world as businesses and schools shifted to work-from-home (WFH),
+                and comprehensive maps have helped visualize how those policies changed over time and in different places.
+                We recently developed algorithms that infer the onset of WFH based on changes in observed Internet usage.
+                Measurements of WFH are important to evaluate how effectively policies are implemented and followed,
+                or to confirm policies in countries with less transparent journalism.
+                This paper describes a web-based visualization system for measurements of Covid-19-induced WFH.
+                We build on a web-based world map, showing a geographic grid of observations about WFH.
+                We extend typical map interaction (zoom and pan, plus animation over time) with two new forms of pop-up information that allow users to drill-down to investigate our underlying data.
+                Datasets from this work will be available from our website
+            </b></p>
+            <v-btn
+            depressed
+            color="primary"
+            href = "https://ant.isi.edu/datasets/covid/"
+            target="_blank"
+            rel="noopener"
+            >
+      Link to dataset
+    </v-btn>
+              </v-col>
+            <v-col cols="4">
+              
+              <v-img src="https://ant.isi.edu/blog/wp-content/uploads/2021/11/Stutz21a_icon.png"
+              height="300"
+              width="300"></v-img>
+            </v-col>
+          </v-row>
+          
+        </v-card-text>
+        
+        </v-card>
+      </v-carousel-item>
+    
+  </v-carousel>
       <LazyHydrate never>
+        
         <div>
+          <v-card>
+            <v-card-title class="primary white--text">
+              COMUNDA is a collaborative, community-driven platform for network dataset sharing and reuse. 
+            </v-card-title>
+            <v-card-text>
+              <br />
+              
+              <div class="text-center">
+                <v-row>
+                <v-card
+    class="mx-auto"
+     href ="/search"             
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="indigo" size="150">
+      <v-icon dark size = "120">
+       mdi-cloud-search
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Search Datasets</p>
+    </v-card-text>
+
+      </v-card>
+            <v-divider
+           inset vertical
+></v-divider>
+            <v-card
+    class="mx-auto"
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="orange" size="150">
+      <v-icon dark size = "120">
+       mdi-comment-account
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	     Rate and comment on existing datasets</p>
+    </v-card-text>
+
+      </v-card>
+            <v-divider
+           inset vertical
+></v-divider>
+        <v-card
+    class="mx-auto"
+    href = "/addLabels"
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="teal" size="150">
+      <v-icon dark size = "120">
+       mdi-label-multiple
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Contribute Labels to Existing Datasets</p>
+    </v-card-text>
+
+      </v-card>
+            
+            
+            <v-divider
+           inset vertical
+></v-divider>
+            <v-card
+    class="mx-auto"
+
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="blue" size="150">
+      <v-icon dark size = "120">
+       mdi-database-import
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Contribute datasets to COMUNDA</p>
+    </v-card-text>
+
+      </v-card>
+            
+        </v-row>
+              </div>
+  
+            </v-card-text>
+            </v-card>
+            <br/><br/>
+          <v-card>
+            <v-card-title class="primary white--text">
+              COMUNDA is a collaborative, community-driven platform for network dataset sharing and reuse. 
+            </v-card-title>
+            <v-card-text>
+              <br />
+              
+              <div class="text-center">
+                <v-row>
+                <v-card
+    class="mx-auto"
+     href ="/search"             
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="indigo" size="150">
+      <v-icon dark size = "120">
+       mdi-cloud-search
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Search Datasets</p>
+    </v-card-text>
+
+      </v-card>
+            <v-divider
+           inset vertical
+></v-divider>
+            <v-card
+    class="mx-auto"
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="orange" size="150">
+      <v-icon dark size = "120">
+       mdi-comment-account
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	     Rate and comment on existing datasets</p>
+    </v-card-text>
+
+      </v-card>
+            <v-divider
+           inset vertical
+></v-divider>
+        <v-card
+    class="mx-auto"
+    href = "/addLabels"
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="teal" size="150">
+      <v-icon dark size = "120">
+       mdi-label-multiple
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Contribute Labels to Existing Datasets</p>
+    </v-card-text>
+
+      </v-card>
+            
+            
+            <v-divider
+           inset vertical
+></v-divider>
+            <v-card
+    class="mx-auto"
+
+    flat color="transparent"
+  >
+    <v-card-text>
+      
+       <v-avatar color="blue" size="150">
+      <v-icon dark size = "120">
+       mdi-database-import
+      </v-icon>
+    </v-avatar>
+      <p class ="font-weight-bold subtitle-1">
+	      Contribute datasets to COMUNDA</p>
+    </v-card-text>
+
+      </v-card>
+            
+        </v-row>
+              </div>
+  
+            </v-card-text>
+            </v-card>
+            <br/><br/>
           <v-card>
             <v-card-title class="primary white--text">
               Welcome to the COMUNDA Portal
             </v-card-title>
             <v-card-text>
               <br />
-	      <p>
+            <v-list>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account-network</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <p class ="body-1"><b>
 	      COMUNDA is a collaborative, community-driven platform for
               network dataset sharing and reuse. Datasets can be contributed
               by anyone in the community, and approval process is streamlined to
 	      include the dataset provider. Datasets can reside on COMUNDA or at
 	      the provider's machines. Datasets can be offered for download, or
-	      for access on the provider's machines.
-	    </p><p>
+                    for access on the provider's machines.</b>
+	                </p>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-forum</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <p class ="body-1">
               In later stages of the project, COMUNDA will support discussions around
               dataset records, and it will support collaborative labeling of ground truth.
 	      COMUNDA will also support researchers' sharing their code, which does dataset
 	      cleaning, processing and interpretation.
-            </p> <p>
+            </p> 
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-lan</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <p class ="body-1">
 	     COMUNDA also facilitates community-building around these datasets. It
               allows data providers to share the metadata of their datasets with
               the community, and it allows researchers to share their experience with different datasets.
-            </p> <p>
+            </p> 
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+	     <p class ="body-1">
               For more information on COMUNDA, check out the
               <a href="https://ant.isi.edu/classnet/" target="_blank" rel="noopener">
                 project homepage.
               </a>
-	      </p> <p>
+	      </p> <p class ="body-1">
               To get started click CONTINUE.
               </p>
               <v-row align="center">
@@ -46,60 +349,106 @@
                   ></v-img>
                 </v-col>
                 <v-col align="left">
-		<em>
+		<em class ="body-1">
                   COMUNDA is supported by the National Science Foundation
                   (NSF) under grant number 8115780 and 1823192.
                   </em>
                 </v-col>
               </v-row>
+              
             </v-card-text>
             <v-card-actions>
               <v-spacer />
               <v-btn color="primary" nuxt to="/search">
                 Continue
               </v-btn>
-            </v-card-actions> </v-card
-          ><br />
+            </v-card-actions> </v-card><br />
+         
+  <br />
           <v-card>
             <v-card-title class="primary white--text">
               Current Features
             </v-card-title>
             <v-card-text>
               <br />
-	      <p>
+	      <p class ="body-1">
 	      COMUNDA has four major functions, which may be accessed using the
-              left-hand navigation menu. A summary of each follows.
-            </p> <p><b>Search Datasets.</b>
-              Users may perform keyword searches to find datasets of
+              left-hand navigation menu. A summary of each follows.</p>
+              
+              <v-list>
+                <v-list-item>
+                  <v-list-item-icon>
+                    <v-icon>mdi-cloud-search</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content class ="body-1">
+                    <b>Search Datasets.</b>Users may perform keyword searches to find datasets of
               interest.
-            </p> <p><b>Favorite Datasets.</b>
-              Users may click on the heart icon on a dataset to add it to a
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-icon>
+                    <v-icon>mdi-folder-heart</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content class ="body-1">
+                    <b>Favorite Datasets.</b>Users may click on the heart icon on a dataset to add it to a
               favorites list. Favorited datasets are displayed on the
               Favorite Datasets menu for quick recall.
-            </p> <p><b>Manage Account.</b>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-icon>
+                    <v-icon>mdi-account-cog</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content class ="body-1">
+                    <b>Manage Account.</b>
               Users may add information about themselves such as their
               research interests and institution affiliation. They may also
               access the list of datasets they have
               rated, and their favorites.
-            </p> <p>
-              The fourth function is reviewing datasets. Users may provide
-              reviews for a dataset when viewing it. Presently, reviews
-              consist of a 1 to 5 star rating and a comment. Ratings and
-              reviews are visible to the community and used by others to help
-              them decide whether to invest their time in trying to use a
-              specific dataset.
-            </p> <p>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-icon>
+                    <v-icon>mdi-comment-multiple</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content class ="body-1">
+                    <b>Review Datasets.</b>Users may provide reviews for a dataset when viewing it.
+                     Presently, reviews consist of a 1 to 5 star rating and a comment. 
+                     Ratings and reviews are visible to the community and used by others to help them decide
+                      whether to invest their time in trying to use a specific dataset.
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+              <p class ="body-1">
               Please provide comments and report bugs using the SEND US
               FEEDBACK button at the bottom right hand side of the page.
               </p>
             </v-card-text>
           </v-card>
+          <br/>
         </div>
       </LazyHydrate>
       <br />
-      <div>
-        <supporters />
-      </div>
+      <v-card>
+        <v-card-title class="primary white--text">
+              Supporters
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-handshake</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <p class ="body-1">The COMUNDA portal is community infrastructure supported by the National Science Foundation's CCRI program. Visit the <a href ="https://www.ccrivo.org">CCRI-VO website</a>
+                   to discover other infrastructure supported by the CCRI program.</p>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+      <br/>
+      
     </v-flex>
     <v-row justify="center">
     <v-dialog
@@ -160,6 +509,7 @@
       </v-card>
     </v-dialog>
   </v-row>
+  
   </v-layout>
 </template>
 
@@ -172,6 +522,21 @@ export default {
         localuser:'',
         userAffiliation:[],
         userPosition:null,
+        model: 0,
+        colors: [
+          'indigo',
+          'warning',
+          'pink darken-2',
+          'red lighten-1',
+          'deep-purple accent-4',
+        ],
+        slides: [
+          'First',
+          'Second',
+          'Third',
+          'Fourth',
+          'Fifth',
+        ],
       }
     },
   components: {
@@ -214,8 +579,8 @@ export default {
       all: 1
     }
     let response = await this.$organizationEndpoint.index(payload)
-    console.log(response )
-      if(this.user.organization.length == 0){
+    console.log(this.organization)
+      if(this.organization.length == 0 || !this.localuser.position){
         this.dialog = true
       }
       this.localuser = JSON.parse(JSON.stringify(this.person))
