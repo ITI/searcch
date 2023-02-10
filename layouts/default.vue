@@ -249,21 +249,6 @@ export default {
           title: 'About',
           href: 'https://steelisi.github.io/CLASSNET-DOCS/'
         },
-        // {
-        //   icon: 'mdi-comment-account',
-        //   title: 'Rate and comment',
-        //   href: '/'
-        // },
-        // {
-        //   icon: 'mdi-label-multiple',
-        //   title: 'Contribute Labels',
-        //   href: '/'
-        // },
-        // {
-        //   icon: 'mdi-database-import',
-        //   title: 'Contribute Datasets',
-        //   href: '/'
-        // },
         {
           icon: 'mdi-frequently-asked-questions',
           title: 'Support',
@@ -276,8 +261,8 @@ export default {
         },
         {
           icon: 'mdi-frequently-asked-questions',
-          title: 'FAQ',
-          to: '/faqs'
+          title: 'Support',
+          href: 'https://steelisi.github.io/CLASSNET-DOCS/support'
         }
       ]
       return footerItems
