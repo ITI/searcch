@@ -161,7 +161,7 @@
         color="error"
         dark
         raised
-        href="https://forms.gle/nsP4kJVsjAmKKLU86"
+        href="mailto:comunda-ops@googlegroups.com"
         target="_blank"
         rel="noopener"
         >Send Us Feedback</v-btn
@@ -253,12 +253,7 @@ export default {
           icon: 'mdi-frequently-asked-questions',
           title: 'Support',
           href: 'https://steelisi.github.io/CLASSNET-DOCS/support'
-        },
-        {
-          icon: 'mdi-information',
-          title: 'Best Practices',
-          href: 'https://searcch.cyberexperimentation.org/best-practices'
-        },
+        }
       ]
       return footerItems
     }
