@@ -105,6 +105,9 @@
             "cloud"
           ],
           "type": "string"
+          },
+	"irb": {
+          "type": "string"
         },
 	  "anonymization": {
           "enum": [
