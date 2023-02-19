@@ -31,7 +31,8 @@
         class="ml-3"
       ></v-rating>
 
-      <v-card-text v-html="sanitizedDescription"> </v-card-text>
+    <!--  <v-card-text v-html="sanitizedDescription"> </v-card-text> -->
+
 
       <div v-if="comments">
         <v-row justify="center">
@@ -189,7 +190,7 @@ export default {
         else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
       }
     }
-  },
+  },      
   methods: {
     async favoriteThis() {
       if (!this.$auth.loggedIn) {

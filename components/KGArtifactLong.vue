@@ -508,7 +508,8 @@ export default {
       user_is_admin: state => state.user.user_is_admin
     }),
     sanitizedDescription: function() {
-      return this.$sanitize(this.record.artifact.description)
+      return this.$sanitize(this.record.artifact.description.replace(/\<\\pre\>/, ''))
+      
     },
     favorite: {
       get() {
