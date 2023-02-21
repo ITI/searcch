@@ -30,9 +30,7 @@
             <v-btn
             depressed
             color="primary"
-            href = "https://ant.isi.edu/address/"
-            target="_blank"
-            rel="noopener"
+            href = "/search?query=census"
             >
       Link to dataset
     </v-btn>
@@ -52,36 +50,36 @@
       <v-carousel-item>
         <v-card color="#eef2bf">
           <v-card-title class="primary white--text">
-            Covid-Work-from-Home Datasets
+            Distributed Denial-of-Service (DDoS) attacks Datasets
           </v-card-title>
         <v-card-text class ="body-1" >
           <br />
           <v-row>
             <v-col cols = "8">
               <p><b>
-                The Covid-19 pandemic disrupted the world as businesses and schools shifted to work-from-home (WFH),
-                and comprehensive maps have helped visualize how those policies changed over time and in different places.
-                We recently developed algorithms that infer the onset of WFH based on changes in observed Internet usage.
-                Measurements of WFH are important to evaluate how effectively policies are implemented and followed,
-                or to confirm policies in countries with less transparent journalism.
-                This paper describes a web-based visualization system for measurements of Covid-19-induced WFH.
-                We build on a web-based world map, showing a geographic grid of observations about WFH.
-                We extend typical map interaction (zoom and pan, plus animation over time) with two new forms of pop-up information that allow users to drill-down to investigate our underlying data.
-                Datasets from this work will be available from our website
+                Distributed Denial-of-Service (DDoS) attacks exhaust resources, leaving a server unavailable to legitimate clients.
+                The Domain Name System (DNS) is a frequent target of DDoS attacks. Since DNS is a critical infrastructure service,
+                protecting it from DoS is imperative. Many prior approaches have focused on specific filters or anti-spoofing
+                techniques to protect generic services. DNS root nameservers are more challenging to protect, since they use
+                fixed IP addresses, serve very diverse clients and requests, receive predominantly UDP traffic that can be spoofed,
+                and must guarantee high quality of service. In this paper we propose a layered DDoS defense for DNS root nameservers.
+                Our defense uses a library of defensive filters, which can be optimized for different attack types, with different levels of selectivity.
+                We further propose a method that automatically and continuously evaluates and selects the best combination of filters throughout the attack.
+                We show that this layered defense approach provides exceptional protection against all attack types using traces of ten real attacks from a DNS root nameserver.
+                Our automated system can select the best defense within seconds and quickly reduces traffic to the server within a manageable range, while keeping collateral damage lower than 2%.
+                We can handle millions of filtering rules without noticeable operational overhead.
             </b></p>
             <v-btn
             depressed
             color="primary"
-            href = "https://ant.isi.edu/datasets/covid/"
-            target="_blank"
-            rel="noopener"
+            href = "/search?query=ddidd"
             >
       Link to dataset
     </v-btn>
               </v-col>
             <v-col cols="4">
               
-              <v-img src="https://ant.isi.edu/blog/wp-content/uploads/2021/11/Stutz21a_icon.png"
+              <v-img src="https://steel.isi.edu/ddidd.jpg"
               height="300"
               width="300"></v-img>
             </v-col>
@@ -93,6 +91,7 @@
       </v-carousel-item>
     
   </v-carousel>
+  <br/>
       <LazyHydrate never>
         
         <div>
