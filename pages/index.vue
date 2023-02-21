@@ -126,6 +126,7 @@
 ></v-divider>
             <v-card
     class="mx-auto"
+    href="https://steelisi.github.io/CLASSNET-DOCS/dataset/"
     flat color="transparent"
   >
     <v-card-text>
@@ -165,9 +166,9 @@
             <v-divider
            inset vertical
 ></v-divider>
-            <v-card
+        <v-card
     class="mx-auto"
-
+    href = "https://steelisi.github.io/CLASSNET-DOCS/contribute/"
     flat color="transparent"
   >
     <v-card-text>
@@ -268,73 +269,14 @@
                 Continue
               </v-btn>
             </v-card-actions> </v-card><br />
-         
-  <br />
-          <v-card>
-            <v-card-title class="primary white--text">
-              Current Features
-            </v-card-title>
-            <v-card-text>
-              <br />
-	      <p class ="body-1">
-	      COMUNDA has four major functions, which may be accessed using the
-              left-hand navigation menu. A summary of each follows.</p>
-              
-              <v-list>
-                <v-list-item>
-                  <v-list-item-icon>
-                    <v-icon>mdi-cloud-search</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content class ="body-1">
-                    <b>Search Datasets.</b>Users may perform keyword searches to find datasets of
-              interest.
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-icon>
-                    <v-icon>mdi-folder-heart</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content class ="body-1">
-                    <b>Favorite Datasets.</b>Users may click on the heart icon on a dataset to add it to a
-              favorites list. Favorited datasets are displayed on the
-              Favorite Datasets menu for quick recall.
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-icon>
-                    <v-icon>mdi-account-cog</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content class ="body-1">
-                    <b>Manage Account.</b>
-              Users may add information about themselves such as their
-              research interests and institution affiliation. They may also
-              access the list of datasets they have
-              rated, and their favorites.
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-icon>
-                    <v-icon>mdi-comment-multiple</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content class ="body-1">
-                    <b>Review Datasets.</b>Users may provide reviews for a dataset when viewing it.
-                     Presently, reviews consist of a 1 to 5 star rating and a comment. 
-                     Ratings and reviews are visible to the community and used by others to help them decide
-                      whether to invest their time in trying to use a specific dataset.
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-              <p class ="body-1">
-              Please provide comments and report bugs using the SEND US
-              FEEDBACK button at the bottom right hand side of the page.
-              </p>
-            </v-card-text>
-          </v-card>
-          <br/>
-        </div>
+
+	    <br/>
+
+	    <br/>
+	    </div>
+	    
       </LazyHydrate>
-      <br />
-      <v-card>
+  <br />
         <v-card-title class="primary white--text">
               Supporters
         </v-card-title>
