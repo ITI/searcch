@@ -204,6 +204,16 @@ export default {
           to: '/favorites'
         })
         items.push({
+          icon: 'mdi-label-multiple-outline',
+          title: 'Label Datasets',
+          to: '/addLabels'
+        })
+      items.push({
+          icon: 'mdi-share-all-outline',
+          title: 'Contribute Datasets',
+          href: 'https://steelisi.github.io/CLASSNET-DOCS/contribute/'
+        })
+        items.push({
           icon: 'mdi-account-cog',
           title: 'Manage Account',
           to: '/profile'
