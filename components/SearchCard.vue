@@ -237,6 +237,7 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   mounted() {
+    console.log(this.$route)
     if (this.related) {
       this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
     } else if (this.$route.query.keywords) {
@@ -267,7 +268,8 @@ export default {
       search_init: state => state.artifacts.search,
       searchLoading: state => state.artifacts.loading,
       user_is_admin: state => state.user.user_is_admin,
-      user_can_admin: state => state.user.user_can_admin
+      user_can_admin: state => state.user.user_can_admin,
+      search_keyword: state => state.system.search_keyword,
     }),
     allArtifacts() {
       return this.advanced.types.length === this.types.length
