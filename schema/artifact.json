@@ -157,6 +157,9 @@
         },
 	"provider": {
           "type": "string"
+        },
+	 "category": {
+          "type": "string"
         }
       },
       "required": [],
