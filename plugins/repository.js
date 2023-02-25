@@ -121,4 +121,6 @@ export default (ctx, inject) => {
 
   // dua API
   inject('duaEndpoint', repositoryWithAxios('kg/' + 'dua'))
+  // labels API
+  inject('labelEndpoint', repositoryWithAxios('kg/' + 'labels'))
 }

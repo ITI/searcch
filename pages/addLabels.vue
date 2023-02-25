@@ -9,9 +9,10 @@
       </v-card-title>
       <v-card-text>
         <v-stepper
-    v-model="e6"
-    vertical
-  >
+        v-model="e6"
+        vertical
+        >
+
     <v-stepper-step
       :complete="e6 > 1"
       step="1"
@@ -35,71 +36,47 @@
   :items="titles"
 
 ></v-autocomplete>
+          <div style ="color:red">{{ errorMessage1 }}</div>
         </v-card-text>
       </v-card>
       <v-btn
         color="primary"
-        @click="e6 = 2"
+        @click="validateDataset"
       >
         Continue
       </v-btn>
-     
+
     </v-stepper-content>
 
     <v-stepper-step
       :complete="e6 > 2"
       step="2"
     >
-      Upload a file with labels 
+      Upload a link with labels
     </v-stepper-step>
 
     <v-stepper-content step="2">
       <v-card
         color=""
         class="mb-12"
-        height="400px"
+        height="300"
       >
-         <v-card-title>Upload a file in the box below</v-card-title>
+         <v-card-title>Provide a link and type for the labels in the textbox below</v-card-title>
         <v-card-text>
-          Please upload a text file with your labels (gzipped is OK). Please use the following format within the file:<br/><br/>
-          <v-card width="170">
-          <v-chip
-      class="ma-2"
-      label
-    >
-      recordID 
-    </v-chip>
-          <v-chip
-      class="ma-2"
-      label
-    >
-      label
-    </v-chip>
-          </v-card>
-          <br/>
-          Where record id looks like:<br/>
-           
-          <v-card width = 340>
-            <v-chip
-      class="ma-2"
-      label
-    >
-      timestamp-sourceIP-sourceport-destIP-destport
-    </v-chip>
-          </v-card><br/>
-        and label can be the label of your choice, e.g., “legitimate” vs “attack”<br/> <br/>
-          <v-file-input
-    label="Select file"
-    outlined
-    dense
-    accept=".txt"
-    v-model = "selectedFile"
-  ></v-file-input>
+          You can also refer to COMUNDA's documentation about submitting labels to dataset <a href = "https://steelisi.github.io/CLASSNET-DOCS/labels/">here</a><br/><br/>
+
+        Enter a labelling approach name as id for the label. The id should be text which can summarize the label that you are providing<br/> <br/>
+         <v-row>
+            <v-col><v-text-field clearable label="https://www.example.com" prepend-icon="mdi-link-plus" outlined v-model="labelLink"></v-text-field></v-col>
+            <v-col><v-text-field clearable label="Label Id" prepend-icon="mdi-label" outlined v-model="labelType"></v-text-field></v-col>
+          </v-row><br/>
+          <div style ="color:red">{{ errorMessage2 }}</div>
         </v-card-text>
+
       </v-card>
       <v-btn
         color="primary"
-        @click="onAddFiles"
+        @click="validateLinkId"
       >
         Continue
       </v-btn>
@@ -117,13 +94,14 @@
 
     <v-stepper-content step="3">
       <v-card
-        
+
         class="mb-12"
-        height="200px"
+        height="200"
       >
-      {{ selectedName }} <br/>
-      
-      {{ fileData }}
+      File name: {{ selectedName }} <br/>
+      Label Link: {{labelLink }} <br/>
+      Label Type: {{ labelType }}
+
     </v-card>
       <v-btn
         color="primary"
@@ -132,7 +110,7 @@
         Continue
       </v-btn>
       <v-btn text @click="e6 = 2">
-        Back 
+        Back
       </v-btn>
     </v-stepper-content>
 
@@ -141,9 +119,9 @@
     </v-stepper-step>
     <v-stepper-content step="4">
       <v-btn
-  
-        @click=""
-        color="success"     
+
+        @click="submitLabel"
+        color="success"
       >
         Submit
       </v-btn>
@@ -154,9 +132,25 @@
   </v-stepper>
       </v-card-text>
     </v-card>
+    <v-dialog
+      v-model="dialog"
+      max-width="600"
+      persistent
+    >
+      <v-card>
+        <v-card-text class ="body-1">
+          <br>
+          Label for dataset {{ selectedName }} Submitted successfully
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn  text color="green darken-1" @click="closeDialog">Home page</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     </div>
 </template>
-  
+
 <script>
 import { mapState } from 'vuex'
     export default {
@@ -172,30 +166,12 @@ import { mapState } from 'vuex'
       artifact_ids: [],
       selectedName: '',
       selectedFile: '',
-      states: [
-          'Alabama',
-          'Alaska',
-          'American Samoa',
-          'Arizona',
-          'Arkansas',
-          'California',
-          'Colorado',
-          'Connecticut',
-          'Delaware',
-          'District of Columbia',
-          'Federated States of Micronesia',
-          'Florida',
-          'Georgia',
-          'Guam',
-          'Hawaii',
-          'Idaho',
-          'Illinois',
-          'Indiana',
-          'Iowa',
-          'Kansas',
-          'Kentucky',
-          'Louisiana',
-        ],
+      labelLink: '',
+      labelType: '',
+      errorMessage1: '',
+      errorMessage2: '',
+      dialog: false,
+      nameToID: {},
         types: ['presentation', 'publication', 'dag', 'argus', 'pcap',  'netflow', 'flowtools', 'flowride', 'fsdb', 'csv', 'custom'],
     }
   },
@@ -223,6 +199,7 @@ import { mapState } from 'vuex'
         for (let i of this.artifacts){
           this.titles.push(i.title)
           this.artifact_ids.push(i.id)
+          this.nameToID[i.title] =i.id
         }
         console.log(this.artifacts[0])
         console.log(this.titles)
@@ -230,18 +207,62 @@ import { mapState } from 'vuex'
   mounted() {
 
     console.log(this.artifacts[0])
-     
+
   },
   methods: {
       onAddFiles(){
         this.e6 = 3
-        var reader = new FileReader();
-        reader.readAsText(this.selectedFile);
-        reader.onload = () => {
-        this.fileData = reader.result;
+
+    },
+    validateDataset(){
+      if(this.selectedName == ''){
+        this.errorMessage1 = "Please select a label before proceding forward"
+        return
       }
+      else{
+        this.errorMessage1 = ''
+        this.e6 = 2
+      }
+    },
+    validateUrl(value){
+      return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
+    },
+    validateLinkId(){
+      if (this.labelType == ''){
+        this.errorMessage2 = "Please enter a label Id"
+        return
+      }
+      if(!this.validateUrl(this.labelLink)){
+        this.errorMessage2 ="Please enter a valid URL"
+        return
+      }
+      if(this.labelLink == ''){
+        this.errorMessage2 = "The URL cannot be blank"
+        return
+      }
+      this.errorMessage2 = ''
+      this.e6 =3
+
+    },
+    async submitLabel(){
+      let payload = {}
+      payload["label_id"] = this.labelType
+      payload["artifact_id"] = this.nameToID[this.selectedName]
+      payload["label_url"] = this.labelLink
+      let response = await this.$labelEndpoint.post(this.nameToID[this.selectedName],payload)
+      console.log(response)
+      if (response.status == 200){
+        this.dialog = true
+      }
+    },
+    closeDialog(){
+      console.log("iN close")
+      this.dialog = false
+      this.$router.push('/')
+
     }
-  }
+  },
+
 }
 </script>
-  
+
