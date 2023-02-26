@@ -30,7 +30,7 @@
             <v-btn
             depressed
             color="primary"
-            href = "/search?query=census"
+            href = "/search?keywords=census"
             >
       Link to dataset
     </v-btn>
@@ -48,7 +48,7 @@
         </v-card>
       </v-carousel-item>
       <v-carousel-item>
-        <v-card color="#eef2bf">
+        <v-card color="#eef2bf" height = "auto">
           <v-card-title class="primary white--text">
             Distributed Denial-of-Service (DDoS) attacks Datasets
           </v-card-title>
@@ -72,7 +72,7 @@
             <v-btn
             depressed
             color="primary"
-            href = "/search?query=ddidd"
+            href = "/search?keywords=ddidd"
             >
       Link to dataset
     </v-btn>
