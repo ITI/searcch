@@ -8,6 +8,16 @@ export const artifactIcon = type => {
       return 'mdi-newspaper-variant-outline'
     case 'code':
       return 'mdi-code-braces'
+    case 'pcap':
+    case 'dag':
+    case 'argus':
+    case 'netflow':
+    case 'flowtools':
+    case 'flowride':
+    case 'fsdb':
+    case 'csv':
+    case 'custom':
+      return 'mdi-data-matrix'
     case 'keyword':
       return 'mdi-tag-outline'
     case 'role':
@@ -29,8 +39,26 @@ export const artifactColor = type => {
       return 'orange white--text'
     case 'publication':
       return 'red white--text'
-    case 'code':
+    case 'code': 
+     return 'purple white--text'
+    case 'pcap':
       return 'purple white--text'
+    case 'dag':
+      return 'grey white--text'
+    case 'argus':
+      return 'green white--text'
+    case 'netflow':
+      return 'orange white--text'
+    case 'flowtools':
+      return 'blue white--text'
+    case 'flowride':
+      return 'brown white--text'
+    case 'fsdb':
+      return 'black white--text'
+    case 'csv':
+      return 'cyan white--text'
+    case 'custom':
+        return 'red white--text'
     case 'role':
       return 'primary'
     case 'relation':

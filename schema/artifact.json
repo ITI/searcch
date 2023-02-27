@@ -105,6 +105,9 @@
             "cloud"
           ],
           "type": "string"
+          },
+	"irb": {
+          "type": "string"
         },
 	  "anonymization": {
           "enum": [
@@ -153,6 +156,9 @@
           "type": "string"
         },
 	"provider": {
+          "type": "string"
+        },
+	 "category": {
           "type": "string"
         }
       },
