@@ -1,5 +1,5 @@
 <template>
-  
+
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
       <div class="text-center">
@@ -7,7 +7,7 @@
       </div>
       <v-carousel
     cycle
-    
+
     hide-delimiter-background
     show-arrows-on-hover
   >
@@ -36,19 +36,19 @@
     </v-btn>
               </v-col>
             <v-col cols="4">
-              
+
               <v-img src="https://ant.isi.edu/address/it.37.all.16-subnet_stats.3px-per-point.annotated.png"
               height="300"
               width="300"></v-img>
             </v-col>
           </v-row>
-          
+
         </v-card-text>
-        
+
         </v-card>
       </v-carousel-item>
       <v-carousel-item>
-        <v-card color="#eef2bf" height = "auto">
+        <v-card color="#eef2bf" height = "500">
           <v-card-title class="primary white--text">
             Distributed Denial-of-Service (DDoS) attacks Datasets
           </v-card-title>
@@ -72,45 +72,45 @@
             <v-btn
             depressed
             color="primary"
-            href = "/search?keywords=ddidd"
+            to = "/search?keywords=ddidd"
             >
       Link to dataset
     </v-btn>
               </v-col>
             <v-col cols="4">
-              
+
               <v-img src="https://steel.isi.edu/ddidd.jpg"
               height="300"
               width="300"></v-img>
             </v-col>
           </v-row>
-          
+
         </v-card-text>
-        
+
         </v-card>
       </v-carousel-item>
-    
+
   </v-carousel>
   <br/>
       <LazyHydrate never>
-        
+
         <div>
           <v-card>
             <v-card-title class="primary white--text">
-              COMUNDA is a collaborative, community-driven platform for network dataset sharing and reuse. 
+              COMUNDA is a collaborative, community-driven platform for network dataset sharing and reuse.
             </v-card-title>
             <v-card-text>
               <br />
-              
+
               <div class="text-center">
                 <v-row>
                 <v-card
     class="mx-auto"
-     href ="/search"             
+     href ="/search"
     flat color="transparent"
   >
     <v-card-text>
-      
+
        <v-avatar color="indigo" size="150">
       <v-icon dark size = "120">
        mdi-cloud-search
@@ -129,7 +129,7 @@
     flat color="transparent"
   >
     <v-card-text>
-      
+
        <v-avatar color="orange" size="150">
       <v-icon dark size = "120">
        mdi-comment-account
@@ -149,7 +149,7 @@
     flat color="transparent"
   >
     <v-card-text>
-      
+
        <v-avatar color="teal" size="150">
       <v-icon dark size = "120">
        mdi-label-multiple
@@ -160,8 +160,8 @@
     </v-card-text>
 
       </v-card>
-            
-            
+
+
             <v-divider
            inset vertical
 ></v-divider>
@@ -171,7 +171,7 @@
     flat color="transparent"
   >
     <v-card-text>
-      
+
        <v-avatar color="blue" size="150">
       <v-icon dark size = "120">
        mdi-database-import
@@ -182,10 +182,10 @@
     </v-card-text>
 
       </v-card>
-            
+
         </v-row>
               </div>
-  
+
             </v-card-text>
             </v-card>
             <br/><br/>
@@ -221,7 +221,7 @@
               dataset records, and it will support collaborative labeling of ground truth.
 	      COMUNDA will also support researchers' sharing their code, which does dataset
 	      cleaning, processing and interpretation.
-            </p> 
+            </p>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
@@ -233,7 +233,7 @@
 	     COMUNDA also facilitates community-building around these datasets. It
               allows data providers to share the metadata of their datasets with
               the community, and it allows researchers to share their experience with different datasets.
-            </p> 
+            </p>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -260,7 +260,7 @@
                   </em>
                 </v-col>
               </v-row>
-              
+
             </v-card-text>
             <v-card-actions>
               <v-spacer />
@@ -268,7 +268,7 @@
                 Continue
               </v-btn>
             </v-card-actions> </v-card><br />
-         
+
   <br />
           <v-card>
             <v-card-title class="primary white--text">
@@ -279,7 +279,7 @@
 	      <p class ="body-1">
 	      COMUNDA has four major functions, which may be accessed using the
               left-hand navigation menu. A summary of each follows.</p>
-              
+
               <v-list>
                 <v-list-item>
                   <v-list-item-icon>
@@ -318,7 +318,7 @@
                   </v-list-item-icon>
                   <v-list-item-content class ="body-1">
                     <b>Review Datasets.</b>Users may provide reviews for a dataset when viewing it.
-                     Presently, reviews consist of a 1 to 5 star rating and a comment. 
+                     Presently, reviews consist of a 1 to 5 star rating and a comment.
                      Ratings and reviews are visible to the community and used by others to help them decide
                       whether to invest their time in trying to use a specific dataset.
                   </v-list-item-content>
@@ -353,7 +353,7 @@
         </v-card-text>
       </v-card>
       <br/>
-      
+
     </v-flex>
     <v-row justify="center">
     <v-dialog
@@ -414,7 +414,7 @@
       </v-card>
     </v-dialog>
   </v-row>
-  
+
   </v-layout>
 </template>
 
@@ -514,11 +514,11 @@ export default {
       if(this.localuser.position && this.userAffiliation){
         this.dialog=false
       }
-      
+
     }
   }
   // async computed(){
-    
+
   // }
 }
 </script>
