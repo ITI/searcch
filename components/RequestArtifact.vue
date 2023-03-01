@@ -33,7 +33,7 @@
      <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
       <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
       
-      <div style="font-weight: bold;">Enter project name</div>
+      <div style="font-weight: bold;">Enter project name<span style='color: red;'><strong> *</strong></span></div>
       <v-text-field
         name="project"
         v-model="project"
@@ -43,7 +43,7 @@
         clearable
         required
       ></v-text-field>
-      <div style="margin-top: 20px; font-weight: bold;">Briefly describe the research to be done with the dataset</div>
+      <div style="margin-top: 20px; font-weight: bold;">Briefly describe the research to be done with the dataset<span style='color: red;'><strong> *</strong></span></div>
       <v-textarea
         name="project_description"
         v-model="project_description"
@@ -54,17 +54,19 @@
         required
       ></v-textarea>
 
-      <div style="margin-top: 20px; font-weight: bold;">Please select the researcher representative</div>
+      <div style="margin-top: 20px; font-weight: bold;">Enter details of the researcher representative</div>
       <v-container>
         <v-row align="center">
           <v-col md="5">
             <v-text-field
               v-model="representative_researcher.name"
-              label="Name"
               type="text"
               hint="Enter researcher name"
-              required
-            ></v-text-field>
+              required>
+              <template #label>
+                  <span>Name<span style='color: red;'> *</span></span> 
+              </template> 
+            </v-text-field>
           </v-col>
           <v-col md="3">
             <v-text-field
@@ -72,36 +74,45 @@
               label="Email"
               type="email"
               hint="Enter researcher email"
-              required
-            ></v-text-field>
+              required>
+              <template #label>
+                  <span>Email<span style='color: red;'> *</span></span> 
+              </template> 
+            </v-text-field>
           </v-col>
           <v-col md="3">
             <v-text-field
               v-model="representative_researcher.number"
-              label="Phone Number (only digits)"
               type="text"
               hint="Enter researcher phone number"
               required
-              pattern="^[0-9]+$"
-            ></v-text-field>
+              pattern="^[0-9]+$">
+              <template #label>
+                  <span>Phone Number (only digits)<span style='color: red;'> *</span></span> 
+              </template>       
+            </v-text-field>
           </v-col>
           <v-col md="5">
             <v-text-field
               v-model="representative_researcher.organization"
-              label="Organization"
               type="text"
               hint="Enter researcher organization"
-              required
-            ></v-text-field>
+              required>
+              <template #label>
+                  <span>Organization<span style='color: red;'> *</span></span> 
+              </template>            
+            </v-text-field>
           </v-col>
           <v-col md="5">
             <v-text-field
               v-model="representative_researcher.title"
-              label="Researcher Title"
               type="text"
               hint="Enter researcher title"
-              required
-            ></v-text-field>
+              required>
+              <template #label>
+                  <span>Researcher Title<span style='color: red;'> *</span></span> 
+              </template>
+            </v-text-field>
           </v-col>
         </v-row> 
       </v-container>
@@ -113,20 +124,24 @@
             <v-col md="5">
               <v-text-field
                 v-model="researcher.name"
-                label="Name"
                 type="text"
                 hint="Enter researcher name"
-                required
-              ></v-text-field>
+                required>
+                <template #label>
+                  <span>Name<span style='color: red;'> *</span></span> 
+                </template>
+              </v-text-field>
             </v-col>
             <v-col md="3">
               <v-text-field
                 v-model="researcher.email"
-                label="Email"
                 type="email"
                 hint="Enter researcher email"
-                required
-              ></v-text-field>
+                required>
+                <template #label>
+                  <span>Email<span style='color: red;'> *</span></span> 
+                </template>
+              </v-text-field>
             </v-col>
             <v-col md="3">
               <v-text-field
@@ -134,7 +149,6 @@
                 label="Phone Number (only digits)"
                 type="text"
                 hint="Enter researcher phone number"
-                required
                 pattern="^[0-9]+$"
               ></v-text-field>
             </v-col>
@@ -167,14 +181,25 @@
       <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
       </div>
     </form>
-    <div v-if="formSubmitted">
-      <div v-if="formSubmittedError" class="form-submit-error">
-        <p>{{formSubmittedErrorMessage}}</p>
-      </div>
-      <div v-else class="form-submit-success">
-        <p>Request submitted successfully!</p>
-      </div>
-    </div>
+   
+    <v-dialog
+    v-model="formSubmitted"
+    width="auto "
+    >
+      <v-card>
+        <v-card-text>
+          <div v-if="formSubmittedError" class="form-submit-error">
+            <p>{{formSubmittedErrorMessage}}</p>
+          </div>
+          <div v-else class="form-submit-success">
+            <p>Request submitted successfully!</p>
+          </div>     
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="$router.push('/');">Go to homepage</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog> 
   </div>
 
    </div>
@@ -473,7 +498,7 @@ export default {
           isEntryEmpty = true;
       }
       this.researchers.forEach((researcher) => {
-        if ((researcher.name == "" || researcher.email == "" || researcher.number == "")) {
+        if ((researcher.name == "" || researcher.email == "")) {
           isEntryEmpty = true;
         }
       });
@@ -571,11 +596,13 @@ export default {
   .form-submit-error {
     color: red;
     padding: 10px;
+    font-size: 15px;
   }
 
   .form-submit-success {
     color: green;
     padding: 10px;
+    font-size: 15px;
   }
 
   .btn-submit {
