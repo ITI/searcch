@@ -53,7 +53,18 @@
         clearable
         required
       ></v-textarea>
-
+      <div v-if="record.artifact.provider == 'USC'">
+      <div style="margin-top: 20px; font-weight: bold;">Briefly justify (a few sentences) about why the dataset is needed to advance that research.<span style='color: red;'><strong> *</strong></span></div>
+      <v-textarea
+        name="project_justification"
+        v-model="project_justification"
+        type="text"
+        hint="Enter your justification for using this dataset." 
+        auto-grow
+        clearable
+        required
+      ></v-textarea>
+      </div>
       <div style="margin-top: 20px; font-weight: bold;">Enter details of the researcher representative</div>
       <v-container>
         <v-row align="center">
@@ -241,6 +252,7 @@ export default {
       loadingMessage: 'Loading...',
       project: "",
       project_description: "",
+      project_justification: "",
       people: "",
       Images: null,
       formSubmitted: false,
@@ -413,7 +425,9 @@ export default {
         this.Images = this.$refs.file.files[0];
     },
     submitForm() {
+      this.project = this.project.trim();
       this.project_description = this.project_description.trim();
+      this.project_justification = this.project_justification.trim();
       this.representative_researcher.name = this.representative_researcher.name.trim();
       this.representative_researcher.email = this.representative_researcher.email.trim();
       this.representative_researcher.number = this.representative_researcher.number.trim();
@@ -424,7 +438,6 @@ export default {
         researcher.email = researcher.email.trim();
         researcher.number = researcher.number.trim();
       });
-      this.project = this.project.trim();
       // Researchers is a combination of representative_researcher and the researchers_that_interact list
       this.researchers = [this.representative_researcher].concat(this.researchers_that_interact)
       if (this.$refs.request_form.checkValidity()) {
@@ -502,6 +515,11 @@ export default {
           isEntryEmpty = true;
         }
       });
+      if(this.record.artifact.provider == 'USC') {
+        if (this.project_justification == "") {
+          isEntryEmpty = true;
+        }
+      }
       if(!(this.project_description) || isEntryEmpty || !(this.project)) {
         this.formSubmittedError = true;
         this.formSubmittedErrorMessage = "Please fill all the fields";
@@ -520,6 +538,7 @@ export default {
       payload.append('file', file);
       payload.append('project', this.project);
       payload.append('project_description', this.project_description);
+      payload.append('project_justification', this.project_justification);
       payload.append('researchers', researchersJSON);
       payload.append('dataset', this.record.artifact.title)
       payload.append('representative_researcher_email', this.representative_researcher['email']);
