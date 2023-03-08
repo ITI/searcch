@@ -15,6 +15,7 @@
         field.splice(index, 1)
       "
       :to="whereTo(item)"
+      :href="navigateTo(item)"
       v-bind:small="small"
     >
       <v-avatar left>
@@ -42,6 +43,9 @@
       </div>
       <div v-else-if="type === 'keyword'">
         {{ item.tag }}
+      </div>
+      <div v-else-if="type === 'label'">
+        {{ item.label_id }}
       </div>
       <div v-else-if="type === 'role'">
         {{ item.affiliation.person.name }}
@@ -168,9 +172,16 @@ export default {
             return '/artifact/' + item.related_artifact_group_id
           case 'reverse-relation':
             return '/artifact/' + item.artifact_group_id
+
         }
       }
       return null
+    },
+    navigateTo(item){
+      if (this.type === 'label'){
+        return item.label_url
+      }
+      return ''
     },
     async deleteRelationship(id) {
       let response = await this.$relationshipEndpoint.delete(id)
