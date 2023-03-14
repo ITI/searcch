@@ -92,7 +92,7 @@ export default {
           q:
             'I have code, data, and other artifacts that are all from the same research. How should I submit those to the hub?',
           a:
-            'Generally, code and data should be packaged and submitted separately into logical components, unless the code is used to generate the data. The hub supports the ability to link artifacts that are related. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices"> best practices and considerations </a> for SEARCCH hub curation for more information.'
+            'Generally, code and data should be packaged and submitted separately into logical components, unless the code is used to generate the data. The hub supports the ability to link artifacts that are related. Please see the <a href="https://searcch.cyberexperimentation.org/best-practices"> best practices and considerations for SEARCCH hub curation </a> for more information.'
         },
         {
           q:
