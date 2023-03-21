@@ -4,7 +4,7 @@
       <logo />
     </div>
     <h1>
-      Search
+      Search Artifacts
       <v-dialog transition="dialog-bottom-transition" max-width="600">
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="primary ml-4" fab small v-bind="attrs" v-on="on"

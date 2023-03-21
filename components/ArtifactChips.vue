@@ -168,15 +168,15 @@ export default {
       if (this.link) {
         switch (this.type) {
           case 'keyword':
-            return '/search?keywords=' + item
+            return '/search/artifacts?keywords=' + item
           case 'role':
-            return '/search?author_keywords=' + item.affiliation.person.name
+            return '/search/artifacts?author_keywords=' + item.affiliation.person.name
           case 'relation':
             return '/artifact/' + item.related_artifact_group_id
           case 'reverse-relation':
             return '/artifact/' + item.artifact_group_id
           case 'venue':
-            return '/search?venue_ids=' + item.id
+            return '/search/artifacts?venue_ids=' + item.id
         }
       }
       return null

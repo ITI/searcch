@@ -188,7 +188,12 @@ export default {
         {
           icon: 'mdi-cloud-search',
           title: 'Search Artifacts',
-          to: '/search'
+          to: '/search/artifacts'
+        },
+        {
+          icon: 'mdi-cloud-search',
+          title: 'Artifact Venues',
+          to: '/search/recurringvenues'
         }
       ]
       if (this.$auth.loggedIn) {
