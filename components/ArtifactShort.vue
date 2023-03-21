@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="9">
             <v-card-title class="align-start">
-              <span class="headline">{{ artifact.title | titlecase }}</span> 
+              <span class="headline">{{ artifact.title | titlecase }}</span>
             </v-card-title>
           </v-col>
           <v-col cols="3">
@@ -122,7 +122,7 @@
           Edit Relation
         </v-btn>
         <v-btn
-          v-if="isOwner() || isAdmin()"
+          v-if="(isOwner() && isDraft()) || isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           nuxt
@@ -211,13 +211,7 @@ export default {
       if(this.artifact.owner.id != this.userid) {
         return false;
       }
-      let isDraft = this.artifact.artifact_group.publications ? true : false;
-      this.artifact.artifact_group.publications && this.artifact.artifact_group.publications.forEach(publication => {
-        if (publication.artifact_id == this.artifact.id) {
-          isDraft = false;
-        }
-      });
-      if (isDraft) {
+      if (this.isDraft()) {
         return 'draft';
       }
       return 'contributor';
@@ -266,6 +260,15 @@ export default {
       return typeof this.artifact.owner !== 'undefined'
         ? this.artifact.artifact_group.owner_id == this.userid
         : false
+    },
+    isDraft() {
+      let hasPublicationAttr = (this.artifact.artifact_group.publications !== undefined)
+      hasPublicationAttr && this.artifact.artifact_group.publications.forEach(publication => {
+        if (publication.artifact_id == this.artifact.id) {
+          return false;
+        }
+      });
+      return true;
     },
     getContributionChipColor() {
       switch(this.contributionTypeText) {
