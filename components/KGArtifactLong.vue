@@ -406,7 +406,7 @@
         <v-btn
           v-if="!(isOwner() || isAdmin())"
           color="primary"
-          :to="`/artifact/request/${record.artifact.artifact_group_id}`"
+          @click="requestArtifact()"
           nuxt
         >
           Request
@@ -690,7 +690,14 @@ export default {
         this.diff_results[i]._id = i
       }
       this.diff_results_dialog = true
-    }
+    },
+    requestArtifact() {
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      } else {
+        this.$router.push('/artifact/request/'+this.record.artifact.artifact_group_id)
+      }
+    },
   }
 }
 </script>
