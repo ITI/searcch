@@ -15,7 +15,7 @@
         field.splice(index, 1)
       "
       :to="whereTo(item)"
-      :href="navigateTo(item)"
+      :href="labelUrl(item)"
       v-bind:small="small"
     >
       <v-avatar left>
@@ -177,7 +177,7 @@ export default {
       }
       return null
     },
-    navigateTo(item){
+    labelUrl(item){
       if (this.type === 'label'){
         return item.label_url
       }

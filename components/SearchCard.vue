@@ -265,7 +265,7 @@ export default {
           items_per_page: this.limit,
           type: this.advanced.types
         }
-        console.log(payload)
+       
         this.author ? (payload['author'] = this.author) : false
         this.owner ? (payload['owner'] = this.owner) : false
         this.organization ? (payload['organization'] = this.organization) : false

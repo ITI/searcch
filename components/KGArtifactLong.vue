@@ -506,14 +506,13 @@ export default {
       diff_results_dialog: false,
       diff_results_tab: "visual",
       loadingMessage: 'Loading...',
-
     }
   },
   mounted() {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
-    console.log(this.labels)
+
   },
   computed: {
     ...mapState({
@@ -549,7 +548,7 @@ export default {
       console.log(this.record.artifact)
       let tags = []
       if (this.record.artifact.tags.length > 0) {
-        console.log(this.record.artifact.tags.map(e => e.tag))
+        
         return this.record.artifact.tags.map(e => e.tag)
       }
       let top = this.record.artifact.meta.find(o => o.name == 'top_keywords')
