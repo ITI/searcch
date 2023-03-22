@@ -274,7 +274,7 @@ export default {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
-    console.log(this.record.artifact)
+
   },
   computed: {
     ...mapState({
@@ -429,11 +429,11 @@ export default {
         this.Images = this.$refs.file.files[0];
     },
     getContent(){
-      console.log(this.irbContent)
+
       if (this.irbContent == null){
         return
       }
-      console.log(typeof(this.irbContent))
+      
       if (!this.irbContent) {this.data = "No File Chosen"}
       var reader = new FileReader();
 
