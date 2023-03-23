@@ -16,9 +16,14 @@
           <v-row>
             <v-col cols="9">
               <div v-if="artifactsLoading">Loading...</div>
-              <ArtifactList v-else-if="artifacts.length" 
-                :artifacts="artifacts"
-              />
+              <ArtifactList v-else-if="artifacts.length" :artifacts="artifacts"/>
+              <!-- pagination -->
+              <v-pagination
+                v-if="artifacts"
+                v-model="page"
+                :length="pages"
+                circle
+              ></v-pagination>
               <div v-else class="no-artifact-container">
                 <h1 class="text-grey">Oops...</h1>
                 No published artifacts for this venue session yet... : (
@@ -30,9 +35,11 @@
                 <v-divider></v-divider>
                 <br><b>Publisher Url</b>: {{ venue.publisher_url || 'N/A' }}
                 <v-divider></v-divider>
+                <br><b>Recurrence</b>
+                <v-divider></v-divider>
               </div>
 
-              <v-radio-group :value="currentRecurrenceId" density="compact">
+              <v-radio-group :value="currentRecurrenceId" class="mt-0">
                 <v-radio 
                   v-for="recurrence in venue.recurrences" 
                   :key="recurrence.id"
@@ -66,9 +73,16 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      page: 1
+    }
+  },
   computed: {
     ...mapState({
       artifacts: state => state.venues.artifacts.artifacts,
+      pages: state => state.venues.artifacts.pages,
+      total: state => state.venues.artifacts.total,
       venue: state => state.venues.currentVenue,
       currentRecurrenceId: state => state.venues.recurrenceId,
       loading: state => state.venues.loading,
@@ -80,6 +94,14 @@ export default {
       this.$store.commit('venues/SET_RECURRENCE_ID', recurrenceId)
       this.$store.dispatch('venues/fetchArtifacts', {
         venue_id: recurrenceId
+      })
+    }
+  },
+  watch: {
+    page() {
+      this.$store.dispatch('venues/fetchArtifacts', {
+        venue_id: this.currentRecurrenceId,
+        page: this.page
       })
     }
   }
