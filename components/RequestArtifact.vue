@@ -187,7 +187,7 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </div>
-      <div v-if ="record.artifact.irb" style="margin-top: 20px; font-weight: bold;">Uppload IRB approval Letter</div>
+      <div v-if ="record.artifact.irb" style="margin-top: 20px; font-weight: bold;">Upload IRB approval Letter</div>
       <v-file-input v-if ="record.artifact.irb" v-model = "irbContent" clearable label="Upload IRB approval letter" variant="underlined" @change ="getContent"></v-file-input>
       <div>
       <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
@@ -433,7 +433,7 @@ export default {
       if (this.irbContent == null){
         return
       }
-      
+
       if (!this.irbContent) {this.data = "No File Chosen"}
       var reader = new FileReader();
 
