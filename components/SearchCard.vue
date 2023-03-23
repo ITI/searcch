@@ -233,7 +233,6 @@
 <script>
 import { mapState } from 'vuex'
 import goTo from 'vuetify/es5/services/goto'
-import { getCookie } from '~/helpers'
 
 const deepClone = (obj) => JSON.parse(JSON.stringify(obj))
 

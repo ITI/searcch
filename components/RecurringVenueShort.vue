@@ -54,7 +54,7 @@ export default {
   methods: {
     onRelatedArtifactsClicked() {
       this.$store.commit('venues/SET_RECURRENCE_ID', this.recurringVenue.recurrences[0].id)
-      this.$router.push('/recurringvenue/' + this.recurringVenue.id)
+      this.$router.push('/venue/' + this.recurringVenue.id)
     },
   }
 }

@@ -72,7 +72,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" nuxt to="/search/artifacts">
+              <v-btn color="primary" nuxt to="/search">
                 Continue
               </v-btn>
             </v-card-actions> </v-card
