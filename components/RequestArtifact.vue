@@ -11,9 +11,9 @@
         >
           &nbsp;&nbsp;(<a :href="`/artifact/${record.artifact.artifact_group_id}`">newest version</a>)
         </div>
-        <div>	
+        <div>
         </div>
-<!--	 
+<!--
      <span>Upload filled data use agreement here  <input type="file" @change="uploadFile" ref="file"></span><br>    -->
 
       </v-card-subtitle>
@@ -32,13 +32,13 @@
      <form @submit.prevent="submitForm" ref="request_form">
      <!-- <div style="margin-top: 20px; font-weight: bold;">Please download and fill out data use agreement from<a @click="fetchDUA"> this link</a></div>
       <div style="margin-top: 20px; margin-bottom: 20px; font-weight: normal;">Upload filled data use agreement here (in PDF format) <input type="file" @change="uploadFile" ref="file" required accept="application/pdf"></div> -->
-      
+
       <div style="font-weight: bold;">Enter project name<span style='color: red;'><strong> *</strong></span></div>
       <v-text-field
         name="project"
         v-model="project"
         type="text"
-        hint="Enter your project name" 
+        hint="Enter your project name"
         auto-grow
         clearable
         required
@@ -48,7 +48,7 @@
         name="project_description"
         v-model="project_description"
         type="text"
-        hint="Enter your research purpose" 
+        hint="Enter your research purpose"
         auto-grow
         clearable
         required
@@ -59,7 +59,7 @@
         name="project_justification"
         v-model="project_justification"
         type="text"
-        hint="Enter your justification for using this dataset." 
+        hint="Enter your justification for using this dataset."
         auto-grow
         clearable
         required
@@ -75,8 +75,8 @@
               hint="Enter researcher name"
               required>
               <template #label>
-                  <span>Name<span style='color: red;'> *</span></span> 
-              </template> 
+                  <span>Name<span style='color: red;'> *</span></span>
+              </template>
             </v-text-field>
           </v-col>
           <v-col md="3">
@@ -87,8 +87,8 @@
               hint="Enter researcher email"
               required>
               <template #label>
-                  <span>Email<span style='color: red;'> *</span></span> 
-              </template> 
+                  <span>Email<span style='color: red;'> *</span></span>
+              </template>
             </v-text-field>
           </v-col>
           <v-col md="3">
@@ -99,8 +99,8 @@
               required
               pattern="^[0-9]+$">
               <template #label>
-                  <span>Phone Number (only digits)<span style='color: red;'> *</span></span> 
-              </template>       
+                  <span>Phone Number (only digits)<span style='color: red;'> *</span></span>
+              </template>
             </v-text-field>
           </v-col>
           <v-col md="5">
@@ -110,8 +110,8 @@
               hint="Enter researcher organization"
               required>
               <template #label>
-                  <span>Organization<span style='color: red;'> *</span></span> 
-              </template>            
+                  <span>Organization<span style='color: red;'> *</span></span>
+              </template>
             </v-text-field>
           </v-col>
           <v-col md="5">
@@ -121,11 +121,11 @@
               hint="Enter researcher title"
               required>
               <template #label>
-                  <span>Researcher Title<span style='color: red;'> *</span></span> 
+                  <span>Researcher Title<span style='color: red;'> *</span></span>
               </template>
             </v-text-field>
           </v-col>
-        </v-row> 
+        </v-row>
       </v-container>
 
       <div style="margin-top: 20px; font-weight: bold;">Enter details of all other researchers that will interact with the data:</div>
@@ -139,7 +139,7 @@
                 hint="Enter researcher name"
                 required>
                 <template #label>
-                  <span>Name<span style='color: red;'> *</span></span> 
+                  <span>Name<span style='color: red;'> *</span></span>
                 </template>
               </v-text-field>
             </v-col>
@@ -150,7 +150,7 @@
                 hint="Enter researcher email"
                 required>
                 <template #label>
-                  <span>Email<span style='color: red;'> *</span></span> 
+                  <span>Email<span style='color: red;'> *</span></span>
                 </template>
               </v-text-field>
             </v-col>
@@ -174,7 +174,7 @@
                 </v-icon>
               </div>
             </v-col>
-          </v-row> 
+          </v-row>
         </v-container>
       </div>
       <div style="margin-top: 20px;">
@@ -187,12 +187,13 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </div>
-      
+      <div v-if ="record.artifact.irb" style="margin-top: 20px; font-weight: bold;">Upload IRB approval Letter</div>
+      <v-file-input v-if ="record.artifact.irb" v-model = "irbContent" clearable label="Upload IRB approval letter" variant="underlined" @change ="getContent"></v-file-input>
       <div>
       <input type="submit" value="Review" class="btn-submit" style="margin-top: 20px;" :disabled="requestMode">
       </div>
     </form>
-   
+
     <v-dialog
     v-model="formSubmitted"
     width="auto "
@@ -204,13 +205,13 @@
           </div>
           <div v-else class="form-submit-success">
             <p>Request submitted successfully!</p>
-          </div>     
+          </div>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" block @click="$router.push('/');">Go to homepage</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog> 
+    </v-dialog>
   </div>
 
    </div>
@@ -260,17 +261,20 @@ export default {
       formSubmittedErrorMessage: "",
       representative_researcher: {name: "", email: "", number: "", organization:"", title:""},
       researchers_that_interact: [],
-      researchers: [], 
+      researchers: [],
       requestMode: false,
       dua: null,
       duaHTML: null,
-      isModalVisible: false
+      isModalVisible: false,
+      irbContent : '',
+      irbData: '',
     }
   },
   mounted() {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
+
   },
   computed: {
     ...mapState({
@@ -424,6 +428,26 @@ export default {
     uploadFile() {
         this.Images = this.$refs.file.files[0];
     },
+    getContent(){
+
+      if (this.irbContent == null){
+        return
+      }
+
+      if (!this.irbContent) {this.data = "No File Chosen"}
+      var reader = new FileReader();
+
+      // Use the javascript reader object to load the contents
+      // of the file in the v-model prop
+      reader.readAsBinaryString(this.irbContent);
+      reader.onload = () => {
+        this.irbData = reader.result;
+
+
+      }
+
+
+    },
     submitForm() {
       this.project = this.project.trim();
       this.project_description = this.project_description.trim();
@@ -526,23 +550,30 @@ export default {
         this.formSubmitted = true;
         return;
       }
-      
+
       this.formSubmittedError = false;
       this.formSubmittedErrorMessage = "";
       this.requestMode = true;
       const payload = new FormData();
-      
+
+
+
       let blob = new Blob([this.duaHTML], { type: 'text/plain' });
       let file = new File([blob], "signed_dua.html", {type: "text/plain"});
       let researchersJSON = JSON.stringify(this.researchers);
       payload.append('file', file);
+      if(this.record.artifact.irb){
+        let pdfBlob = new Blob([this.irbData], {type: 'application/pdf'})
+        let pdfFile = new File([pdfBlob], "IRB_approval_letter.pdf", {type: 'application/pdf'})
+        payload.append('pdf_file', pdfFile);
+      }
       payload.append('project', this.project);
       payload.append('project_description', this.project_description);
       payload.append('project_justification', this.project_justification);
       payload.append('researchers', researchersJSON);
       payload.append('dataset', this.record.artifact.title)
       payload.append('representative_researcher_email', this.representative_researcher['email']);
-      
+
       let response = await this.$artifactRequestEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],payload
       );
