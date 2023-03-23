@@ -36,14 +36,7 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-row align="center">
-              <v-col cols="12">
-                <v-text-field
-                  label="Author"
-                  placeholder="Search for artifacts by author name..."
-                  v-model="author"
-                >
-                </v-text-field>
-              </v-col>
+
               <v-col cols="12">
                 <v-text-field
                   label="Organization"
@@ -86,47 +79,6 @@
                     <span v-if="index === 1" class="grey--text caption">
                       (+{{ advanced.types.length - 1 }} others)
                     </span>
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-select
-                  v-model="advanced.badge_ids"
-                  :items="badges"
-                  :item-value="item => item.id"
-                  label="Artifact badges"
-                  multiple
-                  class="rounded-0"
-                  hide-details
-                >
-                  <template v-slot:prepend-item>
-                    <v-list-item ripple @click="toggleBadges">
-                      <v-list-item-action>
-                        <v-icon
-                          :color="
-                            advanced.badge_ids.length > 0 ? 'indigo darken-4' : ''
-                          "
-                        >
-                          {{ badgeIcon }}
-                        </v-icon>
-                      </v-list-item-action>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          Select All
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-divider class="mt-2"></v-divider>
-                  </template>
-                  <template v-slot:selection="{ item, index }">
-                    <span v-if="index === 0">{{ `${item.organization} ${item.title}` }}</span>
-                    <span></span>
-                    <span v-if="index === 1" class="grey--text caption">
-                      (+{{ advanced.badge_ids.length - 1 }} others)
-                    </span>
-                  </template>
-                  <template v-slot:item="{ item, index }">
-                    {{ `${item.organization} ${item.title}` }}
                   </template>
                 </v-select>
               </v-col>
@@ -225,7 +177,7 @@ export default {
         org: '',
         badge_ids: []
       },
-      types: ['presentation', 'publication', 'dag', 'argus', 'pcap',  'netflow', 'flowtools', 'flowride', 'fsdb', 'csv', 'custom'],	
+      types: ['presentation', 'publication', 'dag', 'argus', 'pcap',  'netflow', 'flowtools', 'flowride', 'fsdb', 'csv', 'custom'],
       filters: ['Name', 'Organization'],
       showScrollToTop: 0
     }
@@ -313,14 +265,14 @@ export default {
           items_per_page: this.limit,
           type: this.advanced.types
         }
-
+       
         this.author ? (payload['author'] = this.author) : false
         this.owner ? (payload['owner'] = this.owner) : false
         this.organization ? (payload['organization'] = this.organization) : false
         this.advanced.badge_ids ? (payload['badge_id'] = this.advanced.badge_ids) : false
 
         this.$store.dispatch('artifacts/fetchArtifacts', payload)
-      } 
+      }
       this.searchInterval = setTimeout(() => {
         if (!this.searchLoading) {
           this.searchMessage = 'No results found'

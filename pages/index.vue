@@ -62,12 +62,10 @@
                 protecting it from DoS is imperative. Many prior approaches have focused on specific filters or anti-spoofing
                 techniques to protect generic services. DNS root nameservers are more challenging to protect, since they use
                 fixed IP addresses, serve very diverse clients and requests, receive predominantly UDP traffic that can be spoofed,
-                and must guarantee high quality of service. In this paper we propose a layered DDoS defense for DNS root nameservers.
-                Our defense uses a library of defensive filters, which can be optimized for different attack types, with different levels of selectivity.
-                We further propose a method that automatically and continuously evaluates and selects the best combination of filters throughout the attack.
+                and must guarantee high quality of service.
                 We show that this layered defense approach provides exceptional protection against all attack types using traces of ten real attacks from a DNS root nameserver.
                 Our automated system can select the best defense within seconds and quickly reduces traffic to the server within a manageable range, while keeping collateral damage lower than 2%.
-                We can handle millions of filtering rules without noticeable operational overhead.
+               
             </b></p>
             <v-btn
             depressed
@@ -275,7 +273,7 @@
 
 	    <br/>
 	    </div>
-	    
+
       </LazyHydrate>
   <br />
         <v-card-title class="primary white--text">

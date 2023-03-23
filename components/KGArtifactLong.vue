@@ -176,6 +176,18 @@
         <v-divider class="mx-4"></v-divider>
       </div>
 
+      <div v-if="labels.length">
+        <v-card-title class="py-0">Labels</v-card-title>
+        <ArtifactChips
+          :field="labels"
+          type="label"
+          display
+          link
+        ></ArtifactChips>
+
+        <v-divider class="mx-4"></v-divider>
+      </div>
+
       <div v-if="languages.length > 0">
         <v-card-title class="py-0">Programming Languages</v-card-title>
         <ArtifactChips
@@ -412,9 +424,9 @@
           Request
         </v-btn>
       </v-card-actions>
-      
+
     </v-card>
-    
+
     <template>
       <v-dialog v-model="diff_results_dialog" scrollable>
         <v-card>
@@ -493,13 +505,14 @@ export default {
       diff_results: [],
       diff_results_dialog: false,
       diff_results_tab: "visual",
-      loadingMessage: 'Loading...'
+      loadingMessage: 'Loading...',
     }
   },
   mounted() {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
+
   },
   computed: {
     ...mapState({
@@ -509,7 +522,7 @@ export default {
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description.replace(/\<\\pre\>/, ''))
-      
+
     },
     favorite: {
       get() {
@@ -525,9 +538,17 @@ export default {
           )
       }
     },
+    labels() {
+      if(this.record.artifact.labels.length > 0){
+        return this.record.artifact.labels
+      }
+
+    },
     tags() {
+      console.log(this.record.artifact)
       let tags = []
       if (this.record.artifact.tags.length > 0) {
+        
         return this.record.artifact.tags.map(e => e.tag)
       }
       let top = this.record.artifact.meta.find(o => o.name == 'top_keywords')
