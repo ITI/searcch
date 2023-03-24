@@ -2,12 +2,17 @@
     <div class="container">
         <div class="row">
         <div class="col-md-12">
-            <div>
+            <div v-if="loading">
+                <h1>Opting out ...</h1>
+                <p>Please wait while we process your request.</p>
+            </div>
+            <div v-else-if="error">
+                <h1>Error</h1>
+                <p>{{ errorMsg }}</p>
+            </div>
+            <div v-else>
                 <h1>We'll miss you ..</h1>
-                <p>
-                You have been opted out of the searcch hub. You will no longer be
-                notified of new searcch results.
-                </p>
+                <p>You have been opted out of the searcch hub. You will no longer be notified of new searcch results.</p>
             </div>
         </div>
         </div>
@@ -17,13 +22,26 @@
 <script>
 export default {
     name: 'OptOut',
-    mounted() {
+    async mounted() {
         const payload = {
             'email': this.$route.query.email,
-            'token': this.$route.query.token
+            'key': this.$route.query.key
         }
-        const response = this.$optOutEndpoint.index(payload)
-        // TODO: handle response
+        this.loading = true
+        await this.$optOutEndpoint.index(payload)
+        .then(response => {
+            this.loading = false
+        })
+        .catch(error => {
+            this.loading = false
+            this.errorMsg = error.message
+        })
     },
+    data() {
+        return {
+            loading: true,
+            errorMsg: ''
+        }
+    }
 };
 </script>
