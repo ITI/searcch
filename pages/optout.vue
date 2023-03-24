@@ -27,6 +27,10 @@ export default {
             'email': this.$route.query.email,
             'key': this.$route.query.key
         }
+        if (!payload.email || !payload.key) {
+            this.$router.push('/')
+        }
+
         this.loading = true
         await this.$optOutEndpoint.index(payload)
         .then(response => {
