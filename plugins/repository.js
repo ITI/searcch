@@ -128,4 +128,7 @@ export default (ctx, inject) => {
 
   // user request ownership API
   inject('requestOwnershipEndpoint', repositoryWithAxios('/kg' + '/requests/ownership'))
+
+  // user optout API
+  inject('optOutEndpoint', repositoryWithAxios('/kg' + '/optout'))
 }
