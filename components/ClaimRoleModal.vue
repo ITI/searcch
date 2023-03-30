@@ -60,8 +60,31 @@
         >
           {{ isDisabled ? "Ownership Claim Requested" : "Claim Ownership" }}
         </v-btn>
+        <v-btn
+          @click="magicKeyModel = true"
+          aria-label="Enter key to claim ownership"
+          depressed text
+        >
+          Have a magic key?
+        </v-btn>
       </footer>
     </div>
+
+    <v-dialog
+      v-model="magicKeyModel"
+      width="auto"
+    >
+      <v-card>
+        <v-text-field
+          v-model="magicKey"
+          label="Magic Key"
+          placeholder="Please enter the magic key"
+        ></v-text-field>
+        <v-card-actions>
+          <v-btn color="primary" block @click="claimRoleByMagicKey">Claim</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -87,6 +110,20 @@
             this.errorMessage = "Kindly provide a valid justification";
         }
       },
+      async claimRoleByMagicKey() {
+        let key = this.magicKey.trim();
+        if (key.length) {
+          try {
+            await this.$artifactClaimEndpoint.index(this.artifact_group_id, { key })
+            this.close(`Claim request successfully sent`);
+          } catch(ex) {
+            this.close(`An error occured in sending the claim request`)
+          }
+        } else {
+          this.isError = true;
+          this.errorMessage = "Kindly provide a valid magic key";
+        }
+      },
       isJustificationMessageValid() {
         this.justificationMessage = this.justificationMessage.trim();
         return this.justificationMessage!="";
@@ -94,7 +131,9 @@
     },
     data() {
         return {
-            isError: false
+          isError: false,
+          magicKeyModel: false,
+          magicKey: "",
         }
     }
   };

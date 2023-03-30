@@ -81,13 +81,13 @@
 
         <transition name="modal-fade">
           <ClaimRoleModal
-          v-show="isModalVisible"
-          @close="closeModal"
-          v-bind:justificationMessage="justificationMessage"
-          v-bind:isDisabled="isModalDisabled"
-          v-bind:artifact_group_id="record.artifact.artifact_group_id"
-          v-bind:email="user.email">
-        </ClaimRoleModal>
+            v-show="isModalVisible"
+            @close="closeModal"
+            v-bind:justificationMessage="justificationMessage"
+            v-bind:isDisabled="isModalDisabled"
+            v-bind:artifact_group_id="record.artifact.artifact_group_id"
+            v-bind:email="user.email">
+          </ClaimRoleModal>
         </transition>
 
         <transition name="info-message-fade">
