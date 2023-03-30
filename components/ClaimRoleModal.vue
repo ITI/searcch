@@ -7,9 +7,8 @@
 
       <header class="modal-header"
         id="modalTitle">
-
         <slot name="header">
-            <div id="heading">
+            <div class="heading">
                 Claim Ownership
             </div>
         </slot>
@@ -43,7 +42,7 @@
         </slot>
        </section>
 
-      <footer class="modal-footer-claimrole">
+      <footer class="modal-footer">
         <div class="footer-text">
            {{ isDisabled ? "Email sent to " : "An email will be sent to " }} SEARCCH admins for approval
            <div class="error-msg" v-if="isError">
@@ -72,17 +71,37 @@
 
     <v-dialog
       v-model="magicKeyModel"
-      width="auto"
+      width="500px"
     >
-      <v-card>
-        <v-text-field
-          v-model="magicKey"
-          label="Magic Key"
-          placeholder="Please enter the magic key"
-        ></v-text-field>
-        <v-card-actions>
-          <v-btn color="primary" block @click="claimRoleByMagicKey">Claim</v-btn>
-        </v-card-actions>
+      <v-card tile>
+        <header class="modal-header">
+          <div class="heading">
+            Please enter magic key
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            @click="magicKeyModel = false"
+            aria-label="Close modal">
+            &times;
+          </button>
+        </header>
+        <section class="modal-body">
+          <v-text-field
+            v-model="magicKey"
+            outlined
+            label="Magic Key"
+          ></v-text-field>
+        </section>
+        <footer class="modal-footer">
+          <div class="footer-text">
+            <div class="error-msg" v-if="magicKeyIsError">
+              <img src="/images/information-outline.svg"/>
+              <span>{{ magicKeyErrorMessage }}</span>
+            </div>
+          </div>
+          <v-btn tile color="primary" block @click="claimRoleByMagicKey">Claim</v-btn>
+        </footer>
       </v-card>
     </v-dialog>
   </div>
@@ -120,8 +139,8 @@
             this.close(`An error occured in sending the claim request`)
           }
         } else {
-          this.isError = true;
-          this.errorMessage = "Kindly provide a valid magic key";
+          this.magicKeyIsError = true;
+          this.magicKeyErrorMessage = "Kindly provide a valid magic key";
         }
       },
       isJustificationMessageValid() {
@@ -132,8 +151,11 @@
     data() {
         return {
           isError: false,
+          magicKeyIsError: false,
+          errorMessage: "",
           magicKeyModel: false,
           magicKey: "",
+          magicKeyErrorMessage: "",
         }
     }
   };
@@ -162,7 +184,7 @@
     width: 500px;
   }
 
-  .modal-header, .modal-footer-claimrole {
+  .modal-header, .modal-footer {
     display: flex;
   }
 
@@ -174,18 +196,18 @@
     align-items: center;
   }
 
-  .modal-header #heading {
+  .modal-header .heading {
     margin-left: 15px;
   }
 
-  .modal-footer-claimrole {
+  .modal-footer {
     padding: 15px;
     border-top: 1px solid #eeeeee;
     flex-direction: column;
     justify-content: flex-end;
   }
 
-  .modal-footer-claimrole .footer-text {
+  .modal-footer .footer-text {
     margin-bottom: 20px;
     font-size: 12px;
     text-align: center;
@@ -216,7 +238,7 @@
     background: transparent;
   }
 
-  .modal-footer-claimrole .claim-btn {
+  .modal-footer .claim-btn {
     color: white;
     border-radius: 2px;
     width: 100%;
