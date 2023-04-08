@@ -65,7 +65,7 @@
                 and must guarantee high quality of service.
                 We show that this layered defense approach provides exceptional protection against all attack types using traces of ten real attacks from a DNS root nameserver.
                 Our automated system can select the best defense within seconds and quickly reduces traffic to the server within a manageable range, while keeping collateral damage lower than 2%.
-               
+
             </b></p>
             <v-btn
             depressed
@@ -308,11 +308,11 @@
         <v-card-title>
           Enter Affiliation and Designation
         </v-card-title>
-        <v-col cols="12">
+        <v-col cols="12" >
                 <v-text-field
                   label="Position*"
                   required
-                  v-model ="localuser.position"
+                  v-model ="userPosition"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -367,7 +367,7 @@ export default {
         dialog: false,
         localuser:'',
         userAffiliation:[],
-        userPosition:null,
+        userPosition:false,
         model: 0,
         colors: [
           'indigo',
@@ -431,7 +431,9 @@ export default {
       }
       this.localuser = JSON.parse(JSON.stringify(this.person))
       this.userAffiliation = this.organization ? this.organization : []
-      this.localuser.position = this.localuser.position ? this.localuser.position : ''
+
+      this.localuser.position = this.localuser.position ? this.localuser.position : false
+      this.userPosition = this.localuser.position
       console.log(this.localuser)
       //this.userPosition = this.position
     }
@@ -451,6 +453,7 @@ export default {
           }
         })
         this.$store.dispatch('user/fetchUser')
+        this.localuser.position = this.userPosition
       }
       if(this.localuser.position && this.userAffiliation){
         this.dialog=false

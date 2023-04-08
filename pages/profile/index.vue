@@ -397,6 +397,9 @@ export default {
   },
   watch: {
     userAffiliation(newValue, oldValue) {
+      if(! this.$auth.loggedIn){
+        return
+      }
       // delete case
       let diff = oldValue.filter(
         affil => newValue.findIndex(newAffil => newAffil.id == affil.id) == -1
@@ -458,7 +461,7 @@ export default {
             object.splice(index, 1)
           }
         })
-       
+
         this.$store.dispatch('user/fetchUser')
       }
     },
