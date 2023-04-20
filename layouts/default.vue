@@ -18,17 +18,17 @@
           router
           exact
         >
-          <v-list-item-action>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-on="on">{{ item.icon }}</v-icon>
-              </template>
-              <span>{{ item.title }}</span>
-            </v-tooltip>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+          <template v-slot:prepend="{ on, attrs }">
+            <v-list-item-action>
+              <v-tooltip right>
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">{{ item.icon }}</v-icon>
+                </template>
+                <span>{{ item.title }}</span>
+              </v-tooltip>
+            </v-list-item-action>
+          </template>
+          <v-list-item-title v-text="item.title" />
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
@@ -42,17 +42,17 @@
           router
           exact
         >
-          <v-list-item-action>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-on="on">{{ item.icon }}</v-icon>
-              </template>
-              <span>{{ item.title }}</span>
-            </v-tooltip>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+          <template v-slot:prepend="{ on, attrs }">
+            <v-list-item-action>
+              <v-tooltip right>
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">{{ item.icon }}</v-icon>
+                </template>
+                <span>{{ item.title }}</span>
+              </v-tooltip>
+            </v-list-item-action>
+          </template>
+          <v-list-item-title v-text="item.title" />
         </v-list-item>
       </v-list>
       <v-divider v-if="adminItems.length"></v-divider>
@@ -66,53 +66,53 @@
           router
           exact
         >
-          <v-list-item-action>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-on="on">{{ item.icon }}</v-icon>
-              </template>
-              <span>{{ item.title }}</span>
-            </v-tooltip>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+          <template v-slot:prepend="{ on, attrs }">
+            <v-list-item-action>
+              <v-tooltip right>
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">{{ item.icon }}</v-icon>
+                </template>
+                <span>{{ item.title }}</span>
+              </v-tooltip>
+            </v-list-item-action>
+          </template>
+          <v-list-item-title v-text="item.title" />
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+      <v-btn icon @click.stop="() => {miniVariant = !miniVariant}">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <!-- For some reasons v-app-bar-title will crash, use bare text instead -->
+      {{ title }}
       <v-spacer />
-      <span v-if="$auth.loggedIn" class="mr-2" v-text="$auth.user.name"></span>
-      <v-btn
+      <span v-if="$auth.loggedIn" class="mr-2">{{ $auth.user.name }}</span>
+      <!-- <v-btn
         v-if="$auth.loggedIn && this.user_can_admin && !this.user_is_admin"
         icon
-        @click="setAdmin(true)"
+        @click="() => setAdmin(true)"
       >
         <v-icon style="color: green">mdi-alpha-a-circle</v-icon>
       </v-btn>
       <v-btn
         v-else-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
         icon
-        @click="setAdmin(false)"
+        @click="() => setAdmin(false)"
       >
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
-      </v-btn>
-      <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
+      </v-btn> -->
+      <v-btn v-if="$auth.loggedIn" class="primary" @click="() => logout()"
         >Logout&nbsp;<v-icon small>mdi-logout</v-icon></v-btn
       >
       <v-menu v-else
         open-on-click
         bottom
       >
-        <template v-slot:activator="{ on, attrs }">
+        <template v-slot:activator="{ props }">
           <v-btn
             class="primary"
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props"
           >
             Login&nbsp;<v-icon small>mdi-login</v-icon>
           </v-btn>
@@ -120,17 +120,17 @@
 
         <v-list>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="gitHubLogin()">
+            <v-btn class="primary" nuxt @click="() => gitHubLogin()">
               GitHub&nbsp;<v-icon small>mdi-github</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="googleLogin()">
+            <v-btn class="primary" nuxt @click="() => googleLogin()">
               Google&nbsp;<v-icon small>mdi-google</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="cilogonLogin()">
+            <v-btn class="primary" nuxt @click="() => cilogonLogin()">
               CILogon&nbsp;<v-icon small>mdi-login</v-icon>
             </v-btn>
           </v-list-item>
@@ -139,7 +139,7 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <nuxt />
+        <slot />
       </v-container>
     </v-main>
     <v-footer app>
@@ -162,26 +162,31 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '../stores/user'
 
-export default {
+export default defineComponent({
   data() {
     return {
       clipped: true,
       drawer: true,
       miniVariant: false,
       right: true,
-      title: 'SEARCCH Hub'
+      title: 'SEARCCH Hub',
     }
   },
-  mounted() {
+  async mounted() {
     this.miniVariant = window.innerWidth < 992;
+
+    // if (this.$auth.loggedIn) {
+    //   this.$loginEndpoint
+    // }
   },
   computed: {
-    ...mapState({
-      userid: state => state.user.userid,
-      user_is_admin: state => state.user.user_is_admin,
-      user_can_admin: state => state.user.user_can_admin
+    ...mapState(userStore, {
+      userid: state => state.userid,
+      user_is_admin: state => state.user_is_admin,
+      user_can_admin: state => state.user_can_admin
     }),
     items() {
       let items = [
@@ -285,8 +290,8 @@ export default {
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
         console.log('Logging out')
-        this.$store.commit('user/LOGOUT')
-        this.$store.commit('system/LOGOUT')
+        this.$userStore.logout()
+        this.$systemStore.logout()
         this.$auth.logout()
       }
     },
@@ -295,12 +300,12 @@ export default {
       await this.$loginEndpoint
         .put({ is_admin: mode })
         .then(response => {
-          this.$store.commit('user/SET_USER_IS_ADMIN', mode)
+          this.$userStore.user_is_admin = mode
           if (!mode) {
-            this.$store.commit('user/ADMIN_OFF')
-            this.$store.commit('system/ADMIN_OFF')
+            this.$userStore.adminOff()
+            this.$systemStore.adminOff()
             if (this.$route.name.startsWith('admin')) {
-              this.$router.push('/')
+              navigateTo('/')
             }
           }
         })
@@ -309,7 +314,7 @@ export default {
         })
     }
   }
-}
+});
 </script>
 
 <style>

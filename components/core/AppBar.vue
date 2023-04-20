@@ -31,7 +31,7 @@
           </v-icon>
         </v-btn>
 
-        <v-menu bottom left offset-y transition="slide-y-transition">
+        <v-menu bottom left transition="slide-y-transition" offset="end">
           <template v-slot:activator="{ attrs, on }">
             <v-btn
               class="toolbar-items"
@@ -76,9 +76,8 @@
 
 <script>
 // Utilities
-import { mapMutations } from 'vuex'
 
-export default {
+export default defineComponent({
   data: () => ({
     notifications: [
       'Mike, John responded to your email',
@@ -103,9 +102,8 @@ export default {
     window.removeEventListener('resize', this.onResponsiveInverted)
   },
   methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     onClick() {
-      this.setDrawer(!this.$store.state.app.drawer)
+      this.$appStore.drawer = !this.$appStore.drawer
     },
     onResponsiveInverted() {
       if (window.innerWidth < 991) {
@@ -115,7 +113,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style>

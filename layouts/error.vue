@@ -23,7 +23,9 @@
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   layout: 'empty',
   props: {
     error: {
@@ -32,7 +34,7 @@ export default {
     }
   },
   components: {
-    PrettyPrint: () => import('@/components/pretty-print'),
+    PrettyPrint: defineAsyncComponent(() => import('@/components/pretty-print')),
   },
   computed: {
     isNotFound() {
@@ -47,7 +49,7 @@ export default {
       if (this.error.statusCode >= 500) {
         window.history.go(0);
       } else {
-        this.$router.push('/');
+        navigateTo('/');
       }
     }
   },
@@ -58,7 +60,7 @@ export default {
       this.error.response.data.message.includes('session token')
     ) {
       console.log('session token')
-      this.$store.commit('user/LOGOUT')
+      this.$userStore.logout()
       this.$auth.logout()
 
       // auto log them back in
@@ -67,7 +69,7 @@ export default {
       this.$auth.loginWith(strategy)
     }
   }
-}
+});
 </script>
 
 <style scoped>

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   props: {
     supTitle: {
       type: String,
@@ -48,7 +48,7 @@ export default {
     return {
     }
   }
-}
+});
 </script>
 
 <style>

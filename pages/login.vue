@@ -29,7 +29,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   data() {
     return {
       login: {
@@ -62,5 +62,5 @@ export default {
       let response = await this.$auth.loginWith('cilogon')
     }
   }
-}
+});
 </script>

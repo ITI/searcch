@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-layout column justify-left align-top>
+  <v-container>
+    <v-row justify="left" align="top">
       <v-row align="center">
         <v-col cols="1">
           <h3>Filters:</h3>
@@ -32,7 +32,7 @@
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
-    </v-layout>
+    </v-row>
     <v-card>
       <v-card-title>
         Users
@@ -108,13 +108,15 @@
         </template>
       </v-data-table>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { systemStore } from '~/stores/system'
 
-export default {
+export default defineComponent({
   data() {
     return {
       loadingMessage: 'Loading users...',
@@ -139,7 +141,7 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
+    this.$userStore.fetchUser()
     this.loadingMessage = 'Loading users...'
     this.updateUsers()
     this.timeoutID = setTimeout(() => {
@@ -147,14 +149,8 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user_is_admin: state => state.user.user_is_admin,
-      items: state => state.system.users.users,
-      page: state => state.system.users.page,
-      pages: state => state.system.users.pages,
-      total: state => state.system.users.total,
-      user_id: state => state.user.userid
-    })
+    ...mapState(userStore, ['user_is_admin', 'user_id']),
+    ...mapState(systemStore, ['users', 'page', 'pages', 'total']),
   },
   methods: {
     updateUsers() {
@@ -169,7 +165,7 @@ export default {
         }
         if (this.can_admin) payload['can_admin'] = 1
         if (this.owner_filter) payload['owner'] = this.owner_filter
-        this.$store.dispatch('system/fetchUsers', payload)
+        this.$systemStore.fetchUsers(payload)
       }
       clearTimeout(this.timeoutID)
     },
@@ -184,7 +180,7 @@ export default {
         user_id: this.user_details.id,
         idx: this.user_details.index  // use this index to update the user list
       }
-      await this.$store.dispatch('system/modifyAdminPrivilege', data);
+      await this.$systemStore.modifyAdminPrivilege(data);
       this.modifyPrivilegeDialog(false);
     }
   },
@@ -209,5 +205,5 @@ export default {
     clearTimeout(this.timeoutID)
     next()
   }
-}
+});
 </script>

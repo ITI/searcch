@@ -30,30 +30,28 @@
             <v-list-item-title>{{ relation.relation | titlecase }}</v-list-item-title>
           </v-col>
           <v-col cols="12" md="10" class="pt-0">
-            <v-list-item-content>
-              <v-list-item-title>
-                <v-btn v-if="edit" class="mb-1" fab x-small text
-                  @click="deleteRelationship(relation)">
-                  <v-icon small>mdi-close</v-icon>
-                </v-btn>
-                <span v-if="relation.related_artifact_group.publication !== null">
-                  {{ relation.related_artifact_group.publication.artifact.title }}
-                </span>
-                <span v-else class="red--text text--lighten-1">
-                  [Related artifact not yet published -- no title available!]
-                </span>
-                <v-btn class="mb-1" fab x-small text
-                  :href="getSearcchLinkForArtifact(relation)">
-                  <v-icon small>mdi-open-in-new</v-icon>
-                </v-btn>
-              </v-list-item-title>
-              <p
-                v-if="relation.related_artifact_group.publication !== null"
-                class="text-caption"
-              >
-                {{ relation.related_artifact_group.publication.artifact.description }}
-              </p>
-            </v-list-item-content>
+            <v-list-item-title>
+              <v-btn v-if="edit" class="mb-1" fab x-small text
+                @click="deleteRelationship(relation)">
+                <v-icon small>mdi-close</v-icon>
+              </v-btn>
+              <span v-if="relation.related_artifact_group.publication !== null">
+                {{ relation.related_artifact_group.publication.artifact.title }}
+              </span>
+              <span v-else class="red--text text--lighten-1">
+                [Related artifact not yet published -- no title available!]
+              </span>
+              <v-btn class="mb-1" fab x-small text
+                :href="getSearcchLinkForArtifact(relation)">
+                <v-icon small>mdi-open-in-new</v-icon>
+              </v-btn>
+            </v-list-item-title>
+            <p
+              v-if="relation.related_artifact_group.publication !== null"
+              class="text-caption"
+            >
+              {{ relation.related_artifact_group.publication.artifact.description }}
+            </p>
           </v-col>
         </v-row>
       </v-list-item>
@@ -62,12 +60,13 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { reverseRelation } from '@/helpers'
 
-export default {
+export default defineComponent({
   components: {
-    SingleComment: () => import('@/components/SingleComment'),
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    SingleComment: defineAsyncComponent(() => import('@/components/SingleComment')),
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   props: {
     artifact_group: {
@@ -125,5 +124,5 @@ export default {
       let response = await this.$relationshipEndpoint.delete(id)
     }
   }
-}
+});
 </script>

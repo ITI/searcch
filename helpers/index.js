@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 
 export const artifactIcon = type => {
   switch (type) {
@@ -128,4 +128,4 @@ export const zipArray = (tag, input) => {
   return array
 }
 
-export const EventBus = new Vue()
+export const EventBus = createApp()

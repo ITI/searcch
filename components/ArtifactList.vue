@@ -16,10 +16,11 @@
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   components: {
-    ArtifactShort: () => import('@/components/ArtifactShort'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    ArtifactShort: defineAsyncComponent(() => import('@/components/ArtifactShort')),
   },
   props: {
     artifacts: {
@@ -34,5 +35,5 @@ export default {
   data() {
     return {}
   }
-}
+});
 </script>

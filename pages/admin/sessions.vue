@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-layout column justify-left align-top>
+  <v-container>
+    <v-row justify="left" align="top">
       <v-row align="center">
         <v-col cols="1">
           <h3>Filters:</h3>
@@ -46,7 +46,7 @@
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
-    </v-layout>
+    </v-row>
     <v-card>
       <v-card-title>
         Login Sessions
@@ -135,13 +135,15 @@
         </template>
       </v-data-table>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { systemStore } from '~/stores/system'
 
-export default {
+export default defineComponent({
   data() {
     return {
       loadingMessage: 'Loading imports...',
@@ -171,7 +173,7 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
+    this.$userStore.fetchUser()
     this.loadingMessage = 'Loading sessions...'
     this.updateSessions()
     this.timeoutID = setTimeout(() => {
@@ -179,13 +181,8 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user_is_admin: state => state.user.user_is_admin,
-      sessions: state => state.system.sessions.sessions,
-      page: state => state.system.sessions.page,
-      pages: state => state.system.sessions.pages,
-      total: state => state.system.sessions.total
-    })
+    ...mapState(systemStore, ['sessions', 'page', 'pages', 'total']),
+    ...mapState(userStore, ['user_is_admin'])
   },
   methods: {
     updateSessions() {
@@ -201,7 +198,7 @@ export default {
         if (this.is_admin) payload['is_admin'] = 1
         if (this.can_admin) payload['can_admin'] = 1
         if (this.owner_filter) payload['owner'] = this.owner_filter
-        this.$store.dispatch('system/fetchSessions', payload)
+        this.$systemStore.fetchSessions(payload)
       }
       clearTimeout(this.timeoutID)
     },
@@ -272,5 +269,5 @@ export default {
     clearTimeout(this.timeoutID)
     next()
   }
-}
+});
 </script>

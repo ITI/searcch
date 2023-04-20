@@ -74,14 +74,19 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import clip from 'text-clipper'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
+import { systemStore } from '~/stores/system'
+import { appStore } from '~/stores/app'
 import { artifactIcon, artifactColor } from '@/helpers'
 
-export default {
+export default defineComponent({
   components: {
-    SingleComment: () => import('@/components/SingleComment'),
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    SingleComment: defineAsyncComponent(() => import('@/components/SingleComment')),
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   props: {
     artifact: {
@@ -109,10 +114,8 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      userid: state => state.user.userid,
-      favorites: state => state.artifacts.favoritesIDs
-    }),
+    ...mapState(userStore, ['userid']),
+    ...mapState(artifactsStore, ['favorites']),
     sanitizedDescription: function() {
       let description = ''
       description = this.artifact.artifact.description
@@ -129,22 +132,16 @@ export default {
       },
       set(value) {
         if (value)
-          this.$store.commit(
-            'artifacts/ADD_FAVORITE',
-            this.artifact.artifact.artifact_group_id
-          )
+          this.$artifactsStore.addFavorite(this.artifact.artifact.artifact_group_id)
         else
-          this.$store.commit(
-            'artifacts/REMOVE_FAVORITE',
-            this.artifact.artifact.artifact_group_id
-          )
+          this.$artifactsStore.removeFavorite(this.artifact.artifact.artifact_group_id)
       }
     },
     commentsReordered() {
       let first = []
       let rest = []
       for (let comment of this.comments) {
-        if (comment.review.reviewer.id === this.userid) first.push(comment)
+        if (comment.review.reviewer.id === this.$artifactsStore.userid) first.push(comment)
         else rest.push(comment)
       }
       return first.concat(rest)
@@ -153,7 +150,7 @@ export default {
   methods: {
     async favoriteThis() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
@@ -172,5 +169,5 @@ export default {
       return artifactIcon(type)
     }
   }
-}
+});
 </script>

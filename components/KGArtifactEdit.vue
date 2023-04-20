@@ -84,13 +84,12 @@
             persistent
             v-model="dialog"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
                 class="success ml-2 mb-2"
                 fab
                 x-small
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
               >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
@@ -122,14 +121,12 @@
                         >
                           <template v-slot:no-data>
                             <v-list-item>
-                              <v-list-item-content>
-                                <v-list-item-title>
-                                  No results matching "<strong>{{
-                                    search
-                                  }}</strong
-                                  >". Press <kbd>enter</kbd> to create a new one
-                                </v-list-item-title>
-                              </v-list-item-content>
+                              <v-list-item-title>
+                                No results matching "<strong>{{
+                                  search
+                                }}</strong
+                                >". Press <kbd>enter</kbd> to create a new one
+                              </v-list-item-title>
                             </v-list-item>
                           </template>
                         </v-combobox>
@@ -156,12 +153,12 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
-                    @click="
+                    @click="() => {
                       meta.creators.push(affiliation)
                       dialog.value = false
                       affiliation = affiliationObject()
                       $refs.dialogform.reset()
-                    "
+                    }"
                     :disabled="!dialogvalid"
                     class="success ml-2 mb-2"
                     text
@@ -170,11 +167,11 @@
                   <v-btn
                     class="error ml-2 mb-2"
                     text
-                    @click="
+                    @click="() => {
                       dialog.value = false
                       affiliation = affiliationObject()
                       $refs.dialogform.reset()
-                    "
+                    }"
                   >
                     Close
                   </v-btn>
@@ -239,7 +236,7 @@
             <a :href="b.badge.url" target="_blank" rel="noopener">
               {{ b.badge.title }}
             </a>
-            <v-icon @click="artifact_local.badges.splice(index, 1)" right
+            <v-icon @click="() => artifact_local.badges.splice(index, 1)" right
               >mdi-close</v-icon
             >
           </span>
@@ -263,24 +260,24 @@
               :rules="[rules.required]"
               return-object
             >
-              <template slot="item" slot-scope="data">
-                <v-list-item-content>
+              <template #item="{ props, item }">
+                <v-list-item v-bind="props">
                   <v-list-item-title
-                    v-text="`${data.item.organization} - ${data.item.title}`"
+                    v-text="`${item.raw.organization} - ${item.raw.title}`"
                   >
                   </v-list-item-title>
-                </v-list-item-content>
+                </v-list-item>
               </template>
-              <template slot="selection" slot-scope="data">
-                {{ data.item.organization }} - {{ data.item.title }}
+              <template #selection="{ item }">
+                {{ item.raw.organization }} - {{ item.raw.title }}
               </template>
             </v-select>
-            <v-icon @click="meta.badges.splice(index, 1)" right
+            <v-icon @click="() => meta.badges.splice(index, 1)" right
               >mdi-close</v-icon
             >
           </v-chip>
           <v-btn
-            @click="meta.badges.push('')"
+            @click="() => meta.badges.push('')"
             class="success ml-2 mb-2"
             fab
             x-small
@@ -338,18 +335,16 @@
             return-object
           >
             <template slot="item" slot-scope="data">
-              <v-list-item-content>
-                <v-list-item-title
-                  v-text="`${data.item.short_name} (${data.item.long_name})`"
-                >
-                </v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title
+                v-text="`${data.item.short_name} (${data.item.long_name})`"
+              >
+              </v-list-item-title>
             </template>
             <template slot="selection" slot-scope="data">
               {{ data.item.short_name }} ({{ data.item.long_name }})
             </template>
           </v-autocomplete>
-          <v-icon @click="artifact_local.license = null" right>mdi-close</v-icon>
+          <v-icon @click="() => artifact_local.license = null" right>mdi-close</v-icon>
         </v-chip>
         <v-divider class="mx-4"></v-divider>
 
@@ -386,7 +381,7 @@
                 {{ fm.size ? convertSize(fm.size) : 'unknown' }})
               </v-list-item>
             </v-list-group>
-            <v-icon @click="artifact_local.files.splice(index, 1)" right
+            <v-icon @click="() => artifact_local.files.splice(index, 1)" right
               >mdi-close</v-icon
             >
           </v-list-item>
@@ -405,13 +400,13 @@
                 v-model="f.url"
                 prepend-icon="mdi-file"
                 append-outer-icon="mdi-close"
-                @click:append-outer="meta.files.splice(index, 1)"
+                @click:append-outer="() => meta.files.splice(index, 1)"
                 :rules="[rules.required, rules.url]"
                 required
               ></v-textarea>
             </v-card-text>
             <v-btn
-              @click="meta.files.push({ url: '', filetype: 'unknown' })"
+              @click="() => meta.files.push({ url: '', filetype: 'unknown' })"
               class="success ml-2 mb-2"
               fab
               x-small
@@ -449,10 +444,9 @@
             v-model="publish_dialog"
             width="500"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
                 color="primary"
                 :disabled="!valid || disabled"
               >
@@ -509,7 +503,7 @@
 
     <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
-      <template v-slot:action="{ attrs }">
+      <template v-slot:actions="{ attrs }">
         <v-btn color="error" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
@@ -546,12 +540,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { zipArray, EventBus } from '@/helpers'
+import { userStore } from '~/stores/user'
 
 function affiliationObjectsEqual(o1,o2) {
   //console.log("o1: ",o1)
@@ -588,7 +584,7 @@ function tagObjectsEqual(o1,o2) {
   }
 }
 
-export default {
+export default defineComponent({
   name: 'KGArtifactEdit',
   props: {
     record: {
@@ -601,9 +597,8 @@ export default {
     }
   },
   components: {
-    LazyHydrate: () => import("vue-lazy-hydration"),
-    ArtifactChips: () => import("@/components/ArtifactChips"),
-    ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
+    ArtifactChips: defineAsyncComponent(() => import("@/components/ArtifactChips")),
+    ArtifactCurationList: defineAsyncComponent(() => import("@/components/ArtifactCurationList")),
 },
   data() {
     return {
@@ -705,16 +700,12 @@ export default {
       this.loadingMessage = 'Error loading'
     }, 5000)
     EventBus.$on('close', this.closeHandler)
-    this.$store.dispatch('user/fetchOrgs')
-    this.$store.dispatch('user/fetchBadges')
-    this.$store.dispatch('user/fetchVenues')
+    this.$userStore.fetchOrgs()
+    this.$userStore.fetchBadges()
+    this.$userStore.fetchVenues()
   },
   computed: {
-    ...mapState({
-      orgs: state => state.user.orgs,
-      badges: state => state.user.badges,
-      venues: state => state.user.venues
-    }),
+    ...mapState(userStore, ['orgs', 'badges', 'venues']),
     orgNames: {
       get: function() {
         return this.orgs.map(m => m.name)
@@ -795,12 +786,12 @@ export default {
           publication: { notes: this.publish_notes }
         }
       )
-      this.$store.dispatch('artifacts/fetchArtifact', {
+      this.$artifactsStore.fetchArtifact( {
         artifact_group_id: this.artifact_local.artifact_group_id,
         id: this.artifact_local.id
       })
 
-      this.$router.push(`/artifact/${this.artifact_local.artifact_group_id}`)
+      navigateTo(`/artifact/${this.artifact_local.artifact_group_id}`)
     },
     async save() {
       if (!this.valid) return
@@ -917,7 +908,7 @@ export default {
 
       if (this.create) {
         this.create = false
-        this.$router.push(`/artifact/${this.artifact_local.artifact_group_id}/${this.artifact_local.id}?edit=true`)
+        navigateTo(`/artifact/${this.artifact_local.artifact_group_id}/${this.artifact_local.id}?edit=true`)
       } else {
       }
     },
@@ -934,7 +925,7 @@ export default {
             JSON.parse(this.replay_results[i].curation.opdata)
       }
       this.replay_results_dialog = true
-      this.$store.dispatch('artifacts/fetchArtifact', {
+      this.$artifactsStore.fetchArtifact( {
         artifact_group_id: this.artifact_local.artifact_group_id,
         id: this.artifact_local.id
       })
@@ -1027,5 +1018,5 @@ export default {
       return true
     }
   }
-}
+});
 </script>

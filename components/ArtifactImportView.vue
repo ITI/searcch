@@ -177,8 +177,9 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     artifact: {
       type: Object,
@@ -186,7 +187,7 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   data() {
     return {}
@@ -252,10 +253,10 @@ export default {
       this.updateImports()
     },
     updateImports() {
-      this.$store.dispatch('artifacts/fetchImports', {})
+      this.$artifactsStore.fetchImports()
     }
   }
-}
+});
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-layout column justify-left align-top>
+  <v-container>
+    <v-row justify="left" align="top">
       <v-row align="center">
         <v-col cols="1">
           <h3>Filters:</h3>
@@ -46,7 +46,7 @@
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
-    </v-layout>
+    </v-row>
     <v-card>
       <v-card-title>
         Artifact Imports
@@ -110,13 +110,15 @@
         </template>
       </v-data-table>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { systemStore } from '~/stores/system'
 
-export default {
+export default defineComponent({
   data() {
     return {
       loadingMessage: 'Loading imports...',
@@ -158,7 +160,7 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
+    this.$userStore.fetchUser()
     this.loadingMessage = 'Loading imports...'
     this.updateImports()
     this.timeoutID = setTimeout(() => {
@@ -166,13 +168,14 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user_is_admin: state => state.user.user_is_admin,
-      items: state => state.system.artifact_imports.artifact_imports,
-      page: state => state.system.artifact_imports.page,
-      pages: state => state.system.artifact_imports.pages,
-      total: state => state.system.artifact_imports.total
-    })
+    ...mapState(systemStore, {
+      items: state => state.artifact_imports.artifact_imports,
+      page: state => state.artifact_imports.page,
+      pages: state => state.artifact_imports.pages,
+      total: state => state.artifact_imports.total
+    }),
+    ...mapState(userStore, ['user_is_admin']),
+
   },
   methods: {
     ellipsize(s, l) {
@@ -192,7 +195,7 @@ export default {
         if (this.status_select) payload['status'] = this.status_select
         if (this.archived) payload['archived'] = 1
         if (this.owner_filter) payload['owner'] = this.owner_filter
-        this.$store.dispatch('system/fetchArtifactImports', payload)
+        this.$systemStore.fetchArtifactImports(payload)
       }
       clearTimeout(this.timeoutID)
     },
@@ -243,5 +246,5 @@ export default {
     clearTimeout(this.timeoutID)
     next()
   }
-}
+});
 </script>

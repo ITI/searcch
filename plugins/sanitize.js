@@ -1,5 +1,5 @@
-import Vue from 'vue'
-
 import VueSanitize from 'vue-sanitize'
 
-Vue.use(VueSanitize)
+export default defineNuxtPlugin((nuxtApp) => {
+    nuxtApp.vueApp.use(VueSanitize.default)
+})

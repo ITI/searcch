@@ -10,10 +10,10 @@
       :color="iconColor(type, item)"
       v-bind:close="edit ? !display : undefined"
       :close-icon="edit ? 'mdi-close' : undefined"
-      @click:close="
+      @click:close="() => {
         if (type === 'relation') deleteRelationship(item.id)
         field.splice(index, 1)
-      "
+      }"
       :to="whereTo(item)"
       v-bind:small="small"
     >
@@ -77,7 +77,7 @@
 <script>
 import { artifactIcon, artifactColor, venueIcon, reverseRelation } from '@/helpers'
 
-export default {
+export default defineComponent({
   components: {},
   props: {
     field: {
@@ -185,5 +185,5 @@ export default {
       let response = await this.$relationshipEndpoint.delete(id)
     }
   }
-}
+});
 </script>

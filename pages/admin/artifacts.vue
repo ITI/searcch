@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-layout column justify-left align-top>
+  <v-container>
+    <v-row justify="left" align="top">
       <v-row align="center">
         <v-btn icon @click="updateArtifacts()">
           <v-icon>mdi-refresh</v-icon>
@@ -53,7 +53,7 @@
         </v-col>
       </v-row>
       <v-divider></v-divider><br />
-    </v-layout>
+    </v-row>
     <v-card>
       <v-data-table
         :headers="headers"
@@ -189,15 +189,18 @@
         </template>
       </v-data-table>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { systemStore } from '~/stores/system'
 
-export default {
+export default defineComponent({
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   data() {
     return {
@@ -259,7 +262,7 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
+    this.$userStore.fetchUser()
     this.loadingMessage = 'Loading artifacts...'
     this.updateArtifacts()
     this.timeoutID = setTimeout(() => {
@@ -267,13 +270,8 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user_is_admin: state => state.user.user_is_admin,
-      artifacts: state => state.system.artifacts.artifacts,
-      page: state => state.system.artifacts.page,
-      pages: state => state.system.artifacts.pages,
-      total: state => state.system.artifacts.total
-    })
+    ...mapState(systemStore, ['artifacts', 'page', 'pages', 'total']),
+    ...mapState(userStore, ['user_is_admin'])
   },
   methods: {
     ellipsize(s, l) {
@@ -299,7 +297,7 @@ export default {
         if (this.allversions) payload['allversions'] = 1
         if (this.owner_filter) payload['owner'] = this.owner_filter
         if (this.artifact_group_id) payload['artifact_group_id'] = this.artifact_group_id
-        this.$store.dispatch('system/fetchArtifacts', payload)
+        this.$systemStore.fetchArtifacts(payload)
       }
       clearTimeout(this.timeoutID)
     },
@@ -355,5 +353,5 @@ export default {
     clearTimeout(this.timeoutID)
     next()
   }
-}
+});
 </script>

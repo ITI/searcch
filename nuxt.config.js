@@ -1,8 +1,11 @@
-export default {
+export default defineNuxtConfig({
+  dir: {
+    public: 'static',
+  },
   /*
    ** Headers of the page
    */
-  head: {
+  meta: {
     titleTemplate: '%s - SEARCCH Hub ',
     title: process.env.npm_package_name || '',
     meta: [
@@ -46,7 +49,6 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-  serverMiddleware: ['~/servermiddleware/seo.js'],
   /*
    ** Customize the progress-bar color
    */
@@ -54,31 +56,10 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/assets/main.css'],
-  /*
-   ** Plugins to load before mounting the App
-   */
-  plugins: [
-    '~/plugins/filters',
-    '~/plugins/vue2-filters',
-    '~/plugins/repository',
-    '~/plugins/base',
-    '~/plugins/chartist',
-    '~/plugins/components',
-    '~/plugins/sanitize',
-    '~/plugins/moment',
-  ],
-  /*
-   ** Nuxt.js dev-modules
-   */
-  buildModules: [
-    '@nuxtjs/vuetify',
-    [
-      '@nuxtjs/google-analytics',
-      {
-        id: 'UA-165120903-1'
-      }
-    ]
+  css: [
+    '~/assets/main.css',
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css'
   ],
   /* uncomment this only for development testing
   googleAnalytics: {
@@ -93,56 +74,63 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/auth-next',
-    '~modules/auth-cilogon',
-    '~modules/auth-googlecustom',
-    '@nuxtjs/proxy',
-    '@nuxtjs/markdownit',
-    [
-      '@dansmaculotte/nuxt-security',
-      {
-        /* module options */
-        dev: true,
-        hsts: {
-          maxAge: 15552000,
-          includeSubDomains: true,
-          preload: true
-        },
-        csp: {
-          directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: [
-              "'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com"
-            ],
-            objectSrc: ["'self'"],
-            styleSrc: [
-              "'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net"
-            ],
-            fontSrc: [
-              "'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"
-            ],
-            connectSrc: [
-              "'self' https://api.github.com https://cilogon.org https://www.gravatar.com"
-            ],
-            // asterisk here due to badge images
-            imgSrc: [
-              "'self' https://avatars.githubusercontent.com https://*.gravatar.com *"
-            ]
-          },
-          reportOnly: false
-        },
-        referrer: 'same-origin',
+    // '@nuxtjs/axios',
+    'nuxt-lazy-hydrate',
+    '@sidebase/nuxt-auth',
+    '@pinia/nuxt',
+    'nuxt-proxy',
+    // '@nuxtjs/markdownit',
+    // '@nuxtjs/vuetify',
+    // [
+    //   '@nuxtjs/google-analytics',
+    //   {
+    //     id: 'UA-165120903-1'
+    //   }
+    // ],
+    // [
+    //   '@dansmaculotte/nuxt-security',
+    //   {
+    //     /* module options */
+    //     dev: true,
+    //     hsts: {
+    //       maxAge: 15552000,
+    //       includeSubDomains: true,
+    //       preload: true
+    //     },
+    //     csp: {
+    //       directives: {
+    //         defaultSrc: ["'self'"],
+    //         scriptSrc: [
+    //           "'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com"
+    //         ],
+    //         objectSrc: ["'self'"],
+    //         styleSrc: [
+    //           "'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net"
+    //         ],
+    //         fontSrc: [
+    //           "'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"
+    //         ],
+    //         connectSrc: [
+    //           "'self' https://api.github.com https://cilogon.org https://www.gravatar.com"
+    //         ],
+    //         // asterisk here due to badge images
+    //         imgSrc: [
+    //           "'self' https://avatars.githubusercontent.com https://*.gravatar.com *"
+    //         ]
+    //       },
+    //       reportOnly: false
+    //     },
+    //     referrer: 'same-origin',
 
-        securityFile: {
-          contacts: ['mailto:security@cyberexperimentation.org'],
-          canonical:
-            'https://hub.cyberexperimentation.org/.well-know/security.txt',
-          preferredLanguages: ['en']
-        },
-        additionalHeaders: true
-      }
-    ]
+    //     securityFile: {
+    //       contacts: ['mailto:security@cyberexperimentation.org'],
+    //       canonical:
+    //         'https://hub.cyberexperimentation.org/.well-know/security.txt',
+    //       preferredLanguages: ['en']
+    //     },
+    //     additionalHeaders: true
+    //   }
+    // ]
   ],
 
   markdownit: {
@@ -153,45 +141,51 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {
-    proxy: true,
-    debug: process.env.AXIOS_DEBUG == 'true'
-  },
+  // axios: {
+  //   proxy: true,
+  //   debug: process.env.AXIOS_DEBUG == 'true'
+  // },
   proxy: {
-    '/kg/': {
-      target: process.env.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : process.env.PRODUCTION == 'true'
-        ? 'https://hub-api.cyberexperimentation.org/v1' // production backend
-        : 'https://hub-dev-api.cyberexperimentation.org/v1', // development backend
-      pathRewrite: { '^/kg/': '/' },
-      headers: {
-        'X-Api-Key':
-          process.env.PRODUCTION == 'true'
-            ? process.env.KG_API_KEY
-            : process.env.KG_DEV_API_KEY
+    options: [
+      {
+        pathFilter: '/kg/',
+        target: process.env.BACKEND_URL
+          ? process.env.BACKEND_URL
+          : process.env.PRODUCTION == 'true'
+          ? 'https://hub-api.cyberexperimentation.org/v1' // production backend
+          : 'https://hub-dev-api.cyberexperimentation.org/v1', // development backend
+        changeOrigin: true,
+        pathRewrite: { '^/kg/': '/' },
+        headers: {
+          'X-Api-Key':
+            process.env.PRODUCTION == 'true'
+              ? process.env.KG_API_KEY
+              : process.env.KG_DEV_API_KEY
+        },
       },
-      changeOrigin: true
-    },
-    '/avatar/': { target: 'https://www.gravatar.com/' }
+      {
+        pathFilter: '/avatar/',
+        target: 'https://www.gravatar.com/',
+      }
+    ]
   },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
    */
-  vuetify: {
-    customVariables: ['~/assets/variables.scss'],
-    theme: {
-      dark: false,
-      themes: {
-        light: {
-          primary: '#00476B',
-          accent: '#6D6E71',
-          secondary: '#395C23'
-        }
-      }
-    }
-  },
+  // vuetify: {
+  //   customVariables: ['~/assets/variables.scss'],
+  //   theme: {
+  //     dark: false,
+  //     themes: {
+  //       light: {
+  //         primary: '#00476B',
+  //         accent: '#6D6E71',
+  //         secondary: '#395C23'
+  //       }
+  //     }
+  //   }
+  // },
   publicRuntimeConfig: {},
   privateRuntimeConfig: {
     gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
@@ -207,39 +201,10 @@ export default {
   build: {
     extractCSS: true,
     extend(config, ctx) {},
-    transpile: [/^vuetify/]
+    transpile: ['vuetify']
   },
   router: {
-    // middleware: 'auth',
     mode: 'history'
-  },
-  auth: {
-    strategies: {
-      local: false,
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        // NB: workaround for v5 defu-based setDefaults that concats array
-        // values *onto* defaults.  Surely this will change eventually; it
-        // is not backwards-compat to v4.9.1 .
-        scope: 'read:user user:email'
-      },
-      googlecustom: {
-        provider: '~modules/auth-googlecustom.js',
-        scheme: 'oauth2',
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        //accessType: 'offline',
-      },
-      cilogon: {
-        provider: '~modules/auth-cilogon.js',
-        scheme: 'oauth2',
-        clientId: process.env.CILOGON_CLIENT_ID,
-        clientSecret: process.env.CILOGON_CLIENT_SECRET
-      }
-    },
-    plugins: ['~/plugins/auth.js', '~/plugins/axios.js'],
-    localStorage: false
   },
   cookie: {
     options: {
@@ -247,4 +212,4 @@ export default {
       sameSite: 'lax'
     }
   }
-}
+})

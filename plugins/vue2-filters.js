@@ -1,4 +1,5 @@
-import Vue from 'vue'
-import Vue2Filters from 'vue2-filters'
+import Vue2Filters from "vue2-filters"
 
-Vue.use(Vue2Filters)
+export default defineNuxtPlugin((nuxtApp) => {
+    nuxtApp.vueApp.use(Vue2Filters.default)
+})

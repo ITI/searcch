@@ -22,9 +22,6 @@
 </template>
 
 <script>
-export default {
-  components: {
-    LazyHydrate: () => import('vue-lazy-hydration'),
-  },
-}
+export default defineComponent({
+});
 </script>

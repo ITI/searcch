@@ -80,11 +80,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
-export default {
+export default defineComponent({
   components: {
-    ArtifactCommentView: () => import('@/components/ArtifactCommentView')
+    ArtifactCommentView: defineAsyncComponent(() => import('@/components/ArtifactCommentView'))
   },
   head() {
     return {
@@ -106,10 +109,10 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      artifact: state => state.artifacts.artifact,
-      comments: state => state.artifacts.artifact.rating_review,
-      userid: state => state.user.userid
+    ...mapState(userStore, ['userid']),
+    ...mapState(artifactsStore, {
+      artifact: 'artifact',
+      comments: state => state.artifact.rating_review,
     }),
     formCheck() {
       if (this.rating == 0 || this.comment === '') {
@@ -127,7 +130,7 @@ export default {
   methods: {
     async onSubmit() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         if (this.rating && this.comment) {
           let rating_payload = {
@@ -146,7 +149,7 @@ export default {
             this.artifact.artifact.artifact_group_id,
             comment_payload
           )
-          this.$store.dispatch('artifacts/fetchArtifact', {
+          this.$artifactsStore.fetchArtifact( {
             artifact_group_id: this.$route.params.id
           })
 
@@ -160,9 +163,9 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('artifacts/fetchArtifact', {
+    this.$artifactsStore.fetchArtifact( {
       artifact_group_id: this.$route.params.id
     })
   }
-}
+});
 </script>

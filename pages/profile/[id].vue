@@ -1,5 +1,5 @@
 <template>
-  <v-layout column justify-left align-top>
+  <v-row justify="left" align="top">
     <v-container fill-height fluid>
       <v-row justify="center">
         <v-col cols="12" md="4" v-if="localuser">
@@ -80,14 +80,12 @@
                     >
                       <template v-slot:no-data>
                         <v-list-item>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              No results matching "<strong>{{
-                                interestSearch
-                              }}</strong
-                              >". Press <kbd>tab</kbd> to create a new one item.
-                            </v-list-item-title>
-                          </v-list-item-content>
+                          <v-list-item-title>
+                            No results matching "<strong>{{
+                              interestSearch
+                            }}</strong
+                            >". Press <kbd>tab</kbd> to create a new one item.
+                          </v-list-item-title>
                         </v-list-item>
                       </template>
                     </v-combobox>
@@ -111,14 +109,12 @@
                     >
                       <template v-slot:no-data>
                         <v-list-item>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              No results matching "<strong>{{
-                                orgSearch
-                              }}</strong
-                              >". Press <kbd>tab</kbd> to create a new one
-                            </v-list-item-title>
-                          </v-list-item-content>
+                          <v-list-item-title>
+                            No results matching "<strong>{{
+                              orgSearch
+                            }}</strong
+                            >". Press <kbd>tab</kbd> to create a new one
+                          </v-list-item-title>
                         </v-list-item>
                       </template>
                     </v-combobox>
@@ -130,18 +126,14 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/affiliation.json'
 
-export default {
-  components: {
-    LazyHydrate: () => import('vue-lazy-hydration')
-  },
+export default defineComponent({
   head() {
     return {
       title: 'SEARCCH User Profile',
@@ -187,7 +179,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({}),
     orgNames: {
       get: function() {
         return this.orgs ? this.orgs.map(m => m.name) : []
@@ -249,5 +240,5 @@ export default {
       return Buffer.from(encodeURI(image.data), 'base64')
     }
   }
-}
+});
 </script>

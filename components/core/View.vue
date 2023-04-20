@@ -2,14 +2,14 @@
   <v-main class="grey lighten-3">
     <div id="core-view">
       <v-fade-transition mode="out-in">
-        <nuxt></nuxt>
+        <slot/>
       </v-fade-transition>
     </div>
   </v-main>
 </template>
 
 <script>
-export default {
+export default defineComponent({
   name: 'CoreView'
-}
+});
 </script>

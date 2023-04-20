@@ -1,28 +1,33 @@
 <template>
-  <span>
-    <v-layout column justify-center align-center>
-      <v-flex xs12 sm8 md6>
+  <v-container>
+    <v-row justify="center" align="center">
+      <v-col sm="12" md="10" lg="6">
         <div class="text-center">
           <logo />
         </div>
-      </v-flex>
-    </v-layout>
-    <v-layout column justify-left align-top>
-      <h1>Favorites</h1>
-      <v-divider></v-divider>
-      <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
-      <span v-if="artifacts.length == 0">No favorites loaded</span>
-    </v-layout>
-  </span>
+      </v-col>
+    </v-row>
+    <v-row justify="center" align="top">
+      <v-col>
+        <h1>Favorites</h1>
+        <v-divider></v-divider>
+        <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
+        <span v-if="artifacts.length == 0">No favorites loaded</span>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
-export default {
+export default defineComponent({
   components: {
-    Logo: () => import('@/components/Logo'),
-    ArtifactList: () => import('@/components/ArtifactList')
+    Logo: defineAsyncComponent(() => import('@/components/Logo')),
+    ArtifactList: defineAsyncComponent(() => import('@/components/ArtifactList'))
   },
   head() {
     return {
@@ -44,13 +49,15 @@ export default {
   },
   async mounted() {
     if (this.userid)
-      this.$store.dispatch('artifacts/fetchFavorites', this.userid)
+      this.$artifactsStore.fetchFavorites(this.userid)
   },
   computed: {
-    ...mapState({
-      artifacts: state => state.artifacts.favorites,
-      userid: state => state.user.userid
+    ...mapState(userStore, {
+      userid: state => state.userid
+    }),
+    ...mapState(artifactsStore, {
+      artifacts: state => state.favorites
     })
   }
-}
+});
 </script>

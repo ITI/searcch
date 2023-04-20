@@ -70,7 +70,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   props: {
     importer: {
       type: Object,
@@ -110,10 +110,10 @@ export default {
       this.updateImporters()
     },
     updateImporters() {
-      this.$store.dispatch('system/fetchImporters')
+      this.$systemStore.fetchImporters()
     }
   }
-}
+});
 </script>
 
 <style scoped>

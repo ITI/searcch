@@ -6,8 +6,8 @@
     <h1>
       Search
       <v-dialog transition="dialog-bottom-transition" max-width="600">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="primary ml-4" fab small v-bind="attrs" v-on="on"
+        <template v-slot:activator="{ props }">
+          <v-btn class="primary ml-4" fab small v-bind="props"
             ><v-icon>mdi-help</v-icon></v-btn
           >
         </template>
@@ -46,10 +46,12 @@
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   components: {
-    Logo: () => import('@/components/Logo'),
-    SearchCard: () => import('@/components/SearchCard')
+    Logo: defineAsyncComponent(() => import('@/components/Logo')),
+    SearchCard: defineAsyncComponent(() => import('@/components/SearchCard'))
   },
   head() {
     return {
@@ -68,5 +70,5 @@ export default {
       dialog: false
     }
   }
-}
+});
 </script>

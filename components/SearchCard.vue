@@ -18,7 +18,7 @@
       </v-text-field>
       <v-expansion-panels v-model="adopen">
         <v-expansion-panel class="rounded-0">
-          <v-expansion-panel-header>
+          <v-expansion-panel-title>
             <template v-slot:default="{ open }">
               <v-row no-gutters>
                 <v-col cols="4">
@@ -33,8 +33,8 @@
                 </v-col>
               </v-row>
             </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
             <v-row align="center">
               <v-col cols="12">
                 <v-text-field
@@ -72,11 +72,9 @@
                           {{ artifactTypeIcon }}
                         </v-icon>
                       </v-list-item-action>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          Select All
-                        </v-list-item-title>
-                      </v-list-item-content>
+                      <v-list-item-title>
+                        Select All
+                      </v-list-item-title>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
                   </template>
@@ -111,11 +109,9 @@
                           {{ badgeIcon }}
                         </v-icon>
                       </v-list-item-action>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          Select All
-                        </v-list-item-title>
-                      </v-list-item-content>
+                      <v-list-item-title>
+                        Select All
+                      </v-list-item-title>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
                   </template>
@@ -153,11 +149,9 @@
                           {{ venueIcon }}
                         </v-icon>
                       </v-list-item-action>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          Select All
-                        </v-list-item-title>
-                      </v-list-item-content>
+                      <v-list-item-title>
+                        Select All
+                      </v-list-item-title>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
                   </template>
@@ -196,7 +190,7 @@
               </v-col>
             </v-row>
             <v-btn @click="onSubmit" class="primary mt-3">Search</v-btn>
-          </v-expansion-panel-content>
+          </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-form>
@@ -231,16 +225,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import goTo from 'vuetify/es5/services/goto'
-import { getCookie } from '~/helpers'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
 const deepClone = (obj) => JSON.parse(JSON.stringify(obj))
 
-export default {
+export default defineComponent({
   components: {
-    Logo: () => import('@/components/Logo'),
-    ArtifactList: () => import('@/components/ArtifactList')
+    Logo: defineAsyncComponent(() => import('@/components/Logo')),
+    ArtifactList: defineAsyncComponent(() => import('@/components/ArtifactList'))
   },
   props: {
     related: {
@@ -293,7 +288,7 @@ export default {
   },
   mounted() {
     if (this.related) {
-      this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
+      this.$artifactsStore.fetchRelatedArtifacts(this.artifact)
     } else if (this.$route.query.keywords) {
       this.search = this.$route.query.keywords
       console.log('keywords: ', this.search)
@@ -319,23 +314,20 @@ export default {
       this.adopen = +(!this.search_advanced_isopen)
       this.sortEnabled = this.advanced.search_criteria !== ''
     }
-    this.$store.dispatch('user/fetchBadges')
-    this.$store.dispatch('user/fetchVenues')
+    this.$userStore.fetchBadges()
+    this.$userStore.fetchVenues()
   },
   computed: {
-    ...mapState({
-      badges: state => state.user.badges,
-      venues: state => state.user.venues,
-      artifacts: state => state.artifacts.artifacts.artifacts,
-      artifact: state => state.artifacts.artifact.artifact,
-      pages: state => state.artifacts.artifacts.pages,
-      total: state => state.artifacts.artifacts.total,
-      search_init: state => state.artifacts.search,
-      search_advanced_init: state => state.artifacts.search_advanced,
-      search_advanced_isopen: state => state.artifacts.search_advanced_isopen,
-      searchLoading: state => state.artifacts.loading,
-      user_is_admin: state => state.user.user_is_admin,
-      user_can_admin: state => state.user.user_can_admin,
+    ...mapState(userStore, ['badges', 'venues', 'user_is_admin', 'user_can_admin']),
+    ...mapState(artifactsStore, {
+      artifacts: state => state.artifacts.artifacts,
+      artifact: state => state.artifact.artifact,
+      pages: state => state.artifacts.pages,
+      total: state => state.artifacts.total,
+      search_init: state => state.search,
+      search_advanced_init: state => state.search_advanced,
+      search_advanced_isopen: state => state.search_advanced_isopen,
+      searchLoading: state => state.loading
     }),
     allArtifacts() {
       return this.advanced.types.length === this.types.length
@@ -380,9 +372,9 @@ export default {
       this.submitted = true
       if (this.searchInterval != null) clearTimeout(this.searchInterval)
       this.searchMessage = 'Searching...'
-      this.$store.commit('artifacts/RESET_ARTIFACTS') // clear artifacts so the Searching... message is shown
+      this.$artifactsStore.resetArtifacts() // clear artifacts so the Searching... message is shown
       if (this.related && this.search.trim() === '') {
-        this.$store.dispatch('artifacts/fetchRelatedArtifacts', this.artifact)
+        this.$artifactsStore.fetchRelatedArtifacts(this.artifact)
       } else {
         let payload = {
           keywords: this.search,
@@ -398,7 +390,7 @@ export default {
         this.advanced.sort_criteria ? (payload['sort'] = this.advanced.sort_criteria): false
         this.advanced.sort_type ? (payload['order'] = this.advanced.sort_type) :false
         this.owner ? (payload['owner'] = this.owner) : false
-        this.$store.dispatch('artifacts/fetchArtifacts', { payload, advanced: this.advanced })
+        this.$artifactsStore.fetchArtifacts({ payload, advanced: this.advanced })
       } 
       this.searchInterval = setTimeout(() => {
         if (!this.searchLoading) {
@@ -438,7 +430,8 @@ export default {
       })
     },
     scrollToTop() {
-      goTo(0)
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     },
     handleScroll() {
       this.showScrollToTop = window.scrollY
@@ -471,7 +464,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

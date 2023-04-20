@@ -14,39 +14,41 @@
         </OwnershipReviewModal>
     </transition>
 
-    <v-layout column justify-left align-top>
-      <v-row align="center">
-        <v-col cols="1">
-          <h3>Filters:</h3>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            v-model="user_filter"
-            hint="Case-insensitive substring of user name or email"
-            label="User"
-            @change="updateClaims()"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            v-model="artifact_filter"
-            hint="Case-insensitive substring of artifact name or id" 
-            label="Artifact"
-            @change="updateClaims()"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2"></v-col>
-        <v-col cols="1">
-          <h3>Refresh:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-btn icon @click="updateClaims()">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-        </v-col>
+    <v-container>
+      <v-row justify="left" align="top">
+        <v-row align="center">
+          <v-col cols="1">
+            <h3>Filters:</h3>
+          </v-col>
+          <v-col cols="2">
+            <v-text-field
+              v-model="user_filter"
+              hint="Case-insensitive substring of user name or email"
+              label="User"
+              @change="updateClaims()"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-text-field
+              v-model="artifact_filter"
+              hint="Case-insensitive substring of artifact name or id" 
+              label="Artifact"
+              @change="updateClaims()"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="2"></v-col>
+          <v-col cols="1">
+            <h3>Refresh:</h3>
+          </v-col>
+          <v-col cols="1">
+            <v-btn icon @click="updateClaims()">
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider><br />
       </v-row>
-      <v-divider></v-divider><br />
-    </v-layout>
+    </v-container>
     <v-card>
       <v-card-title>
         Claims
@@ -89,11 +91,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { systemStore } from '~/stores/system'
 
-export default {
+export default defineComponent({
   components: {
-    OwnershipReviewModal: () => import("@/components/AdminRoleReviewModal.vue")
+    OwnershipReviewModal: defineAsyncComponent(() => import("@/components/AdminRoleReviewModal.vue"))
   },
   data() {
     return {
@@ -126,7 +131,7 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
+    this.$userStore.fetchUser()
     this.loadingMessage = 'Loading claims...'
     this.updateClaims()
     this.timeoutID = setTimeout(() => {
@@ -134,13 +139,8 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user_is_admin: state => state.user.user_is_admin,
-      claims: state => state.system.claims.artifact_owner_requests,
-      page: state => state.system.claims.page,
-      pages: state => state.system.claims.pages,
-      total: state => state.system.claims.total
-    })
+    ...mapState(userStore, ['user_is_admin']),
+    ...mapState(systemStore, ['claims', 'page', 'pages', 'total'])
   },
   methods: {
     updateClaims() {
@@ -155,7 +155,7 @@ export default {
         }
         if (this.user_filter) payload['user'] = this.user_filter
         if (this.artifact_filter) payload['artifact'] = this.artifact_filter
-        this.$store.dispatch('system/fetchClaims', payload)
+        this.$systemStore.fetchClaims(payload)
       }
       clearTimeout(this.timeoutID)
     },
@@ -227,5 +227,5 @@ export default {
     clearTimeout(this.timeoutID)
     next()
   }
-}
+});
 </script>

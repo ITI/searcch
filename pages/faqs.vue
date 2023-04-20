@@ -1,49 +1,52 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <LazyHydrate never>
-        <div>
-          <div class="text-center">
-            <logo />
+  <v-container>
+    <v-row justify="center" align="center">
+      <v-col sm="12" md="10" lg="6">
+        <LazyHydrate never>
+          <div>
+            <div class="text-center">
+              <logo />
+            </div>
+            <v-card>
+              <v-card-title class="primary white--text">
+                <span class="text-h6">Frequently Asked Questions</span>
+              </v-card-title>
+              <v-card-text class="py-0">
+                <v-timeline align-top dense>
+                  <v-timeline-item
+                    v-for="(faq, index) in faqs"
+                    :key="`faq${index}`"
+                    small
+                    fill-dot
+                    icon="mdi-help"
+                  >
+                    <v-card color="primary" dark>
+                      <v-card-title class="text-h6" v-text="faq.q"/>
+                      <br />
+                      <v-card-text class="white text--primary" v-html="faq.a"/>
+                    </v-card>
+                  </v-timeline-item>
+                </v-timeline>
+              </v-card-text>
+            </v-card>
           </div>
-          <v-card>
-            <v-card-title class="primary white--text">
-              <span class="text-h6">Frequently Asked Questions</span>
-            </v-card-title>
-            <v-card-text class="py-0">
-              <v-timeline align-top dense>
-                <v-timeline-item
-                  v-for="(faq, index) in faqs"
-                  :key="`faq${index}`"
-                  small
-                  fill-dot
-                  icon="mdi-help"
-                >
-                  <v-card color="primary" dark>
-                    <v-card-title class="text-h6" v-text="faq.q"/>
-                    <br />
-                    <v-card-text class="white text--primary" v-html="faq.a"/>
-                  </v-card>
-                </v-timeline-item>
-              </v-timeline>
-            </v-card-text>
-          </v-card>
+        </LazyHydrate>
+        <br />
+        <div>
+          <supporters />
         </div>
-      </LazyHydrate>
-      <br />
-      <div>
-        <supporters />
-      </div>
-    </v-flex>
-  </v-layout>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   components: {
-    Logo: () => import('@/components/Logo'),
-    LazyHydrate: () => import('vue-lazy-hydration'),
-    Supporters: () => import('@/components/Supporters')
+    Logo: defineAsyncComponent(() => import('@/components/Logo')),
+    Supporters: defineAsyncComponent(() => import('@/components/Supporters'))
   },
   data() {
     return {
@@ -141,5 +144,5 @@ export default {
     }
   },
   async mounted() {}
-}
+});
 </script>

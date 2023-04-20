@@ -37,13 +37,13 @@
         <v-row justify="center">
           <v-expansion-panels inset multiple focusable v-model="expanded">
             <v-expansion-panel v-for="(comment, i) in comments" :key="i">
-              <v-expansion-panel-header disable-icon-rotate>
+              <v-expansion-panel-title disable-icon-rotate>
                 <template v-slot:actions>
                   <v-icon color="primary">mdi-comment</v-icon>
                 </template>
                 {{ comment.person }} -- {{ comment.title }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
+              </v-expansion-panel-title>
+              <v-expansion-panel-text>
                 <v-rating
                   v-model="comment.rating"
                   color="amber"
@@ -54,7 +54,7 @@
                 ></v-rating>
 
                 {{ comment.content }}
-              </v-expansion-panel-content>
+              </v-expansion-panel-text>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-row>
@@ -135,11 +135,14 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import clip from 'text-clipper'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 import { EventBus } from '@/helpers'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
-export default {
+export default defineComponent({
   props: {
     artifact: {
       type: Object,
@@ -155,7 +158,7 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   data() {
     return {
@@ -178,10 +181,9 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      favorites: state => state.artifacts.favoritesIDs,
-      userid: state => state.user.userid,
-      user_is_admin: state => state.user.user_is_admin
+    ...mapState(userStore, ['userid', 'user_is_admin']),
+    ...mapState(artifactsStore, {
+      favorites: 'favoritesIDs',
     }),
     sanitizedDescription: function() {
       let description = ''
@@ -196,9 +198,9 @@ export default {
         return this.favorites[this.artifact.artifact_group_id] ? true : false
       },
       set(value) {
-        if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.artifact.artifact_group_id)
-        else this.$store.commit('artifacts/REMOVE_FAVORITE', this.artifact.artifact_group_id)
+        value
+        ? this.$artifactsStore.addFavorite(this.artifact.artifact_group_id)
+        : this.$artifactsStore.removeFavorite(this.artifact.artifact_group_id)
       }
     },
     contributionTypeText() {
@@ -226,7 +228,7 @@ export default {
   methods: {
     async favoriteThis() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
@@ -253,7 +255,7 @@ export default {
     },
     addRelated(id, relation) {
       console.log(this.artifact)
-      this.$store.dispatch('artifacts/setRelated', {
+      this.$artifactsStore.setRelated({
         id: id,
         relation: relation
       })
@@ -280,7 +282,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

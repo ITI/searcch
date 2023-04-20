@@ -5,9 +5,11 @@
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   components: {
-    KGArtifactEdit: () => import('@/components/KGArtifactEdit')
+    KGArtifactEdit: defineAsyncComponent(() => import('@/components/KGArtifactEdit'))
   },
   head() {
     return {
@@ -38,5 +40,5 @@ export default {
       }
     }
   }
-}
+});
 </script>

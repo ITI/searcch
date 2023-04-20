@@ -1,16 +1,16 @@
-var qs = require('qs')
+import * as qs from 'qs'
 // Provide nuxt-axios instance to use same configuration across the whole project
 // I've used typical CRUD method names and actions here
-export default $axios => (resource, error) => ({
+export default $fetch => (resource, error) => ({
   index(payload) {
-    return $axios
-      .$get(`${resource}`, {
-        params: payload,
-        paramsSerializer: function(params) {
-          return qs.stringify(params, { arrayFormat: 'repeat' })
-        }
-      })
-      .catch(function(e) {
+    return $fetch(`${resource}`, {
+      params: payload,
+      method: 'GET',
+      paramsSerializer: function (params) {
+        return qs.stringify(params, { arrayFormat: 'repeat' })
+      }
+    })
+      .catch(function (e) {
         if (e.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -36,12 +36,15 @@ export default $axios => (resource, error) => ({
     if (params) {
       rparams = {
         params: params,
-        paramsSerializer: function(params) {
+        paramsSerializer: function (params) {
           return qs.stringify(params, { arrayFormat: 'repeat' })
         }
       }
     }
-    return $axios.$get(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, rparams).catch(function(e) {
+    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+      method: 'GET',
+      ...rparams
+    }).catch(function (e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -62,8 +65,11 @@ export default $axios => (resource, error) => ({
     })
   },
 
-  create(payload) {
-    return $axios.$post(`${resource}`, payload).catch(function(e) {
+  create(data) {
+    return $fetch(`${resource}`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }).catch(function (e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -84,8 +90,11 @@ export default $axios => (resource, error) => ({
     })
   },
 
-  update(id, payload) {
-    return $axios.$put(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, payload).catch(function(e) {
+  update(id, data) {
+    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }).catch(function (e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -105,9 +114,13 @@ export default $axios => (resource, error) => ({
       $nuxt.error(e)
     })
   },
-  put(payload, ...args) {
+
+  put(data, ...args) {
     let complete_path = [resource, ...args].join('/');
-    return $axios.$put(`${complete_path}`, payload).catch(function(e) {
+    return $fetch(`${complete_path}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }).catch(function (e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -128,8 +141,11 @@ export default $axios => (resource, error) => ({
     })
   },
   // FIXME: backend API
-  post(id, payload) {
-    return $axios.$post(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, payload).catch(function(e) {
+  post(id, data) {
+    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }).catch(function (e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -150,7 +166,9 @@ export default $axios => (resource, error) => ({
     })
   },
   delete(id) {
-    return $axios.$delete(`${resource}/${Array.isArray(id) ? id.join('/') : id}`).catch(function(e) {
+    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+      method: 'DELETE',
+    }).catch(function (e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -171,12 +189,12 @@ export default $axios => (resource, error) => ({
     })
   },
   // FIXME: backend API
-  remove(id, payload) {
-    return $axios
-      .$delete(`${resource}/${id}`, {
-        params: payload
-      })
-      .catch(function(e) {
+  remove(id, params) {
+    return $fetch(`${resource}/${id}`, {
+      method: 'DELETE',
+      params
+    })
+      .catch(function (e) {
         if (e.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx

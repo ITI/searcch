@@ -1,18 +1,18 @@
 <template>
-  <span>
-    <v-layout column justify-center align-center>
-      <v-flex xs12 sm8 md6>
+  <v-container>
+    <v-row justify="center" align="center">
+      <v-col sm="12" md="10" lg="6">
         <div class="text-center">
           <logo />
         </div>
-      </v-flex>
-    </v-layout>
-    <v-layout column justify-left align-top>
-      <v-row class="ml-1 mb-2"
-        ><h1>Artifact Import</h1>
+      </v-col>
+    </v-row>
+    <v-row justify="left" align="top">
+      <v-row class="ml-1 mb-2">
+        <h1>Artifact Import</h1>
         <v-dialog transition="dialog-bottom-transition" max-width="600">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="primary ml-4" fab small v-bind="attrs" v-on="on"
+          <template v-slot:activator="{ props }">
+            <v-btn class="primary ml-4" fab small v-bind="props"
               ><v-icon>mdi-help</v-icon></v-btn
             >
           </template>
@@ -98,8 +98,8 @@
               max-width="400px"
               bottom
             >
-              <template v-slot:activator="{ on, attrs }">
-                <span v-on="on" v-bind="attrs">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
                   <v-checkbox
                     class="ma-1 pa-1"
                     label="Import candidates"
@@ -124,8 +124,8 @@
               max-width="400px"
               bottom
             >
-              <template v-slot:activator="{ on, attrs }">
-                <span v-on="on" v-bind="attrs">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
                   <v-checkbox
                     class="ma-1 pa-1"
                     label="Disable Extraction"
@@ -147,8 +147,8 @@
               max-width="400px"
               bottom
             >
-              <template v-slot:activator="{ on, attrs }">
-                <span v-on="on" v-bind="attrs">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
                   <v-checkbox
                     class="ma-1 pa-1"
                     label="Disable Fetch"
@@ -173,8 +173,8 @@
               max-width="400px"
               bottom
             >
-              <template v-slot:activator="{ on, attrs }">
-                <span v-on="on" v-bind="attrs">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
                   <v-checkbox
                     v-if="user_is_admin"
                     class="ma-1 pa-1"
@@ -212,17 +212,20 @@
         circle
       ></v-pagination>
       <div v-else>{{ loadingMessage }}</div>
-    </v-layout>
-  </span>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
-export default {
+export default defineComponent({
   components: {
-    Logo: () => import('@/components/Logo'),
-    ImportList: () => import('@/components/ImportList')
+    Logo: defineAsyncComponent(() => import('@/components/Logo')),
+    ImportList: defineAsyncComponent(() => import('@/components/ImportList'))
   },
   head() {
     return {
@@ -276,11 +279,13 @@ export default {
     )
   },
   computed: {
-    ...mapState({
-      imports: state => state.artifacts.imports.artifact_imports,
-      pages: state => state.artifacts.imports.pages,
-      total: state => state.artifacts.imports.total,
-      user_is_admin: state => state.user.user_is_admin
+    ...mapState(artifactsStore, {
+      imports: state => state.imports.artifact_imports,
+      pages: state => state.imports.pages,
+      total: state => state.imports.total
+    }),
+    ...mapState(userStore, {
+      user_is_admin: state => state.user_is_admin
     })
   },
   methods: {
@@ -311,7 +316,7 @@ export default {
       this.importing = false
     },
     updateImports() {
-      this.$store.dispatch('artifacts/fetchImports', { "page": this.page })
+      this.$artifactsStore.fetchImports({ "page": this.page })
       if (
         !this.imports.some(m => m.status.match(/^(running|pending|scheduled)$/))
       ) {
@@ -341,5 +346,5 @@ export default {
       }
     }
   }
-}
+});
 </script>

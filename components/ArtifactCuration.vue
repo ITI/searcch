@@ -64,8 +64,9 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     curation: {
       type: Object,
@@ -86,7 +87,7 @@ export default {
     },
   },
   components: {
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   computed: {
     opIsSetField: function() {
@@ -112,5 +113,5 @@ export default {
       return typeof item === 'object'
     },
   }
-}
+});
 </script>

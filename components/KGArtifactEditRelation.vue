@@ -24,7 +24,7 @@
           fullscreen
           v-model="artifactdialog"
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template v-slot:activator="{ props }">
             <v-card-actions class="mt-n4">
               <v-row>
                 <v-col cols="12" md="2"></v-col>
@@ -32,8 +32,7 @@
                   <v-btn
                     color="primary"
                     block depressed outlined
-                    v-bind="attrs"
-                    v-on="on"
+                    v-bind="props"
                     :disabled="artifact_local.id ? false : true"
                   >
                     Add New Relation
@@ -72,13 +71,14 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { EventBus } from '@/helpers'
 import ArtifactRelationView from './ArtifactRelationView.vue'
 
-export default {
+export default defineComponent({
   name: 'KGArtifactEditRelation',
   props: {
     record: {
@@ -91,8 +91,8 @@ export default {
     }
   },
   components: {
-    SearchCard: () => import("@/components/SearchCard"),
-    ArtifactRelationView: () => import("@/components/ArtifactRelationView"),
+    SearchCard: defineAsyncComponent(() => import("@/components/SearchCard")),
+    ArtifactRelationView: defineAsyncComponent(() => import("@/components/ArtifactRelationView")),
 },
   data() {
     return {
@@ -147,8 +147,8 @@ export default {
       this.loadingMessage = 'Error loading'
     }, 5000)
     EventBus.$on('close', this.closeHandler)
-    this.$store.dispatch('user/fetchOrgs')
-    this.$store.dispatch('user/fetchBadges')
+    this.$userStore.fetchOrgs()
+    this.$userStore.fetchBadges()
   },
   watch: {
     record(val) {
@@ -200,5 +200,5 @@ export default {
       }
     },
   }
-}
+});
 </script>

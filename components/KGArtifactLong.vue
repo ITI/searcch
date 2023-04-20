@@ -482,10 +482,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
 import { artifactIcon, artifactColor, bytesToSize, reverseRelation } from '@/helpers'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
-export default {
+export default defineComponent({
   name: 'KGArtifactLong',
   props: {
     record: {
@@ -494,11 +497,11 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import("@/components/ArtifactChips"),
-    ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
-    JsonPrettyPrint: () => import("@/components/pretty-print"),
-    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue"),
-    ArtifactRelationView: () => import("@/components/ArtifactRelationView.vue"),
+    ArtifactChips: defineAsyncComponent(() => import("@/components/ArtifactChips")),
+    ArtifactCurationList: defineAsyncComponent(() => import("@/components/ArtifactCurationList")),
+    JsonPrettyPrint: defineAsyncComponent(() => import("@/components/pretty-print")),
+    ClaimRoleModal: defineAsyncComponent(() => import("@/components/ClaimRoleModal.vue")),
+    ArtifactRelationView: defineAsyncComponent(() => import("@/components/ArtifactRelationView.vue")),
 },
   data() {
     return {
@@ -526,11 +529,10 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user: state => state.user,
-      favorites: state => state.artifacts.favoritesIDs,
-      user_is_admin: state => state.user.user_is_admin,
-      artifactClaim: state => state.artifacts.artifactClaim
+    ...mapState(userStore, ['user', 'user_is_admin']),
+    ...mapState(artifactsStore, {
+      favorites: 'favoritesIDs',
+      artifactClaim: 'artifactClaim'
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
@@ -540,13 +542,9 @@ export default {
         return this.favorites[this.record.artifact.artifact_group_id] ? true : false
       },
       set(value) {
-        if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.artifact_group_id)
-        else
-          this.$store.commit(
-            'artifacts/REMOVE_FAVORITE',
-            this.record.artifact.artifact_group_id
-          )
+        value
+        ? this.$artifactsStore.addFavorite(this.record.artifact.artifact_group_id)
+        : this.$artifactsStore.removeFavorite(this.record.artifact.artifact_group_id)
       }
     },
     tags() {
@@ -658,7 +656,7 @@ export default {
   methods: {
     async favoriteThis() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
@@ -690,18 +688,18 @@ export default {
     async newVersion() {
       let response = await this.$artifactEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],{})
-      this.$store.dispatch('artifacts/fetchArtifact', {
+      this.$artifactsStore.fetchArtifact( {
         artifact_group_id: response.artifact.artifact_group_id,
         id: response.artifact.id
       })
-      this.$router.push("/artifact/" + response.artifact.artifact_group_id
+      navigateTo("/artifact/" + response.artifact.artifact_group_id
         + "/" + response.artifact.id + "?edit=true")
     },
     async reImportNewVersion() {
       let response = await this.$artifactEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],
         { reimport: true })
-      this.$router.push("/import")
+      navigateTo("/import")
     },
     async getDiff(from, to) {
       this.diff_from = from
@@ -731,7 +729,7 @@ export default {
         this.ownershipMessage='Kindly login to claim role'
         this.showOwnershipMessage = true;
       } else {
-        await this.$store.dispatch('artifacts/fetchArtifactClaim', {
+        await this.$artifactsStore.fetchArtifactClaim( {
           artifact_group_id: this.record.artifact.artifact_group_id,
         })
         if(this.artifactClaim.artifact_owner_request && this.artifactClaim.artifact_owner_request.error) {
@@ -768,7 +766,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

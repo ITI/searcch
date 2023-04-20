@@ -24,15 +24,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { artifactsStore } from '~/stores/artifacts'
 import KGArtifactEditRelation from '~/components/KGArtifactEditRelation.vue'
 
-export default {
+export default defineComponent({
   components: {
-    KGArtifactLong: () => import("@/components/KGArtifactLong"),
-    KGArtifactEdit: () => import("@/components/KGArtifactEdit"),
-    KGArtifactEditRelation: () => import("@/components/KGArtifactEditRelation"),
-    LazyHydrate: () => import("vue-lazy-hydration"),
+    KGArtifactLong: defineAsyncComponent(() => import("@/components/KGArtifactLong")),
+    KGArtifactEdit: defineAsyncComponent(() => import("@/components/KGArtifactEdit")),
+    KGArtifactEditRelation: defineAsyncComponent(() => import("@/components/KGArtifactEditRelation")),
 },
   head() {
     return {
@@ -52,8 +53,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      artifact: state => state.artifacts.artifact
+    ...mapState(artifactsStore, {
+      artifact: state => state.artifact
     }),
     editing() {
       return this.$route.query.edit !== undefined
@@ -65,10 +66,10 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('artifacts/fetchArtifact', {
+    this.$artifactsStore.fetchArtifact( {
       artifact_group_id: this.$route.params.artifact_group_id,
       id: this.$route.params.id
     })
   }
-}
+});
 </script>

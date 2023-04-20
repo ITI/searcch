@@ -1,5 +1,5 @@
 <template>
-  <v-layout column justify-left align-top>
+  <v-row justify="left" align="top">
     <v-container fill-height fluid>
       <v-row justify="center">
         <v-col cols="12" md="4" v-if="localuser">
@@ -82,14 +82,12 @@
                     >
                       <template v-slot:no-data>
                         <v-list-item>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              No results matching "<strong>{{
-                                interestSearch
-                              }}</strong
-                              >". Press <kbd>tab</kbd> to create a new one item.
-                            </v-list-item-title>
-                          </v-list-item-content>
+                          <v-list-item-title>
+                            No results matching "<strong>{{
+                              interestSearch
+                            }}</strong
+                            >". Press <kbd>tab</kbd> to create a new one item.
+                          </v-list-item-title>
                         </v-list-item>
                       </template>
                     </v-combobox>
@@ -112,14 +110,12 @@
                     >
                       <template v-slot:no-data>
                         <v-list-item>
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              No results matching "<strong>{{
-                                orgSearch
-                              }}</strong
-                              >". Press <kbd>tab</kbd> to create a new one
-                            </v-list-item-title>
-                          </v-list-item-content>
+                          <v-list-item-title>
+                            No results matching "<strong>{{
+                              orgSearch
+                            }}</strong
+                            >". Press <kbd>tab</kbd> to create a new one
+                          </v-list-item-title>
                         </v-list-item>
                       </template>
                     </v-combobox>
@@ -289,19 +285,20 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
 import { artifactIcon, artifactColor } from '@/helpers'
 import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/affiliation.json'
 
-export default {
+export default defineComponent({
   components: {
-    LazyHydrate: () => import('vue-lazy-hydration'),
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   head() {
     return {
@@ -348,13 +345,13 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      user: state => state.user.user,
-      organization: state => state.user.organization,
-      userid: state => state.user.userid,
-      orgs: state => state.user.orgs,
-      interests: state => state.user.interests,
-      authUser: state => state.auth.user
+    ...mapState(userStore, {
+      user: state => state.user,
+      organization: state => state.organization,
+      userid: state => state.userid,
+      orgs: state => state.orgs,
+      interests: state => state.interests,
+      authUser: state => state.authUser
     }),
     orgNames: {
       get: function() {
@@ -411,9 +408,9 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
-    this.$store.dispatch('user/fetchOrgs')
-    this.$store.dispatch('user/fetchInterests')
+    this.$userStore.fetchUser()
+    this.$userStore.fetchOrgs()
+    this.$userStore.fetchInterests()
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
     this.userAffiliation = this.organization ? this.organization : []
@@ -434,18 +431,18 @@ export default {
   methods: {
     async updateProfile() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         await this.$userEndpoint.update(this.userid, this.localuser)
 
         // create any affiliations that were added
         this.userAffiliation.forEach((affil, index, object) => {
           if (typeof affil === 'string') {
-            this.$store.dispatch('user/createAffiliation', affil)
+            this.$userStore.createAffiliation(affil)
             object.splice(index, 1)
           }
         })
-        this.$store.dispatch('user/fetchUser')
+        this.$userStore.fetchUser()
       }
     },
     iconColor(type) {
@@ -475,5 +472,5 @@ export default {
       return Buffer.from(encodeURI(image.data), 'base64')
     }
   }
-}
+});
 </script>

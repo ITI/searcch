@@ -38,7 +38,7 @@
                 {{ isDisabled ? "Justification" : "Please justify your claim in the textbox below" }}
             </div>
             <div>
-                <textarea v-model="justificationMessage" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
+                <textarea v-model="justificationMessageData" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
             </div>
         </slot>
        </section>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-  export default {
+  export default defineComponent({
     name: 'ClaimRoleModal',
     props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email'],
     methods: {
@@ -77,7 +77,7 @@
         if(this.isJustificationMessageValid()) {
             this.isError = false;
             try {
-              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage })
+              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessageData })
               this.close(`Claim request successfully sent`);
             } catch(ex) {
               this.close(`An error occured in sending the claim request`)
@@ -88,16 +88,24 @@
         }
       },
       isJustificationMessageValid() {
-        this.justificationMessage = this.justificationMessage.trim();
-        return this.justificationMessage!="";
+        this.justificationMessageData = this.justificationMessageData.trim();
+        return this.justificationMessageData!="";
       }
     },
     data() {
         return {
-            isError: false
+            isError: false,
+            justificationMessageData: "",
         }
+    },
+    watch: {
+      justificationMessage: function (oldVal, newVal) {
+        if (oldVal !== newVal) {
+          this.justificationMessageData = val;
+        }
+      }
     }
-  };
+  });
 </script>
 
 <style>

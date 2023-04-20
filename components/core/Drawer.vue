@@ -62,9 +62,10 @@
 
 <script>
 // Utilities
-import { mapMutations, mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { appStore } from '~/stores/app'
 
-export default {
+export default defineComponent({
   props: {
     opened: {
       type: Boolean,
@@ -112,19 +113,15 @@ export default {
   }),
 
   computed: {
-    ...mapState('app', ['image', 'color']),
+    ...mapState(appStore, ['image', 'color']),
     inputValue: {
       get() {
-        return this.$store.state.app.drawer
+        return this.$appStore.drawer
       },
       set(val) {
-        this.setDrawer(val)
+        this.$appStore.drawer = val
       }
     }
   },
-
-  methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
-  }
-}
+});
 </script>
