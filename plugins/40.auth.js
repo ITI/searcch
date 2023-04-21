@@ -4,14 +4,13 @@ export default defineNuxtPlugin(({ $artifactsStore, $userStore, $loginEndpoint }
     if (auth.status.value === 'authenticated') {
         const payload = {
             strategy: auth.data?.value?.provider,
-            token: auth.data?.value?.token,
+            token: `Bearer ${auth.data?.value?.token}`,
         }
 
         $userStore.user_token = payload.token
         $loginEndpoint
             .create(payload)
             .then(response => {
-                console.log('res: ', response)
                 if (typeof response !== 'undefined' && response.userid >= 0) {
                     $userStore.user = response.person
                     $userStore.userid = response.userid
