@@ -293,7 +293,6 @@ import { defineAsyncComponent } from 'vue'
 import { mapState } from 'pinia'
 import { userStore } from '~/stores/user'
 import { artifactIcon, artifactColor } from '@/helpers'
-import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/affiliation.json'
 
 export default defineComponent({
@@ -417,15 +416,13 @@ export default defineComponent({
     this.localuser = JSON.parse(JSON.stringify(this.user))
   },
   created() {
-    $RefParser.dereference(schemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.schema = schema
-        this.schemaLoaded = true
-      }
+    this.$resolver.resolve(schemaWithPointers).then(schema => {
+      this.schema = schema
+      this.schemaLoaded = true
+    }).catch(err => {
+      // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+      // including referenced files, combined into a single object
+      console.error(err)
     })
   },
   methods: {

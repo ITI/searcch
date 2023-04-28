@@ -72,7 +72,6 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
 import { EventBus } from '@/helpers'
@@ -113,26 +112,22 @@ export default defineComponent({
     }
   },
   async created() {
-    $RefParser.dereference(schemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.schema = schema
-        this.schemaLoaded = true
-      }
+    this.$resolver.resolve(schemaWithPointers).then(schema => {
+      this.schema = schema
+      this.schemaLoaded = true
+    }).catch(err => {
+      // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+      // including referenced files, combined into a single object
+      console.error(err)
     })
-    $RefParser.dereference(affiliationSchemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.affiliationSchema = schema
-        this.schemaLoaded = true
-      }
-    })
+    this.$resolver.resolve(affiliationSchemaWithPointers).then(schema => {
+      this.affiliationSchema = schema
+      this.schemaLoaded = true
+    }).catch(err => {
+      // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+      // including referenced files, combined into a single object
+      console.error(err)
+    });
     this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
     this.meta.languages = this.getLanguages()
     this.meta.keywords = this.getPossibleTags()
