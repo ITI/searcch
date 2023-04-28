@@ -6,10 +6,10 @@ import { appStore } from '~/stores/app'
 export default defineNuxtPlugin(({ $pinia }) => {
   return {
     provide: {
-        artifactsStore: artifactsStore($pinia),
-        systemStore: systemStore($pinia),
-        userStore: userStore($pinia),
-        appStore: appStore($pinia),
+      artifactsStore: artifactsStore($pinia),
+      systemStore: systemStore($pinia),
+      userStore: userStore($pinia),
+      appStore: appStore($pinia),
     }
   }
 })
