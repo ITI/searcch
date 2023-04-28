@@ -75,78 +75,42 @@ export default defineNuxtConfig({
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    // '@nuxtjs/axios',
     'nuxt-lazy-hydrate',
     '@sidebase/nuxt-auth',
     '@pinia/nuxt',
     'nuxt-proxy',
-    // '@nuxtjs/markdownit',
-    // '@nuxtjs/vuetify',
+    'nuxt-security',
     // [
     //   '@nuxtjs/google-analytics',
     //   {
     //     id: 'UA-165120903-1'
     //   }
     // ],
-    // [
-    //   '@dansmaculotte/nuxt-security',
-    //   {
-    //     /* module options */
-    //     dev: true,
-    //     hsts: {
-    //       maxAge: 15552000,
-    //       includeSubDomains: true,
-    //       preload: true
-    //     },
-    //     csp: {
-    //       directives: {
-    //         defaultSrc: ["'self'"],
-    //         scriptSrc: [
-    //           "'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com"
-    //         ],
-    //         objectSrc: ["'self'"],
-    //         styleSrc: [
-    //           "'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net"
-    //         ],
-    //         fontSrc: [
-    //           "'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"
-    //         ],
-    //         connectSrc: [
-    //           "'self' https://api.github.com https://cilogon.org https://www.gravatar.com"
-    //         ],
-    //         // asterisk here due to badge images
-    //         imgSrc: [
-    //           "'self' https://avatars.githubusercontent.com https://*.gravatar.com *"
-    //         ]
-    //       },
-    //       reportOnly: false
-    //     },
-    //     referrer: 'same-origin',
-
-    //     securityFile: {
-    //       contacts: ['mailto:security@cyberexperimentation.org'],
-    //       canonical:
-    //         'https://hub.cyberexperimentation.org/.well-know/security.txt',
-    //       preferredLanguages: ['en']
-    //     },
-    //     additionalHeaders: true
-    //   }
-    // ]
   ],
 
-  markdownit: {
-    runtime: true,
-    html: true,
-  },
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  // axios: {
-  //   proxy: true,
-  //   debug: process.env.AXIOS_DEBUG == 'true'
-  // },
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        'connection-src': ["'self' https://api.github.com https://cilogon.org https://www.gravatar.com"],
+        'default-src': ["'self'"],
+        'font-src': ["'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"],
+        // asterisk here due to badge images
+        'img-src': ["'self' https://avatars.githubusercontent.com https://*.gravatar.com *"],
+        'object-src': ["'self'"],
+        'script-src': ["'self' 'unsafe-eval' 'unsafe-inline' https://www.google-analytics.com"],
+        'script-src-attr': ["'none'"],
+        'style-src': ["'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net"],
+      },
+      referrerPolicy: 'same-origin',
+      strictTransportSecurity: {
+        maxAge: 15552000,
+        includeSubdomains: true,
+        preload: true,
+      },
+    },
+  },  
+
+  
   proxy: {
     options: [
       {
