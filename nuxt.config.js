@@ -5,49 +5,51 @@ export default defineNuxtConfig({
   /*
    ** Headers of the page
    */
-  meta: {
-    titleTemplate: '%s - SEARCCH Hub ',
-    title: process.env.npm_package_name || '',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: process.env.npm_package_description || ''
-      },
-      // Twitter Card Meta
-      // Doc: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html
-      { property: 'twitter:card', content: 'summary' },
-      { property: 'twitter:site', value: '@SEARCCH_HUB' },
-      { property: 'twitter:creator', value: '@timyardley' },
+  app: {
+    head: {
+      titleTemplate: '%s - SEARCCH Hub ',
+      title: process.env.npm_package_name || '',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          hid: 'description',
+          name: 'description',
+          content: process.env.npm_package_description || ''
+        },
+        // Twitter Card Meta
+        // Doc: https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html
+        { property: 'twitter:card', content: 'summary' },
+        { property: 'twitter:site', value: '@SEARCCH_HUB' },
+        { property: 'twitter:creator', value: '@timyardley' },
 
-      // OpenGraph Meta
-      // Doc: http://ogp.me/
-      {
-        property: 'og:url',
-        content: 'https://hub.cyberexperimentation.org/'
-      },
-      { property: 'og:type', content: 'website' },
-      {
-        property: 'og:title',
-        content: 'SEARCCH Hub for Cyber Security Artifacts'
-      },
-      {
-        property: 'og:description',
-        content:
-          'SEARCCH: Sharing Expertise and Artifacts for Reuse through a Cybersecurity Community Hub. SEARCCH is creating a collaborative, community-driven platform that lowers the barrier to sharing by aiding researchers in packaging, importing, locating, understanding, and reusing experiment artifacts. The artifacts organized by the platform, including tools, methodologies, documentation, and data, can be deployed to community testbeds for performing new experiments. Concurrently, SEARCCH engages in outreach activities to build an active, diverse, online community around the hub to enable direct sharing of expertise and crowdsourcing research ideas and experiment design. Through a process of continuous learning and improvement, the hub will grow over time to include collections of artifacts covering a broad range of cybersecurity research topics and add support for newly identified community needs. These activities together will transform the way cybersecurity research is conducted in the cybersecurity community, improving the overall scientific quality of cybersecurity research through validation, repeatable sharing and reuse, and a collective approach to building on research results.'
-      },
-      {
-        property: 'og:image',
-        content: 'https://hub.cyberexperimentation.org/images/horiz-tagline.png'
-      },
-      { property: 'og:image:width', content: 433 },
-      { property: 'og:image:height', content: 138 },
-      { property: 'og:image:type', content: 'image/png' },
-      { property: 'og:image:alt', content: 'SEARCCH Logo' }
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+        // OpenGraph Meta
+        // Doc: http://ogp.me/
+        {
+          property: 'og:url',
+          content: 'https://hub.cyberexperimentation.org/'
+        },
+        { property: 'og:type', content: 'website' },
+        {
+          property: 'og:title',
+          content: 'SEARCCH Hub for Cyber Security Artifacts'
+        },
+        {
+          property: 'og:description',
+          content:
+            'SEARCCH: Sharing Expertise and Artifacts for Reuse through a Cybersecurity Community Hub. SEARCCH is creating a collaborative, community-driven platform that lowers the barrier to sharing by aiding researchers in packaging, importing, locating, understanding, and reusing experiment artifacts. The artifacts organized by the platform, including tools, methodologies, documentation, and data, can be deployed to community testbeds for performing new experiments. Concurrently, SEARCCH engages in outreach activities to build an active, diverse, online community around the hub to enable direct sharing of expertise and crowdsourcing research ideas and experiment design. Through a process of continuous learning and improvement, the hub will grow over time to include collections of artifacts covering a broad range of cybersecurity research topics and add support for newly identified community needs. These activities together will transform the way cybersecurity research is conducted in the cybersecurity community, improving the overall scientific quality of cybersecurity research through validation, repeatable sharing and reuse, and a collective approach to building on research results.'
+        },
+        {
+          property: 'og:image',
+          content: 'https://hub.cyberexperimentation.org/images/horiz-tagline.png'
+        },
+        { property: 'og:image:width', content: 433 },
+        { property: 'og:image:height', content: 138 },
+        { property: 'og:image:type', content: 'image/png' },
+        { property: 'og:image:alt', content: 'SEARCCH Logo' }
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    }
   },
   /*
    ** Customize the progress-bar color
