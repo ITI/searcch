@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="9">
             <v-card-title class="align-start">
-              <span class="headline">{{ artifact.title | titlecase }}</span> 
+              <span class="headline">{{$filters.titlecase( artifact.title ) }}</span> 
             </v-card-title>
           </v-col>
           <v-col cols="3">

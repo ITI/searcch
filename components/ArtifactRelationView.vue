@@ -27,7 +27,7 @@
         :key="`${relation.artifact_id}-${idx}`">
         <v-row>
           <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 grey--text text--darken-2">
-            <v-list-item-title>{{ relation.relation | titlecase }}</v-list-item-title>
+            <v-list-item-title>{{$filters.titlecase( relation.relation ) }}</v-list-item-title>
           </v-col>
           <v-col cols="12" md="10" class="pt-0">
             <v-list-item-title>

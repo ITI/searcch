@@ -52,12 +52,12 @@
         <span v-if="edit && item.affiliation.person && item.affiliation.person.email">({{ item.affiliation.person.email }})</span>
       </div>
       <div v-else-if="type === 'relation'">
-        {{ item.artifact_id }} {{ item.relation | titlecase }}
+        {{ item.artifact_id }} {{ $filters.titlecase(item.relation) }}
         {{ item.related_artifact_id }}
       </div>
       <div v-else-if="type === 'reverse-relation'">
         {{ item.related_artifact_id }}
-        {{ flipRelation(item.relation) | titlecase }}
+        {{ $filters.titlecase(flipRelation(item.relation)) }}
         {{ item.artifact_id }}
       </div>
     </v-chip>

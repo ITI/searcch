@@ -20,7 +20,7 @@
     </v-row>
     <v-row align="center" class="mx-0">
       <span>
-        <b>{{ this.curation.opdata.op | titlecase }}</b>
+        <b>{{$filters.titlecase( this.curation.opdata.op ) }}</b>
         ({{ this.curation.opdata.obj }}{{ this.curation.opdata.op === 'set'
                                           ? "." + this.curation.opdata.data.field : "" }}): 
       </span>

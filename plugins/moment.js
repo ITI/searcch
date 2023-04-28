@@ -1,5 +1,9 @@
 import moment from 'moment'
 
-export default defineNuxtPlugin(nuxtApp => {
-    nuxtApp.vueApp.use(moment.default)
-})
+export default defineNuxtPlugin(() => {
+    return {
+        provide: {
+            moment: moment.default
+        }
+    }
+});

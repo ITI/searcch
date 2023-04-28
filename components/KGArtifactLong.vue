@@ -207,7 +207,7 @@
               <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
             </v-avatar>
 
-            <div>{{ record.artifact.type | titlecase }}</div>
+            <div>{{$filters.titlecase( record.artifact.type ) }}</div>
           </v-chip>
 
           <v-divider class="mx-4"></v-divider>
