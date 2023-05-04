@@ -91,7 +91,7 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
-        'connection-src': ["'self' https://api.github.com https://cilogon.org https://www.gravatar.com"],
+        'connect-src': ["'self' https://api.github.com https://cilogon.org https://www.gravatar.com"],
         'default-src': ["'self'"],
         'font-src': ["'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"],
         // asterisk here due to badge images
