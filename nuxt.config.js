@@ -79,7 +79,7 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth',
     '@pinia/nuxt',
     'nuxt-proxy',
-    // 'nuxt-security',
+    'nuxt-security',
     // [
     //   '@nuxtjs/google-analytics',
     //   {
