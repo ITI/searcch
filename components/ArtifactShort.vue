@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="9">
             <v-card-title class="align-start">
-              <span class="headline">{{$filters.titlecase( artifact.title ) }}</span> 
+              <span class="text-h5">{{$filters.titlecase( artifact.title ) }}</span> 
             </v-card-title>
           </v-col>
           <v-col cols="3">
@@ -17,14 +17,14 @@
           </v-col>
         </v-row>
       </v-container>
-      <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
+      <span class="ml-4 text-grey-darken-2 font-weight-light text-caption">
         {{ artifact.num_reviews }}
         {{ artifact.num_reviews == 1 ? 'review' : 'reviews' }}
       </span>
       <v-rating
         v-model="artifact.avg_rating"
         color="amber"
-        dense
+        density="compact"
         half-increments
         readonly
         size="18"
@@ -35,7 +35,7 @@
 
       <div v-if="comments">
         <v-row justify="center">
-          <v-expansion-panels inset multiple focusable v-model="expanded">
+          <v-expansion-panels variant="inset" multiple v-model="expanded">
             <v-expansion-panel v-for="(comment, i) in comments" :key="i">
               <v-expansion-panel-title disable-icon-rotate>
                 <template v-slot:actions>
@@ -47,7 +47,7 @@
                 <v-rating
                   v-model="comment.rating"
                   color="amber"
-                  dense
+                  density="compact"
                   half-increments
                   readonly
                   size="18"
@@ -73,7 +73,6 @@
           icon
           v-if="!related"
           :to="`/artifact/review/${artifact.artifact_group_id}`"
-          nuxt
         >
           <v-icon>mdi-comment</v-icon>
         </v-btn>
@@ -84,7 +83,7 @@
           label
           :color="getContributionChipColor()"
           v-if="contributionTypeText">
-          <v-avatar left>
+          <v-avatar start>
             <v-icon>mdi-check-circle</v-icon>
           </v-avatar>
           <span style="font-weight: normal;">{{ contributionTypeText }}</span>
@@ -101,7 +100,6 @@
           v-if="!related"
           color="primary"
           :to="getArtifactLink()"
-          nuxt
         >
           Read More
         </v-btn>
@@ -117,7 +115,6 @@
           v-if="isOwner() || isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit_relation=true`"
-          nuxt
         >
           Edit Relation
         </v-btn>
@@ -125,7 +122,6 @@
           v-if="isOwner() || isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
-          nuxt
         >
           Edit
         </v-btn>

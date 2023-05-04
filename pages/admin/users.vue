@@ -6,12 +6,12 @@
           <h3>Filters:</h3>
         </v-col>
         <v-col cols="1">
-          <v-subheader>
+          <v-list-subheader>
             Can Admin
-          </v-subheader>
+          </v-list-subheader>
         </v-col>
         <v-col cols="1">
-          <v-checkbox v-model="can_admin" @change="updateUsers()"></v-checkbox>
+          <v-checkbox v-model="can_admin" @update:model-value="updateUsers()"></v-checkbox>
         </v-col>
         <v-col cols="2">
           <v-text-field
@@ -43,7 +43,7 @@
           label="Search"
           single-line
           hide-details
-          dense
+          density="compact"
         ></v-text-field> -->
       </v-card-title>
       <v-data-table
@@ -51,7 +51,7 @@
         :items="items"
         :search="search"
         :loading="loading"
-        :options.sync="options"
+        v-model:options="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
         dense
@@ -60,20 +60,20 @@
           <v-dialog v-model="dialogModify" max-width="500px">
             <v-sheet
               class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
-              color="blue-grey darken-3"
-              dark
+              color="blue-grey-darken-3"
+              theme="dark"
             >
-              <div class="grey--text text--lighten-1 text-body-2 mb-4">
+              <div class="text-grey-lighten-1 text-body-2 mb-4">
                 Are you sure you want to modify the admin privileges of user {{user_details.id}}?
               </div>
 
-              <v-btn plain color="success" @click="confirmChangeAdminPrivilege()">OK</v-btn>
-              <v-btn plain color="error" @click="modifyPrivilegeDialog(false)">Cancel</v-btn>
+              <v-btn variant="plain" color="success" @click="confirmChangeAdminPrivilege()">OK</v-btn>
+              <v-btn variant="plain" color="error" @click="modifyPrivilegeDialog(false)">Cancel</v-btn>
             </v-sheet>
           </v-dialog>
         </template>
         <template v-slot:item.id="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <a
                 v-if="item.id"
@@ -90,17 +90,17 @@
           </v-tooltip>
         </template>
         <template v-slot:item.can_admin="{ item }">
-          <v-tooltip bottom :disabled="user_id == item.id">
+          <v-tooltip location="bottom" :disabled="user_id == item.id">
             <template v-slot:activator="{ on }">
               <span>
-                <v-simple-checkbox 
+                <v-checkbox-btn 
                   style="padding: 10px" 
                   :value="item.can_admin" 
                   :disabled="user_id == item.id" 
                   v-on="on" 
                   :color="'primary'"
                   @click="user_id != item.id ? modifyPrivilegeDialog(true, item) : () => {}"
-                ></v-simple-checkbox>
+                ></v-checkbox-btn>
               </span>
             </template>
             <span>Modify User Admin Privilege</span>

@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
     <div>
-      <v-card class="mx-auto my-2" outlined>
+      <v-card class="mx-auto my-2" variant="outlined">
         <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
@@ -11,11 +11,11 @@
       </v-card>
     </div>
     <v-form v-model="valid" ref="artifact">
-      <v-card class="mx-auto my-2" outlined>
+      <v-card class="mx-auto my-2" variant="outlined">
         <v-card-title>Edit Artifact</v-card-title>
         <v-card-text>Want to edit relationship? 
           <v-btn 
-            text small color="primary" 
+            variant="text" size="small" color="primary" 
             :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit_relation=true`">
             Click here
           </v-btn>
@@ -23,7 +23,7 @@
         <v-card-title
           ><v-text-field
             label="Title"
-            outlined
+            variant="outlined"
             v-model="artifact_local.title"
             :rules="[rules.required, rules.exists]"
             required
@@ -33,7 +33,7 @@
           <div>
             <v-textarea
               auto-grow
-              outlined
+              variant="outlined"
               label="Description"
               v-model="artifact_local.description"
               :rules="[rules.required, rules.exists]"
@@ -44,7 +44,7 @@
         <v-card-title
           ><v-text-field
             label="URL"
-            outlined
+            variant="outlined"
             v-model="artifact_local.url"
             :rules="[rules.required, rules.url]"
             required
@@ -86,9 +86,8 @@
           >
             <template v-slot:activator="{ props }">
               <v-btn
-                class="success ml-2 mb-2"
-                fab
-                x-small
+                class="bg-success ml-2 mb-2 rounded-circle"
+                size="x-small"
                 v-bind="props"
               >
                 <v-icon>mdi-plus</v-icon>
@@ -106,16 +105,16 @@
                       <v-col cols="12">
                         <v-combobox
                           label="Organization Name"
-                          small-chips
+                          chips
                           persistent-hint
                           clearable
                           v-if="orgs"
                           :items="orgNames"
                           v-model="affiliation.affiliation.org"
                           hint="Select applicable organization from the list or type in your own"
-                          :search-input.sync="search"
+                          v-model:search-input="search"
                           item-value="org.name"
-                          item-text="org.name"
+                          item-title="org.name"
                           :rules="[rules.notwhitespace, rules.unique_creator]"
                           return-object
                         >
@@ -160,13 +159,13 @@
                       $refs.dialogform.reset()
                     }"
                     :disabled="!dialogvalid"
-                    class="success ml-2 mb-2"
-                    text
+                    class="bg-success ml-2 mb-2"
+                    variant="text"
                     >Add</v-btn
                   >
                   <v-btn
-                    class="error ml-2 mb-2"
-                    text
+                    class="bg-error ml-2 mb-2"
+                    variant="text"
                     @click="() => {
                       dialog.value = false
                       affiliation = affiliationObject()
@@ -236,7 +235,7 @@
             <a :href="b.badge.url" target="_blank" rel="noopener">
               {{ b.badge.title }}
             </a>
-            <v-icon @click="() => artifact_local.badges.splice(index, 1)" right
+            <v-icon @click="() => artifact_local.badges.splice(index, 1)" end
               >mdi-close</v-icon
             >
           </span>
@@ -249,13 +248,13 @@
             class="ma-2"
             label
           >
-            <v-icon left>mdi-tag-outline</v-icon>
+            <v-icon start>mdi-tag-outline</v-icon>
 
             <v-select
               label="Badges"
               v-bind:items="badges"
               v-model="meta.badges[index]"
-              item-text="id"
+              item-title="id"
               item-value="title"
               :rules="[rules.required]"
               return-object
@@ -272,15 +271,14 @@
                 {{ item.raw.organization }} - {{ item.raw.title }}
               </template>
             </v-select>
-            <v-icon @click="() => meta.badges.splice(index, 1)" right
+            <v-icon @click="() => meta.badges.splice(index, 1)" end
               >mdi-close</v-icon
             >
           </v-chip>
           <v-btn
             @click="() => meta.badges.push('')"
-            class="success ml-2 mb-2"
-            fab
-            x-small
+            class="bg-success ml-2 mb-2 rounded-circle"
+            size="x-small"
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </div>
@@ -292,14 +290,14 @@
             <v-card-title class="py-0">Github Metrics</v-card-title>
 
             <v-chip color="primary" cols="12" class="ma-2" label>
-              <v-avatar left>
+              <v-avatar start>
                 <v-icon color="yellow">mdi-star</v-icon>
               </v-avatar>
 
               {{ stars }}
             </v-chip>
             <v-chip color="primary" cols="12" class="ma-2" label>
-              <v-avatar left>
+              <v-avatar start>
                 <v-icon>mdi-eye</v-icon>
               </v-avatar>
 
@@ -311,7 +309,7 @@
             <v-card-title class="py-0">Importer</v-card-title>
 
             <v-chip color="primary" cols="12" class="ma-2" label>
-              <v-avatar left>
+              <v-avatar start>
                 <v-icon>mdi-file-download-outline</v-icon>
               </v-avatar>
               {{
@@ -324,27 +322,27 @@
 
         <v-card-title class="py-0">License</v-card-title>
         <v-chip cols="12" class="ma-2" label>
-          <v-icon left>mdi-scale-balance</v-icon>
+          <v-icon start>mdi-scale-balance</v-icon>
 
           <v-autocomplete
             label="License"
             :items="possibleLicenses"
             v-model="artifact_local.license"
-            item-text="short_name"
+            item-title="short_name"
             item-value="long_name"
             return-object
           >
-            <template slot="item" slot-scope="data">
+            <template v-slot:item="data" >
               <v-list-item-title
                 v-text="`${data.item.short_name} (${data.item.long_name})`"
               >
               </v-list-item-title>
             </template>
-            <template slot="selection" slot-scope="data">
+            <template v-slot:selection="data" >
               {{ data.item.short_name }} ({{ data.item.long_name }})
             </template>
           </v-autocomplete>
-          <v-icon @click="() => artifact_local.license = null" right>mdi-close</v-icon>
+          <v-icon @click="() => artifact_local.license = null" end>mdi-close</v-icon>
         </v-chip>
         <v-divider class="mx-4"></v-divider>
 
@@ -354,9 +352,9 @@
           <v-list-item
             v-for="(f, index) in artifact_local.files"
             :key="`file${index}`"
-            dense
+            density="compact"
           >
-            <v-list-group :value="true" no-action sub-group>
+            <v-list-group :value="true" >
               <template v-slot:activator>
                 <a @click.stop target="_blank" :href="f.url" rel="noopener">{{
                   f.url
@@ -367,7 +365,7 @@
               <v-list-item
                 v-for="(fm, indexm) in f.members"
                 :key="`mem${indexm}`"
-                dense
+                density="compact"
               >
                 <a
                   target="_blank"
@@ -381,7 +379,7 @@
                 {{ fm.size ? convertSize(fm.size) : 'unknown' }})
               </v-list-item>
             </v-list-group>
-            <v-icon @click="() => artifact_local.files.splice(index, 1)" right
+            <v-icon @click="() => artifact_local.files.splice(index, 1)" end
               >mdi-close</v-icon
             >
           </v-list-item>
@@ -393,23 +391,22 @@
               cols="12"
             >
               <v-textarea
-                outlined
-                height="10"
+                variant="outlined"
+                row="10"
                 label="File URL"
                 placeholder="Enter File URL"
                 v-model="f.url"
                 prepend-icon="mdi-file"
-                append-outer-icon="mdi-close"
-                @click:append-outer="() => meta.files.splice(index, 1)"
+                append-icon="mdi-close"
+                @click:append="() => meta.files.splice(index, 1)"
                 :rules="[rules.required, rules.url]"
                 required
               ></v-textarea>
             </v-card-text>
             <v-btn
               @click="() => meta.files.push({ url: '', filetype: 'unknown' })"
-              class="success ml-2 mb-2"
-              fab
-              x-small
+              class="bg-success ml-2 mb-2 rounded-circle"
+              size="x-small"
               ><v-icon>mdi-plus</v-icon></v-btn
             >
           </div>
@@ -422,7 +419,6 @@
             v-if="canReplayCurations"
             color="success"
             @click="replayCurations"
-            nuxt
           >
             Reapply Prior Version Edits
           </v-btn>
@@ -454,7 +450,7 @@
               </v-btn>
             </template>
             <v-card>
-              <v-card-title class="text-h5 lighten-2">
+              <v-card-title class="text-h5 text-black-lighten-2">
                 Publish this version
               </v-card-title>
               <v-card-text>
@@ -462,7 +458,7 @@
               </v-card-text>
               <v-card-text>
                 <v-textarea
-                  outlined
+                  variant="outlined"
                   auto-grow
                   rows="1"
                   label="Publication notes"
@@ -493,7 +489,6 @@
             v-if="!record.artifact.publication"
             color="error"
             @click="deleteDraft()"
-            nuxt
           >
             Delete Draft
           </v-btn>
@@ -504,7 +499,7 @@
     <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
       <template v-slot:actions="{ attrs }">
-        <v-btn color="error" text v-bind="attrs" @click="snackbar = false">
+        <v-btn color="error" variant="text" v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>
@@ -522,8 +517,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="blue darken-1"
-              text
+              color="blue-darken-1"
+              variant="text"
               @click="replay_results_dialog = false"
             >
               Close

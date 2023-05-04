@@ -12,13 +12,13 @@
         <h1>Artifact Import</h1>
         <v-dialog transition="dialog-bottom-transition" max-width="600">
           <template v-slot:activator="{ props }">
-            <v-btn class="primary ml-4" fab small v-bind="props"
+            <v-btn class="bg-primary ml-4 rounded-circle" size="small" v-bind="props"
               ><v-icon>mdi-help</v-icon></v-btn
             >
           </template>
           <template v-slot:default="dialog">
             <v-card>
-              <v-toolbar color="primary" dark>Import Help</v-toolbar>
+              <v-toolbar color="primary" theme="dark">Import Help</v-toolbar>
               <v-card-text>
                 <div class="text-h6 pa-12">
                   <p>
@@ -52,7 +52,7 @@
                 </div>
               </v-card-text>
               <v-card-actions class="justify-end">
-                <v-btn text @click="dialog.value = false">Close</v-btn>
+                <v-btn variant="text" @click="dialog.value = false">Close</v-btn>
               </v-card-actions>
             </v-card>
           </template>
@@ -75,7 +75,7 @@
               label="URL"
               v-model="url"
               placeholder="http://github.com/iti/project"
-              outlined
+              variant="outlined"
               hide-details="auto"
               :rules="[rules.required, rules.url]"
             ></v-text-field>
@@ -84,7 +84,7 @@
         <v-row align="center" dense>
           <v-col cols="2" class="ma-1 pa-1">
             <v-btn
-              class="primary"
+              class="bg-primary"
               :disabled="importing"
               @click="startImport()"
               block
@@ -94,9 +94,9 @@
           <v-divider class="mx-4" vertical></v-divider>
           <v-col class="ma-1 pa-1">
             <v-tooltip
-              color="grey darken-4"
+              color="grey-darken-4"
               max-width="400px"
-              bottom
+              location="bottom"
             >
               <template v-slot:activator="{ props }">
                 <span v-bind="props">
@@ -105,7 +105,7 @@
                     label="Import candidates"
                     v-model="autofollow"
                     hide-details="auto"
-                    dense
+                    density="compact"
                     ></v-checkbox>
                   </span>
               </template>
@@ -120,9 +120,9 @@
           </v-col>
           <v-col class="ma-1 pa-1">
             <v-tooltip
-              color="grey darken-4"
+              color="grey-darken-4"
               max-width="400px"
-              bottom
+              location="bottom"
             >
               <template v-slot:activator="{ props }">
                 <span v-bind="props">
@@ -131,7 +131,7 @@
                     label="Disable Extraction"
                     v-model="noextract"
                     hide-details="auto"
-                    dense
+                    density="compact"
                   ></v-checkbox>
                 </span>
               </template>
@@ -143,9 +143,9 @@
           </v-col>
           <v-col class="ma-1 pa-1">
             <v-tooltip
-              color="grey darken-4"
+              color="grey-darken-4"
               max-width="400px"
-              bottom
+              location="bottom"
             >
               <template v-slot:activator="{ props }">
                 <span v-bind="props">
@@ -154,7 +154,7 @@
                     label="Disable Fetch"
                     v-model="nofetch"
                     hide-details="auto"
-                    dense
+                    density="compact"
                   ></v-checkbox>
                 </span>
               </template>
@@ -169,9 +169,9 @@
           </v-col>
           <v-col class="ma-1 pa-1">
             <v-tooltip
-              color="grey darken-4"
+              color="grey-darken-4"
               max-width="400px"
-              bottom
+              location="bottom"
             >
               <template v-slot:activator="{ props }">
                 <span v-bind="props">
@@ -181,7 +181,7 @@
                     label="Disable Removal"
                     v-model="noremove"
                     hide-details="auto"
-                    dense
+                    density="compact"
                   ></v-checkbox>
                 </span>
               </template>
@@ -209,7 +209,7 @@
         v-if="imports.length"
         v-model="page"
         :length="pages"
-        circle
+        rounded
       ></v-pagination>
       <div v-else>{{ loadingMessage }}</div>
     </v-row>

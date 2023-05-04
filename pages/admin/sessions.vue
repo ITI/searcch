@@ -6,25 +6,25 @@
           <h3>Filters:</h3>
         </v-col>
         <v-col cols="1">
-          <v-subheader>
+          <v-list-subheader>
             Is Admin
-          </v-subheader>
+          </v-list-subheader>
         </v-col>
         <v-col cols="1">
           <v-checkbox
             v-model="is_admin"
-            @change="updateSessions()"
+            @update:model-value="updateSessions()"
           ></v-checkbox>
         </v-col>
         <v-col cols="1">
-          <v-subheader>
+          <v-list-subheader>
             Can Admin
-          </v-subheader>
+          </v-list-subheader>
         </v-col>
         <v-col cols="1">
           <v-checkbox
             v-model="can_admin"
-            @change="updateSessions()"
+            @update:model-value="updateSessions()"
           ></v-checkbox>
         </v-col>
         <v-col cols="2">
@@ -57,7 +57,7 @@
           label="Search"
           single-line
           hide-details
-          dense
+          density="compact"
         ></v-text-field> -->
       </v-card-title>
       <v-data-table
@@ -66,7 +66,7 @@
         :search="search"
         :custom-filter="specializedFilter"
         :loading="loading"
-        :options.sync="options"
+        v-model:options="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
         dense
@@ -75,25 +75,25 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-sheet
               class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
-              color="blue-grey darken-3"
-              dark
+              color="blue-grey-darken-3"
+              theme="dark"
             >
-              <div class="grey--text text--lighten-1 text-body-2 mb-4">
+              <div class="text-grey-lighten-1 text-body-2 mb-4">
                 Are you sure you want to delete this item?
               </div>
 
-              <v-btn plain color="success" @click="deleteItemConfirm">OK</v-btn>
-              <v-btn plain color="error" @click="closeDelete">Cancel</v-btn>
+              <v-btn variant="plain" color="success" @click="deleteItemConfirm">OK</v-btn>
+              <v-btn variant="plain" color="error" @click="closeDelete">Cancel</v-btn>
             </v-sheet>
           </v-dialog>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <v-icon
                 v-if="item.id"
                 v-on="on"
-                small
+                size="small"
                 color="error"
                 @click="deleteItem(item)"
               >
@@ -104,7 +104,7 @@
           </v-tooltip>
         </template>
         <template v-slot:item.user.id="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <a
                 v-if="item.user_id"

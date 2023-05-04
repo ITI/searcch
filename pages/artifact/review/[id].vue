@@ -32,7 +32,7 @@
                     <v-rating
                       v-model="rating"
                       color="amber"
-                      dense
+                      density="compact"
                       hover
                       size="32"
                       required

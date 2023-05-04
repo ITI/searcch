@@ -8,7 +8,7 @@
           v-model="rating"
           v-if="!editing"
           color="amber"
-          dense
+          density="compact"
           readonly
           size="18"
           class="ml-3"
@@ -21,7 +21,7 @@
         v-if="editing"
         label="Rating"
         color="amber"
-        dense
+        density="compact"
         hover
         size="24"
         class="ml-3"
@@ -53,7 +53,7 @@
       <v-btn color="error" @click="deleteReview()" v-if="!editing">
         Delete
       </v-btn>
-      <v-btn text color="error" @click="editing = false" v-if="editing">
+      <v-btn variant="text" color="error" @click="editing = false" v-if="editing">
         Cancel
       </v-btn>
     </v-card-actions>

@@ -8,7 +8,7 @@
         <LazyHydrate never>
           <div>
             <v-card>
-              <v-card-title class="primary white--text">
+              <v-card-title class="bg-primary text-white">
                 Welcome to the SEARCCH Hub
               </v-card-title>
               <v-card-text>
@@ -65,12 +65,12 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" nuxt to="/search">
+                <v-btn color="primary"  to="/search">
                   Continue
                 </v-btn>
               </v-card-actions> </v-card><br />
             <v-card>
-              <v-card-title class="primary white--text">
+              <v-card-title class="bg-primary text-white">
                 Current Features
               </v-card-title>
               <v-card-text>

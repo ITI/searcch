@@ -14,7 +14,7 @@
             v-model="type_select"
             label="Type"
             :items="type_items"
-            @change="updateArtifacts()"
+            @update:model-value="updateArtifacts()"
           ></v-select>
         </v-col>
         <v-col cols="2">
@@ -23,14 +23,14 @@
             v-model="publication_select"
             label="Publication Status"
             :items="publication_items"
-            @change="updateArtifacts()"
+            @update:model-value="updateArtifacts()"
           ></v-select>
         </v-col>
         <v-col cols="2">
           <v-checkbox
             v-model="allversions"
             label="All Versions"
-            @change="updateArtifacts()"
+            @update:model-value="updateArtifacts()"
           ></v-checkbox>
         </v-col>
         <v-col cols="2">
@@ -60,25 +60,25 @@
         :items="items"
         :search="search"
         :loading="loading"
-        :options.sync="options"
+        v-model:options="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
-        :expanded.sync="expanded"
+        v-model:expanded="expanded"
         dense
       >
         <template v-slot:top>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-sheet
               class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
-              color="blue-grey darken-3"
-              dark
+              color="blue-grey-darken-3"
+              theme="dark"
             >
-              <div class="grey--text text--lighten-1 text-body-2 mb-4">
+              <div class="text-grey-lighten-1 text-body-2 mb-4">
                 Are you sure you want to delete this item?
               </div>
 
-              <v-btn plain color="success" @click="deleteItemConfirm">OK</v-btn>
-              <v-btn plain color="error" @click="closeDelete">Cancel</v-btn>
+              <v-btn variant="plain" color="success" @click="deleteItemConfirm">OK</v-btn>
+              <v-btn variant="plain" color="error" @click="closeDelete">Cancel</v-btn>
             </v-sheet>
           </v-dialog>
         </template>
@@ -93,7 +93,7 @@
           </td>
         </template>
         <template v-slot:item.id="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <a
                 v-if="item.id"
@@ -101,12 +101,12 @@
                 target="_blank"
                 rel="noopener"
               >
-                <v-icon v-on="on" small color="info">mdi-database</v-icon>
+                <v-icon v-on="on" size="small" color="info">mdi-database</v-icon>
               </a>
             </template>
             <span>View</span>
           </v-tooltip>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <a
                 v-if="item.id && !item.publication"
@@ -114,7 +114,7 @@
                 target="_blank"
                 rel="noopener"
               >
-                <v-icon v-on="on" small color="green">mdi-database-edit</v-icon>
+                <v-icon v-on="on" size="small" color="green">mdi-database-edit</v-icon>
               </a>
             </template>
             <span>Edit</span>
@@ -158,12 +158,12 @@
           ></ArtifactChips>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <v-icon
                 v-if="item.id"
                 v-on="on"
-                small
+                size="small"
                 color="error"
                 @click="deleteItem(item, false)"
               >
@@ -172,12 +172,12 @@
             </template>
             <span>Delete Artifact Version {{ item.id }}</span>
           </v-tooltip>
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <v-icon
                 v-if="item.id"
                 v-on="on"
-                small
+                size="small"
                 color="error"
                 @click="deleteItem(item, true)"
               >

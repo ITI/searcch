@@ -2,7 +2,7 @@
   <LazyHydrate never>
     <div>
       <v-card elevation="1">
-        <v-card-title class="primary white--text">
+        <v-card-title class="bg-primary text-white">
           <span class="text-h6">Supporters</span>
         </v-card-title>
         <v-card-text>

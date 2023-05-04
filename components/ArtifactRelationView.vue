@@ -8,7 +8,7 @@
               v-model="displayMode"
               :items="availableModes"
               label="Relation Direction"
-              outlined dense
+              variant="outlined" density="compact"
             ></v-select>
           </v-col>
           <v-col class="pt-0 pt-md-3" cols="12" md="9">
@@ -16,34 +16,34 @@
               v-model="filters"
               :items="availableFilters"
               label="Relation Type"
-              outlined dense multiple
+              variant="outlined" density="compact" multiple
             ></v-select>
           </v-col>
         </v-row>
       </v-card-text>
     </v-card>
-    <v-list dense>
+    <v-list density="compact">
       <v-list-item v-for="relation, idx in relations"
         :key="`${relation.artifact_id}-${idx}`">
         <v-row>
-          <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 grey--text text--darken-2">
+          <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 text-grey-darken-2">
             <v-list-item-title>{{$filters.titlecase( relation.relation ) }}</v-list-item-title>
           </v-col>
           <v-col cols="12" md="10" class="pt-0">
             <v-list-item-title>
-              <v-btn v-if="edit" class="mb-1" fab x-small text
+              <v-btn v-if="edit" class="mb-1 rounded-circle" size="x-small" variant="text"
                 @click="deleteRelationship(relation)">
-                <v-icon small>mdi-close</v-icon>
+                <v-icon size="small">mdi-close</v-icon>
               </v-btn>
               <span v-if="relation.related_artifact_group.publication !== null">
                 {{ relation.related_artifact_group.publication.artifact.title }}
               </span>
-              <span v-else class="red--text text--lighten-1">
+              <span v-else class="text-red-lighten-1">
                 [Related artifact not yet published -- no title available!]
               </span>
-              <v-btn class="mb-1" fab x-small text
+              <v-btn class="mb-1 rounded-circle" size="x-small" variant="text"
                 :href="getSearcchLinkForArtifact(relation)">
-                <v-icon small>mdi-open-in-new</v-icon>
+                <v-icon size="small">mdi-open-in-new</v-icon>
               </v-btn>
             </v-list-item-title>
             <p

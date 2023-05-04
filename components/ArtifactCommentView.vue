@@ -9,7 +9,7 @@
         <v-col cols="10">
           <v-card-title class="align-start">
             <div>
-              <span class="headline">{{
+              <span class="text-h5">{{
                 artifact.artifact.title
               }}</span>
             </div>
@@ -24,14 +24,14 @@
         </v-col>
       </v-row>
 
-      <span class="ml-4 grey--text text--darken-2 font-weight-light caption">
+      <span class="ml-4 text-grey-darken-2 font-weight-light text-caption">
         {{ artifact.num_reviews }}
         {{ artifact.num_reviews == 1 ? 'review' : 'reviews' }}
       </span>
       <v-rating
         v-model="artifact.avg_rating"
         color="amber"
-        dense
+        density="compact"
         half-increments
         readonly
         size="18"
@@ -64,7 +64,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="primary" :to="`/artifact/${artifact.artifact.artifact_group_id}`" nuxt>
+        <v-btn color="primary" :to="`/artifact/${artifact.artifact.artifact_group_id}`" >
           Read More
         </v-btn>
       </v-card-actions>

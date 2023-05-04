@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
     <div>
-      <v-card class="mx-auto my-2" outlined>
+      <v-card class="mx-auto my-2" variant="outlined">
         <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
@@ -10,10 +10,10 @@
         </v-card-text>
       </v-card>
     </div>
-    <v-card class="mx-auto my-2" outlined>
+    <v-card class="mx-auto my-2" variant="outlined">
       
       <v-card-title>Edit Relationship</v-card-title>
-      <v-card-text>Want to edit content? <v-btn text small color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
+      <v-card-text>Want to edit content? <v-btn variant="text" size="small" color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
 
       <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
 
@@ -31,7 +31,7 @@
                 <v-col cols="12" md="10">
                   <v-btn
                     color="primary"
-                    block depressed outlined
+                    block variant="flat"
                     v-bind="props"
                     :disabled="artifact_local.id ? false : true"
                   >
@@ -50,8 +50,8 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  class="error ml-2 mb-2"
-                  text
+                  class="bg-error ml-2 mb-2"
+                  variant="text"
                   @click="artifactdialog.value = false"
                 >
                   Close

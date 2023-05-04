@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app theme="dark">
     <h1> {{ errTitle }} </h1>
     <h2 v-if="error.message">
       {{ error.message }}

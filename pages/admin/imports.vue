@@ -6,9 +6,9 @@
           <h3>Filters:</h3>
         </v-col>
         <v-col cols="1">
-          <v-subheader>
+          <v-list-subheader>
             Status
-          </v-subheader>
+          </v-list-subheader>
         </v-col>
         <v-col cols="2">
           <v-select
@@ -16,16 +16,16 @@
             label="Status"
             :items="status_items"
             single-line
-            @change="updateImports()"
+            @update:model-value="updateImports()"
           ></v-select>
         </v-col>
         <v-col cols="1">
-          <v-subheader>
+          <v-list-subheader>
             Archived
-          </v-subheader>
+          </v-list-subheader>
         </v-col>
         <v-col cols="1">
-          <v-checkbox v-model="archived" @change="updateImports()"></v-checkbox>
+          <v-checkbox v-model="archived" @update:model-value="updateImports()"></v-checkbox>
         </v-col>
         <v-col cols="2">
           <v-text-field
@@ -57,7 +57,7 @@
           label="Search"
           single-line
           hide-details
-          dense
+          density="compact"
         ></v-text-field> -->
       </v-card-title>
 
@@ -67,7 +67,7 @@
         :search="search"
         :custom-filter="specializedFilter"
         :loading="loading"
-        :options.sync="options"
+        v-model:options="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
         dense

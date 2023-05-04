@@ -59,7 +59,7 @@
         :items="items"
         :search="search"
         :loading="loading"
-        :options.sync="options"
+        v-model:options="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
         :server-items-length="total"
         dense
@@ -70,12 +70,12 @@
         </a>
       </template>
         <template v-slot:item.actions="{ item }">
-          <v-tooltip bottom>
+          <v-tooltip location="bottom">
             <template v-slot:activator="{ on }">
               <v-icon
                 v-if="item.id"
                 v-on="on"
-                small
+                size="small"
                 color="warning"
                 @click="reviewClaim(item)"
               >

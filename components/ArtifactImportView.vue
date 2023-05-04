@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-card tile class="mx-auto pa-1 overflow-hidden" elevation="3">
+    <v-card rounded="0" class="mx-auto pa-1 overflow-hidden" elevation="3">
       <v-row class="px-0">
         <v-col cols="10" class="pa-1">
           <v-card-title class="align-start">
             <div>
-              <span class="headline"
+              <span class="text-h5"
                 >Import:&nbsp;<a
                   target="_blank"
                   :href="artifact.url"
@@ -28,7 +28,7 @@
         <v-progress-linear
           color="light-blue"
           height="25"
-          :value="artifact.progress"
+          :model-value="artifact.progress"
           ><strong>{{ artifact.progress }}%</strong></v-progress-linear
         >
         {{ artifact.status }} - {{ artifact.phase }}
@@ -44,7 +44,7 @@
             <v-textarea
               auto-grow
               readonly
-              :value="this.artifact.log"
+              :model-value="this.artifact.log"
             ></v-textarea>
           </span>
         </v-col>
@@ -137,9 +137,9 @@
               </v-col>
               <v-col cols="3" class="pa-0">
                 <v-progress-linear
-                  color="light-blue lighten-3"
+                  color="light-blue-lighten-3"
                   height="25"
-                  :value="artifact.progress"
+                  :model-value="artifact.progress"
                 >
                   <strong>{{ cr.related_candidate.artifact_import.progress }}%</strong>
                 </v-progress-linear>
@@ -152,7 +152,7 @@
               <v-col cols="auto" class="pa-0">
                 <v-btn
                   color="primary"
-                  small
+                  size="small"
                   @click="importCandidate(cr)"
                 >
                   Start Import
@@ -161,7 +161,7 @@
               <v-col cols="auto" class="pa-0 pl-2">
                 <v-btn
                   color="error"
-                  small
+                  size="small"
                   @click="deleteCandidate(cr)"
                 >
                   Delete Candidate

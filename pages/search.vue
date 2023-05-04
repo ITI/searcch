@@ -7,13 +7,13 @@
       Search
       <v-dialog transition="dialog-bottom-transition" max-width="600">
         <template v-slot:activator="{ props }">
-          <v-btn class="primary ml-4" fab small v-bind="props"
+          <v-btn class="bg-primary ml-4 rounded-circle" size="small" v-bind="props"
             ><v-icon>mdi-help</v-icon></v-btn
           >
         </template>
         <template v-slot:default="dialog">
           <v-card>
-            <v-toolbar color="primary" dark>Search Help</v-toolbar>
+            <v-toolbar color="primary" theme="dark">Search Help</v-toolbar>
             <v-card-text>
               <div class="text-h6 pa-12">
                 <p>
@@ -34,7 +34,7 @@
               </div>
             </v-card-text>
             <v-card-actions class="justify-end">
-              <v-btn text @click="dialog.value = false">Close</v-btn>
+              <v-btn variant="text" @click="dialog.value = false">Close</v-btn>
             </v-card-actions>
           </v-card>
         </template>

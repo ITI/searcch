@@ -8,7 +8,7 @@
       class="ma-2"
       label
       :color="iconColor(type, item)"
-      v-bind:close="edit ? !display : undefined"
+      v-bind:closable="edit ? !display : undefined"
       :close-icon="edit ? 'mdi-close' : undefined"
       @click:close="() => {
         if (type === 'relation') deleteRelationship(item.id)
@@ -17,17 +17,17 @@
       :to="whereTo(item)"
       v-bind:small="small"
     >
-      <v-avatar left>
+      <v-avatar start>
         <v-icon>{{ iconImage(type, item) }}</v-icon>
       </v-avatar>
       <div v-if="!isObject(field[index])">
         <v-text-field
           v-if="edit"
           class="m-0"
-          solo
-          dark
+          variant="solo"
+          theme="dark"
           hide-details
-          :background-color="iconColor(type, field[index])"
+          :bg-color="iconColor(type, field[index])"
           :placeholder="placeholder"
           v-model="field[index]"
           v-bind:readonly="!create"
@@ -64,10 +64,9 @@
     <v-btn
       v-if="create"
       @click="field.push('')"
-      class="success ml-2 mb-2"
+      class="bg-success ml-2 mb-2 rounded-circle"
       :disabled="typeof this.formModel !== 'undefined' ? !formModel : false"
-      fab
-      x-small
+      size="x-small"
     >
       <v-icon>mdi-plus</v-icon>
     </v-btn>

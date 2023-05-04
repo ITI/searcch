@@ -13,11 +13,11 @@
                 <v-img :src="profileImage(localuser.email)"></v-img>
               </v-avatar>
               <v-card-text class="text-center">
-                <h6 class="overline mb-3">
+                <h6 class="text-overline mb-3">
                   {{ localuser.name }}
                 </h6>
                 <h6
-                  class="overline mb-3"
+                  class="text-overline mb-3"
                   v-if="userAffiliation"
                   v-for="affil in userAffiliation"
                 >
@@ -68,13 +68,13 @@
                       v-if="localuser"
                       label="Interests"
                       multiple
-                      small-chips
-                      deletable-chips
+                      chips
+                      closable-chips
                       persistent-hint
                       :items="hardcodedInterests"
                       v-model="researchInterests"
                       hint="Select applicable items from the list or type in your own"
-                      :search-input.sync="interestSearch"
+                      v-model:search-input="interestSearch"
                       return-object
                       readonly
                     >
@@ -95,14 +95,14 @@
                     <v-combobox
                       label="Affiliation"
                       multiple
-                      small-chips
-                      deletable-chips
+                      chips
+                      closable-chips
                       persistent-hint
                       :items="orgNames"
                       v-model="userAffiliation"
                       hint="Select applicable organization from the list or type in your own"
-                      :search-input.sync="orgSearch"
-                      item-text="org.name"
+                      v-model:search-input="orgSearch"
+                      item-title="org.name"
                       item-value="org.name"
                       return-object
                       readonly

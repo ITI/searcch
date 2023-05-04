@@ -13,11 +13,11 @@
                 <v-img :src="profileImage(localuser.email)"></v-img>
               </v-avatar>
               <v-card-text class="text-center">
-                <h6 class="overline mb-3">
+                <h6 class="text-overline mb-3">
                   {{ localuser.name }}
                 </h6>
                 <h6
-                  class="overline mb-3"
+                  class="text-overline mb-3"
                   v-if="userAffiliation"
                   v-for="affil in userAffiliation"
                 >
@@ -71,13 +71,13 @@
                       v-if="localuser"
                       label="Interests"
                       multiple
-                      small-chips
-                      deletable-chips
+                      chips
+                      closable-chips
                       persistent-hint
                       :items="hardcodedInterests"
                       v-model="researchInterests"
                       hint="Select applicable items from the list or type in your own"
-                      :search-input.sync="interestSearch"
+                      v-model:search-input="interestSearch"
                       return-object
                     >
                       <template v-slot:no-data>
@@ -97,14 +97,14 @@
                     <v-combobox
                       label="Affiliation"
                       multiple
-                      small-chips
-                      deletable-chips
+                      chips
+                      closable-chips
                       persistent-hint
                       :items="orgNames"
                       v-model="userAffiliation"
                       hint="Select applicable organization from the list or type in your own"
-                      :search-input.sync="orgSearch"
-                      item-text="org.name"
+                      v-model:search-input="orgSearch"
+                      item-title="org.name"
                       item-value="org.name"
                       return-object
                     >
@@ -142,7 +142,7 @@
               <template v-slot:header>
                 <v-tabs
                   v-model="tabs"
-                  background-color="transparent"
+                  bg-color="transparent"
                   slider-color="white"
                   class="ml-4"
                 >
@@ -170,13 +170,13 @@
               <v-tabs-items v-model="tabs">
                 <v-tab-item>
                   <!-- artifacts -->
-                  <v-timeline align-top dense v-if="dashboard.owned_artifacts">
+                  <v-timeline align="top" density="compact" v-if="dashboard.owned_artifacts">
                     <v-timeline-item
                       v-for="item in sortedArtifacts"
                       :key="item.id"
-                      :color="iconColor(item.type)"
+                      :dot-color="iconColor(item.type)"
                       :icon="iconImage(item.type)"
-                      small
+                      size="small"
                     >
                       <div>
                         <div class="font-weight-normal">
@@ -189,7 +189,6 @@
                             color="primary"
                             icon
                             :to="`/artifact/${item.artifact_group_id}/${item.id}`"
-                            nuxt
                           >
                             <v-icon color="primary">
                               mdi-arrow-top-right-thick
@@ -217,16 +216,15 @@
                       <v-list-item-title v-text="item.title" />
 
                       <div class="d-flex">
-                        <v-tooltip top content-class="top">
+                        <v-tooltip location="top" content-class="top">
                           <template v-slot:activator="{ attrs, on }">
                             <v-chip
                               color="amber"
                               class="ma-2"
                               label
                               :to="`/artifact/review/${item.artifact_group_id}`"
-                              nuxt
                             >
-                              <v-avatar left>
+                              <v-avatar start>
                                 <v-icon> mdi-star </v-icon>
                               </v-avatar>
                               <div>{{ item.rating }}</div>
@@ -256,7 +254,7 @@
                         v-text="item.title"
                       ></v-list-item-title>
                       <div class="d-flex">
-                        <v-tooltip top content-class="top">
+                        <v-tooltip location="top" content-class="top">
                           <template v-slot:activator="{ attrs, on }">
                             <v-btn
                               class="v-btn--simple"
@@ -265,7 +263,6 @@
                               v-bind="attrs"
                               v-on="on"
                               :to="`/artifact/${item.artifact_group_id}`"
-                              nuxt
                             >
                               <v-icon color="primary">
                                 mdi-arrow-top-right-thick

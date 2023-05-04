@@ -79,7 +79,7 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth',
     '@pinia/nuxt',
     'nuxt-proxy',
-    'nuxt-security',
+    // 'nuxt-security',
     // [
     //   '@nuxtjs/google-analytics',
     //   {
@@ -142,7 +142,7 @@ export default defineNuxtConfig({
   // vuetify: {
   //   customVariables: ['~/assets/variables.scss'],
   //   theme: {
-  //     dark: false,
+  //     theme="dark": false,
   //     themes: {
   //       light: {
   //         primary: '#00476B',

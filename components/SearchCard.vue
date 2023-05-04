@@ -12,8 +12,8 @@
         hide-details
         @keydown="onChange"
         @change="onSubmit"
-        solo
-        dense
+        variant="solo"
+        density="compact"
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen">
@@ -62,7 +62,7 @@
                   hide-details
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item ripple @click="toggle">
+                    <v-list-item  @click="toggle">
                       <v-list-item-action>
                         <v-icon
                           :color="
@@ -81,7 +81,7 @@
                   <template v-slot:selection="{ item, index }">
                     <span v-if="index === 0">{{ item }}</span>
                     <span></span>
-                    <span v-if="index === 1" class="grey--text caption">
+                    <span v-if="index === 1" class="text-grey text-caption">
                       (+{{ advanced.types.length - 1 }} others)
                     </span>
                   </template>
@@ -99,7 +99,7 @@
                   hide-details
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item ripple @click="toggleBadges">
+                    <v-list-item  @click="toggleBadges">
                       <v-list-item-action>
                         <v-icon
                           :color="
@@ -118,7 +118,7 @@
                   <template v-slot:selection="{ item, index }">
                     <span v-if="index === 0">{{ `${item.organization} ${item.title}` }}</span>
                     <span></span>
-                    <span v-if="index === 1" class="grey--text caption">
+                    <span v-if="index === 1" class="text-grey text-caption">
                       (+{{ advanced.badge_ids.length - 1 }} others)
                     </span>
                   </template>
@@ -139,7 +139,7 @@
                   hide-details
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item ripple @click="toggleVenues">
+                    <v-list-item  @click="toggleVenues">
                       <v-list-item-action>
                         <v-icon
                           :color="
@@ -158,7 +158,7 @@
                   <template v-slot:selection="{ item, index }">
                     <span v-if="index === 0">{{ `${item.title}` }}</span>
                     <span></span>
-                    <span v-if="index === 1" class="grey--text caption">
+                    <span v-if="index === 1" class="text-grey text-caption">
                       (+{{ advanced.venue_ids.length - 1 }} others)
                     </span>
                   </template>
@@ -169,12 +169,12 @@
               </v-col>
 
               <v-col cols="12" sm ="8">
-                <v-select v-model="advanced.search_criteria" label="Sort Results" :items="['None','date', 'views', 'rating']" @change = "showOptions">
+                <v-select v-model="advanced.search_criteria" label="Sort Results" :items="['None','date', 'views', 'rating']" @update:model-value = "showOptions">
                 </v-select>
               </v-col>
               
               <v-col cols="12" sm="4">
-                <v-radio-group v-model="advanced.search_type" v-if="sortEnabled" @change="setSortType" row>
+                <v-radio-group v-model="advanced.search_type" v-if="sortEnabled" @update:model-value="setSortType" row>
                   <v-radio label="Ascending" value="asc"></v-radio>
                   <v-radio label="Descending" value="desc"></v-radio>
                 </v-radio-group>
@@ -189,7 +189,7 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-btn @click="onSubmit" class="primary mt-3">Search</v-btn>
+            <v-btn @click="onSubmit" class="bg-primary mt-3">Search</v-btn>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -200,7 +200,7 @@
       v-if="artifacts"
       v-model="page"
       :length="pages"
-      circle
+      rounded
     ></v-pagination>
     <ArtifactList
       :artifacts="artifacts"
@@ -215,11 +215,11 @@
     >
     <v-btn
       v-if="showScrollToTop != 0"
-      class="secondary"
+      class="bg-secondary"
       id="scrollbtn"
       @click="scrollToTop()"
       elevation="10"
-      ><v-icon large color="lightblue">mdi-chevron-up</v-icon></v-btn
+      ><v-icon size="large" color="lightblue">mdi-chevron-up</v-icon></v-btn
     >
   </div>
 </template>
@@ -283,7 +283,7 @@ export default defineComponent({
   beforeMount() {
     window.addEventListener('scroll', this.handleScroll)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
   },
   mounted() {

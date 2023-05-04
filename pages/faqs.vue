@@ -8,22 +8,22 @@
               <logo />
             </div>
             <v-card>
-              <v-card-title class="primary white--text">
+              <v-card-title class="bg-primary text-white">
                 <span class="text-h6">Frequently Asked Questions</span>
               </v-card-title>
               <v-card-text class="py-0">
-                <v-timeline align-top dense>
+                <v-timeline align="top" density="compact">
                   <v-timeline-item
                     v-for="(faq, index) in faqs"
                     :key="`faq${index}`"
-                    small
+                    size="small"
                     fill-dot
                     icon="mdi-help"
                   >
-                    <v-card color="primary" dark>
+                    <v-card color="primary" theme="dark">
                       <v-card-title class="text-h6" v-text="faq.q"/>
                       <br />
-                      <v-card-text class="white text--primary" v-html="faq.a"/>
+                      <v-card-text class="bg-white text--primary" v-html="faq.a"/>
                     </v-card>
                   </v-timeline-item>
                 </v-timeline>

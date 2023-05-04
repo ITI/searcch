@@ -2,11 +2,10 @@
   <v-app light>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
+      :rail="miniVariant"
+      :order="order"
       permanent
-      fixed
-      app
+      position="fixed"
     >
       <v-list>
         <v-list-item
@@ -20,7 +19,7 @@
         >
           <template v-slot:prepend="{ on, attrs }">
             <v-list-item-action>
-              <v-tooltip right>
+              <v-tooltip location="right">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">{{ item.icon }}</v-icon>
                 </template>
@@ -44,7 +43,7 @@
         >
           <template v-slot:prepend="{ on, attrs }">
             <v-list-item-action>
-              <v-tooltip right>
+              <v-tooltip location="right">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">{{ item.icon }}</v-icon>
                 </template>
@@ -68,7 +67,7 @@
         >
           <template v-slot:prepend="{ on, attrs }">
             <v-list-item-action>
-              <v-tooltip right>
+              <v-tooltip location="right">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">{{ item.icon }}</v-icon>
                 </template>
@@ -80,7 +79,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar position="fixed">
       <v-btn icon @click.stop="() => {miniVariant = !miniVariant}">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
@@ -102,36 +101,36 @@
       >
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
       </v-btn> -->
-      <v-btn v-if="$auth.loggedIn" class="primary" @click="() => logout()"
-        >Logout&nbsp;<v-icon small>mdi-logout</v-icon></v-btn
+      <v-btn v-if="$auth.loggedIn" class="bg-primary" @click="() => logout()"
+        >Logout&nbsp;<v-icon size="small">mdi-logout</v-icon></v-btn
       >
       <v-menu v-else
         open-on-click
-        bottom
+        location="bottom"
       >
         <template v-slot:activator="{ props }">
           <v-btn
-            class="primary"
+            class="bg-primary"
             v-bind="props"
           >
-            Login&nbsp;<v-icon small>mdi-login</v-icon>
+            Login&nbsp;<v-icon size="small">mdi-login</v-icon>
           </v-btn>
         </template>
 
         <v-list>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="() => gitHubLogin()">
-              GitHub&nbsp;<v-icon small>mdi-github</v-icon>
+            <v-btn class="bg-primary"  @click="() => gitHubLogin()">
+              GitHub&nbsp;<v-icon size="small">mdi-github</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="() => googleLogin()">
-              Google&nbsp;<v-icon small>mdi-google</v-icon>
+            <v-btn class="bg-primary"  @click="() => googleLogin()">
+              Google&nbsp;<v-icon size="small">mdi-google</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="() => cilogonLogin()">
-              CILogon&nbsp;<v-icon small>mdi-login</v-icon>
+            <v-btn class="bg-primary"  @click="() => cilogonLogin()">
+              CILogon&nbsp;<v-icon size="small">mdi-login</v-icon>
             </v-btn>
           </v-list-item>
         </v-list>
@@ -150,7 +149,7 @@
       >
       <v-btn
         color="error"
-        dark
+        theme="dark"
         raised
         href="https://forms.gle/nsP4kJVsjAmKKLU86"
         target="_blank"
@@ -168,7 +167,7 @@ import { userStore } from '../stores/user'
 export default defineComponent({
   data() {
     return {
-      clipped: true,
+      order: 0,
       drawer: true,
       miniVariant: false,
       right: true,

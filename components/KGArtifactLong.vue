@@ -23,12 +23,12 @@
           <v-rating
             v-model="record.avg_rating"
             color="amber"
-            dense
+            density="compact"
             half-increments
             size="18"
             readonly
           ></v-rating>
-          <div class="grey--text ml-4">({{ record.num_ratings }})</div>
+          <div class="text-grey ml-4">({{ record.num_ratings }})</div>
         </v-row>
         <v-row align="center" class="mx-0">
           <span v-if="record.artifact.publication">
@@ -67,13 +67,13 @@
         >
           <v-btn
             v-if="record.artifact.artifact_group.publications"
-            x-small
+            size="x-small"
             @click="history_expanded = !history_expanded"
           >
             {{ !history_expanded ? 'Show Record History' : 'Hide Record History' }}
           </v-btn>
 	  <v-btn
-	    x-small
+	    size="x-small"
 	    @click="claimThis()"
 	    >Claim This Record
 	  </v-btn>
@@ -150,8 +150,8 @@
         </v-container>
       </v-card-text>
 
-      <v-divider class="mt-4 grey lighten-2"></v-divider>
-      <v-tabs v-model="tab" background-color="grey lighten-4">
+      <v-divider class="mt-4 bg-grey-lighten-2"></v-divider>
+      <v-tabs v-model="tab" bg-color="grey lighten-4">
         <v-tab>Content</v-tab>
         <v-tab>Related{{ numberRelationships ? " (" + numberRelationships + ")" : "" }}</v-tab>
 
@@ -186,7 +186,7 @@
               <v-row class="mx-1">
                 <v-btn
                   elevation="0"
-                  tile
+                  rounded="0"
                   :v-if="isOverflow"
                   @click="expanded = !expanded"
                   block
@@ -203,7 +203,7 @@
           <v-card-title class="py-0"> Artifact Type </v-card-title>
 
           <v-chip :color="iconColor(record.artifact.type)" class="ma-2 ml-6" label>
-            <v-avatar left>
+            <v-avatar start>
               <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
             </v-avatar>
 
@@ -281,14 +281,14 @@
               <v-card-title class="py-0">GitHub Metrics</v-card-title>
 
               <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
+                <v-avatar start>
                   <v-icon color="yellow">mdi-star</v-icon>
                 </v-avatar>
 
                 {{ stars }}
               </v-chip>
               <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
+                <v-avatar start>
                   <v-icon>mdi-eye</v-icon>
                 </v-avatar>
 
@@ -300,7 +300,7 @@
               <v-card-title class="py-0">Importer</v-card-title>
 
               <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
+                <v-avatar start>
                   <v-icon>mdi-file-download-outline</v-icon>
                 </v-avatar>
                 {{
@@ -315,7 +315,7 @@
             <v-card-title class="py-0">License</v-card-title>
             <a :href="record.artifact.license.url">
               <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
+                <v-avatar start>
                   <v-icon>mdi-scale-balance</v-icon>
                 </v-avatar>
 
@@ -331,16 +331,16 @@
             <v-list-item
               v-for="(v, k) in record.artifact.files"
               :key="`file${k}`"
-              dense
+              density="compact"
             >
-              <v-list-group :value="true" no-action sub-group>
+              <v-list-group :value="true"  >
                 <template v-slot:activator>
                   <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
                     v.url
                   }}</a>
                   &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
                 </template>
-                <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
+                <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" density="compact">
                   <a
                     target="_blank"
                     :href="vm.html_url || vm.download_url"
@@ -366,16 +366,15 @@
               <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
             </v-btn>
 
-            <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" nuxt>
+            <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" >
               <v-icon>mdi-comment</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <span v-if="(isOwner() || isAdmin()) && !published">
               <v-btn
                 color="success"
-                small
+                size="small"
                 :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit=true`"
-                nuxt
                 >
                 Edit
               </v-btn>
@@ -383,17 +382,15 @@
             <span v-if="(isOwner() || isAdmin()) && published">
               <v-btn
                 color="success"
-                small
+                size="small"
                 @click="newVersion()"
-                nuxt
                 >
                 Edit New Version
               </v-btn>
               <v-btn
                 color="success"
-                small
+                size="small"
                 @click="reImportNewVersion()"
-                nuxt
                 >
                 Reimport New Version
               </v-btn>
@@ -420,9 +417,9 @@
           <v-card-actions class="justify-end" v-if="(isOwner() || isAdmin()) && published">
             <v-btn
               color="success"
-              small
+              size="small"
               :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit_relation=true`"
-              nuxt>
+            >
               Edit Relation
             </v-btn>
           </v-card-actions>
@@ -464,8 +461,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="blue darken-1"
-              text
+              color="blue-darken-1"
+              variant="text"
               @click="diff_results_dialog = false"
             >
               Close
