@@ -7,7 +7,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row justify="center" align="top">
+    <v-row justify="center" align="start">
       <v-col>
         <h1>Favorites</h1>
         <v-divider></v-divider>

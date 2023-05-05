@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="left" align="top">
+  <v-row justify="start" align="start">
     <v-container fill-height fluid>
       <v-row justify="center">
         <v-col cols="12" md="4" v-if="localuser">

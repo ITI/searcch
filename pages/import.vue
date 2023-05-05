@@ -7,7 +7,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row justify="left" align="top">
+    <v-row justify="start" align="start">
       <v-row class="ml-1 mb-2">
         <h1>Artifact Import</h1>
         <v-dialog transition="dialog-bottom-transition" max-width="600">

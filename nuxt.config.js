@@ -95,9 +95,13 @@ export default defineNuxtConfig({
   },
 
   security: {
+    // TODO: this is an integration bug between nuxt-security and sidebase/nuxt-auth,
+    // https://github.com/sidebase/nuxt-auth/issues/324
+    // once fixed, we can enable this
+    xssValidator: false,
     headers: {
       contentSecurityPolicy: {
-        'connect-src': ["'self' https://api.github.com https://cilogon.org https://www.gravatar.com"],
+        'connect-src': ["'self' https://api.github.com https://cilogon.org https://www.gravatar.com ws://localhost:*"],
         'default-src': ["'self'"],
         'font-src': ["'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net"],
         // asterisk here due to badge images
@@ -113,6 +117,8 @@ export default defineNuxtConfig({
         includeSubdomains: true,
         preload: true,
       },
+      xXSSProtection: '1; mode=block',
+      acceptRanges: 'none',
     },
   },  
 

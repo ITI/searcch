@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row justify="left" align="top">
+    <v-row justify="start" align="start">
       <v-row class="ml-1 mb-2">
         <h1>Importers</h1>
       </v-row>

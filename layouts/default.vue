@@ -79,7 +79,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar position="fixed">
+    <v-app-bar position="fixed" elevation="1">
       <v-btn icon @click.stop="() => {miniVariant = !miniVariant}">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
@@ -167,7 +167,7 @@ import { userStore } from '../stores/user'
 export default defineComponent({
   data() {
     return {
-      order: 0,
+      order: 1,
       drawer: true,
       miniVariant: false,
       right: true,

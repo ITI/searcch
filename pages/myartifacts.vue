@@ -7,7 +7,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row justify="left" align="top">
+    <v-row justify="start" align="start">
       <div class="my-artifacts-header">
         <h1>My Artifacts</h1>
         <v-divider></v-divider>

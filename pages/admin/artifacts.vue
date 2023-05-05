@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row justify="left" align="top">
+    <v-row justify="start" align="start">
       <v-row align="center">
         <v-btn icon @click="updateArtifacts()">
           <v-icon>mdi-refresh</v-icon>
