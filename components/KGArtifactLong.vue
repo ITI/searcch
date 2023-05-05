@@ -154,8 +154,10 @@
       <v-tabs v-model="tab" bg-color="grey lighten-4">
         <v-tab>Content</v-tab>
         <v-tab>Related{{ numberRelationships ? " (" + numberRelationships + ")" : "" }}</v-tab>
+      </v-tabs>
 
-        <v-tab-item>
+      <v-window v-model="tab">
+        <v-window-item>
 
           <v-card-title>Description</v-card-title>
 
@@ -397,9 +399,9 @@
             </span>
           </v-card-actions>
 
-        </v-tab-item>
+        </v-window-item>
 
-        <v-tab-item>
+        <v-window-item>
           <div
             v-if="
               (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
@@ -423,8 +425,8 @@
               Edit Relation
             </v-btn>
           </v-card-actions>
-        </v-tab-item>
-      </v-tabs>
+        </v-window-item>
+      </v-window>
     </v-card>
 
     <template>
@@ -447,16 +449,16 @@
               <v-tab>Raw</v-tab>
             </v-tabs>
 
-            <v-tabs-items v-model="diff_results_tab">
-              <v-tab-item key="visual">
+            <v-tabs v-model="diff_results_tab">
+              <v-tab key="visual">
                 <ArtifactCurationList
                   :curations="diff_results">
                 </ArtifactCurationList>
-              </v-tab-item>
-              <v-tab-item key="raw">
+              </v-tab>
+              <v-tab key="raw">
                 <JsonPrettyPrint :value="diff_results"></JsonPrettyPrint>
-              </v-tab-item>
-            </v-tabs-items>
+              </v-tab>
+            </v-tabs>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

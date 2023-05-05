@@ -167,8 +167,8 @@
                 </v-tabs>
               </template>
 
-              <v-tabs-items v-model="tabs">
-                <v-tab-item>
+              <v-window v-model="tabs">
+                <v-window-item>
                   <!-- artifacts -->
                   <v-timeline align="top" density="compact" v-if="dashboard.owned_artifacts">
                     <v-timeline-item
@@ -198,8 +198,8 @@
                       </div>
                     </v-timeline-item>
                   </v-timeline>
-                </v-tab-item>
-                <v-tab-item>
+                </v-window-item>
+                <v-window-item>
                   <!-- ratings -->
                   <v-list
                     single-line
@@ -236,8 +236,8 @@
                     </v-list-item>
                     <v-divider />
                   </v-list>
-                </v-tab-item>
-                <v-tab-item>
+                </v-window-item>
+                <v-window-item>
                   <!-- favorites -->
                   <v-list
                     single-line
@@ -275,8 +275,8 @@
                     </v-list-item>
                     <v-divider />
                   </v-list>
-                </v-tab-item>
-              </v-tabs-items>
+                </v-window-item>
+              </v-window>
             </material-card>
           </LazyHydrate>
         </v-col>

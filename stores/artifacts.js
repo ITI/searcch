@@ -21,63 +21,6 @@ const search_advanced_defaults = {
   sort_type: 'desc',
 }
 
-// export const state = () => ({
-//   artifacts: {
-//     artifacts: [],
-//     pages: 0,
-//     total: 0
-//   },
-//   artifact: {},
-//   myArtifacts: {
-//     owned_artifacts: [],
-//   },
-//   search: '',
-//   search_advanced_enabled: true,
-//   search_advanced_isopen: false,
-//   search_advanced: JSON.parse(JSON.stringify(search_advanced_defaults)),
-//   favorites: [],
-//   favoritesIDs: {},
-//   imports: {
-//     artifact_imports: [],
-//     pages: 0,
-//     total: 0
-//   },
-//   import: {},
-//   loading: false,
-//   artifactClaim: {}
-// })
-
-// export const mutations = {
-//   RESET_ARTIFACTS(state) {
-//     state.artifacts = {
-//       artifacts: [],
-//       pages: 0,
-//       total: 0
-//     }
-//   },
-//   SET_SEARCH_ADVANCED(state, search_advanced) {
-//     state.search_advanced = search_advanced
-//     if (!search_advanced)
-//       state.search_advanced_enabled = false
-//     if (JSON.stringify(state.search_advanced) === JSON.stringify(search_advanced_defaults))
-//       state.search_advanced_isopen = false
-//     else
-//       state.search_advanced_isopen = true
-//   },
-//   RESET_SEARCH(state) {
-//     state.search = ''
-//     state.search_advanced_enabled = false
-//     state.search_advanced = {
-//       types: ['dataset', 'presentation', 'publication', 'software', 'other'],
-//       author: '',
-//       org: '',
-//       badge_ids: [],
-//       sort_criteria: '',
-//       sort_type: 'desc',
-//     }
-//   },
-// }
-
 export const artifactsStore = defineStore('artifacts', {
   state: () => ({
     artifacts: {

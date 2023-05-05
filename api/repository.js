@@ -3,7 +3,7 @@ import * as qs from 'qs'
 // I've used typical CRUD method names and actions here
 export default $fetch => (resource, error) => ({
   index(payload) {
-    return $fetch(`${resource}`, {
+    return $fetch(`/${resource}`, {
       params: payload,
       method: 'GET',
       paramsSerializer: function (params) {
@@ -41,7 +41,8 @@ export default $fetch => (resource, error) => ({
         }
       }
     }
-    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+    console.log('show: ', resource)
+    return $fetch(`/${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
       method: 'GET',
       ...rparams
     }).catch(function (e) {
@@ -66,7 +67,7 @@ export default $fetch => (resource, error) => ({
   },
 
   create(data) {
-    return $fetch(`${resource}`, {
+    return $fetch(`/${resource}`, {
       method: 'POST',
       body: JSON.stringify(data),
     }).catch(function (e) {
@@ -91,7 +92,7 @@ export default $fetch => (resource, error) => ({
   },
 
   update(id, data) {
-    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+    return $fetch(`/${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }).catch(function (e) {
@@ -117,7 +118,7 @@ export default $fetch => (resource, error) => ({
 
   put(data, ...args) {
     let complete_path = [resource, ...args].join('/');
-    return $fetch(`${complete_path}`, {
+    return $fetch(`/${complete_path}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }).catch(function (e) {
@@ -142,7 +143,7 @@ export default $fetch => (resource, error) => ({
   },
   // FIXME: backend API
   post(id, data) {
-    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+    return $fetch(`/${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
       method: 'POST',
       body: JSON.stringify(data),
     }).catch(function (e) {
@@ -166,7 +167,7 @@ export default $fetch => (resource, error) => ({
     })
   },
   delete(id) {
-    return $fetch(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
+    return $fetch(`/${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
       method: 'DELETE',
     }).catch(function (e) {
       if (e.response) {
@@ -190,7 +191,7 @@ export default $fetch => (resource, error) => ({
   },
   // FIXME: backend API
   remove(id, params) {
-    return $fetch(`${resource}/${id}`, {
+    return $fetch(`/${resource}/${id}`, {
       method: 'DELETE',
       params
     })
