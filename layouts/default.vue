@@ -176,10 +176,6 @@ export default defineComponent({
   },
   async mounted() {
     this.miniVariant = window.innerWidth < 992;
-
-    // if (this.$auth.loggedIn) {
-    //   this.$loginEndpoint
-    // }
   },
   computed: {
     ...mapState(userStore, {

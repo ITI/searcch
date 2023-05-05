@@ -88,6 +88,12 @@ export default defineNuxtConfig({
     // ],
   ],
 
+  auth: {
+    isEnabled: true,
+    origin: 'http://localhost:3000',
+    addDefaultCallbackUrl: true,
+  },
+
   security: {
     headers: {
       contentSecurityPolicy: {
