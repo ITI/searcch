@@ -119,6 +119,8 @@ export default defineNuxtConfig({
       },
       xXSSProtection: '1; mode=block',
       acceptRanges: 'none',
+      crossOriginEmbedderPolicy: 'unsafe-none',
+      crossOriginResourcePolicy: 'cross-origin',
     },
   },  
 

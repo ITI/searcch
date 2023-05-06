@@ -29,18 +29,21 @@
       <!-- Bug in Vuetify for first child of v-list not receiving proper border-radius -->
       <div />
 
-      <v-list-item
+      <nuxt-link
         v-for="(link, i) in links"
         :key="i"
         :to="link.to"
-        active-class="primary white--text"
       >
-        <v-list-item-action>
-          <v-icon>{{ link.icon }}</v-icon>
-        </v-list-item-action>
+        <v-list-item
+          active-class="primary white--text"
+        >
+          <v-list-item-action>
+            <v-icon>{{ link.icon }}</v-icon>
+          </v-list-item-action>
 
-        <v-list-item-title v-text="link.text" />
-      </v-list-item>
+          <v-list-item-title v-text="link.text" />
+        </v-list-item>
+      </nuxt-link>
     </v-list>
 
     <template v-slot:append>

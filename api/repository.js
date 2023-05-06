@@ -41,7 +41,6 @@ export default $fetch => (resource, error) => ({
         }
       }
     }
-    console.log('show: ', resource)
     return $fetch(`/${resource}/${Array.isArray(id) ? id.join('/') : id}`, {
       method: 'GET',
       ...rparams

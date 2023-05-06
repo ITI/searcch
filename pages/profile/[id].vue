@@ -131,6 +131,7 @@
 
 <script>
 import schemaWithPointers from '~/schema/affiliation.json'
+import md5 from 'md5';
 
 export default defineComponent({
   head() {
@@ -223,7 +224,6 @@ export default defineComponent({
           return this.authUser.avatar_url + '&size=130'
         }
       }
-      var md5 = require('md5')
       const url =
         'https://www.gravatar.com/avatar/' +
         md5(email.toLowerCase().trim()) +

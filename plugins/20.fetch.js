@@ -3,7 +3,7 @@ export default defineNuxtPlugin(({ $userStore }) => {
     provide: {
       // provide a wrapper for $fetch
       fetch: async (url, options) => {
-        if ($userStore.user_token && url.startsWith('kg/')) {
+        if ($userStore.user_token && url.startsWith('/kg/')) {
           const headers = new Headers()
           headers.append('Authorization', $userStore.user_token)
           options = { ...options, headers }

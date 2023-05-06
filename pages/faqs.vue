@@ -12,7 +12,7 @@
                 <span class="text-h6">Frequently Asked Questions</span>
               </v-card-title>
               <v-card-text class="py-0">
-                <v-timeline align="top" density="compact">
+                <v-timeline align="start" density="compact">
                   <v-timeline-item
                     v-for="(faq, index) in faqs"
                     :key="`faq${index}`"

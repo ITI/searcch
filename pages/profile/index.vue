@@ -170,7 +170,7 @@
               <v-window v-model="tabs">
                 <v-window-item>
                   <!-- artifacts -->
-                  <v-timeline align="top" density="compact" v-if="dashboard.owned_artifacts">
+                  <v-timeline align="start" density="compact" v-if="dashboard.owned_artifacts">
                     <v-timeline-item
                       v-for="item in sortedArtifacts"
                       :key="item.id"
@@ -291,6 +291,7 @@ import { mapState } from 'pinia'
 import { userStore } from '~/stores/user'
 import { artifactIcon, artifactColor } from '@/helpers'
 import schemaWithPointers from '~/schema/affiliation.json'
+import md5 from 'md5'
 
 export default defineComponent({
   components: {
@@ -452,7 +453,6 @@ export default defineComponent({
           return this.authUser.avatar_url + '&size=130'
         }
       }
-      var md5 = require('md5')
       const url =
         'https://www.gravatar.com/avatar/' +
         md5(email.toLowerCase().trim()) +
