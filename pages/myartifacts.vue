@@ -8,12 +8,14 @@
       </v-col>
     </v-row>
     <v-row justify="start" align="start">
-      <div class="my-artifacts-header">
+      <v-col cols="12">
         <h1>My Artifacts</h1>
         <v-divider></v-divider>
+      </v-col>
+      <v-col cols="12">
         <ArtifactList :artifacts="myArtifacts.owned_artifacts" :limit="limit"></ArtifactList>
         <span v-if="doArtifactsExist()">No artifacts yet</span>
-      </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -61,11 +63,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-
-  .my-artifacts-header {
-    margin-top: 20px;
-  }
-
-</style>

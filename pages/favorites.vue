@@ -7,8 +7,8 @@
         </div>
       </v-col>
     </v-row>
-    <v-row justify="center" align="start">
-      <v-col>
+    <v-row justify="start" align="start">
+      <v-col cols="12">
         <h1>Favorites</h1>
         <v-divider></v-divider>
         <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>

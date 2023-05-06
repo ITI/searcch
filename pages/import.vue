@@ -8,210 +8,160 @@
       </v-col>
     </v-row>
     <v-row justify="start" align="start">
-      <v-row class="ml-1 mb-2">
-        <h1>Artifact Import</h1>
-        <v-dialog transition="dialog-bottom-transition" max-width="600">
-          <template v-slot:activator="{ props }">
-            <v-btn class="bg-primary ml-4 rounded-circle" size="small" v-bind="props"
-              ><v-icon>mdi-help</v-icon></v-btn
-            >
-          </template>
-          <template v-slot:default="dialog">
-            <v-card>
-              <v-toolbar color="primary" theme="dark">Import Help</v-toolbar>
-              <v-card-text>
-                <div class="text-h6 pa-12">
-                  <p>
-                    Artifacts published on GitHub, ACM digital library, IEEE
-                    Xplore, USENIX web site publication, arXiv, Papers With
-                    Code, Zenodo, and generic git repositories can be processed
-                    using our import assistant. All other artifact sources must
-                    be manually processed.
-                  </p>
-                  <p>
-                    To start the import assistant, type the URL of an artifact
-                    in the input field and click START IMPORT.
-                  </p>
-                  <p>
-                    When the import processing starts, it will show up in your
-                    imports list below the URL field.
-                  </p>
-                  <p>
-                    The import assistant works in multiple stages to scrape all
-                    of the information and format it properly. Once the progress
-                    bar shows the process is complete, you should review and
-                    correct the information (as needed) by clicking EDIT.
-                  </p>
-                  <p>
-                    When you are ready to make your artifact available in the
-                    catalog of searchable artifacts, click PUBLISH.
-                  </p>
-                  <p>
-                    Click ARCHIVE to hide a completed import from your list.
-                  </p>
-                </div>
-              </v-card-text>
-              <v-card-actions class="justify-end">
-                <v-btn variant="text" @click="dialog.value = false">Close</v-btn>
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-      </v-row>
-      <v-divider></v-divider><br />
-      <h2>Artifact Import Assistant</h2>
-      <p>
-        Supported artifact locations are: GitHub, ACM digital library, IEEE
-        Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo,
-        and openly-accessible generic git repositories.
-      </p>
-      <p>
-        Enter the supported URL for your artifact:
-      </p>
-      <v-form v-model="valid" ref="importform">
-        <v-row dense>
-          <v-col cols="10" class="ma-1 pa-1">
-            <v-text-field
-              label="URL"
-              v-model="url"
-              placeholder="http://github.com/iti/project"
-              variant="outlined"
-              hide-details="auto"
-              :rules="[rules.required, rules.url]"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row align="center" dense>
-          <v-col cols="2" class="ma-1 pa-1">
-            <v-btn
-              class="bg-primary"
-              :disabled="importing"
-              @click="startImport()"
-              block
-              >Start Import</v-btn
-            >
-          </v-col>
-          <v-divider class="mx-4" vertical></v-divider>
-          <v-col class="ma-1 pa-1">
-            <v-tooltip
-              color="grey-darken-4"
-              max-width="400px"
-              location="bottom"
-            >
-              <template v-slot:activator="{ props }">
-                <span v-bind="props">
-                  <v-checkbox
-                    class="ma-1 pa-1"
-                    label="Import candidates"
-                    v-model="autofollow"
-                    hide-details="auto"
-                    density="compact"
-                    ></v-checkbox>
+      <v-col cols="12">
+        <h1>Artifact Import
+          <v-dialog transition="dialog-bottom-transition" max-width="600">
+            <template v-slot:activator="{ props }">
+              <v-btn class="bg-primary mb-2" size="x-small" v-bind="props" icon="mdi-help" />
+            </template>
+            <template v-slot:default="dialog">
+              <v-card>
+                <v-toolbar color="primary" theme="dark">Import Help</v-toolbar>
+                <v-card-text>
+                  <div class="text-h6 pa-12">
+                    <p>
+                      Artifacts published on GitHub, ACM digital library, IEEE
+                      Xplore, USENIX web site publication, arXiv, Papers With
+                      Code, Zenodo, and generic git repositories can be processed
+                      using our import assistant. All other artifact sources must
+                      be manually processed.
+                    </p>
+                    <p>
+                      To start the import assistant, type the URL of an artifact
+                      in the input field and click START IMPORT.
+                    </p>
+                    <p>
+                      When the import processing starts, it will show up in your
+                      imports list below the URL field.
+                    </p>
+                    <p>
+                      The import assistant works in multiple stages to scrape all
+                      of the information and format it properly. Once the progress
+                      bar shows the process is complete, you should review and
+                      correct the information (as needed) by clicking EDIT.
+                    </p>
+                    <p>
+                      When you are ready to make your artifact available in the
+                      catalog of searchable artifacts, click PUBLISH.
+                    </p>
+                    <p>
+                      Click ARCHIVE to hide a completed import from your list.
+                    </p>
+                  </div>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn variant="text" @click="dialog.value = false">Close</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </h1>
+        <v-divider></v-divider>
+      </v-col>
+      <v-col cols="12">
+        <h2>Artifact Import Assistant</h2>
+        <p>
+          Supported artifact locations are: GitHub, ACM digital library, IEEE
+          Xplore, USENIX web site publication, arXiv, Papers With Code, Zenodo,
+          and openly-accessible generic git repositories.
+        </p>
+        <p>
+          Enter the supported URL for your artifact:
+        </p>
+        <v-form v-model="valid" ref="importform">
+          <v-row class="ma-1 pa-1">
+            <v-col cols="10">
+              <v-text-field label="URL" v-model="url" placeholder="http://github.com/iti/project" variant="outlined"
+                hide-details="auto" :rules="[rules.required, rules.url]"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row align="center" class="ma-1 pa-1">
+            <v-col cols="3">
+              <v-btn class="bg-primary" :disabled="importing" @click="startImport()" block>Start Import</v-btn>
+            </v-col>
+            <v-divider class="mx-4" vertical></v-divider>
+            <v-col>
+              <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <span v-bind="props">
+                    <v-checkbox label="Import candidates" v-model="autofollow" hide-details="auto"
+                      density="compact"></v-checkbox>
                   </span>
-              </template>
-              <span>
-                If the initial import of the URL you enter suggests
-                additional, related <strong>candidate</strong> artifacts to
-                import, selecting this option will automatically import
-                those as artifacts, <strong>and</strong> create the
-                recommended relationships between them.
-              </span>
-            </v-tooltip>
-          </v-col>
-          <v-col class="ma-1 pa-1">
-            <v-tooltip
-              color="grey-darken-4"
-              max-width="400px"
-              location="bottom"
-            >
-              <template v-slot:activator="{ props }">
-                <span v-bind="props">
-                  <v-checkbox
-                    class="ma-1 pa-1"
-                    label="Disable Extraction"
-                    v-model="noextract"
-                    hide-details="auto"
-                    density="compact"
-                  ></v-checkbox>
+                </template>
+                <span>
+                  If the initial import of the URL you enter suggests
+                  additional, related <strong>candidate</strong> artifacts to
+                  import, selecting this option will automatically import
+                  those as artifacts, <strong>and</strong> create the
+                  recommended relationships between them.
                 </span>
-              </template>
-              <span>
-                If selected, disables potentially costly metadata extraction
-                (e.g. keyword extraction) from fetched artifact content.
-              </span>
-            </v-tooltip>
-          </v-col>
-          <v-col class="ma-1 pa-1">
-            <v-tooltip
-              color="grey-darken-4"
-              max-width="400px"
-              location="bottom"
-            >
-              <template v-slot:activator="{ props }">
-                <span v-bind="props">
-                  <v-checkbox
-                    class="ma-1 pa-1"
-                    label="Disable Fetch"
-                    v-model="nofetch"
-                    hide-details="auto"
-                    density="compact"
-                  ></v-checkbox>
+              </v-tooltip>
+            </v-col>
+            <v-col>
+              <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <span v-bind="props">
+                    <v-checkbox label="Disable Extraction" v-model="noextract" hide-details="auto"
+                      density="compact"></v-checkbox>
+                  </span>
+                </template>
+                <span>
+                  If selected, disables potentially costly metadata extraction
+                  (e.g. keyword extraction) from fetched artifact content.
                 </span>
-              </template>
-              <span>
-                If selected, disables retrieval of the artifact's content --
-                for instance, source code repositories and associated files
-                (e.g papers, presentations, etc).  If your artifact is a
-                fork of the Linux kernel, you might consider selecting this
-                box.
-              </span>
-            </v-tooltip>
-          </v-col>
-          <v-col class="ma-1 pa-1">
-            <v-tooltip
-              color="grey-darken-4"
-              max-width="400px"
-              location="bottom"
-            >
-              <template v-slot:activator="{ props }">
-                <span v-bind="props">
-                  <v-checkbox
-                    v-if="user_is_admin"
-                    class="ma-1 pa-1"
-                    label="Disable Removal"
-                    v-model="noremove"
-                    hide-details="auto"
-                    density="compact"
-                  ></v-checkbox>
+              </v-tooltip>
+            </v-col>
+            <v-col>
+              <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <span v-bind="props">
+                    <v-checkbox label="Disable Fetch" v-model="nofetch" hide-details="auto"
+                      density="compact"></v-checkbox>
+                  </span>
+                </template>
+                <span>
+                  If selected, disables retrieval of the artifact's content --
+                  for instance, source code repositories and associated files
+                  (e.g papers, presentations, etc). If your artifact is a
+                  fork of the Linux kernel, you might consider selecting this
+                  box.
                 </span>
-              </template>
-              <span>
-                If selected, disables removal of fetched content at the
-                importer service that performed the import.  This should
-                only be selected by administrators to facilitate debugging.
-              </span>
-            </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-        </v-row>
-      </v-form>
-      <br />
-      <v-row class="ml-1 mb-2">
+              </v-tooltip>
+            </v-col>
+            <v-col v-if="user_is_admin">
+              <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
+                <template v-slot:activator="{ props }">
+                  <span v-bind="props">
+                    <v-checkbox label="Disable Removal" v-model="noremove" hide-details="auto"
+                      density="compact"></v-checkbox>
+                  </span>
+                </template>
+                <span>
+                  If selected, disables removal of fetched content at the
+                  importer service that performed the import. This should
+                  only be selected by administrators to facilitate debugging.
+                </span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+          <v-row>
+          </v-row>
+        </v-form>
+      </v-col>
+      <v-col cols="12">
         Artifacts stored on unsupported sources may be manually imported. &nbsp;
         <NuxtLink to="/create">Click here</NuxtLink> &nbsp; to start a manual
         import.
-      </v-row>
-      <br /><v-divider></v-divider><br />
-      <h2>Imported Artifacts</h2>
-      <ImportList v-if="imports.length" :imports="imports"></ImportList>
-      <v-pagination
-        v-if="imports.length"
-        v-model="page"
-        :length="pages"
-        rounded
-      ></v-pagination>
-      <div v-else>{{ loadingMessage }}</div>
+        <v-divider></v-divider>
+      </v-col>
+      <v-col cols="12">
+        <h2>Imported Artifacts</h2>
+        <ImportList v-if="imports.length" :imports="imports"></ImportList>
+      </v-col>
+      <v-col cols="12">
+        <v-pagination v-if="imports.length" v-model="page" :length="pages" rounded></v-pagination>
+        <div v-else>{{ loadingMessage }}</div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -272,7 +222,7 @@ export default defineComponent({
       this.pollingID = null
     }, 5000)
     this.pollingID = setInterval(
-      function() {
+      function () {
         this.updateImports()
       }.bind(this),
       3000
@@ -303,7 +253,7 @@ export default defineComponent({
       this.updateImports()
       clearInterval(this.pollingID)
       this.pollingID = setInterval(
-        function() {
+        function () {
           this.updateImports()
         }.bind(this),
         3000
@@ -338,7 +288,7 @@ export default defineComponent({
     imports() {
       if (this.pollingID === null) {
         this.pollingID = setInterval(
-          function() {
+          function () {
             this.updateImports()
           }.bind(this),
           3000

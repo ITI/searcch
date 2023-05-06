@@ -2,18 +2,15 @@
   <div>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
-        append-icon="mdi-magnify"
+        append-inner-icon="mdi-magnify"
         label="Search"
         placeholder="Type search term..."
         v-model="search"
-        loading="true"
         clearable
         class="rounded-0"
         hide-details
         @keydown="onChange"
         @change="onSubmit"
-        variant="solo"
-        density="compact"
       >
       </v-text-field>
       <v-expansion-panels v-model="adopen">
