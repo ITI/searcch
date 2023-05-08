@@ -1,115 +1,51 @@
 <template>
   <v-container>
     <v-row justify="start" align="start">
-      <v-row align="center">
-        <v-col cols="1">
-          <h3>Filters:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-list-subheader>
-            Status
-          </v-list-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-select
-            v-model="status_select"
-            label="Status"
-            :items="status_items"
-            single-line
-            @update:model-value="updateImports()"
-          ></v-select>
-        </v-col>
-        <v-col cols="1">
-          <v-list-subheader>
-            Archived
-          </v-list-subheader>
-        </v-col>
-        <v-col cols="1">
-          <v-checkbox v-model="archived" @update:model-value="updateImports()"></v-checkbox>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            v-model="owner_filter"
-            hint="Case-insensitive substring of user name or email"
-            label="Owner"
-            @change="updateImports()"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2"></v-col>
-        <v-col cols="1">
-          <h3>Refresh:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-btn icon @click="updateImports()">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-divider></v-divider><br />
+      <v-col cols="12">
+        <v-row align="start" class="mb-n12">
+          <v-col cols="2">
+            <v-select variant="outlined" density="compact" v-model="status_select" label="Status" :items="status_items"
+              @update:model-value="updateImports()"></v-select>
+          </v-col>
+          <v-col cols="2">
+            <v-checkbox density="compact" v-model="archived" @update:model-value="updateImports()" label="Archived"></v-checkbox>
+          </v-col>
+          <v-col cols="2">
+            <v-text-field variant="outlined" density="compact" v-model="owner_filter" hint="Case-insensitive substring of user name or email" label="Owner"
+              @change="updateImports()"></v-text-field>
+          </v-col>
+          <v-spacer/>
+          <v-col cols="1">
+            <v-btn @click="updateImports()" size="x-small" icon="mdi-refresh" variant="outlined" class="mt-1" />
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12">
+          <v-data-table-server :headers="headers" :items="items" :search="search" :custom-filter="specializedFilter"
+            :loading="loading" v-model:options="options"
+            :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }" :items-length="total" dense>
+            <template v-slot:item.id="{ item: { raw: item } }">
+              <a v-if="item.id" :href="`/artifact/import/${item.id}`" target="_blank" rel="noopener">View</a>
+            </template>
+            <template v-slot:item.ctime="{ item: { raw: item } }">
+              {{ $moment.utc(item.ctime).fromNow() }}
+            </template>
+            <template v-slot:item.url="{ item: { raw: item } }">
+              <a v-if="item.url" :href="`${item.url}`" target="_blank" rel="noopener">{{ ellipsize(item.url, 32) }}</a>
+            </template>
+            <template v-slot:item.artifact_id="{ item: { raw: item } }">
+              <a v-if="item.artifact_id" :href="`/artifact/${item.artifact_group_id}/${item.artifact_id}`" target="_blank"
+                rel="noopener">View</a>
+            </template>
+            <template v-slot:item.owner.person="{ item: { raw: item } }">
+              {{ item.owner.person.email
+              }}{{
+  item.owner.person.name ? ' (' + item.owner.person.name + ')' : ''
+}}
+            </template>
+          </v-data-table-server>
+      </v-col>
     </v-row>
-    <v-card>
-      <v-card-title>
-        Artifact Imports
-        <v-spacer></v-spacer>
-        <!-- <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          density="compact"
-        ></v-text-field> -->
-      </v-card-title>
-
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        :search="search"
-        :custom-filter="specializedFilter"
-        :loading="loading"
-        v-model:options="options"
-        :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
-        :server-items-length="total"
-        dense
-      >
-        <template v-slot:item.id="{ item }">
-          <a
-            v-if="item.id"
-            :href="`/artifact/import/${item.id}`"
-            target="_blank"
-            rel="noopener"
-            >View</a
-          >
-        </template>
-        <template v-slot:item.ctime="{ item }">
-          {{ $moment.utc(item.ctime).fromNow() }}
-        </template>
-        <template v-slot:item.url="{ item }">
-          <a
-            v-if="item.url"
-            :href="`${item.url}`"
-            target="_blank"
-            rel="noopener"
-            >{{ ellipsize(item.url, 32) }}</a
-          >
-        </template>
-        <template v-slot:item.artifact_id="{ item }">
-          <a
-            v-if="item.artifact_id"
-            :href="`/artifact/${item.artifact_group_id}/${item.artifact_id}`"
-            target="_blank"
-            rel="noopener"
-            >View</a
-          >
-        </template>
-        <template v-slot:item.owner.person="{ item }">
-          {{ item.owner.person.email
-          }}{{
-            item.owner.person.name ? ' (' + item.owner.person.name + ')' : ''
-          }}
-        </template>
-      </v-data-table>
-    </v-card>
   </v-container>
 </template>
 
@@ -135,26 +71,24 @@ export default defineComponent({
       archived: false,
       owner_filter: '',
       headers: [
-        { text: 'Import', value: 'id', align: 'start', sortable: true },
+        { title: 'Import', key: 'id', align: 'start', sortable: true },
         {
-          text: 'Created',
+          title: 'Created',
           sortable: true,
           align: 'start',
-          value: 'ctime',
-          sortable: true
+          key: 'ctime',
         },
-        { text: 'Status', value: 'status', sortable: true },
-        //{ text: "Phase", value: "phase", sortable: true },
-        { text: 'URL', value: 'url', sortable: true },
-        { text: 'Owner', value: 'owner.person', sortable: false },
-        //{ text: "Owner Email", value: "owner.person.email", sortable: false },
-        { text: 'Artifact', value: 'artifact_id', sortable: true }
+        { title: 'Status', key: 'status', sortable: true },
+        //{ title: "Phase", key: "phase", sortable: true },
+        { title: 'URL', key: 'url', sortable: true },
+        { title: 'Owner', key: 'owner.person', sortable: false },
+        //{ title: "Owner Email", key: "owner.person.email", sortable: false },
+        { title: 'Artifact', key: 'artifact_id', sortable: true }
       ],
       loading: true,
       options: {
         itemsPerPage: 20,
         page: 1,
-        sortDesc: [true]
       },
       search: ''
     }
@@ -189,7 +123,6 @@ export default defineComponent({
           page: this.options.page,
           items_per_page: this.options.itemsPerPage,
           sort: this.options.sortBy,
-          sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1
         }
         if (this.status_select) payload['status'] = this.status_select

@@ -2,12 +2,37 @@ import { defineStore } from 'pinia'
 
 export const systemStore = defineStore('system', {
   state: () => ({
-    artifacts: {},
-    artifact_imports: {},
-    users: {},
-    sessions: {},
+    artifacts: {
+      artifacts: [],
+      page: 1,
+      pages: 1,
+      total: 0
+    },
+    artifact_imports: {
+      artifact_imports: [],
+      page: 1,
+      pages: 1,
+      total: 0
+    },
+    users: {
+      users: [],
+      page: 1,
+      pages: 1,
+      total: 0
+    },
+    sessions: {
+      sessions: [],
+      page: 1,
+      pages: 1,
+      total: 0
+    },
     importers: [],
-    claims: {}
+    claims: {
+      claims: [],
+      page: 1,
+      pages: 1,
+      total: 0
+    }
   }),
   actions: {
     logout() {

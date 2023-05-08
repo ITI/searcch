@@ -87,20 +87,20 @@
       {{ title }}
       <v-spacer />
       <span v-if="$auth.loggedIn" class="mr-2">{{ $auth.user.name }}</span>
-      <!-- <v-btn
-        v-if="$auth.loggedIn && this.user_can_admin && !this.user_is_admin"
+      <v-btn
+        v-if="$auth.loggedIn && user_can_admin && !user_is_admin"
         icon
         @click="() => setAdmin(true)"
       >
         <v-icon style="color: green">mdi-alpha-a-circle</v-icon>
       </v-btn>
       <v-btn
-        v-else-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
+        v-else-if="$auth.loggedIn && user_can_admin && user_is_admin"
         icon
         @click="() => setAdmin(false)"
       >
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
-      </v-btn> -->
+      </v-btn>
       <v-btn v-if="$auth.loggedIn" class="bg-primary" @click="() => logout()"
         >Logout&nbsp;<v-icon size="small">mdi-logout</v-icon></v-btn
       >

@@ -1,66 +1,28 @@
 <template>
   <v-container>
     <v-row justify="start" align="start">
-      <v-row align="center">
-        <v-col cols="1">
-          <h3>Filters:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-list-subheader>
-            Is Admin
-          </v-list-subheader>
-        </v-col>
-        <v-col cols="1">
-          <v-checkbox
-            v-model="is_admin"
-            @update:model-value="updateSessions()"
-          ></v-checkbox>
-        </v-col>
-        <v-col cols="1">
-          <v-list-subheader>
-            Can Admin
-          </v-list-subheader>
-        </v-col>
-        <v-col cols="1">
-          <v-checkbox
-            v-model="can_admin"
-            @update:model-value="updateSessions()"
-          ></v-checkbox>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            v-model="owner_filter"
-            hint="Case-insensitive substring of user name or email"
-            label="User"
-            @change="updateSessions()"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2"></v-col>
-        <v-col cols="1">
-          <h3>Refresh:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-btn icon @click="updateSessions()">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-divider></v-divider><br />
-    </v-row>
-    <v-card>
-      <v-card-title>
-        Login Sessions
-        <v-spacer></v-spacer>
-        <!-- <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          density="compact"
-        ></v-text-field> -->
-      </v-card-title>
-      <v-data-table
+      <v-col cols="12">
+        <v-row align="start" class="mb-n12">
+          <v-col cols="2">
+            <v-text-field density="compact" variant="outlined" v-model="owner_filter"
+              hint="Case-insensitive substring of user name or email" label="User" @change="updateUsers()"></v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-checkbox density="compact" v-model="is_admin" label="Is Admin"
+              @update:model-value="updateSessions()"></v-checkbox>
+          </v-col>
+          <v-col cols="2">
+            <v-checkbox density="compact" v-model="can_admin" label="Can Admin"
+              @update:model-value="updateSessions()"></v-checkbox>
+          </v-col>
+          <v-spacer />
+          <v-col cols="1">
+            <v-btn @click="updateSessions()" size="x-small" icon="mdi-refresh" variant="outlined" class="mt-1" />
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12">
+        <v-data-table-server
         :headers="headers"
         :items="items"
         :search="search"
@@ -68,7 +30,7 @@
         :loading="loading"
         v-model:options="options"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
-        :server-items-length="total"
+        :items-length="total"
         dense
       >
         <template v-slot:top>
@@ -87,12 +49,11 @@
             </v-sheet>
           </v-dialog>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:item.actions="{ item: { raw: item } }">
           <v-tooltip location="bottom">
-            <template v-slot:activator="{ on }">
+            <template v-slot:activator>
               <v-icon
                 v-if="item.id"
-                v-on="on"
                 size="small"
                 color="error"
                 @click="deleteItem(item)"
@@ -103,38 +64,39 @@
             <span>Delete Session {{ item.id }} </span>
           </v-tooltip>
         </template>
-        <template v-slot:item.user.id="{ item }">
+        <template v-slot:item.user.id="{ item: { raw: item } }">
           <v-tooltip location="bottom">
-            <template v-slot:activator="{ on }">
+            <template v-slot:activator>
               <a
                 v-if="item.user_id"
                 :href="`/profile/${item.user_id}`"
                 target="_blank"
                 rel="noopener"
               >
-                <v-icon v-on="on">mdi-account</v-icon>
+                <v-icon>mdi-account</v-icon>
               </a>
             </template>
             <span>View User Profile</span>
           </v-tooltip>
         </template>
-        <template v-slot:item.expires_on="{ item }">
+        <template v-slot:item.expires_on="{ item: { raw: item } }">
           {{ $moment.utc(item.expires_on).fromNow() }}
         </template>
-        <template v-slot:item.is_admin="{ item }">
+        <template v-slot:item.is_admin="{ item: { raw: item } }">
           <v-icon v-if="item.is_admin">mdi-check</v-icon>
         </template>
-        <template v-slot:item.user.can_admin="{ item }">
+        <template v-slot:item.user.can_admin="{ item: { raw: item } }">
           <v-icon v-if="item.user.can_admin">mdi-check</v-icon>
         </template>
-        <template v-slot:item.user="{ item }">
+        <template v-slot:item.user="{ item: { raw: item } }">
           {{ item.user.person.email
           }}{{
             item.user.person.name ? ' (' + item.user.person.name + ')' : ''
           }}
         </template>
-      </v-data-table>
-    </v-card>
+      </v-data-table-server>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -152,14 +114,14 @@ export default defineComponent({
       can_admin: false,
       owner_filter: '',
       headers: [
-        { text: 'Session ID', value: 'id', align: 'start', sortable: true },
-        { text: 'Expires', value: 'expires_on', sortable: true },
+        { title: 'Session ID', key: 'id', align: 'start', sortable: true },
+        { title: 'Expires', key: 'expires_on', sortable: true },
         // TODO: disabled as endpoint for viewing specific user profile doesn't exist yet
-        // { text: 'User ID', value: 'user.id' },
-        { text: 'User', value: 'user' },
-        { text: 'Is Admin', value: 'is_admin' },
-        { text: 'Can Admin', value: 'user.can_admin' },
-        { text: 'Actions', value: 'actions', sortable: false }
+        // { title: 'User ID', key: 'user.id' },
+        { title: 'User', key: 'user' },
+        { title: 'Is Admin', key: 'is_admin' },
+        { title: 'Can Admin', key: 'user.can_admin' },
+        { title: 'Actions', key: 'actions', sortable: false }
       ],
       loading: true,
       options: {
@@ -181,7 +143,12 @@ export default defineComponent({
     }, 5000)
   },
   computed: {
-    ...mapState(systemStore, ['sessions', 'page', 'pages', 'total']),
+    ...mapState(systemStore, {
+      sessions: (state) => state.sessions.sessions,
+      page: (state) => state.sessions.page,
+      pages: (state) => state.sessions.pages,
+      total: (state) => state.sessions.total
+    }),
     ...mapState(userStore, ['user_is_admin'])
   },
   methods: {
@@ -192,7 +159,6 @@ export default defineComponent({
           page: this.options.page,
           items_per_page: this.options.itemsPerPage,
           sort: this.options.sortBy,
-          sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1
         }
         if (this.is_admin) payload['is_admin'] = 1
