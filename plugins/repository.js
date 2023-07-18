@@ -126,6 +126,6 @@ export default (ctx, inject) => {
   // sessions index API
   inject('sessionsEndpoint', repositoryWithAxios('kg/' + 'sessions'))
 
-  // user request ownership API
-  inject('requestOwnershipEndpoint', repositoryWithAxios('/kg' + '/requests/ownership'))
+  // user optout API
+  inject('optOutEndpoint', repositoryWithAxios('/kg' + '/email/opt_out'))
 }

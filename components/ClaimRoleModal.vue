@@ -7,9 +7,8 @@
 
       <header class="modal-header"
         id="modalTitle">
-
         <slot name="header">
-            <div id="heading">
+            <div class="heading">
                 Claim Ownership
             </div>
         </slot>
@@ -43,7 +42,7 @@
         </slot>
        </section>
 
-      <footer class="modal-footer-claimrole">
+      <footer class="modal-footer">
         <div class="footer-text">
            {{ isDisabled ? "Email sent to " : "An email will be sent to " }} SEARCCH admins for approval
            <div class="error-msg" v-if="isError">
@@ -60,15 +59,58 @@
         >
           {{ isDisabled ? "Ownership Claim Requested" : "Claim Ownership" }}
         </v-btn>
+        <v-btn
+          @click="magicKeyModel = true"
+          aria-label="Enter key to claim ownership"
+          depressed text
+        >
+          Have a magic key?
+        </v-btn>
       </footer>
     </div>
+
+    <v-dialog
+      v-model="magicKeyModel"
+      width="500px"
+    >
+      <v-card tile>
+        <header class="modal-header">
+          <div class="heading">
+            Please enter magic key
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            @click="magicKeyModel = false"
+            aria-label="Close modal">
+            &times;
+          </button>
+        </header>
+        <section class="modal-body">
+          <v-text-field
+            v-model="magicKey"
+            outlined
+            label="Magic Key"
+          ></v-text-field>
+        </section>
+        <footer class="modal-footer">
+          <div class="footer-text">
+            <div class="error-msg" v-if="magicKeyIsError">
+              <img src="/images/information-outline.svg"/>
+              <span>{{ magicKeyErrorMessage }}</span>
+            </div>
+          </div>
+          <v-btn tile color="primary" block @click="claimRoleByMagicKey">Claim</v-btn>
+        </footer>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
   export default {
     name: 'ClaimRoleModal',
-    props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email'],
+    props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email', 'claimKey'],
     methods: {
       close(message = "") {
         this.$emit('close', message);
@@ -77,7 +119,7 @@
         if(this.isJustificationMessageValid()) {
             this.isError = false;
             try {
-              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage })
+              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage, email: this.email })
               this.close(`Claim request successfully sent`);
             } catch(ex) {
               this.close(`An error occured in sending the claim request`)
@@ -87,6 +129,22 @@
             this.errorMessage = "Kindly provide a valid justification";
         }
       },
+      async claimRoleByMagicKey() {
+        let key = this.magicKey.trim();
+        if (key.length) {
+          try {
+            this.magicKeyModel = false
+            let response = await this.$artifactClaimEndpoint.post(this.artifact_group_id, { email: this.email, key: key })
+            this.close(`Claim request successfully sent`);
+            this.$router.push("/artifact/" + this.artifact.artifact_group_id)
+          } catch(ex) {
+            this.close(`An error occured in sending the claim request`)
+          }
+        } else {
+          this.magicKeyIsError = true;
+          this.magicKeyErrorMessage = "Kindly provide a valid magic key";
+        }
+      },
       isJustificationMessageValid() {
         this.justificationMessage = this.justificationMessage.trim();
         return this.justificationMessage!="";
@@ -94,8 +152,19 @@
     },
     data() {
         return {
-            isError: false
+          isError: false,
+          magicKeyIsError: false,
+          errorMessage: "",
+          magicKeyModel: false,
+          magicKey: "",
+          magicKeyErrorMessage: "",
         }
+    },
+    mounted() {
+      if (this.claimKey) {
+        this.magicKey = this.claimKey
+        this.magicKeyModel = true
+      }
     }
   };
 </script>
@@ -123,7 +192,7 @@
     width: 500px;
   }
 
-  .modal-header, .modal-footer-claimrole {
+  .modal-header, .modal-footer {
     display: flex;
   }
 
@@ -135,18 +204,18 @@
     align-items: center;
   }
 
-  .modal-header #heading {
+  .modal-header .heading {
     margin-left: 15px;
   }
 
-  .modal-footer-claimrole {
+  .modal-footer {
     padding: 15px;
     border-top: 1px solid #eeeeee;
     flex-direction: column;
     justify-content: flex-end;
   }
 
-  .modal-footer-claimrole .footer-text {
+  .modal-footer .footer-text {
     margin-bottom: 20px;
     font-size: 12px;
     text-align: center;
@@ -177,7 +246,7 @@
     background: transparent;
   }
 
-  .modal-footer-claimrole .claim-btn {
+  .modal-footer .claim-btn {
     color: white;
     border-radius: 2px;
     width: 100%;
