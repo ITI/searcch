@@ -129,7 +129,8 @@ export default $axios => (resource, error) => ({
   },
   // FIXME: backend API
   post(id, payload) {
-    return $axios.$post(`${resource}/${Array.isArray(id) ? id.join('/') : id}`, payload).catch(function(e) {
+    let idstr = !id ? '' : (Array.isArray(id) ? '/' + id.join('/') : '/' + id)
+    return $axios.$post(`${resource}${idstr}`, payload).catch(function(e) {
       if (e.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx

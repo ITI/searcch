@@ -32,7 +32,7 @@ export default {
         }
 
         this.loading = true
-        await this.$optOutEndpoint.post(payload)
+        await this.$optOutEndpoint.post(null, payload)
         .then(response => {
             this.loading = false
         })
