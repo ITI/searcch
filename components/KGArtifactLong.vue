@@ -86,7 +86,8 @@
             v-bind:justificationMessage="justificationMessage"
             v-bind:isDisabled="isModalDisabled"
             v-bind:artifact_group_id="record.artifact.artifact_group_id"
-            v-bind:email="user.email">
+            v-bind:email="claimEmail || user.email"
+            v-bind:claimKey="claimKey">
           </ClaimRoleModal>
         </transition>
 
@@ -517,13 +518,20 @@ export default {
       ownershipMessage: "",
       showOwnershipMessage: false,
       justificationMessage: "",
-      tab: 'content'
+      tab: 'content',
+      claimEmail: "",
+      claimKey: ""
     }
   },
   mounted() {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
+    if (this.$route.query.email && this.$route.query.key) {
+      this.isModalVisible = true
+      this.claimEmail = this.$route.query.email
+      this.claimKey = this.$route.query.key
+    }
   },
   computed: {
     ...mapState({

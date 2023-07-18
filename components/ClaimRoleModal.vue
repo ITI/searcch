@@ -110,7 +110,7 @@
 <script>
   export default {
     name: 'ClaimRoleModal',
-    props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email'],
+    props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email', 'claimKey'],
     methods: {
       close(message = "") {
         this.$emit('close', message);
@@ -119,7 +119,7 @@
         if(this.isJustificationMessageValid()) {
             this.isError = false;
             try {
-              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage })
+              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage, email: this.email })
               this.close(`Claim request successfully sent`);
             } catch(ex) {
               this.close(`An error occured in sending the claim request`)
@@ -133,8 +133,10 @@
         let key = this.magicKey.trim();
         if (key.length) {
           try {
-            await this.$artifactClaimEndpoint.index(this.artifact_group_id, { key })
+            this.magicKeyModel = false
+            let response = await this.$artifactClaimEndpoint.post(this.artifact_group_id, { email: this.email, key: key })
             this.close(`Claim request successfully sent`);
+            this.$router.push("/artifact/" + this.artifact.artifact_group_id)
           } catch(ex) {
             this.close(`An error occured in sending the claim request`)
           }
@@ -157,6 +159,12 @@
           magicKey: "",
           magicKeyErrorMessage: "",
         }
+    },
+    mounted() {
+      if (this.claimKey) {
+        this.magicKey = this.claimKey
+        this.magicKeyModel = true
+      }
     }
   };
 </script>

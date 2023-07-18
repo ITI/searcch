@@ -3,7 +3,7 @@
         <div class="row">
         <div class="col-md-12">
             <div v-if="loading">
-                <h1>Opting out ...</h1>
+                <h1>Opting out...</h1>
                 <p>Please wait while we process your request.</p>
             </div>
             <div v-else-if="error">
@@ -11,8 +11,10 @@
                 <p>{{ errorMsg }}</p>
             </div>
             <div v-else>
-                <h1>We'll miss you ..</h1>
-                <p>You have been opted out of the searcch hub. You will no longer be notified of new searcch results.</p>
+                <h1>We'll miss you.</h1>
+                <p>You have been opted out of the SEARCCH Hub. You will no
+                longer be notified of new SEARCCH artifacts that are
+                relevant to you.</p>
             </div>
         </div>
         </div>
