@@ -63,6 +63,12 @@ export default (ctx, inject) => {
   // venues
   inject('venuesEndpoint', repositoryWithAxios('kg/' + 'venues'))
 
+  // Recurring Venues
+  inject('recurringVenuesEndpoint', repositoryWithAxios('kg/' + 'recurringvenues'))
+
+  // Recurring Venue
+  inject('recurringVenueEndpoint', repositoryWithAxios('kg/' + 'recurringvenue'))
+
   // licenses
   inject('licenseEndpoint', repositoryWithAxios('kg/' + 'licenses'))
 

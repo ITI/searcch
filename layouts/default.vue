@@ -189,6 +189,11 @@ export default {
           icon: 'mdi-cloud-search',
           title: 'Search Artifacts',
           to: '/search'
+        },
+        {
+          icon: 'mdi-cloud-search',
+          title: 'Artifact Venues',
+          to: '/venues'
         }
       ]
       if (this.$auth.loggedIn) {
