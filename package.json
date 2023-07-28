@@ -5,8 +5,8 @@
   "author": "SEARCCH Development Team",
   "private": true,
   "scripts": {
-    "dev-any": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3000 npx nuxi dev",
-    "dev": "cross-env NUXT_HOST=localhost NUXT_PORT=3000 npx nuxi dev",
+    "dev-any": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3000 NODE_TLS_REJECT_UNAUTHORIZED=0 npx nuxi dev",
+    "dev": "cross-env NUXT_HOST=localhost NUXT_PORT=3000 NODE_TLS_REJECT_UNAUTHORIZED=0 npx nuxi dev",
     "lint": "eslint --ext .js,.vue ./ --fix",
     "build": "npx nuxi build",
     "start": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=80 npx nuxi start",

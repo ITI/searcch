@@ -2,6 +2,11 @@ export default defineNuxtConfig({
   dir: {
     public: 'static',
   },
+  // safari will force https on http requests thus breaking the dev server
+  // have to force https on the dev server
+  devServer: {
+    https: true,
+  },
   /*
    ** Headers of the page
    */
@@ -90,7 +95,7 @@ export default defineNuxtConfig({
 
   auth: {
     isEnabled: true,
-    origin: 'http://localhost:3000',
+    origin: 'https://localhost:3000',
     addDefaultCallbackUrl: true,
   },
 
@@ -149,23 +154,6 @@ export default defineNuxtConfig({
       }
     ]
   },
-  /*
-   ** vuetify module configuration
-   ** https://github.com/nuxt-community/vuetify-module
-   */
-  // vuetify: {
-  //   customVariables: ['~/assets/variables.scss'],
-  //   theme: {
-  //     theme="dark": false,
-  //     themes: {
-  //       light: {
-  //         primary: '#00476B',
-  //         accent: '#6D6E71',
-  //         secondary: '#395C23'
-  //       }
-  //     }
-  //   }
-  // },
   publicRuntimeConfig: {},
   privateRuntimeConfig: {
     gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
