@@ -7,7 +7,7 @@ reverse_proxy /* searcch-frontend-prod:3000 {
 	}
 }
 
-https://hub-dev.cyberexperimentation.org {
+hub-dev.cyberexperimentation.org {
 tls /etc/ssl/certs/searcch/searcch.pem /etc/ssl/certs/searcch/searcch-key.pem
 reverse_proxy /* searcch-frontend-dev:3000 {
       header_down Strict-Transport-Security "max-age=15552000;"
@@ -16,3 +16,12 @@ reverse_proxy /* searcch-frontend-dev:3000 {
         }
 }
 
+hub-local-dev.cyberexperimentation.org {
+tls /etc/ssl/certs/searcch/searcch.pem /etc/ssl/certs/searcch/searcch-key.pem
+reverse_proxy /* searcch-frontend-local-dev:3000 {
+      header_down Strict-Transport-Security "max-age=15552000;"
+      # header_up Host "hub-local-dev.cyberexperimentation.org"
+      header_up X-Real-IP {remote_host}
+      header_up X-Forwarded-For {remote_host}
+        }
+}
