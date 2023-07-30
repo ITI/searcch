@@ -2,11 +2,6 @@ export default defineNuxtConfig({
   dir: {
     public: 'static',
   },
-  // safari will force https on http requests thus breaking the dev server
-  // have to force https on the dev server
-  devServer: {
-    https: true,
-  },
   /*
    ** Headers of the page
    */
@@ -95,7 +90,7 @@ export default defineNuxtConfig({
 
   auth: {
     isEnabled: true,
-    origin: 'https://localhost:3000',
+    origin: 'http://localhost:3000',
     addDefaultCallbackUrl: true,
   },
 
