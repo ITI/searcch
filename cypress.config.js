@@ -1,12 +1,16 @@
 import { defineConfig } from 'cypress';
 import { loadNuxt, build } from 'nuxt';
+import vue from '@vitejs/plugin-vue';
 
 async function getNuxtViteConfig() {
   const nuxt = await loadNuxt({
     cwd: process.cwd(),
     dev: false,
     overrides: {
-      ssr: false
+      ssr: false,
+      vite: {
+        plugins: [vue()]
+      }
     }
   });
   return new Promise((resolve, reject) => {
@@ -24,11 +28,16 @@ async function getNuxtViteConfig() {
 
 export default defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    // setupNodeEvents(on, config) {
+    //   on('file:preprocessor', vue);
+    //   return config;
+    // },
   },
   component: {
+    // setupNodeEvents(on, config) {
+    //   on('file:preprocessor', vue);
+    //   return config;
+    // },
     devServer: {
       framework: 'vue',
       bundler: 'vite',

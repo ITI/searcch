@@ -1,5 +1,3 @@
-import vue from '@vitejs/plugin-vue'
-
 export default defineNuxtConfig({
   dir: {
     public: 'static',
@@ -167,9 +165,6 @@ export default defineNuxtConfig({
     extractCSS: true,
     extend(config, ctx) {},
     transpile: ['vuetify']
-  },
-  vite: {
-    plugins: [vue()],
   },
   router: {
     mode: 'history'
