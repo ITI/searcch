@@ -9,7 +9,12 @@ async function getNuxtViteConfig() {
     overrides: {
       ssr: false,
       vite: {
-        plugins: [vue()]
+        plugins: [vue()],
+        server: {
+          hmr: {
+            protocol: 'ws'
+          }
+        }
       }
     }
   });

@@ -65,7 +65,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary"  to="/search">
+                <v-btn class="bg-primary" to="/search">
                   Continue
                 </v-btn>
               </v-card-actions> </v-card><br />

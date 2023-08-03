@@ -169,6 +169,13 @@ export default defineNuxtConfig({
   router: {
     mode: 'history'
   },
+  vite: {
+    server: {
+      hmr: {
+        protocol: 'ws'
+      }
+    }
+  },
   cookie: {
     options: {
       secure: process.env.NODE_ENV === "production",
