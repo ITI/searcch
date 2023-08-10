@@ -37,29 +37,24 @@ Cypress.Commands.add('login', () => {
         method: 'POST',
         url: '/api/auth/callback/credentials',
         body: {
-          username: 'jsmith',
-          password: 'hunter2',
+          strategy: payload.strategy,
+          token: payload.token,
           csrfToken: res.body.csrfToken,
         },
         followRedirect: false,
       }).then((res) => {
-        expect(res.status).to.eq(302)
         cy.visit('/')
         cy.get('nav a[href="/search"]').should('be.visible')
-      })
-    })
+        
+        cy.intercept('/kg/**/*', (req) => {
+          req.headers['Authorization'] = `Bearer ${access_token}`
+        })
 
-    cy.intercept('/kg/**/*', (req) => {
-      req.headers['Authorization'] = `Bearer ${access_token}`
-    })
-
-    cy.window().then((win) => {
-      win.useNuxtApp().$loginEndpoint.create(payload).then((user) => {
-        win.userStore.user = user.person
-        win.userStore.userid = user.id
-        win.userStore.user_can_admin = user.can_admin
-        win.userStore.user_is_admin = user.is_admin
-        win.userStore.user_orgs = user.affiliations
+        cy.window().then((win) => {
+          expect(win.useNuxtApp().$auth.loggedIn).to.be.true
+          expect(win.useNuxtApp().$auth.user.name).to.be.a.string
+          expect(win.useNuxtApp().$auth.user.email).to.be.a.string
+        })
       })
     })
   })

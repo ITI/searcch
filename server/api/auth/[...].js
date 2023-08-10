@@ -15,10 +15,10 @@ export default NuxtAuthHandler({
     callbacks: {
         // Callback when the JWT is created / updated, see https://next-auth.js.org/configuration/callbacks#jwt-callback
         jwt: async ({ token, user, account }) => {
-            const isSignIn = user ? true : false;
-            if (isSignIn) {
+            if (user) {
                 token.jwt = account.access_token
                 token.provider = account.provider
+                token.user = user
             }
             return Promise.resolve(token)
         },
@@ -26,6 +26,7 @@ export default NuxtAuthHandler({
         session: async ({ session, token }) => {
             session.provider = token.provider
             session.token = token.jwt
+            session.user = token.user
             return Promise.resolve(session)
         },
     },
@@ -65,31 +66,37 @@ export default NuxtAuthHandler({
         },
 
         process.env.TESTING === 'true'
-            ? CredentialsProvider.default({
-                name: 'Credentials',
-                credentials: {
-                    username: { label: 'Username', type: 'text', placeholder: '(hint: jsmith)' },
-                    password: { label: 'Password', type: 'password', placeholder: '(hint: hunter2)' }
-                },
-                authorize(credentials) {
-                    const user = { 
-                        userid: 53, 
-                        username: 'jsmith',
-                        email: 'jsmith@gamil.com',
-                        name: 'John Smith',
-                        password: 'hunter2',
-                        is_admin: true,
-                        can_admin: true,
+        ? CredentialsProvider.default({
+            name: 'Credentials',
+            credentials: {
+                strategy: { label: 'strategy', type: 'text' },
+                token: { label: 'token', type: 'password' }
+            },
+            async authorize(credentials) {
+                try {
+                    const { csrfToken, ...payload } = credentials
+                    const res = await fetch(`${process.env.BACKEND_URL}/login`, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Api-Key": process.env.PRODUCTION == 'true'
+                                ? process.env.KG_API_KEY
+                                : process.env.KG_DEV_API_KEY,
+                        }
+                    })
+                    const user = await res.json()
+                    if (res.ok && user) return {
+                        id: user.id,
+                        name: user.person.name,
+                        email: user.person.email,
                     }
-                    if (credentials?.username === user.username 
-                        && credentials?.password === user.password) {
-                        return user
-                    } else {
-                        console.error('Warning: Malicious login attempt registered, bad credentials provided')
-                        return null
-                    }
+                } catch (e) {
+                    console.error(e)
                 }
-            })
-            : undefined,
+                return null
+            },
+        })
+        : undefined,
     ]
 })
