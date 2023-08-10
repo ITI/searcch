@@ -1,22 +1,9 @@
 <template>
   <v-app light>
-    <v-navigation-drawer
-      v-model="drawer"
-      :rail="miniVariant"
-      :order="order"
-      permanent
-      position="fixed"
-    >
+    <v-navigation-drawer v-model="drawer" :rail="miniVariant" :order="order" permanent position="fixed">
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="`main${i}`"
-          :href="'href' in item ? item.href : undefined"
-          :target="'href' in item ? '_blank' : undefined"
-          :to="!('href' in item) ? item.to : undefined"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="`main${i}`" :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
           <template v-slot:prepend="{ on, attrs }">
             <v-list-item-action>
               <v-tooltip location="right">
@@ -32,15 +19,8 @@
       </v-list>
       <v-divider></v-divider>
       <v-list v-if="adminItems.length">
-        <v-list-item
-          v-for="(item, i) in adminItems"
-          :key="`main${i}`"
-          :href="'href' in item ? item.href : undefined"
-          :target="'href' in item ? '_blank' : undefined"
-          :to="!('href' in item) ? item.to : undefined"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in adminItems" :key="`main${i}`" :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
           <template v-slot:prepend="{ on, attrs }">
             <v-list-item-action>
               <v-tooltip location="right">
@@ -56,15 +36,8 @@
       </v-list>
       <v-divider v-if="adminItems.length"></v-divider>
       <v-list>
-        <v-list-item
-          v-for="(item, i) in footerItems"
-          :key="`footer${i}`"
-          :href="'href' in item ? item.href : undefined"
-          :target="'href' in item ? '_blank' : undefined"
-          :to="!('href' in item) ? item.to : undefined"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in footerItems" :key="`footer${i}`" :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
           <template v-slot:prepend="{ on, attrs }">
             <v-list-item-action>
               <v-tooltip location="right">
@@ -80,56 +53,41 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar position="fixed" elevation="1">
-      <v-btn icon @click.stop="() => {miniVariant = !miniVariant}">
+      <v-btn icon @click.stop="() => { miniVariant = !miniVariant }">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
       <!-- For some reasons v-app-bar-title will crash, use bare text instead -->
       {{ title }}
       <v-spacer />
       <span v-if="$auth.loggedIn" class="mr-2">{{ $auth.user.name }}</span>
-      <v-btn
-        v-if="$auth.loggedIn && user_can_admin && !user_is_admin"
-        icon
-        @click="() => setAdmin(true)"
-      >
+      <v-btn v-if="$auth.loggedIn && user_can_admin && !user_is_admin" icon @click="() => setAdmin(true)">
         <v-icon style="color: green">mdi-alpha-a-circle</v-icon>
       </v-btn>
-      <v-btn
-        v-else-if="$auth.loggedIn && user_can_admin && user_is_admin"
-        icon
-        @click="() => setAdmin(false)"
-      >
+      <v-btn v-else-if="$auth.loggedIn && user_can_admin && user_is_admin" icon @click="() => setAdmin(false)">
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
       </v-btn>
-      <v-btn v-if="$auth.loggedIn" class="bg-primary" @click="() => logout()"
-        >Logout&nbsp;<v-icon size="small">mdi-logout</v-icon></v-btn
-      >
-      <v-menu v-else
-        open-on-click
-        location="bottom"
-      >
+      <v-btn v-if="$auth.loggedIn" class="bg-primary" @click="() => logout()">Logout&nbsp;<v-icon
+          size="small">mdi-logout</v-icon></v-btn>
+      <v-menu v-else open-on-click location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn
-            class="bg-primary"
-            v-bind="props"
-          >
+          <v-btn class="bg-primary" v-bind="props">
             Login&nbsp;<v-icon size="small">mdi-login</v-icon>
           </v-btn>
         </template>
 
         <v-list>
           <v-list-item>
-            <v-btn class="bg-primary"  @click="() => gitHubLogin()">
+            <v-btn class="bg-primary" @click="() => gitHubLogin()">
               GitHub&nbsp;<v-icon size="small">mdi-github</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="bg-primary"  @click="() => googleLogin()">
+            <v-btn class="bg-primary" @click="() => googleLogin()">
               Google&nbsp;<v-icon size="small">mdi-google</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="bg-primary"  @click="() => cilogonLogin()">
+            <v-btn class="bg-primary" @click="() => cilogonLogin()">
               CILogon&nbsp;<v-icon size="small">mdi-login</v-icon>
             </v-btn>
           </v-list-item>
@@ -142,20 +100,11 @@
       </v-container>
     </v-main>
     <v-footer app>
-      <span
-        >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
+      <span>&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
         National Science Foundation under Grant Numbers 1925773, 1925616,
-        1925588, 1925564</span
-      >
-      <v-btn
-        color="error"
-        theme="dark"
-        raised
-        href="https://forms.gle/nsP4kJVsjAmKKLU86"
-        target="_blank"
-        rel="noopener"
-        >Send Us Feedback</v-btn
-      >
+        1925588, 1925564</span>
+      <v-btn color="error" theme="dark" raised href="https://forms.gle/nsP4kJVsjAmKKLU86" target="_blank"
+        rel="noopener">Send Us Feedback</v-btn>
     </v-footer>
   </v-app>
 </template>
@@ -274,13 +223,13 @@ export default defineComponent({
   },
   methods: {
     async gitHubLogin() {
-      let response = await this.$auth.loginWith('github')
+      await this.$auth.loginWith('github')
     },
     async googleLogin() {
-      let response = await this.$auth.loginWith('googlecustom')
+      await this.$auth.loginWith('google')
     },
     async cilogonLogin() {
-      let response = await this.$auth.loginWith('cilogon')
+      await this.$auth.loginWith('cilogon')
     },
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
@@ -313,16 +262,16 @@ export default defineComponent({
 </script>
 
 <style>
-  .v-footer {
-    flex-wrap: nowrap;
-    z-index: 9;
-    justify-content: space-between;
-  }
+.v-footer {
+  flex-wrap: nowrap;
+  z-index: 9;
+  justify-content: space-between;
+}
 
-  @media screen and (max-width: 992px) {
-    .v-footer {
-      flex-direction: column;
-      position: relative;
-    }
+@media screen and (max-width: 992px) {
+  .v-footer {
+    flex-direction: column;
+    position: relative;
   }
+}
 </style>

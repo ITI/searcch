@@ -53,13 +53,13 @@ export default defineComponent({
 
   methods: {
     async gitHubLogin() {
-      let response = await this.$auth.loginWith('github')
+      await this.$auth.loginWith('github')
     },
     async googleLogin() {
-      let response = await this.$auth.loginWith('google')
+      await this.$auth.loginWith('google')
     },
     async cilogonLogin() {
-      let response = await this.$auth.loginWith('cilogon')
+      await this.$auth.loginWith('cilogon')
     }
   }
 });
