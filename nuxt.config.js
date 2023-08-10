@@ -149,8 +149,10 @@ export default defineNuxtConfig({
       }
     ]
   },
-  publicRuntimeConfig: {},
-  privateRuntimeConfig: {
+  runtimeConfig: {
+    public: {
+      testing: process.env.TESTING || 'undefined',
+    },
     gitHubClientID: process.env.GITHUB_CLIENT_ID || 'undefined',
     gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET || 'undefined',
     googleClientID: process.env.GOOGLE_CLIENT_ID || 'undefined',

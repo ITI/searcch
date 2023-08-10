@@ -1,5 +1,26 @@
-export default defineNuxtPlugin(({ $artifactsStore, $userStore, $loginEndpoint }) => {
+export default defineNuxtPlugin(({ 
+    $userStore, 
+    $loginEndpoint, 
+    $artifactsStore,
+}) => {
     const auth = useSession()
+    const config = useRuntimeConfig()
+    const plugin = {
+        provide: {
+            auth: {
+                ...auth,
+                loggedIn: computed(() => auth.status.value === 'authenticated').value,
+                user: computed(() => auth.data?.value?.user).value,
+                logout: auth.signOut,
+                loginWith: auth.signIn,
+            },
+        },
+    }
+
+    // Prevent calling backend when testing with Cypress
+    if (config.public.testing === 'true') {
+        return plugin
+    }
 
     if (auth.status.value === 'authenticated') {
         const payload = {
@@ -24,15 +45,5 @@ export default defineNuxtPlugin(({ $artifactsStore, $userStore, $loginEndpoint }
             })
     }
 
-    return {
-        provide: {
-            auth: {
-                ...auth,
-                loggedIn: computed(() => auth.status.value === 'authenticated').value,
-                user: computed(() => auth.data?.value?.user).value,
-                logout: auth.signOut,
-                loginWith: auth.signIn,
-            },
-        },
-    }
+    return plugin
 })

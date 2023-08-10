@@ -1,6 +1,9 @@
 import { defineConfig } from 'cypress';
 import { loadNuxt, build } from 'nuxt';
 import vue from '@vitejs/plugin-vue';
+import { config } from 'dotenv';
+
+config();
 
 async function getNuxtViteConfig() {
   const nuxt = await loadNuxt({
@@ -15,8 +18,8 @@ async function getNuxtViteConfig() {
             protocol: 'ws'
           }
         }
-      }
-    }
+      },
+    },
   });
   return new Promise((resolve, reject) => {
     nuxt.hook('vite:extendConfig', config => {
@@ -32,17 +35,17 @@ async function getNuxtViteConfig() {
 }
 
 export default defineConfig({
+  env: {
+    // Google
+    googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  }, 
   e2e: {
-    // setupNodeEvents(on, config) {
-    //   on('file:preprocessor', vue);
-    //   return config;
-    // },
+    baseUrl: "http://localhost:3000",
   },
   component: {
-    // setupNodeEvents(on, config) {
-    //   on('file:preprocessor', vue);
-    //   return config;
-    // },
+    baseUrl: "http://localhost:3000",
     devServer: {
       framework: 'vue',
       bundler: 'vite',

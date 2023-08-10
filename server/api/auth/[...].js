@@ -2,7 +2,10 @@
 // file: ~/server/api/auth/[...].ts
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
+import CredentialsProvider from 'next-auth/providers/credentials'
+
 import { NuxtAuthHandler } from '#auth'
+
 export default NuxtAuthHandler({
     // A secret string you define, to ensure correct encryption
     secret: process.env.PRODUCTION == 'true'
@@ -59,6 +62,34 @@ export default NuxtAuthHandler({
                     affiliation: profile.affiliation
                 }
             }
-        }
+        },
+
+        process.env.TESTING === 'true'
+            ? CredentialsProvider.default({
+                name: 'Credentials',
+                credentials: {
+                    username: { label: 'Username', type: 'text', placeholder: '(hint: jsmith)' },
+                    password: { label: 'Password', type: 'password', placeholder: '(hint: hunter2)' }
+                },
+                authorize(credentials) {
+                    const user = { 
+                        userid: 53, 
+                        username: 'jsmith',
+                        email: 'jsmith@gamil.com',
+                        name: 'John Smith',
+                        password: 'hunter2',
+                        is_admin: true,
+                        can_admin: true,
+                    }
+                    if (credentials?.username === user.username 
+                        && credentials?.password === user.password) {
+                        return user
+                    } else {
+                        console.error('Warning: Malicious login attempt registered, bad credentials provided')
+                        return null
+                    }
+                }
+            })
+            : undefined,
     ]
 })
