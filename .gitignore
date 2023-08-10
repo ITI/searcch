@@ -94,3 +94,6 @@ sw.*
 .nitro/
 .cache/
 .env
+
+# cypress videos
+cypress/videos
