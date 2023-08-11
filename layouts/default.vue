@@ -125,6 +125,22 @@ export default defineComponent({
   },
   async mounted() {
     this.miniVariant = window.innerWidth < 992;
+    if (this.$auth.loggedIn) {
+      const payload = {
+        strategy: this.$auth.data?.value?.provider,
+        token: `Bearer ${this.$auth.data?.value?.token}`,
+      }
+      this.$userStore.user_token = payload.token
+      await this.$loginEndpoint.create(payload).then((response) => {
+        if (typeof response !== 'undefined' && response.userid >= 0) {
+          this.$userStore.user = response.person
+          this.$userStore.userid = response.userid
+          this.$userStore.user_is_admin = response.is_admin
+          this.$userStore.user_can_admin = response.can_admin
+          this.$artifactsStore.fetchFavorites(response.userid)
+        }
+      })
+    }
   },
   computed: {
     ...mapState(userStore, {
