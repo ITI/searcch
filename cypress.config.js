@@ -40,12 +40,13 @@ export default defineConfig({
     googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
     googleClientId: process.env.GOOGLE_CLIENT_ID,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
   }, 
   e2e: {
-    baseUrl: "http://localhost:3000",
+    baseUrl: process.env.BASE_URL || "http://localhost:3000",
   },
   component: {
-    baseUrl: "http://localhost:3000",
+    baseUrl: process.env.BASE_URL || "http://localhost:3000",
     devServer: {
       framework: 'vue',
       bundler: 'vite',
