@@ -2,6 +2,7 @@
   <div>
     <v-form ref="search" @submit.prevent="onSubmit">
       <v-text-field
+        id="input-search-artifact"
         append-inner-icon="mdi-magnify"
         label="Search"
         placeholder="Type search term..."

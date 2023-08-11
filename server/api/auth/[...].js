@@ -6,6 +6,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 import { NuxtAuthHandler } from '#auth'
 
+const config = useRuntimeConfig()
+
 export default NuxtAuthHandler({
     // A secret string you define, to ensure correct encryption
     secret: process.env.PRODUCTION == 'true'
@@ -65,7 +67,7 @@ export default NuxtAuthHandler({
             }
         },
 
-        process.env.TESTING === 'true'
+        config.public.testing === 'true'
         ? CredentialsProvider.default({
             name: 'Credentials',
             credentials: {
@@ -90,6 +92,7 @@ export default NuxtAuthHandler({
                         id: user.id,
                         name: user.person.name,
                         email: user.person.email,
+                        ...user
                     }
                 } catch (e) {
                     console.error(e)

@@ -1,13 +1,5 @@
-// We cannot use social login with sidebase in tests because it
-// will trigger a captcha in CI. Instead, we login the user through google api
-// and cheat the sidebase by modifying its auth object on the client end.
-// However, the update does not reflect on frontend because nuxt computes
-// auth state and pages on the server. We, therefore, use a custom test-env-only
-// command to login user with credentials so that we have the logged-in 
-// page on user end, then we modify the auth object on the client side to
-// the actual user who logged in through google.
 Cypress.Commands.add('login', () => {
-  cy.visit('http://localhost:3000')
+  cy.visit(`${Cypress.env('baseUrl')}`)
   cy.get('nav a[href="/search"]').should('be.visible')
 
   cy.request({
@@ -24,7 +16,7 @@ Cypress.Commands.add('login', () => {
     localStorage.setItem('token', access_token)
 
     cy.window().then((win) => {
-      win.userStore.user_token = access_token
+      win.useNuxtApp().$userStore.user_token = access_token
     })
 
     const payload = {
@@ -45,10 +37,6 @@ Cypress.Commands.add('login', () => {
       }).then((res) => {
         cy.visit('/')
         cy.get('nav a[href="/search"]').should('be.visible')
-        
-        cy.intercept('/kg/**/*', (req) => {
-          req.headers['Authorization'] = `Bearer ${access_token}`
-        })
 
         cy.window().then((win) => {
           expect(win.useNuxtApp().$auth.loggedIn).to.be.true
