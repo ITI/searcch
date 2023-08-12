@@ -63,6 +63,7 @@
       <v-card-actions>
         <v-btn
           icon
+          id="btn-artifact-favorite"
           @click="favoriteThis()"
           :color="favorite == true ? 'red' : ''"
         >
@@ -71,6 +72,7 @@
 
         <v-btn
           icon
+          id="btn-artifact-comment"
           v-if="!related"
           :to="`/artifact/review/${artifact.artifact_group_id}`"
         >
@@ -100,6 +102,7 @@
           v-if="!related"
           color="primary"
           :to="getArtifactLink()"
+          id="btn-artifact-read-more"
         >
           Read More
         </v-btn>
@@ -108,6 +111,7 @@
           color="success"
           @click="addRelated(artifact.artifact_group_id, relation)"
           :disabled="relation.length == 0"
+          id="btn-artifact-add-related"
         >
           Add Related
         </v-btn>
@@ -115,6 +119,7 @@
           v-if="isOwner() || isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit_relation=true`"
+          id="btn-artifact-edit-relation"
         >
           Edit Relation
         </v-btn>
@@ -122,6 +127,7 @@
           v-if="isOwner() || isAdmin()"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
+          id="btn-artifact-edit"
         >
           Edit
         </v-btn>
