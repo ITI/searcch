@@ -130,6 +130,12 @@ export default defineComponent({
         strategy: this.$auth.data?.value?.provider,
         token: `Bearer ${this.$auth.data?.value?.token}`,
       }
+
+      if (window.Cypress) {
+        payload.strategy = 'google'
+        payload.token = `Bearer ${localStorage.getItem('token')}`
+      }
+
       this.$userStore.user_token = payload.token
       await this.$loginEndpoint.create(payload).then((response) => {
         if (typeof response !== 'undefined' && response.userid >= 0) {
