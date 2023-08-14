@@ -1,4 +1,4 @@
-describe('Search and Filter Artifacts for Guests', () => {
+describe('Search and Filter Artifacts', () => {
 	beforeEach(() => {
 		cy.visit(`${Cypress.env('baseUrl')}/search`)
 		cy.get('nav a[href="/search"]').should('be.visible')

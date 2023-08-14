@@ -1,4 +1,4 @@
-describe('Home Page for Guests', () => {
+describe('Home Page', () => {
   beforeEach(() => {
     cy.visit(`${Cypress.env('baseUrl')}`)
     // sometimes we have slow network, run this to wait for the full page to load
