@@ -661,7 +661,7 @@ export default defineComponent({
   },
   async created() {
     this.$resolver.resolve(schemaWithPointers).then(schema => {
-      this.schema = schema
+      this.schema = schema.result
       this.schemaLoaded = true
     }).catch(err => {
       // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
@@ -669,7 +669,7 @@ export default defineComponent({
       console.error(err)
     })
     this.$resolver.resolve(affiliationSchemaWithPointers).then(schema => {
-      this.affiliationSchema = schema
+      this.affiliationSchema = schema.result
       this.schemaLoaded = true
     }).catch(err => {
       // `schema` is just a normal JavaScript object that contains your entire JSON Schema,

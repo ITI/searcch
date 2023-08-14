@@ -210,7 +210,7 @@ export default defineComponent({
   },
   created() {
     this.$resolver.resolve(schemaWithPointers).then(schema => {
-      this.schema = schema
+      this.schema = schema.result
       this.schemaLoaded = true
     }).catch(err => {
       // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
