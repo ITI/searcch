@@ -37,6 +37,7 @@
               <v-col cols="12">
                 <v-text-field
                   label="Author"
+                  id="input-filter-by-author"
                   placeholder="Search for artifacts by author name..."
                   v-model="advanced.author"
                 >
@@ -44,6 +45,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
+                  id="input-filter-by-organization"
                   label="Organization"
                   placeholder="Search for artifacts by organization name..."
                   v-model="advanced.org"
@@ -57,27 +59,25 @@
                   label="Artifact types"
                   multiple
                   class="rounded-0"
-                  hide-details
+                  persisent
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item  @click="toggle">
-                      <v-list-item-action>
-                        <v-icon
-                          :color="
-                            advanced.types.length > 0 ? 'indigo darken-4' : ''
-                          "
-                        >
-                          {{ artifactTypeIcon }}
-                        </v-icon>
-                      </v-list-item-action>
-                      <v-list-item-title>
-                        Select All
-                      </v-list-item-title>
+                    <v-list-item
+                      title="Select All"
+                      @click="toggleArtifactTypes"
+                    >
+                      <template v-slot:prepend>
+                        <v-checkbox-btn
+                          color="indigo-darken-4"
+                          :indeterminate="advanced.types.length > 0 && advanced.types.length < types.length"
+                          :model-value="advanced.types.length === types.length"
+                        ></v-checkbox-btn>
+                      </template>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
                   </template>
                   <template v-slot:selection="{ item, index }">
-                    <span v-if="index === 0">{{ item }}</span>
+                    <span v-if="index === 0">{{ item.raw }}</span>
                     <span></span>
                     <span v-if="index === 1" class="text-grey text-caption">
                       (+{{ advanced.types.length - 1 }} others)
@@ -97,31 +97,30 @@
                   hide-details
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item  @click="toggleBadges">
-                      <v-list-item-action>
-                        <v-icon
-                          :color="
-                            advanced.badge_ids.length > 0 ? 'indigo darken-4' : ''
-                          "
-                        >
-                          {{ badgeIcon }}
-                        </v-icon>
-                      </v-list-item-action>
-                      <v-list-item-title>
-                        Select All
-                      </v-list-item-title>
+                    <v-list-item
+                      title="Select All"
+                      @click="toggleBadges"
+                    >
+                      <template v-slot:prepend>
+                        <v-checkbox-btn
+                          color="indigo-darken-4"
+                          :indeterminate="advanced.badge_ids.length > 0 && advanced.badge_ids.length < badges.length"
+                          :model-value="advanced.badge_ids.length === badges.length"
+                        ></v-checkbox-btn>
+                      </template>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
                   </template>
                   <template v-slot:selection="{ item, index }">
-                    <span v-if="index === 0">{{ `${item.organization} ${item.title}` }}</span>
+                    <span v-if="index === 0">{{ `${item.raw.organization} ${item.raw.title}` }}</span>
                     <span></span>
                     <span v-if="index === 1" class="text-grey text-caption">
                       (+{{ advanced.badge_ids.length - 1 }} others)
                     </span>
                   </template>
-                  <template v-slot:item="{ item, index }">
-                    {{ `${item.organization} ${item.title}` }}
+                  <template v-slot:item="{ item, props }">
+                    <v-list-item v-bind="props" :title="`${item.raw.organization} ${item.raw.title}`">
+                    </v-list-item>
                   </template>
                 </v-select>
               </v-col>
@@ -137,19 +136,17 @@
                   hide-details
                 >
                   <template v-slot:prepend-item>
-                    <v-list-item  @click="toggleVenues">
-                      <v-list-item-action>
-                        <v-icon
-                          :color="
-                            advanced.venue_ids.length > 0 ? 'indigo darken-4' : ''
-                          "
-                        >
-                          {{ venueIcon }}
-                        </v-icon>
-                      </v-list-item-action>
-                      <v-list-item-title>
-                        Select All
-                      </v-list-item-title>
+                    <v-list-item
+                      title="Select All"
+                      @click="toggleVenues"
+                    >
+                      <template v-slot:prepend>
+                        <v-checkbox-btn
+                          color="indigo-darken-4"
+                          :indeterminate="advanced.venue_ids.length > 0 && advanced.venue_ids.length < venues.length"
+                          :model-value="advanced.venue_ids.length === venues.length"
+                        ></v-checkbox-btn>
+                      </template>
                     </v-list-item>
                     <v-divider class="mt-2"></v-divider>
                   </template>
@@ -167,7 +164,7 @@
               </v-col>
 
               <v-col cols="12" sm ="8">
-                <v-select v-model="advanced.search_criteria" label="Sort Results" :items="['None','date', 'views', 'rating']" @update:model-value = "showOptions">
+                <v-select v-model="advanced.search_criteria" label="Sort Results" :items="['None','Date', 'View', 'Rating']" @update:model-value = "showOptions">
                 </v-select>
               </v-col>
               
@@ -187,7 +184,7 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-btn @click="onSubmit" class="bg-primary mt-3">Search</v-btn>
+            <v-btn id="btn-advanced-search-submit" @click="onSubmit" class="bg-primary mt-3">Search</v-btn>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -400,7 +397,7 @@ export default defineComponent({
     onChange() {
       this.searchMessage = ''
     },
-    toggle() {
+    toggleArtifactTypes() {
       this.$nextTick(() => {
         if (this.allArtifacts) {
           this.advanced.types = []
