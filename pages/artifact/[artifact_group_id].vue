@@ -76,8 +76,8 @@ export default defineComponent({
       // the user will have outdated artifact data when he returns from
       // editing page. In those cases, the mounted hook is not triggered
       // so we have to manually fetch new information
-      if (!val.query.edit && !val.query.editing) {
-        this.$store.dispatch('artifacts/fetchArtifact', {
+      if (val.fullPath.search('/artifact') !== -1 && !val.query.edit && !val.query.editing) {
+        this.$artifactsStore.fetchArtifact({
           artifact_group_id: this.$route.params.artifact_group_id,
           id: this.$route.params.id
         })
