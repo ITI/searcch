@@ -74,7 +74,6 @@
 import { defineAsyncComponent } from 'vue'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
-import { EventBus } from '@/helpers'
 import ArtifactRelationView from './ArtifactRelationView.vue'
 
 export default defineComponent({
@@ -141,7 +140,7 @@ export default defineComponent({
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
-    EventBus.$on('close', this.closeHandler)
+    this.$on('close', this.closeHandler)
     this.$userStore.fetchOrgs()
     this.$userStore.fetchBadges()
   },

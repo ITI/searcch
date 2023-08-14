@@ -140,7 +140,6 @@
 import { defineAsyncComponent } from 'vue'
 import clip from 'text-clipper'
 import { mapState } from 'pinia'
-import { EventBus } from '@/helpers'
 import { userStore } from '~/stores/user'
 import { artifactsStore } from '~/stores/artifacts'
 
@@ -255,7 +254,7 @@ export default defineComponent({
         id: id,
         relation: relation
       })
-      EventBus.$emit('close', 'artifactdialog')
+      this.$emit('close', 'artifactdialog')
     },
     isAdmin() {
       this.user_is_admin

@@ -25,6 +25,7 @@
     "dompurify": "^3.0.2",
     "markdown-it": "^13.0.1",
     "md5": "^2.3.0",
+    "mitt": "^3.0.1",
     "moment": "^2.29.4",
     "next-auth": "^4.18.8",
     "nuxt-lazy-hydrate": "^0.1.0",

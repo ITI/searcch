@@ -127,5 +127,3 @@ export const zipArray = (tag, input) => {
     array = getArray(zip)
   return array
 }
-
-export const EventBus = createApp()

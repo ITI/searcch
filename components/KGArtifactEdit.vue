@@ -540,7 +540,7 @@ import { mapState } from 'pinia'
 import { artifactIcon, artifactColor, bytesToSize } from '@/helpers'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
-import { zipArray, EventBus } from '@/helpers'
+import { zipArray } from '@/helpers'
 import { userStore } from '~/stores/user'
 
 function affiliationObjectsEqual(o1,o2) {
@@ -690,7 +690,7 @@ export default defineComponent({
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
-    EventBus.$on('close', this.closeHandler)
+    this.$on('close', this.closeHandler)
     this.$userStore.fetchOrgs()
     this.$userStore.fetchBadges()
     this.$userStore.fetchVenues()
