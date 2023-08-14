@@ -105,8 +105,8 @@ export default defineNuxtPlugin(({ $fetch }) => {
       // sessions index API
       sessionsEndpoint: repositoryWithAxios('kg/' + 'sessions'),
 
-      // user request ownership API
-      requestOwnershipEndpoint: repositoryWithAxios('/kg' + '/requests/ownership'),
+      // user optout API
+      optOutEndpoint: repositoryWithAxios('/kg' + '/email/opt_out'),
     }
   }
 })

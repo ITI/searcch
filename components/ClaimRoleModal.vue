@@ -37,7 +37,7 @@
                 {{ isDisabled ? "Justification" : "Please justify your claim in the textbox below" }}
             </div>
             <div>
-                <textarea v-model="justificationMessageData" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
+                <textarea v-model="justificationMessage" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
             </div>
         </slot>
        </section>
@@ -146,8 +146,8 @@
         }
       },
       isJustificationMessageValid() {
-        this.justificationMessageData = this.justificationMessageData.trim();
-        return this.justificationMessageData!="";
+        this.justificationMessage = this.justificationMessage.trim();
+        return this.justificationMessage!="";
       }
     },
     data() {
