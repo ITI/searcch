@@ -44,6 +44,8 @@ export default defineConfig({
   }, 
   e2e: {
     baseUrl: process.env.BASE_URL || "http://localhost:3000",
+    viewportHeight: 800,
+    viewportWidth: 1280,
   },
   component: {
     baseUrl: process.env.BASE_URL || "http://localhost:3000",
