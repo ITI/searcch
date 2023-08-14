@@ -86,7 +86,7 @@
             v-bind:justificationMessage="justificationMessage"
             v-bind:isDisabled="isModalDisabled"
             v-bind:artifact_group_id="record.artifact.artifact_group_id"
-            v-bind:email="claimEmail || user.email"
+            v-bind:email="claimEmail || user?.email"
             v-bind:claimKey="claimKey">
           </ClaimRoleModal>
         </transition>
