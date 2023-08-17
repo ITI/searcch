@@ -71,31 +71,17 @@ export default NuxtAuthHandler({
         ? CredentialsProvider.default({
             name: 'Credentials',
             credentials: {
-                strategy: { label: 'strategy', type: 'text' },
-                token: { label: 'token', type: 'password' }
+                username: { label: 'username', type: 'text' },
+                password: { label: 'password', type: 'password' }
             },
             async authorize(credentials) {
-                try {
-                    const { csrfToken, ...payload } = credentials
-                    const res = await fetch(`${process.env.BACKEND_URL}/login`, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-Api-Key": process.env.PRODUCTION == 'true'
-                                ? process.env.KG_API_KEY
-                                : process.env.KG_DEV_API_KEY,
-                        }
-                    })
-                    const user = await res.json()
-                    if (res.ok && user) return {
-                        id: user.id,
-                        name: user.person.name,
-                        email: user.person.email,
-                        ...user
+                const { username, password } = credentials
+                if (username === 'testuser' && password === 'testuser') {
+                    return {
+                        id: 1,
+                        name: 'Test User',
+                        email: 'testing@example.com'
                     }
-                } catch (e) {
-                    console.error(e)
                 }
                 return null
             },

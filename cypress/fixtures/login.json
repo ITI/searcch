@@ -1,0 +1,13 @@
+{
+  "userid": 999,
+  "person": {
+    "id": 999,
+    "name": "Test User",
+    "email": "testing@example.com",
+    "research_interests": null,
+    "website": null
+  },
+  "can_admin": false,
+  "is_admin": false,
+  "message": "login successful: new session"
+}
