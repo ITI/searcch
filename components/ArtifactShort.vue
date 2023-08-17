@@ -208,10 +208,11 @@ export default defineComponent({
       if (this.artifact === undefined) {
         return false;
       }
-      if (this.artifact.artifact_group.owner_id == this.userid) {
+      if (this.artifact.artifact_group.owner_id === this.userid) {
         return 'owner';
       }
-      if(this.artifact.owner.id != this.userid) {
+      if (typeof this.artifact.owner !== 'undefined' 
+        && this.artifact.owner.id !== this.userid) {
         return false;
       }
       if (this.isDraft()) {
