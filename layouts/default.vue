@@ -123,8 +123,7 @@ export default defineComponent({
       title: 'SEARCCH Hub',
     }
   },
-  async mounted() {
-    this.miniVariant = window.innerWidth < 992;
+  async beforeMount() {
     if (this.$auth.loggedIn) {
       const payload = {
         strategy: this.$auth.data?.value?.provider,
@@ -147,6 +146,9 @@ export default defineComponent({
         }
       })
     }
+  },
+  mounted() {
+    this.miniVariant = window.innerWidth < 992;
   },
   computed: {
     ...mapState(userStore, {
