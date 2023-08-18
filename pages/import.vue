@@ -71,13 +71,13 @@
         <v-form v-model="valid" ref="importform">
           <v-row class="ma-1 pa-1">
             <v-col cols="10">
-              <v-text-field label="URL" v-model="url" placeholder="http://github.com/iti/project" variant="outlined"
+              <v-text-field id="input-artifact-import" label="URL" v-model="url" placeholder="http://github.com/iti/project" variant="outlined"
                 hide-details="auto" :rules="[rules.required, rules.url]"></v-text-field>
             </v-col>
           </v-row>
           <v-row align="center" class="ma-1 pa-1">
             <v-col cols="3">
-              <v-btn class="bg-primary" :disabled="importing" @click="startImport()" block>Start Import</v-btn>
+              <v-btn id="btn-start-import" class="bg-primary" :disabled="importing" @click="startImport()" block>Start Import</v-btn>
             </v-col>
             <v-divider class="mx-4" vertical></v-divider>
             <v-col>
