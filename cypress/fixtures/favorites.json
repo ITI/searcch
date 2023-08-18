@@ -1,0 +1,365 @@
+{
+    "artifacts": [
+        {
+            "artifact_group": {
+                "owner": {
+                    "person": {
+                        "id": 14,
+                        "name": "David Johnson"
+                    },
+                    "id": 2
+                },
+                "publication": {
+                    "artifact": {
+                        "owner": {
+                            "person": {
+                                "id": 14,
+                                "name": "David Johnson"
+                            },
+                            "id": 2
+                        },
+                        "id": 432,
+                        "artifact_group_id": 432,
+                        "type": "software",
+                        "url": "https://gitlab.flux.utah.edu/a3/vmi",
+                        "ext_id": "https://gitlab.flux.utah.edu/a3/vmi",
+                        "title": "Stackdb: A C Library for \" Stackable\" Debugging and Virtual Machine Introspection",
+                        "name": null,
+                        "ctime": "2021-08-12T14:24:49.836067",
+                        "mtime": "2021-08-12T14:34:53.324048",
+                        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).",
+                        "license_id": 36,
+                        "owner_id": 2,
+                        "parent_id": null
+                    },
+                    "publisher": {
+                        "person": {
+                            "id": 14,
+                            "name": "David Johnson"
+                        },
+                        "id": 2
+                    },
+                    "id": 186,
+                    "artifact_id": 432,
+                    "time": "2021-08-12T14:34:53.324473",
+                    "notes": null,
+                    "version": 0
+                },
+                "id": 432,
+                "owner_id": 2,
+                "publication_id": 186,
+                "next_version": 1
+            },
+            "artifact_group_id": 432,
+            "uri": "/v1/artifact/432",
+            "doi": "https://gitlab.flux.utah.edu/a3/vmi",
+            "type": "software",
+            "title": "Stackdb: A C Library for \" Stackable\" Debugging and Virtual Machine Introspection",
+            "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).",
+            "avg_rating": null,
+            "num_ratings": 0,
+            "num_reviews": 0
+        },
+        {
+            "artifact_group": {
+                "owner": {
+                    "person": {
+                        "id": 14,
+                        "name": "David Johnson"
+                    },
+                    "id": 2
+                },
+                "publication": {
+                    "artifact": {
+                        "owner": {
+                            "person": {
+                                "id": 14,
+                                "name": "David Johnson"
+                            },
+                            "id": 2
+                        },
+                        "id": 433,
+                        "artifact_group_id": 433,
+                        "type": "publication",
+                        "url": "https://dl.acm.org/doi/10.1145/2576195.2576212",
+                        "ext_id": "10.1145/2576195.2576212",
+                        "title": "Composable multi-level debugging with Stackdb",
+                        "name": "Composable multi-level debugging with Stackdb",
+                        "ctime": "2021-08-12T14:28:05.910731",
+                        "mtime": "2021-08-12T14:35:08.907974",
+                        "description": "Virtual machine introspection (VMI) allows users to debug software that executes within\na virtual machine. To support rich, whole-system analyses, a VMI tool must inspect\nand control systems at multiple levels of the software stack. Traditional debuggers\nenable inspection and control, but they limit users to treating a whole system as\njust one kind of target: e.g., just a kernel, or just a process, but not both.We created\nStackdb, a debugging library with VMI support that allows one to monitor and control\na whole system through multiple, coordinated targets. A target corresponds to a particular\nlevel of the system's software stack; multiple targets allow a user to observe a VM\nguest at several levels of abstraction simultaneously. For example, with Stackdb,\none can observe a PHP script running in a Linux process in a Xen VM via three coordinated\ntargets at the language, process, and kernel levels. Within Stackdb, higher-level\ntargets are components that utilize lower-level targets; a key contribution of Stackdb\nis its API that supports multi-level and flexible \"stacks\" of targets. This paper\ndescribes the challenges we faced in creating Stackdb, presents the solutions we devised,\nand evaluates Stackdb through its application to a security-focused, whole-system\ncase study.",
+                        "license_id": null,
+                        "owner_id": 2,
+                        "parent_id": null
+                    },
+                    "publisher": {
+                        "person": {
+                            "id": 14,
+                            "name": "David Johnson"
+                        },
+                        "id": 2
+                    },
+                    "id": 187,
+                    "artifact_id": 433,
+                    "time": "2021-08-12T14:35:08.908361",
+                    "notes": null,
+                    "version": 0
+                },
+                "id": 433,
+                "owner_id": 2,
+                "publication_id": 187,
+                "next_version": 1
+            },
+            "artifact_group_id": 433,
+            "uri": "/v1/artifact/433",
+            "doi": "https://dl.acm.org/doi/10.1145/2576195.2576212",
+            "type": "publication",
+            "title": "Composable multi-level debugging with Stackdb",
+            "description": "Virtual machine introspection (VMI) allows users to debug software that executes within\na virtual machine. To support rich, whole-system analyses, a VMI tool must inspect\nand control systems at multiple levels of the software stack. Traditional debuggers\nenable inspection and control, but they limit users to treating a whole system as\njust one kind of target: e.g., just a kernel, or just a process, but not both.We created\nStackdb, a debugging library with VMI support that allows one to monitor and control\na whole system through multiple, coordinated targets. A target corresponds to a particular\nlevel of the system's software stack; multiple targets allow a user to observe a VM\nguest at several levels of abstraction simultaneously. For example, with Stackdb,\none can observe a PHP script running in a Linux process in a Xen VM via three coordinated\ntargets at the language, process, and kernel levels. Within Stackdb, higher-level\ntargets are components that utilize lower-level targets; a key contribution of Stackdb\nis its API that supports multi-level and flexible \"stacks\" of targets. This paper\ndescribes the challenges we faced in creating Stackdb, presents the solutions we devised,\nand evaluates Stackdb through its application to a security-focused, whole-system\ncase study.",
+            "avg_rating": null,
+            "num_ratings": 0,
+            "num_reviews": 0
+        },
+        {
+            "artifact_group": {
+                "owner": {
+                    "person": {
+                        "id": 1,
+                        "name": "automatic-imports"
+                    },
+                    "id": 1
+                },
+                "publication": {
+                    "artifact": {
+                        "owner": {
+                            "person": {
+                                "id": 1,
+                                "name": "automatic-imports"
+                            },
+                            "id": 1
+                        },
+                        "id": 101,
+                        "artifact_group_id": 101,
+                        "type": "software",
+                        "url": "https://github.com/cmu-transparency/artifact-proxyuse-ccs2017",
+                        "ext_id": "cmu-transparency/artifact-proxyuse-ccs2017",
+                        "title": "cmu-transparency/artifact-proxyuse-ccs2017",
+                        "name": "cmu-transparency/artifact-proxyuse-ccs2017",
+                        "ctime": "2021-08-02T05:55:35.561849",
+                        "mtime": null,
+                        "description": "Snapshot of the proxy-use-related implementations and experiments/results presented in the CCS 2017 paper.",
+                        "license_id": null,
+                        "owner_id": 1,
+                        "parent_id": null
+                    },
+                    "publisher": {
+                        "person": {
+                            "id": 1,
+                            "name": "automatic-imports"
+                        },
+                        "id": 1
+                    },
+                    "id": 203,
+                    "artifact_id": 101,
+                    "time": "2021-08-12T23:10:50.945841",
+                    "notes": null,
+                    "version": 0
+                },
+                "id": 101,
+                "owner_id": 1,
+                "publication_id": 203,
+                "next_version": 1
+            },
+            "artifact_group_id": 101,
+            "uri": "/v1/artifact/101",
+            "doi": "https://github.com/cmu-transparency/artifact-proxyuse-ccs2017",
+            "type": "software",
+            "title": "cmu-transparency/artifact-proxyuse-ccs2017",
+            "description": "Snapshot of the proxy-use-related implementations and experiments/results presented in the CCS 2017 paper.",
+            "avg_rating": null,
+            "num_ratings": 0,
+            "num_reviews": 0
+        },
+        {
+            "artifact_group": {
+                "owner": {
+                    "person": {
+                        "id": 1,
+                        "name": "automatic-imports"
+                    },
+                    "id": 1
+                },
+                "publication": {
+                    "artifact": {
+                        "owner": {
+                            "person": {
+                                "id": 1,
+                                "name": "automatic-imports"
+                            },
+                            "id": 1
+                        },
+                        "id": 214,
+                        "artifact_group_id": 214,
+                        "type": "software",
+                        "url": "https://github.com/g-petracca/Bind",
+                        "ext_id": "g-petracca/Bind",
+                        "title": "g-petracca/AWare",
+                        "name": "g-petracca/AWare",
+                        "ctime": "2021-08-02T16:12:47.432846",
+                        "mtime": null,
+                        "description": "Proof-of-Concept Authorization Mechanism for Privacy-Sensitive Sensors Use in Smartphones.",
+                        "license_id": null,
+                        "owner_id": 1,
+                        "parent_id": null
+                    },
+                    "publisher": {
+                        "person": {
+                            "id": 1,
+                            "name": "automatic-imports"
+                        },
+                        "id": 1
+                    },
+                    "id": 200,
+                    "artifact_id": 214,
+                    "time": "2021-08-12T23:10:50.945841",
+                    "notes": null,
+                    "version": 0
+                },
+                "id": 214,
+                "owner_id": 1,
+                "publication_id": 200,
+                "next_version": 1
+            },
+            "artifact_group_id": 214,
+            "uri": "/v1/artifact/214",
+            "doi": "https://github.com/g-petracca/Bind",
+            "type": "software",
+            "title": "g-petracca/AWare",
+            "description": "Proof-of-Concept Authorization Mechanism for Privacy-Sensitive Sensors Use in Smartphones.",
+            "avg_rating": null,
+            "num_ratings": 0,
+            "num_reviews": 0
+        },
+        {
+            "artifact_group": {
+                "owner": {
+                    "person": {
+                        "id": 1,
+                        "name": "automatic-imports"
+                    },
+                    "id": 1
+                },
+                "publication": {
+                    "artifact": {
+                        "owner": {
+                            "person": {
+                                "id": 1,
+                                "name": "automatic-imports"
+                            },
+                            "id": 1
+                        },
+                        "id": 209,
+                        "artifact_group_id": 209,
+                        "type": "software",
+                        "url": "https://github.com/dedos-project/DeDOS",
+                        "ext_id": "dedos-project/DeDOS",
+                        "title": "dedos-project/DeDOS",
+                        "name": "dedos-project/DeDOS",
+                        "ctime": "2021-08-02T16:05:56.611457",
+                        "mtime": null,
+                        "description": "DeDOS: Declarative Dispersion-Oriented Software",
+                        "license_id": null,
+                        "owner_id": 1,
+                        "parent_id": null
+                    },
+                    "publisher": {
+                        "person": {
+                            "id": 1,
+                            "name": "automatic-imports"
+                        },
+                        "id": 1
+                    },
+                    "id": 192,
+                    "artifact_id": 209,
+                    "time": "2021-08-12T23:10:50.945841",
+                    "notes": null,
+                    "version": 0
+                },
+                "id": 209,
+                "owner_id": 1,
+                "publication_id": 192,
+                "next_version": 1
+            },
+            "artifact_group_id": 209,
+            "uri": "/v1/artifact/209",
+            "doi": "https://github.com/dedos-project/DeDOS",
+            "type": "software",
+            "title": "dedos-project/DeDOS",
+            "description": "DeDOS: Declarative Dispersion-Oriented Software",
+            "avg_rating": null,
+            "num_ratings": 0,
+            "num_reviews": 0
+        },
+        {
+            "artifact_group": {
+                "owner": {
+                    "person": {
+                        "id": 1,
+                        "name": "automatic-imports"
+                    },
+                    "id": 1
+                },
+                "publication": {
+                    "artifact": {
+                        "owner": {
+                            "person": {
+                                "id": 1,
+                                "name": "automatic-imports"
+                            },
+                            "id": 1
+                        },
+                        "id": 151,
+                        "artifact_group_id": 151,
+                        "type": "software",
+                        "url": "https://doi.org/10.5281/zenodo.804871",
+                        "ext_id": "804871",
+                        "title": "diekmann/net-network: Snapshot of June 2017",
+                        "name": null,
+                        "ctime": "2021-08-02T06:43:59.265511",
+                        "mtime": null,
+                        "description": "Public collection of firewall dumps.",
+                        "license_id": 106,
+                        "owner_id": 1,
+                        "parent_id": null
+                    },
+                    "publisher": {
+                        "person": {
+                            "id": 1,
+                            "name": "automatic-imports"
+                        },
+                        "id": 1
+                    },
+                    "id": 193,
+                    "artifact_id": 151,
+                    "time": "2021-08-12T23:10:50.945841",
+                    "notes": null,
+                    "version": 0
+                },
+                "id": 151,
+                "owner_id": 1,
+                "publication_id": 193,
+                "next_version": 1
+            },
+            "artifact_group_id": 151,
+            "uri": "/v1/artifact/151",
+            "doi": "https://doi.org/10.5281/zenodo.804871",
+            "type": "software",
+            "title": "diekmann/net-network: Snapshot of June 2017",
+            "description": "Public collection of firewall dumps.",
+            "avg_rating": null,
+            "num_ratings": 0,
+            "num_reviews": 0
+        }
+    ],
+    "length": 6
+}
