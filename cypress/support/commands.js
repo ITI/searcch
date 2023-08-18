@@ -6,10 +6,6 @@ Cypress.Commands.add('login', (asAdmin) => {
     fixture: asAdmin ? 'loginAsAdmin.json' : 'login.json',
   })
 
-  cy.intercept('/kg/favorites/*', {
-    fixture: 'favorites.json',
-  })
-
   cy.request('/api/auth/csrf').then((res) => {
     cy.request({
       method: 'POST',
@@ -31,4 +27,8 @@ Cypress.Commands.add('login', (asAdmin) => {
       })
     })
   })
+})
+
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.login(true)
 })

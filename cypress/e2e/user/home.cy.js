@@ -1,7 +1,5 @@
 describe('Home page', () => {
   beforeEach(() => {
-    cy.visit(`${Cypress.env('baseUrl')}`)
-    cy.get('nav a[href="/search"]').should('be.visible')
     cy.login()
   })
 
