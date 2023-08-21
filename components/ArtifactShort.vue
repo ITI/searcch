@@ -206,19 +206,25 @@ export default defineComponent({
     },
     contributionTypeText() {
       if (this.artifact === undefined) {
-        return false;
+        return false
       }
+
       if (this.artifact.artifact_group.owner_id === this.userid) {
-        return 'owner';
+        return 'owner'
+      } else {
+        return this.isDraft() ? 'draft' : false
       }
-      if (typeof this.artifact.owner !== 'undefined' 
-        && this.artifact.owner.id !== this.userid) {
-        return false;
-      }
-      if (this.isDraft()) {
-        return 'draft';
-      }
-      return 'contributor';
+
+      // The following is pure evil, i have no idea what it does
+      // if ((typeof this.artifact.owner !== 'undefined' && this.artifact.owner.id !== this.userid)) {
+      //   return false
+      // }
+
+      // if (this.isDraft()) {
+      //   return 'draft'
+      // }
+
+      // return 'contributor'
     }
   },
   methods: {
@@ -267,12 +273,14 @@ export default defineComponent({
         : false
     },
     isDraft() {
-      let hasPublicationAttr = (this.artifact.artifact_group.publications !== undefined)
-      hasPublicationAttr && this.artifact.artifact_group.publications.forEach(publication => {
-        if (publication.artifact_id == this.artifact.id) {
-          return false;
-        }
-      });
+      if (typeof this.artifact.artifact_group.publication !== 'undefined' 
+        && this.artifact.artifact_group.publication !== null)
+        return this.artifact.artifact_group.publication.artifact_id !== this.artifact.artifact_group.id
+      
+      let hasPublicationsAttr = (this.artifact.artifact_group.publications !== undefined)
+      hasPublicationsAttr && this.artifact.artifact_group.publications.forEach(publication => {
+        if (publication.artifact_id == this.artifact.id) return false
+      })
       return true;
     },
     getContributionChipColor() {
