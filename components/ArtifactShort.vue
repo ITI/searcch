@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-card class="mx-auto overflow-hidden" elevation="3">
+  <v-sheet border>
+    <v-card class="mx-auto overflow-hidden" elevation="0">
       <v-container>
         <v-row>
           <v-col cols="9">
@@ -133,7 +133,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-  </div>
+  </v-sheet>
 </template>
 
 <script>
