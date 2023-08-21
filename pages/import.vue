@@ -84,7 +84,7 @@
               <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
                 <template v-slot:activator="{ props }">
                   <span v-bind="props">
-                    <v-checkbox label="Import candidates" v-model="autofollow" hide-details="auto"
+                    <v-checkbox label="Import candidates" v-model="autofollow" hide-details="auto" id="cb-autofollow"
                       density="compact"></v-checkbox>
                   </span>
                 </template>
@@ -101,7 +101,7 @@
               <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
                 <template v-slot:activator="{ props }">
                   <span v-bind="props">
-                    <v-checkbox label="Disable Extraction" v-model="noextract" hide-details="auto"
+                    <v-checkbox label="Disable Extraction" v-model="noextract" hide-details="auto" id="cb-noextract"
                       density="compact"></v-checkbox>
                   </span>
                 </template>
@@ -115,7 +115,7 @@
               <v-tooltip color="grey-darken-4" max-width="400px" location="bottom">
                 <template v-slot:activator="{ props }">
                   <span v-bind="props">
-                    <v-checkbox label="Disable Fetch" v-model="nofetch" hide-details="auto"
+                    <v-checkbox label="Disable Fetch" v-model="nofetch" hide-details="auto" id="cb-nofetch"
                       density="compact"></v-checkbox>
                   </span>
                 </template>
