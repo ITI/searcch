@@ -5,14 +5,12 @@
         <v-list-item v-for="(item, i) in items" :key="`main${i}`" :href="'href' in item ? item.href : undefined"
           :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
           <template v-slot:prepend="{ on, attrs }">
-            <v-list-item-action>
               <v-tooltip location="right">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">{{ item.icon }}</v-icon>
                 </template>
                 <span>{{ item.title }}</span>
               </v-tooltip>
-            </v-list-item-action>
           </template>
           <v-list-item-title v-text="item.title" />
         </v-list-item>
@@ -22,14 +20,12 @@
         <v-list-item v-for="(item, i) in adminItems" :key="`main${i}`" :href="'href' in item ? item.href : undefined"
           :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
           <template v-slot:prepend="{ on, attrs }">
-            <v-list-item-action>
               <v-tooltip location="right">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">{{ item.icon }}</v-icon>
                 </template>
                 <span>{{ item.title }}</span>
               </v-tooltip>
-            </v-list-item-action>
           </template>
           <v-list-item-title v-text="item.title" />
         </v-list-item>
@@ -39,14 +35,12 @@
         <v-list-item v-for="(item, i) in footerItems" :key="`footer${i}`" :href="'href' in item ? item.href : undefined"
           :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
           <template v-slot:prepend="{ on, attrs }">
-            <v-list-item-action>
               <v-tooltip location="right">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props">{{ item.icon }}</v-icon>
                 </template>
                 <span>{{ item.title }}</span>
               </v-tooltip>
-            </v-list-item-action>
           </template>
           <v-list-item-title v-text="item.title" />
         </v-list-item>
