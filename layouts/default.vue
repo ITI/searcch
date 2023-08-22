@@ -60,11 +60,11 @@
       <v-btn v-else-if="$auth.loggedIn && user_can_admin && user_is_admin" icon @click="() => setAdmin(false)">
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
       </v-btn>
-      <v-btn v-if="$auth.loggedIn" class="bg-primary" @click="() => logout()">Logout&nbsp;<v-icon
+      <v-btn v-if="$auth.loggedIn" class="bg-primary mr-4" @click="() => logout()">Logout&nbsp;<v-icon
           size="small">mdi-logout</v-icon></v-btn>
       <v-menu v-else open-on-click location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn class="bg-primary" v-bind="props">
+          <v-btn class="bg-primary mr-4" v-bind="props">
             Login&nbsp;<v-icon size="small">mdi-login</v-icon>
           </v-btn>
         </template>
