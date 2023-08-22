@@ -87,7 +87,6 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-separator></v-separator>
     </v-app-bar>
     <v-main>
       <v-container>
