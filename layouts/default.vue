@@ -94,11 +94,11 @@
         <slot />
       </v-container>
     </v-main>
-    <v-footer app>
+    <v-footer app class="border-t">
       <span>&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
         National Science Foundation under Grant Numbers 1925773, 1925616,
         1925588, 1925564</span>
-      <v-btn color="error" theme="dark" raised href="https://forms.gle/nsP4kJVsjAmKKLU86" target="_blank"
+      <v-btn color="error" theme="dark" variant="tonal" href="https://forms.gle/nsP4kJVsjAmKKLU86" target="_blank"
         rel="noopener">Send Us Feedback</v-btn>
     </v-footer>
   </v-app>
