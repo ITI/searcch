@@ -209,22 +209,19 @@ export default defineComponent({
         return false
       }
 
-      if (this.artifact.artifact_group.owner_id === this.userid) {
-        return 'owner'
-      } else {
-        return this.isDraft() ? 'draft' : false
+      if (this.isDraft()) {
+        return 'draft'
       }
 
-      // The following is pure evil, i have no idea what it does
-      // if ((typeof this.artifact.owner !== 'undefined' && this.artifact.owner.id !== this.userid)) {
-      //   return false
-      // }
+      if (this.isOwner()) {
+        return 'owner'
+      }
 
-      // if (this.isDraft()) {
-      //   return 'draft'
-      // }
+      if (this.isContributor()) {
+        return 'contributor'
+      }
 
-      // return 'contributor'
+      return false
     }
   },
   methods: {
@@ -268,18 +265,30 @@ export default defineComponent({
       this.user_is_admin
     },
     isOwner() {
-      return typeof this.artifact.owner !== 'undefined'
-        ? this.artifact.artifact_group.owner_id == this.userid
-        : false
+      return this.artifact.artifact_group.owner_id === this.userid
+    },
+    // contributor is a previous owner of the artifact group
+    // he/she does not have the edit access to the current artifact group
+    // but he/she is the owner of a historical version of the artifact
+    //
+    // TODO: make everyone a candidate of contributor, they become a contributor
+    // once their edit is accepted by the owner. However, the feature is not possible
+    // without changing the backend, edit access or whatsever, so we will leave it 
+    // as it is for now.
+    isContributor() {
+      return !this.isOwner() 
+        && typeof this.artifact.owner !== 'undefined' 
+        && this.artifact.owner.id === this.userid
     },
     isDraft() {
+      if (!this.isOwner() && !this.isAdmin()) return false
       if (typeof this.artifact.artifact_group.publication !== 'undefined' 
         && this.artifact.artifact_group.publication !== null)
-        return this.artifact.artifact_group.publication.artifact_id !== this.artifact.artifact_group.id
+        return this.artifact.artifact_group.publication.artifact_id !== this.artifact.id
       
       let hasPublicationsAttr = (this.artifact.artifact_group.publications !== undefined)
       hasPublicationsAttr && this.artifact.artifact_group.publications.forEach(publication => {
-        if (publication.artifact_id == this.artifact.id) return false
+        if (publication.artifact_id === this.artifact.id) return false
       })
       return true;
     },
