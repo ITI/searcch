@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a @click="$router.go(-1)">Back</a>
+    <v-btn @click="$router.go(-1)" variant="plain" density="compact" prepend-icon="mdi-chevron-left">back</v-btn>
 
     <div v-if="artifact.artifact">
       <div v-if="editing">

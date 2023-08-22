@@ -7,7 +7,7 @@
         </div>
       </v-col>
     </v-row>
-    <a @click="$router.go(-1)">Back</a>
+    <v-btn @click="$router.go(-1)" variant="plain" density="compact" prepend-icon="mdi-chevron-left">back</v-btn>
     <ArtifactImportView :artifact="artifact"></ArtifactImportView>
   </v-container>
 </template>

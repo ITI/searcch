@@ -1,7 +1,7 @@
 <template>
   <div v-if="record.artifact">
-    <v-sheet border>
-      <v-card class="mx-auto my-2" elevation="0">
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
         <v-card-title>{{ record.artifact.title }}</v-card-title>
         <v-card-subtitle>
           <div
