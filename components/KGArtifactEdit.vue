@@ -500,8 +500,8 @@
 
     <v-snackbar v-model="snackbar" timeout:3000>
       Artifact Saved
-      <template v-slot:actions="{ attrs }">
-        <v-btn color="error" variant="text" v-bind="attrs" @click="snackbar = false">
+      <template v-slot:actions>
+        <v-btn color="error" variant="text" @click="snackbar = false">
           Close
         </v-btn>
       </template>
