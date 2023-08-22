@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
-    <div>
-      <v-card class="mx-auto my-2" variant="outlined">
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
         <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
@@ -9,59 +9,61 @@
           </a>
         </v-card-text>
       </v-card>
-    </div>
-    <v-card class="mx-auto my-2" variant="outlined">
-      
-      <v-card-title>Edit Relationship</v-card-title>
-      <v-card-text>Want to edit content? <v-btn variant="text" size="small" color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
+    </v-sheet>
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
+        
+        <v-card-title>Edit Relationship</v-card-title>
+        <v-card-text>Want to edit content? <v-btn variant="text" size="small" color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
 
-      <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
+        <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
 
-      <div>
-        <v-dialog
-          transition="dialog-bottom-transition"
-          persistent
-          fullscreen
-          v-model="artifactdialog"
-        >
-          <template v-slot:activator="{ props }">
-            <v-card-actions class="mt-n4">
-              <v-row>
-                <v-col cols="12" md="2"></v-col>
-                <v-col cols="12" md="10">
-                  <v-btn
-                    color="primary"
-                    block variant="flat"
-                    v-bind="props"
-                    :disabled="artifact_local.id ? false : true"
-                  >
-                    Add New Relation
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-actions>
-          </template>
-          <template v-slot:default="artifactdialog">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Search for Related Artifacts</span>
-              </v-card-title>
-              <SearchCard :search="search" related></SearchCard>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  class="bg-error ml-2 mb-2"
-                  variant="text"
-                  @click="artifactdialog.value = false"
-                >
-                  Close
-                </v-btn>
+        <div>
+          <v-dialog
+            transition="dialog-bottom-transition"
+            persistent
+            fullscreen
+            v-model="artifactdialog"
+          >
+            <template v-slot:activator="{ props }">
+              <v-card-actions class="mt-n4">
+                <v-row>
+                  <v-col cols="12" md="2"></v-col>
+                  <v-col cols="12" md="10">
+                    <v-btn
+                      color="primary"
+                      block variant="tonal"
+                      v-bind="props"
+                      :disabled="artifact_local.id ? false : true"
+                    >
+                      Add New Relation
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-      </div>
-    </v-card>
+            </template>
+            <template v-slot:default="artifactdialog">
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Search for Related Artifacts</span>
+                </v-card-title>
+                <SearchCard :search="search" related></SearchCard>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    class="bg-error ml-2 mb-2"
+                    variant="text"
+                    @click="artifactdialog.value = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </div>
+      </v-card>
+    </v-sheet>
 
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->

@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
-    <v-sheet border class="mb-n1">
-      <v-card class="mx-auto my-2" elevation="0">
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
         <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
@@ -11,8 +11,8 @@
       </v-card>
     </v-sheet>
     <v-form v-model="valid" ref="artifact">
-      <v-sheet border>
-        <v-card class="mx-auto my-2" elevation="0">
+      <v-sheet border class="my-2">
+        <v-card class="mx-auto" elevation="0">
           <v-card-title>Edit Artifact</v-card-title>
           <v-card-text>Want to edit relationship? 
             <v-btn 

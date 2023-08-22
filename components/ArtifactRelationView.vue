@@ -29,23 +29,23 @@
           <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 text-grey-darken-2">
             <v-list-item-title>{{$filters.titlecase( relation.relation ) }}</v-list-item-title>
           </v-col>
-          <v-col cols="12" md="10" class="pt-0">
-            <v-list-item-title>
-              <v-btn v-if="edit" class="mb-1 rounded-circle" size="x-small" variant="text"
-                @click="deleteRelationship(relation)">
-                <v-icon size="small">mdi-close</v-icon>
+          <v-col cols="12" md="10" class="pt-3">
+            <p>
+              <v-btn v-if="edit" class="mb-1 text-red" size="xs" variant="plain"
+                @click="deleteRelationship(relation)" icon="mdi-trash-can">
               </v-btn>
+              
               <span v-if="relation.related_artifact_group.publication !== null">
                 {{ relation.related_artifact_group.publication.artifact.title }}
               </span>
               <span v-else class="text-red-lighten-1">
                 [Related artifact not yet published -- no title available!]
               </span>
-              <v-btn class="mb-1 rounded-circle" size="x-small" variant="text"
-                :href="getSearcchLinkForArtifact(relation)">
-                <v-icon size="small">mdi-open-in-new</v-icon>
-              </v-btn>
-            </v-list-item-title>
+              <v-btn class="mb-1" size="x-small" variant="plain"
+                :href="getSearcchLinkForArtifact(relation)"
+                icon="mdi-open-in-new"
+              ></v-btn>
+            </p>
             <p
               v-if="relation.related_artifact_group.publication !== null"
               class="text-caption"
