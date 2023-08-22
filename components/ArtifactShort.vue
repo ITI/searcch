@@ -116,7 +116,7 @@
           Add Related
         </v-btn>
         <v-btn
-          v-if="isOwner() || isAdmin()"
+          v-if="showEditBtns && (isOwner() || isAdmin())"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit_relation=true`"
           id="btn-artifact-edit-relation"
@@ -124,7 +124,7 @@
           Edit Relation
         </v-btn>
         <v-btn
-          v-if="(isOwner() && isDraft()) || isAdmin()"
+          v-if="showEditBtns && ((isOwner() && isDraft()) || isAdmin())"
           color="success"
           :to="`/artifact/${artifact.artifact_group_id}/${artifact.id}?edit=true`"
           id="btn-artifact-edit"
@@ -156,6 +156,10 @@ export default defineComponent({
     related: {
       type: Boolean,
       required: false
+    },
+    showEditBtns: {
+      type: Boolean,
+      required: false,
     }
   },
   components: {
@@ -209,7 +213,7 @@ export default defineComponent({
         return false
       }
 
-      if (this.isDraft()) {
+      if (this.isDraft() && this.showEditBtns) {
         return 'draft'
       }
 

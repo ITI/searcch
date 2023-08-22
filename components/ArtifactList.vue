@@ -1,11 +1,12 @@
 <template>
   <div>
-    <v-row v-for="artifact in artifacts" :key="artifact.id">
+    <v-row v-for="artifact in artifacts" :key="getKey(artifact)">
       <v-col>
         <LazyHydrate when-visible>
           <ArtifactShort
             :artifact="artifact"
-            v-bind:related="related"
+            :related="related"
+            :showEditBtns="showEditBtns"
           ></ArtifactShort>
         </LazyHydrate>
       </v-col>
@@ -28,10 +29,20 @@ export default defineComponent({
     related: {
       type: Boolean,
       required: false
+    },
+    showEditBtns: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data() {
     return {}
+  },
+  methods: {
+    getKey(artifact) {
+      return typeof artifact.id === 'undefined' ? artifact.artifact_group_id : artifact.id
+    }
   }
 });
 </script>

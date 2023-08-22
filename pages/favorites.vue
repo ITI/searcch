@@ -13,7 +13,7 @@
         <v-divider></v-divider>
       </v-col>
       <v-col cols="12">
-        <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
+        <ArtifactList :artifacts="artifacts" :limit="limit" :showEditBtns="false"></ArtifactList>
         <span v-if="artifacts.length == 0">No favorites loaded</span>
       </v-col>
     </v-row>
