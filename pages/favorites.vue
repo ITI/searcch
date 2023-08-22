@@ -11,6 +11,8 @@
       <v-col cols="12">
         <h1>Favorites</h1>
         <v-divider></v-divider>
+      </v-col>
+      <v-col cols="12">
         <ArtifactList :artifacts="artifacts" :limit="limit"></ArtifactList>
         <span v-if="artifacts.length == 0">No favorites loaded</span>
       </v-col>
