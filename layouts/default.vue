@@ -46,7 +46,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar position="fixed" elevation="1">
+    <v-app-bar position="fixed" elevation="0" class="border-b">
       <v-btn icon @click.stop="() => { miniVariant = !miniVariant }">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
@@ -87,6 +87,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <v-separator></v-separator>
     </v-app-bar>
     <v-main>
       <v-container>
