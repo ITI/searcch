@@ -64,12 +64,12 @@
     <v-btn
       v-if="create"
       @click="field.push('')"
-      class="bg-success ml-2 mb-2 rounded-circle"
+      class="ml-2 mb-2 text-success"
+      variant="tonal"
+      density="compact"
+      icon="mdi-plus"
       :disabled="typeof this.formModel !== 'undefined' ? !formModel : false"
-      size="x-small"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+    ></v-btn>
   </div>
 </template>
 

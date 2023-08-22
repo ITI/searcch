@@ -87,12 +87,12 @@
             >
               <template v-slot:activator="{ props }">
                 <v-btn
-                  class="bg-success ml-2 mb-2 rounded-circle"
-                  size="x-small"
+                  class="text-success ml-2 mb-2"
+                  density="compact"
+                  variant="tonal"
+                  icon="mdi-plus"
                   v-bind="props"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
+                ></v-btn>
               </template>
               <template v-slot:default="dialog">
                 <v-card>
@@ -278,10 +278,11 @@
             </v-chip>
             <v-btn
               @click="() => meta.badges.push('')"
-              class="bg-success ml-2 mb-2 rounded-circle"
-              size="x-small"
-              ><v-icon>mdi-plus</v-icon></v-btn
-            >
+              class="text-success ml-2 mb-2"
+              density="compact"
+              variant="tonal"
+              icon="mdi-plus"
+            ></v-btn>
           </div>
 
           <v-divider class="mx-4"></v-divider>
@@ -406,10 +407,11 @@
               </v-card-text>
               <v-btn
                 @click="() => meta.files.push({ url: '', filetype: 'unknown' })"
-                class="bg-success ml-2 mb-2 rounded-circle"
-                size="x-small"
-                ><v-icon>mdi-plus</v-icon></v-btn
-              >
+                class="text-success ml-2 mb-2"
+                variant="tonal"
+                density="compact"
+                icon="mdi-plus"
+              ></v-btn>
             </div>
           </div>
           <div class="ml-4 mb-2" v-else>No files found by importer</div>
