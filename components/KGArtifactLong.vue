@@ -373,7 +373,7 @@
               <v-icon>mdi-comment</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <span v-if="(isOwner() || isAdmin()) && !published">
+            <span v-if="shouldShowEditBtn">
               <v-btn
                 color="success"
                 size="small"
@@ -382,7 +382,7 @@
                 Edit
               </v-btn>
             </span>
-            <span v-if="(isOwner() || isAdmin()) && published">
+            <span v-if="shouldShowEditVersionBtn">
               <v-btn
                 color="success"
                 size="small"
@@ -536,7 +536,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(userStore, ['user', 'user_is_admin']),
+    ...mapState(userStore, ['user', 'user_is_admin', 'userid']),
     ...mapState(artifactsStore, {
       favorites: 'favoritesIDs',
       artifactClaim: 'artifactClaim'
@@ -658,6 +658,12 @@ export default defineComponent({
             + ((typeof this.record.artifact.artifact_group.reverse_relationships !== 'undefined'
                 && this.record.artifact.artifact_group.reverse_relationships.length)
                ? this.record.artifact.artifact_group.reverse_relationships.length : 0)
+    },
+    shouldShowEditBtn() {
+      return (this.isOwner() || this.isAdmin()) && !this.published
+    },
+    shouldShowEditVersionBtn() {
+      return (this.isOwner() || this.isAdmin()) && this.published
     }
   },
   methods: {
@@ -689,7 +695,7 @@ export default defineComponent({
     },
     isOwner() {
       return typeof this.record.artifact.artifact_group.owner_id !== 'undefined'
-        ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.artifact_group.owner_id == this.user.userid)
+        ? (this.$auth.loggedIn && this.record.artifact.artifact_group.owner_id == this.userid)
         : false
     },
     async newVersion() {
