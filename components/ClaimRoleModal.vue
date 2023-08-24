@@ -51,6 +51,7 @@
            </div>
         </div>
         <v-btn
+          id="btn-modal-claim-ownership"
           color="secondary"
           variant="flat"
           @click="claimRole"
@@ -60,6 +61,7 @@
           {{ isDisabled ? "Ownership Claim Requested" : "Claim Ownership" }}
         </v-btn>
         <v-btn
+          id="btn-modal-magic-key"
           variant="plain"
           @click="magicKeyModel = true"
           aria-label="Enter key to claim ownership"
@@ -101,7 +103,7 @@
               <span>{{ magicKeyErrorMessage }}</span>
             </div>
           </div>
-          <v-btn tile color="primary" block @click="claimRoleByMagicKey">Claim</v-btn>
+          <v-btn tile color="primary" block @click="claimRoleByMagicKey" id="btn-submit-magic-key">Claim</v-btn>
         </footer>
       </v-card>
     </v-dialog>
@@ -137,7 +139,7 @@
             this.magicKeyModel = false
             let response = await this.$artifactClaimEndpoint.post(this.artifact_group_id, { email: this.email, key: key })
             this.close(`Claim request successfully sent`);
-            this.$router.push("/artifact/" + this.artifact.artifact_group_id)
+            this.$router.push("/artifact/" + this.artifact_group_id)
           } catch(ex) {
             this.close(`An error occured in sending the claim request`)
           }

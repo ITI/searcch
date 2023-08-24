@@ -1,0 +1,25 @@
+{
+    "artifact_owner_request": {
+        "user": {
+            "person": {
+                "id": 1584,
+                "name": null,
+                "email": "bingjig2@illinois.edu",
+                "research_interests": null,
+                "website": null
+            },
+            "id": 53
+        },
+        "action_by_user": null,
+        "artifact_title": "Stackdb: A C Library for \" Stackable\" Debugging and Virtual Machine Introspection",
+        "id": 2,
+        "user_id": 53,
+        "artifact_group_id": 432,
+        "message": "I'm entitled to get the ownership of this artifact!",
+        "ctime": "2023-08-24T17:57:05.110977",
+        "status": "pending",
+        "action_message": null,
+        "action_time": null,
+        "action_by_user_id": null
+    }
+}
