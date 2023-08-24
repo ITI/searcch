@@ -79,8 +79,6 @@ import clip from 'text-clipper'
 import { mapState } from 'pinia'
 import { userStore } from '~/stores/user'
 import { artifactsStore } from '~/stores/artifacts'
-import { systemStore } from '~/stores/system'
-import { appStore } from '~/stores/app'
 import { artifactIcon, artifactColor } from '@/helpers'
 
 export default defineComponent({
