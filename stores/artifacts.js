@@ -52,7 +52,7 @@ export const artifactsStore = defineStore('artifacts', {
       this.favoritesIDs[id] = true
     },
     removeFavorite(id) {
-      this.favoritesIDs.splice(this.favoritesIDs.indexOf(id), 1)
+      delete this.favoritesIDs[id]
     },
     setSearchAdvanced(search_advanced) {
       this.search_advanced = search_advanced
