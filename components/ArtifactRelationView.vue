@@ -16,15 +16,32 @@
               v-model="filters"
               :items="availableFilters"
               label="Relation Type"
-              variant="outlined" density="compact" multiple
-            ></v-select>
+              variant="outlined" density="compact" multiple chips
+            >
+              <template v-slot:prepend-item>
+                <v-list-item
+                  title="Select All"
+                  @click="toggleRelationTypes"
+                >
+                  <template v-slot:prepend>
+                    <v-checkbox-btn
+                      color="indigo-darken-4"
+                      :indeterminate="filters.length > 0 && filters.length < availableFilters.length"
+                      :model-value="filters.length === availableFilters.length"
+                    ></v-checkbox-btn>
+                  </template>
+                </v-list-item>
+                <v-divider class="mt-2"></v-divider>
+              </template>
+            </v-select>
           </v-col>
         </v-row>
       </v-card-text>
     </v-card>
     <v-list density="compact">
       <v-list-item v-for="relation, idx in relations"
-        :key="`${relation.artifact_id}-${idx}`">
+        :key="`${relation.artifact_id}-${idx}`"
+        class="item-artifact-relation">
         <v-row>
           <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 text-grey-darken-2">
             <v-list-item-title>{{$filters.titlecase( relation.relation ) }}</v-list-item-title>
@@ -60,14 +77,9 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
 import { reverseRelation } from '@/helpers'
 
 export default defineComponent({
-  components: {
-    SingleComment: defineAsyncComponent(() => import('@/components/SingleComment')),
-    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
-  },
   props: {
     artifact_group: {
       type: Object,
@@ -122,7 +134,16 @@ export default defineComponent({
     },
     async deleteRelationshipApi(id) {
       let response = await this.$relationshipEndpoint.delete(id)
-    }
+    },
+    toggleRelationTypes() {
+      this.$nextTick(() => {
+        if (this.filters.length === this.availableFilters.length) {
+          this.filters = []
+        } else {
+          this.filters = this.availableFilters.slice()
+        }
+      })
+    },
   }
 });
 </script>
