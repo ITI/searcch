@@ -52,7 +52,7 @@
         </div>
         <v-btn
           color="secondary"
-          class="claim-btn"
+          variant="flat"
           @click="claimRole"
           aria-label="Close modal"
           :disabled="isDisabled"
@@ -60,6 +60,7 @@
           {{ isDisabled ? "Ownership Claim Requested" : "Claim Ownership" }}
         </v-btn>
         <v-btn
+          variant="plain"
           @click="magicKeyModel = true"
           aria-label="Enter key to claim ownership"
           depressed text
@@ -185,7 +186,7 @@
 
   .modal {
     background: #FFFFFF;
-    box-shadow: 2px 2px 20px 1px;
+    box-shadow: 2px 2px 10px -5px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
