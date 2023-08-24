@@ -27,7 +27,7 @@ export default $fetch => (resource, error) => ({
           console.log('e', e.message)
         }
         console.log(e.config)
-        createError(e)
+        throw createError(e)
       })
   },
 
@@ -61,7 +61,7 @@ export default $fetch => (resource, error) => ({
         console.log('e', e.message)
       }
       console.log(e.config)
-      createError(e)
+      throw createError(e)
     })
   },
 
@@ -86,7 +86,7 @@ export default $fetch => (resource, error) => ({
         console.log('e', e.message)
       }
       console.log(e.config)
-      createError(e)
+      throw createError(e)
     })
   },
 
@@ -111,7 +111,7 @@ export default $fetch => (resource, error) => ({
         console.log('e', e.message)
       }
       console.log(e.config)
-      createError(e)
+      throw createError(e)
     })
   },
 
@@ -137,7 +137,7 @@ export default $fetch => (resource, error) => ({
         console.log('e', e.message)
       }
       console.log(e.config)
-      createError(e)
+      throw createError(e)
     })
   },
   // FIXME: backend API
@@ -162,7 +162,7 @@ export default $fetch => (resource, error) => ({
         console.log('e', e.message)
       }
       console.log(e.config)
-      createError(e)
+      throw createError(e)
     })
   },
   delete(id) {
@@ -185,7 +185,7 @@ export default $fetch => (resource, error) => ({
         console.log('e', e.message)
       }
       console.log(e.config)
-      createError(e)
+      throw createError(e)
     })
   },
   // FIXME: backend API
@@ -211,7 +211,7 @@ export default $fetch => (resource, error) => ({
           console.log('e', e.message)
         }
         console.log(e.config)
-        createError(e)
+        throw createError(e)
       })
   }
 })
