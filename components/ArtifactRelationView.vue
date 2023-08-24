@@ -38,7 +38,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-sheet v-if="!relations.length">
+    <v-sheet v-if="!relations.length" class="item-nothing-message">
       <v-row justify="center">
         <v-col cols="6">
           <v-card elevation="0">
@@ -110,9 +110,9 @@ export default defineComponent({
   data() {
     return {
       displayMode: 'Forward & Backward',
-      filters: ['cites','supplements','extends','uses','describes','requires','processes','produces'],
+      filters: ['Cites','Supplements','Extends','Uses','Describes','Requires','Processes','Produces'],
       availableModes: ['Forward & Backward', 'Forward', 'Backward'],
-      availableFilters: ['cites','supplements','extends','uses','describes','requires','processes','produces']
+      availableFilters: ['Cites','Supplements','Extends','Uses','Describes','Requires','Processes','Produces'],
     }
   },
   computed: {
@@ -124,13 +124,13 @@ export default defineComponent({
         && this.artifact_group.relationships.length && this.displayMode !== 'Backward'
       
       if (showPositiveRelation) {
-        results.push(...this.artifact_group.relationships.filter(v => this.filters.includes(v.relation)))
+        results.push(...this.artifact_group.relationships.filter(v => this.filters.map(e => e.toLowerCase()).includes(v.relation)))
       }
 
 
       if (showReversedRelation) {
         results.push(...this.artifact_group.reverse_relationships
-          .filter(v => this.filters.includes(v.relation))
+          .filter(v => this.filters.map(e => e.toLowerCase()).includes(v.relation))
           .map(e => ({ ...e, relation: reverseRelation(e.relation)}))
         )
       }
@@ -144,7 +144,6 @@ export default defineComponent({
     },
     deleteRelationship(relation) {
       const idx = this.artifact_group.relationships.indexOf(relation)
-      console.log(relation)
       this.deleteRelationshipApi(relation.id)
       this.artifact_group.relationships.splice(idx, 1)
     },

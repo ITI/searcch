@@ -74,6 +74,158 @@ describe('View Artifact', () => {
                 })
             })
         })
+
+        it('should display artifact files', () => {
+            cy.fixture('artifact.json').then((artifact) => {
+                artifact.artifact.files.forEach((file) => {
+                    cy.get(`a[href="${file.url}"]`)
+                        .should('be.visible')
+                        .and('contain', file.name)
+                        .and('have.attr', 'target', '_blank')
+                })
+            })
+        })
+
+        it('should not display edit buttons', () => {
+            cy.get('button').should('not.contain', 'Edit')
+                .and('not.contain', 'Edit New Version')
+                .and('not.contain', 'Reimport New Version')
+        })
+
+    })
+
+    context('should be able to interact with artifact', () => {
+
+        it('should bring user to login page when click on love button', () => {
+            cy.get('#btn-favorite-artifact').should('be.visible').click()
+            cy.url().should('include', '/login')
+        })
+
+        it('should bring user to reivew page when click on review button', () => {
+            cy.get('#btn-comment-artifact').should('be.visible').click()
+            cy.url().should('include', '/artifact/review')
+        })
+
+        it('should show history record when click on show record history button', () => {
+            cy.get('#container-artifact-history').should('not.exist')
+
+            cy.get('#btn-show-history').should('contain', 'Show Record History').and('be.visible').click()
+            cy.get('#container-artifact-history').should('be.visible')
+            
+            cy.get('#btn-show-history').should('contain', 'Hide Record History').and('be.visible').click()
+            cy.get('#container-artifact-history').should('not.exist')
+        })
+
+        it('should alert user when click on claim this artifact button', () => {
+            cy.get('#btn-claim-artifact').should('be.visible').click()
+            cy.get('.ownership-info').should('contain', 'Kindly login to claim role')
+        })
+
+        it('should redirect user to search page when click on author chips', () => {
+            cy.fixture('artifact.json').then((artifact) => {
+                artifact.artifact.affiliations.forEach((affiliation) => {
+                    cy.get(`[href="/search?author_keywords=${affiliation.affiliation.person.name}"]`)
+                        .should('be.visible')
+                        .and('not.have.attr', 'target', '_blank')
+                })
+            })
+        })
+
+        it('should redirect user to search page when click on keyword chips', () => {
+            cy.fixture('artifact.json').then((artifact) => {
+                artifact.artifact.tags.forEach((tag) => {
+                    cy.get(`[href="/search?keywords=${tag.tag}"]`)
+                        .should('be.visible')
+                        .and('not.have.attr', 'target', '_blank')
+                })
+            })
+        })
         
+    })
+
+    context('should display artifact relationship correctly', () => {
+        beforeEach(() => {
+            cy.get('.v-tab').last().click()
+        })
+
+        it('should display artifact relationship', () => {
+            cy.fixture('artifact.json').then((record) => {
+                record.artifact.artifact_group.relationships.forEach((relationship) => {
+                    cy.get('.v-card').contains(relationship.relation, { matchCase: false })
+                    cy.get('.v-card')
+                        .should('contain', relationship.related_artifact_group.publication.artifact.title)
+                        .and('contain', relationship.related_artifact_group.publication.artifact.description)
+                    cy.get(`a[href="/artifact/${relationship.related_artifact_group_id}"]`).should('be.visible')
+                })
+            })
+        })
+
+        it('should display reverse artifact relationships', () => {
+            cy.fixture('artifact.json').then((record) => {
+                record.artifact.artifact_group.reverse_relationships.forEach((relationship) => {
+                    cy.get('.v-card').contains(relationship.relation, { matchCase: false })
+                    cy.get('.v-card')
+                        .should('contain', relationship.related_artifact_group.publication.artifact.title)
+                        .and('contain', relationship.related_artifact_group.publication.artifact.description)
+                        cy.get(`a[href="/artifact/${relationship.related_artifact_group_id}"]`).should('be.visible')
+                })
+            })
+        })
+    })
+
+    context('should be able to filter artifact relationship', () => {
+        beforeEach(() => {
+            cy.get('.v-tab').last().click()
+        })
+
+        it('should display backward/forward relation correctly', () => {
+            cy.fixture('artifact.json').then((record) => {
+                cy.get('.item-artifact-relation').should('have.length', 
+                    record.artifact.artifact_group.relationships.length
+                  + record.artifact.artifact_group.reverse_relationships.length
+                )
+            })
+        })
+
+        it('should display forward relation correctly', () => {
+            cy.get('.v-field__input').first().click()
+			cy.get('.v-overlay:last-of-type .v-list-item').eq(1).click()
+			
+            cy.fixture('artifact.json').then((record) => {
+                cy.get('.item-artifact-relation').should('have.length', record.artifact.artifact_group.relationships.length)
+            })
+        })
+
+        it('should display backward relation correctly', () => {
+            cy.get('.v-field__input').first().click()
+			cy.get('.v-overlay:last-of-type .v-list-item').eq(2).click()
+			
+            cy.fixture('artifact.json').then((record) => {
+                cy.get('.item-artifact-relation').should('have.length', record.artifact.artifact_group.reverse_relationships.length)
+            })
+        })
+
+        it('should dispaly nothing when no artifact with matching criteria', () => {
+            cy.get('.v-field__input').last().click({ force: true })
+            cy.get('.v-overlay:last-of-type .v-list-item').eq(0).click()
+
+            cy.get('.item-nothing-message').should('be.visible')
+        })
+
+        it('should display results correctly when filter applies', () => {
+            cy.get('.v-field__input').last().click({ force: true })
+            cy.get('.v-overlay:last-of-type .v-list-item').first().click()
+
+            cy.fixture('artifact.json').then((record) => {
+                const filters = ['Cites','Supplements','Extends','Uses','Describes','Requires','Processes','Produces'].map(e => e.toLowerCase())
+                filters.forEach((filter, i) => {
+                    const relations = record.artifact.artifact_group.relationships.filter((relationship) => relationship.relation === filter)
+                    const reverseRelationships = record.artifact.artifact_group.reverse_relationships.filter((relationship) => relationship.relation === filter)
+                    cy.get('.v-overlay:last-of-type .v-list-item').eq(i + 1).click()
+                    cy.get('.item-artifact-relation').should('have.length', relations.length + reverseRelationships.length)
+                    cy.get('.v-overlay:last-of-type .v-list-item').eq(i + 1).click()
+                })
+            })
+        })
     })
 })

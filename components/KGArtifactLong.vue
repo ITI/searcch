@@ -68,12 +68,14 @@
           >
             <v-btn
               v-if="record.artifact.artifact_group.publications"
+              id="btn-show-history"
               size="x-small"
               @click="history_expanded = !history_expanded"
             >
               {{ !history_expanded ? 'Show Record History' : 'Hide Record History' }}
             </v-btn>
       <v-btn
+        id="btn-claim-artifact"
         size="x-small"
         @click="claimThis()"
         >Claim This Record
@@ -100,7 +102,7 @@
 
         </v-card-text>
 
-        <v-card-text v-if="history_expanded">
+        <v-card-text v-if="history_expanded" id="container-artifact-history">
           <v-container
             align="center" class="mx-0"
             v-for="publication in record.artifact.artifact_group.publications.slice().reverse()"
@@ -364,13 +366,14 @@
             <v-card-actions>
               <v-btn
                 icon
+                id="btn-favorite-artifact"
                 @click="favoriteThis()"
                 :color="favorite == true ? 'red' : ''"
               >
                 <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
               </v-btn>
 
-              <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" >
+              <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" id="btn-comment-artifact">
                 <v-icon>mdi-comment</v-icon>
               </v-btn>
               <v-spacer></v-spacer>

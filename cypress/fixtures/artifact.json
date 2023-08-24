@@ -598,22 +598,22 @@
         ],
         "badges": [
             {
-              "badge": {
-                "id": 23, 
-                "title": "Artifact Evaluated", 
-                "url": "https://www.usenix.org/sites/default/files/usenix_artifact_evaluated_250.png", 
-                "image_url": "https://www.usenix.org/sites/default/files/usenix_artifact_evaluated_250.png", 
-                "description": "Artifact Evaluated", 
-                "version": "", 
-                "organization": "USENIX", 
-                "venue": null, 
-                "issue_time": null, 
-                "doi": null, 
-                "verified": true
-              }, 
-              "id": 36
+                "badge": {
+                    "id": 23,
+                    "title": "Artifact Evaluated",
+                    "url": "https://www.usenix.org/sites/default/files/usenix_artifact_evaluated_250.png",
+                    "image_url": "https://www.usenix.org/sites/default/files/usenix_artifact_evaluated_250.png",
+                    "description": "Artifact Evaluated",
+                    "version": "",
+                    "organization": "USENIX",
+                    "venue": null,
+                    "issue_time": null,
+                    "doi": null,
+                    "verified": true
+                },
+                "id": 36
             }
-        ], 
+        ],
         "venues": [],
         "candidate_relationships": [],
         "view_count": 1,
