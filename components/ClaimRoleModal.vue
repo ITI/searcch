@@ -37,7 +37,7 @@
                 {{ isDisabled ? "Justification" : "Please justify your claim in the textbox below" }}
             </div>
             <div>
-                <textarea v-model="justificationMessage" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
+                <textarea v-model="message" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
             </div>
         </slot>
        </section>
@@ -120,7 +120,7 @@
         if(this.isJustificationMessageValid()) {
             this.isError = false;
             try {
-              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage, email: this.email })
+              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.message, email: this.email })
               this.close(`Claim request successfully sent`);
             } catch(ex) {
               this.close(`An error occured in sending the claim request`)
@@ -147,8 +147,8 @@
         }
       },
       isJustificationMessageValid() {
-        this.justificationMessage = this.justificationMessage.trim();
-        return this.justificationMessage!="";
+        this.message = this.message.trim();
+        return this.message !== "";
       }
     },
     data() {
@@ -159,6 +159,7 @@
           magicKeyModel: false,
           magicKey: "",
           magicKeyErrorMessage: "",
+          message: "",
         }
     },
     mounted() {
@@ -166,6 +167,11 @@
         this.magicKey = this.claimKey
         this.magicKeyModel = true
       }
+    },
+    watch: {
+      justificationMessage() {
+        this.message = this.justificationMessage;
+      },
     }
   });
 </script>
