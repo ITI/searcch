@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-4">
     <v-card elevation="0">
       <v-card-text class="pb-0">
         <v-row class="d-flex align-center">
@@ -38,7 +38,23 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-list density="compact">
+    <v-sheet v-if="!relations.length">
+      <v-row justify="center">
+        <v-col cols="6">
+          <v-card elevation="0">
+            <v-card-text align="center">
+              <p class="text-h4 text--primary">
+                Oops...Nothing here : (
+              </p>
+              <div class="text--primary mt-4">
+                We couldn't find any related artifacts with given criteria. Please adjust your filters and try again!
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-sheet>
+    <v-list v-else density="compact">
       <v-list-item v-for="relation, idx in relations"
         :key="`${relation.artifact_id}-${idx}`"
         class="item-artifact-relation">
