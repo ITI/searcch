@@ -28,6 +28,7 @@ import { defineAsyncComponent } from 'vue'
 import { mapState } from 'pinia'
 import { artifactsStore } from '~/stores/artifacts'
 import KGArtifactEditRelation from '~/components/KGArtifactEditRelation.vue'
+import { userStore } from '~/stores/user';
 
 export default defineComponent({
   components: {
@@ -56,13 +57,20 @@ export default defineComponent({
     ...mapState(artifactsStore, {
       artifact: state => state.artifact
     }),
+    ...mapState(userStore, ['userid']),
     editing() {
+      // TODO: let everyone edit artifact
+      if (this.artifact.artifact.artifact_group.owner_id !== this.userid)
+        return false
       return this.$route.query.edit !== undefined
-        && this.$route.query.edit == 'true' ? true : false
+        && this.$route.query.edit === 'true' ? true : false
     },
     editingRelation() {
+      // TODO: let everyone edit artifact
+      if (this.artifact.artifact.artifact_group.owner_id !== this.userid)
+        return false
       return this.$route.query.edit_relation !== undefined
-        && this.$route.query.edit_relation == 'true' ? true : false
+        && this.$route.query.edit_relation === 'true' ? true : false
     }
   },
   mounted() {
