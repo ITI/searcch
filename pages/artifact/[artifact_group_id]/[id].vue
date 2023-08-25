@@ -27,6 +27,7 @@
 import { defineAsyncComponent } from 'vue'
 import { mapState } from 'pinia'
 import { artifactsStore } from '~/stores/artifacts'
+import { userStore } from '~/stores/user'
 import KGArtifactEditRelation from '~/components/KGArtifactEditRelation.vue'
 
 export default defineComponent({
