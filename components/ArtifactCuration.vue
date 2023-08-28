@@ -27,14 +27,14 @@
       <span v-if="opIsSetField">
         <v-row align="center">
         <ArtifactChips
-          :field="[this.curation.opdata.data.value]"
+          :modelValue="[this.curation.opdata.data.value]"
           type="field"
           align="center"
         ></ArtifactChips>
         previous:
         <ArtifactChips
           :v-if="this.curation.opdata.data.old_value !== 'undefined'"
-          :field="[this.curation.opdata.data.old_value]"
+          :modelValue="[this.curation.opdata.data.old_value]"
           type="field"
         ></ArtifactChips>
         </v-row>
@@ -49,13 +49,13 @@
       </span>
       <span v-else-if="opIsTag">
         <ArtifactChips
-          :field="[this.curation.opdata.data.value.tag]"
+          :modelValue="[this.curation.opdata.data.value.tag]"
           type="keyword"
         ></ArtifactChips>
       </span>
       <span v-else-if="opIsAffiliation">
         <ArtifactChips
-          :field="[this.curation.opdata.data.value]"
+          :modelValue="[this.curation.opdata.data.value]"
           type="role"
         ></ArtifactChips>
       </span>

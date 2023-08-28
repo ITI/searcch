@@ -18,7 +18,7 @@
         </v-col>
         <v-col cols="2" class="text-lg-right">
           <ArtifactChips
-            :field="[artifactType]"
+            :modelValue="[artifactType]"
             :type="artifactType"
           ></ArtifactChips>
         </v-col>

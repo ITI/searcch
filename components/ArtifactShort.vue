@@ -11,7 +11,7 @@
           <v-col cols="3">
             <ArtifactChips
               class="card-chip"
-              :field="[artifact.type]"
+              :modelValue="[artifact.type]"
               :type="artifact.type"
             ></ArtifactChips>
           </v-col>

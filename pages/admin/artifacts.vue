@@ -98,7 +98,7 @@
             </a>
           </template>
           <template v-slot:item.type="{ item: { raw: item } }">
-            <ArtifactChips :field="[item.type]" :type="item.type" small></ArtifactChips>
+            <ArtifactChips :modelValue="[item.type]" :type="item.type" small></ArtifactChips>
           </template>
           <template v-slot:item.actions="{ item: { raw: item } }">
             <v-tooltip location="bottom">

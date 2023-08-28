@@ -18,7 +18,7 @@
         <v-spacer></v-spacer>
         <v-col>
           <ArtifactChips
-            :field="[artifact.artifact.type]"
+            :modelValue="[artifact.artifact.type]"
             :type="artifact.artifact.type"
           ></ArtifactChips>
         </v-col>

@@ -221,7 +221,7 @@
             <div v-if="record.artifact.affiliations">
               <v-card-title class="py-0">Authors</v-card-title>
               <ArtifactChips class="ml-4"
-                :field="record.artifact.affiliations"
+                :modelValue="record.artifact.affiliations"
                 type="role"
                 display
                 link
@@ -233,7 +233,7 @@
             <div v-if="record.artifact.venues && record.artifact.venues.length">
               <v-card-title class="py-0">Venues</v-card-title>
               <ArtifactChips class="ml-4"
-                :field="record.artifact.venues"
+                :modelValue="record.artifact.venues"
                 type="venue"
                 display
                 link
@@ -245,7 +245,7 @@
             <div v-if="tags.length">
               <v-card-title class="py-0">Keywords</v-card-title>
               <ArtifactChips class="ml-4"
-                :field="tags"
+                :modelValue="tags"
                 type="keyword"
                 display
                 link
@@ -257,7 +257,7 @@
             <div v-if="languages.length > 0">
               <v-card-title class="py-0">Programming Languages</v-card-title>
               <ArtifactChips class="ml-4"
-                :field="languages"
+                :modelValue="languages"
                 type="software"
                 display
               ></ArtifactChips>

@@ -210,7 +210,7 @@
                     >
                       <v-list-item>
                         <ArtifactChips
-                          :field="[item.type]"
+                          :modelValue="[item.type]"
                           :type="item.type"
                         ></ArtifactChips>
 
@@ -248,7 +248,7 @@
                     >
                       <v-list-item>
                         <ArtifactChips
-                          :field="[item.type]"
+                          :modelValue="[item.type]"
                           :type="item.type"
                         ></ArtifactChips>
                         <v-list-item-title
