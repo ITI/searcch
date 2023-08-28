@@ -20,238 +20,270 @@
               Click here
             </v-btn>
           </v-card-text>
-          <v-card-title><v-text-field label="Title" variant="outlined" v-model="artifact_local.title"
-              :rules="[rules.required, rules.exists]" required></v-text-field></v-card-title>
-          <v-card-text>
-            <div>
-              <v-textarea auto-grow variant="outlined" label="Description" v-model="artifact_local.description"
-                :rules="[rules.required, rules.exists]" required></v-textarea>
-            </div>
-          </v-card-text>
-          <v-card-title><v-text-field label="URL" variant="outlined" v-model="artifact_local.url"
-              :rules="[rules.required, rules.url]" required></v-text-field></v-card-title>
 
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0 mt-2"> Artifact Type </v-card-title>
-          <v-select :items="types" label="Select Artifact Type" class="mx-4" chips v-model="artifact_local.type"
-            :prepend-icon="iconImage(artifact_local.type)" :color="iconColor(artifact_local.type)"
-            :rules="[rules.required, rules.exists]" required></v-select>
-
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0">Authors</v-card-title>
-
-          <ArtifactChips :field="artifact_local.affiliations" type="role" edit></ArtifactChips>
-
-          <ArtifactChips :field="meta.creators" type="role" edit></ArtifactChips>
-          <div>
-            <v-dialog transition="dialog-bottom-transition" max-width="600px" persistent v-model="dialog">
-              <template v-slot:activator="{ props }">
-                <v-btn class="text-success ml-2 mb-2" density="compact" variant="tonal" icon="mdi-plus"
-                  v-bind="props"></v-btn>
-              </template>
-              <template v-slot:default="dialog">
-                <v-card>
-                  <v-form v-model="dialogvalid" ref="dialogform">
-                    <v-card-title>
-                      <span class="text-h5">Add Author</span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col cols="12">
-                            <v-combobox label="Organization Name" chips persistent-hint clearable v-if="orgs"
-                              :items="orgNames" v-model="affiliation.affiliation.org"
-                              hint="Select applicable organization from the list or type in your own"
-                              v-model:search-input="search" item-value="org.name" item-title="org.name"
-                              :rules="[rules.notwhitespace, rules.unique_creator]" return-object>
-                              <template v-slot:no-data>
-                                <v-list-item>
-                                  <v-list-item-title>
-                                    No results matching "<strong>{{
-                                      search
-                                    }}</strong>". Press <kbd>enter</kbd> to create a new one
-                                  </v-list-item-title>
-                                </v-list-item>
-                              </template>
-                            </v-combobox>
-                          </v-col>
-                          <v-col cols="12">
-                            <v-text-field label="Author Name" v-model="affiliation.affiliation.person.name" :rules="[rules.required, rules.exists,
-                            rules.notwhitespace, rules.unique_creator]" required></v-text-field>
-                          </v-col>
-                          <v-col cols="12">
-                            <v-text-field label="Email Address" v-model="affiliation.affiliation.person.email"
-                              :rules="[rules.notwhitespace, rules.unique_creator]"></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn @click="() => {
-                        meta.creators.push(affiliation)
-                        dialog.value = false
-                        affiliation = affiliationObject()
-                        $refs.dialogform.reset()
-                      }" :disabled="!dialogvalid" class="bg-success ml-2 mb-2" variant="text">Add</v-btn>
-                      <v-btn class="bg-error ml-2 mb-2" variant="text" @click="() => {
-                        dialog.value = false
-                        affiliation = affiliationObject()
-                        $refs.dialogform.reset()
-                      }">
-                        Close
-                      </v-btn>
-                    </v-card-actions>
-                  </v-form>
-                </v-card>
-              </template>
-            </v-dialog>
+          <div id="container-artifact-title">
+            <v-text-field id="input-artifact-title" variant="outlined" bg-color="grey-lighten-5" class="mx-8" label="Title"
+                v-model="artifact_local.title" :rules="[rules.required, rules.exists]"
+                required></v-text-field>
           </div>
 
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0">Venues</v-card-title>
-          <ArtifactChips class="ml-4" :field="artifact_local.venues" type="venue" edit></ArtifactChips>
-
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0">Keywords</v-card-title>
-          <ArtifactChips :field="artifact_local.tags" type="keyword" edit></ArtifactChips>
-
-          <ArtifactChips :field="meta.keywords" type="keyword" placeholder="Enter Keyword" :validator="validateKeyword"
-            :formModel="valid" edit create></ArtifactChips>
-
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0">Programming Languages</v-card-title>
-          <ArtifactChips :field="meta.languages" type="software" placeholder="Enter Language" :formModel="valid" edit
-            create></ArtifactChips>
-
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0">Badges</v-card-title>
-          <div>
-            <span v-for="(b, index) in artifact_local.badges">
-              <v-img :key="`badgeimg${index}`" max-height="100" max-width="100" :src="b.badge.image_url"></v-img>
-              <a :href="b.badge.url" target="_blank" rel="noopener">
-                {{ b.badge.title }}
-              </a>
-              <v-icon @click="() => artifact_local.badges.splice(index, 1)" end>mdi-close</v-icon>
-            </span>
-          </div>
-          <div>
-            <v-chip v-for="(item, index) in meta.badges" :key="`newbadge${index}`" cols="12" class="ma-2" label>
-              <v-icon start>mdi-tag-outline</v-icon>
-
-              <v-select label="Badges" v-bind:items="badges" v-model="meta.badges[index]" item-title="id"
-                item-value="title" :rules="[rules.required]" return-object>
-                <template #item="{ props, item }">
-                  <v-list-item v-bind="props">
-                    <v-list-item-title v-text="`${item.raw.organization} - ${item.raw.title}`">
-                    </v-list-item-title>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  {{ item.raw.organization }} - {{ item.raw.title }}
-                </template>
-              </v-select>
-              <v-icon @click="() => meta.badges.splice(index, 1)" end>mdi-close</v-icon>
-            </v-chip>
-            <v-btn @click="() => meta.badges.push('')" class="text-success ml-2 mb-2" density="compact" variant="tonal"
-              icon="mdi-plus"></v-btn>
+          <div id="container-artifact-description">
+            <v-textarea id="input-artifact-description" auto-grow variant="outlined" bg-color="grey-lighten-5" class="mx-8" label="Description"
+              v-model="artifact_local.description" :rules="[rules.required, rules.exists]" required></v-textarea>
           </div>
 
-          <v-divider class="mx-4"></v-divider>
+          <div id="container-artifact-url">
+            <v-text-field id="input-artifact-url" variant="outlined" bg-color="grey-lighten-5" class="mx-8" label="URL"
+                v-model="artifact_local.url" :rules="[rules.required, rules.url]"
+                required></v-text-field>
+          </div>
+
+          <div id="container-artifact-type">
+              <v-select id="select-artifact-type" :items="types" chips label="Select Artifact Type"
+                variant="outlined" bg-color="grey-lighten-5" class="mx-8"
+                v-model="artifact_local.type" :prepend-icon="iconImage(artifact_local.type)"
+                :color="iconColor(artifact_local.type)" :rules="[rules.required, rules.exists]" required></v-select>
+          </div>
+
+          <v-divider class="my-4"></v-divider>
+
+          <div id="container-artifact-authors">
+            <v-card-title>Authors</v-card-title>
+            <v-card-text>
+              <ArtifactChips v-model="artifact_local.affiliations" type="role" edit></ArtifactChips>
+              <ArtifactChips v-model="meta.creators" type="role" edit></ArtifactChips>
+              <div>
+                <v-dialog transition="dialog-bottom-transition" max-width="600px" persistent v-model="dialog">
+                  <template v-slot:activator="{ props }">
+                    <v-btn class="text-success ml-2 mb-2" density="compact" variant="tonal" icon="mdi-plus"
+                      v-bind="props"></v-btn>
+                  </template>
+                  <template v-slot:default="dialog">
+                    <v-card>
+                      <v-form v-model="dialogvalid" ref="dialogform">
+                        <v-card-title>
+                          <span class="text-h5">Add Author</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12">
+                                <v-combobox label="Organization Name" chips persistent-hint clearable v-if="orgs"
+                                  :items="orgNames" v-model="affiliation.affiliation.org"
+                                  hint="Select applicable organization from the list or type in your own"
+                                  v-model:search-input="search" item-value="org.name" item-title="org.name"
+                                  :rules="[rules.notwhitespace, rules.unique_creator]" return-object>
+                                  <template v-slot:no-data>
+                                    <v-list-item>
+                                      <v-list-item-title>
+                                        No results matching "<strong>{{
+                                          search
+                                        }}</strong>". Press <kbd>enter</kbd> to create a new one
+                                      </v-list-item-title>
+                                    </v-list-item>
+                                  </template>
+                                </v-combobox>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-text-field label="Author Name" v-model="affiliation.affiliation.person.name" :rules="[rules.required, rules.exists,
+                                rules.notwhitespace, rules.unique_creator]" required></v-text-field>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-text-field label="Email Address" v-model="affiliation.affiliation.person.email"
+                                  :rules="[rules.notwhitespace, rules.unique_creator]"></v-text-field>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn @click="() => {
+                            meta.creators.push(affiliation)
+                            dialog.value = false
+                            affiliation = affiliationObject()
+                            $refs.dialogform.reset()
+                          }" :disabled="!dialogvalid" class="bg-success ml-2 mb-2" variant="text">Add</v-btn>
+                          <v-btn class="bg-error ml-2 mb-2" variant="text" @click="() => {
+                            dialog.value = false
+                            affiliation = affiliationObject()
+                            $refs.dialogform.reset()
+                          }">
+                            Close
+                          </v-btn>
+                        </v-card-actions>
+                      </v-form>
+                    </v-card>
+                  </template>
+                </v-dialog>
+              </div>
+            </v-card-text>
+          </div>
+
+          <v-divider class="my-4"></v-divider>
+
+          <div id="container-artifact-venues" v-if="artifact_local.venues.length">
+            <v-card-title class="py-0">Venues</v-card-title>
+            <v-card-text>
+              <ArtifactChips class="ml-4" v-model="artifact_local.venues" type="venue" edit></ArtifactChips>
+            </v-card-text>
+            <v-divider class="my-4"></v-divider>
+          </div>
+
+          <div id="container-artifact-keywords">
+            <v-card-title class="py-0">Keywords</v-card-title>
+            <v-card-text>
+              <ArtifactChips v-model="artifact_local.tags" type="keyword" edit></ArtifactChips>
+              <ArtifactChips v-model="meta.keywords" type="keyword" placeholder="Enter Keyword"
+                :validator="validateKeyword" :formModel="valid" edit create></ArtifactChips>
+            </v-card-text>
+            <v-divider class="my-4"></v-divider>
+          </div>
+
+          <div id="container-artifact-programming-languages">
+            <v-card-title class="py-0">Programming Languages</v-card-title>
+            <v-card-text>
+              <ArtifactChips v-model="meta.languages" type="software" placeholder="Enter Language" :formModel="valid" edit
+                create></ArtifactChips>
+            </v-card-text>
+            <v-divider class="my-4"></v-divider>
+          </div>
+
+          <div id="container-artifact-badges">
+            <v-card-title class="py-0">Badges</v-card-title>
+            <v-card-text>
+              <div>
+                <span v-for="(b, index) in artifact_local.badges">
+                  <v-img :key="`badgeimg${index}`" max-height="100" max-width="100" :src="b.badge.image_url"></v-img>
+                  <a :href="b.badge.url" target="_blank" rel="noopener">
+                    {{ b.badge.title }}
+                  </a>
+                  <v-icon @click="() => artifact_local.badges.splice(index, 1)" end>mdi-close</v-icon>
+                </span>
+              </div>
+              <div>
+                <v-chip v-for="(item, index) in meta.badges" :key="`newbadge${index}`" cols="12" class="ma-2" label>
+                  <v-icon start>mdi-tag-outline</v-icon>
+
+                  <v-select label="Badges" v-bind:items="badges" v-model="meta.badges[index]" item-title="id"
+                    item-value="title" :rules="[rules.required]" return-object menu-icon="">
+                    <template #item="{ props, item }">
+                      <v-list-item v-bind="props" :title="`${item.raw.organization} - ${item.raw.title}`"></v-list-item>
+                    </template>
+                    <template #selection="{ item }">
+                      {{ item.raw.organization }} - {{ item.raw.title }}
+                    </template>
+                  </v-select>
+                  <v-icon @click="() => meta.badges.splice(index, 1)" end>mdi-close</v-icon>
+                </v-chip>
+                <v-btn @click="() => meta.badges.push('')" class="text-success ml-2 mb-2" density="compact"
+                  variant="tonal" icon="mdi-plus"></v-btn>
+              </div>
+            </v-card-text>
+            <v-divider class="my-4"></v-divider>
+          </div>
 
           <div v-if="artifact_local.type == 'software'">
-            <div v-if="stars || watchers">
+            <div id="container-artifact-metrics" v-if="stars || watchers">
               <v-card-title class="py-0">Github Metrics</v-card-title>
 
-              <v-chip color="primary" cols="12" class="ma-2" label>
-                <v-avatar start>
-                  <v-icon color="yellow">mdi-star</v-icon>
-                </v-avatar>
+              <v-card-text>
+                <v-chip color="primary" cols="12" class="ma-2" label>
+                  <v-avatar start>
+                    <v-icon color="yellow">mdi-star</v-icon>
+                  </v-avatar>
 
-                {{ stars }}
-              </v-chip>
-              <v-chip color="primary" cols="12" class="ma-2" label>
-                <v-avatar start>
-                  <v-icon>mdi-eye</v-icon>
-                </v-avatar>
+                  {{ stars }}
+                </v-chip>
+                <v-chip color="primary" cols="12" class="ma-2" label>
+                  <v-avatar start>
+                    <v-icon>mdi-eye</v-icon>
+                  </v-avatar>
 
-                {{ watchers }}
-              </v-chip>
+                  {{ watchers }}
+                </v-chip>
+              </v-card-text>
             </div>
 
-            <div v-if="record.artifact.importer">
+            <div id="container-artifact-importer" v-if="record.artifact.importer">
               <v-card-title class="py-0">Importer</v-card-title>
 
-              <v-chip color="primary" cols="12" class="ma-2" label>
-                <v-avatar start>
-                  <v-icon>mdi-file-download-outline</v-icon>
-                </v-avatar>
-                {{
-                  `${record.artifact.importer.name} v${record.artifact.importer.version}`
-                }}
-              </v-chip>
-              <v-divider class="mx-4"></v-divider>
-            </div>
-          </div>
-
-          <v-card-title class="py-0">License</v-card-title>
-          <v-chip cols="12" class="ma-2" label>
-            <v-icon start>mdi-scale-balance</v-icon>
-
-            <v-autocomplete label="License" :items="possibleLicenses" v-model="artifact_local.license"
-              item-title="short_name" item-value="long_name" return-object>
-              <template v-slot:item="data">
-                <v-list-item-title v-text="`${data.item.short_name} (${data.item.long_name})`">
-                </v-list-item-title>
-              </template>
-              <template v-slot:selection="data">
-                {{ data.item.short_name }} ({{ data.item.long_name }})
-              </template>
-            </v-autocomplete>
-            <v-icon @click="() => artifact_local.license = null" end>mdi-close</v-icon>
-          </v-chip>
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0">Files</v-card-title>
-
-          <div v-if="artifact_local.files">
-            <v-list-item v-for="(f, index) in artifact_local.files" :key="`file${index}`" density="compact">
-              <v-list-group :value="true">
-                <template v-slot:activator>
-                  <a @click.stop target="_blank" :href="f.url" rel="noopener">{{
-                    f.url
-                  }}</a>
-                  &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
-                  {{ f.size ? convertSize(f.size) : 'unknown' }})
-                </template>
-                <v-list-item v-for="(fm, indexm) in f.members" :key="`mem${indexm}`" density="compact">
-                  <a target="_blank" :href="fm.html_url || fm.download_url" rel="noopener">{{
-                    fm.pathname || fm.name || fm.html_url || fm.download_url
-                  }}</a>
-                  &nbsp; (type: {{ fm.filetype ? fm.filetype : 'unknown' }}, size:
-                  {{ fm.size ? convertSize(fm.size) : 'unknown' }})
-                </v-list-item>
-              </v-list-group>
-              <v-icon @click="() => artifact_local.files.splice(index, 1)" end>mdi-close</v-icon>
-            </v-list-item>
-
-            <div>
-              <v-card-text v-for="(f, index) in meta.files" :key="`newfile${index}`" cols="12">
-                <v-textarea variant="outlined" row="10" label="File URL" placeholder="Enter File URL" v-model="f.url"
-                  prepend-icon="mdi-file" append-icon="mdi-close" @click:append="() => meta.files.splice(index, 1)"
-                  :rules="[rules.required, rules.url]" required></v-textarea>
+              <v-card-text>
+                <v-chip color="primary" cols="12" class="ma-2" label>
+                  <v-avatar start>
+                    <v-icon>mdi-file-download-outline</v-icon>
+                  </v-avatar>
+                  {{
+                    `${record.artifact.importer.name} v${record.artifact.importer.version}`
+                  }}
+                </v-chip>
               </v-card-text>
-              <v-btn @click="() => meta.files.push({ url: '', filetype: 'unknown' })" class="text-success ml-2 mb-2"
-                variant="tonal" density="compact" icon="mdi-plus"></v-btn>
             </div>
+            <v-divider class="my-4"></v-divider>
           </div>
-          <div class="ml-4 mb-2" v-else>No files found by importer</div>
+
+
+          <div id="container-artifact-licenses">
+            <v-card-title class="py-0">License</v-card-title>
+            <v-card-text>
+              <v-chip class="ma-2" label>
+                <v-icon start>mdi-scale-balance</v-icon>
+
+                <v-autocomplete label="License" :items="possibleLicenses" v-model="artifact_local.license"
+                  item-title="short_name" item-value="long_name" menu-icon="" return-object>
+                  <template v-slot:item="{ item, props }">
+                    <v-list-item v-bind="props" :title="`${item.raw.short_name} (${item.raw.long_name})`">
+                    </v-list-item>
+                  </template>
+                  <template v-slot:selection="{ item, props }">
+                    <v-list-item v-bind="props">
+                      {{ item.raw.short_name }} ({{ item.raw.long_name }})
+                    </v-list-item>
+                  </template>
+                </v-autocomplete>
+
+                <v-icon @click="() => artifact_local.license = null" end>mdi-close</v-icon>
+              </v-chip>
+            </v-card-text>
+            <v-divider class="my-4"></v-divider>
+          </div>
+
+          <div id="container-artifact-files">
+            <v-card-title class="py-0">Files</v-card-title>
+            <v-card-text>
+              <div v-if="artifact_local.files">
+                <v-list-item v-for="(f, index) in artifact_local.files" :key="`file${index}`" density="compact">
+                  <v-list-group :value="true">
+                    <template v-slot:activator>
+                      <a @click.stop target="_blank" :href="f.url" rel="noopener">{{
+                        f.url
+                      }}</a>
+                      &nbsp; (type: {{ f.filetype ? f.filetype : 'unknown' }}, size:
+                      {{ f.size ? convertSize(f.size) : 'unknown' }})
+                    </template>
+                    <v-list-item v-for="(fm, indexm) in f.members" :key="`mem${indexm}`" density="compact">
+                      <a target="_blank" :href="fm.html_url || fm.download_url" rel="noopener">{{
+                        fm.pathname || fm.name || fm.html_url || fm.download_url
+                      }}</a>
+                      &nbsp; (type: {{ fm.filetype ? fm.filetype : 'unknown' }}, size:
+                      {{ fm.size ? convertSize(fm.size) : 'unknown' }})
+                    </v-list-item>
+                  </v-list-group>
+                  <v-icon @click="() => artifact_local.files.splice(index, 1)" end>mdi-close</v-icon>
+                </v-list-item>
+
+                <div>
+                  <v-card-text v-for="(f, index) in meta.files" :key="`newfile${index}`" cols="12">
+                    <v-textarea variant="outlined" row="10" label="File URL" placeholder="Enter File URL" v-model="f.url"
+                      prepend-icon="mdi-file" append-icon="mdi-close" @click:append="() => meta.files.splice(index, 1)"
+                      :rules="[rules.required, rules.url]" required></v-textarea>
+                  </v-card-text>
+                  <v-btn @click="() => meta.files.push({ url: '', filetype: 'unknown' })" class="text-success ml-2 mb-2"
+                    variant="tonal" density="compact" icon="mdi-plus"></v-btn>
+                </div>
+              </div>
+              <div class="ml-4 mb-2" v-else>No files found by importer</div>
+            </v-card-text>
+          </div>
 
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -569,6 +601,9 @@ export default defineComponent({
     artifact_local(val) {
       this.meta.languages = this.getLanguages()
       this.meta.keywords = this.getPossibleTags()
+    },
+    'meta.keywords'(value) {
+      console.log(value)
     }
   },
   methods: {
