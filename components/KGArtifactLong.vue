@@ -172,13 +172,16 @@
             <div v-if="markdown" :class="hideOverflow">
               <v-divider class="mx-4"></v-divider>
               <v-card-title>
-                <v-row class="mx-1">
-                  Readme
-                  <v-spacer></v-spacer>
-                  <v-btn :v-if="false && isOverflow" @click="expanded = !expanded">
-                    {{ overflowText }}
-                    <v-icon>{{ overflowIcon }}</v-icon>
-                  </v-btn>
+                <v-row class="mx-1 justify-space-between">
+                  <v-col cols="auto">
+                    Readme
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-btn :v-if="false && isOverflow" @click="expanded = !expanded" variant="tonal">
+                      {{ overflowText }}
+                      <v-icon>{{ overflowIcon }}</v-icon>
+                    </v-btn>
+                  </v-col>
                 </v-row>
               </v-card-title>
               <v-card-text>
@@ -333,32 +336,36 @@
 
             <div v-if="record.artifact.files.length">
               <v-card-title class="py-0">Files</v-card-title>
-
-              <v-list-item
-                v-for="(v, k) in record.artifact.files"
-                :key="`file${k}`"
-                density="compact"
-              >
-                <v-list-group :value="true"  >
-                  <template v-slot:activator>
-                    <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
-                      v.url
-                    }}</a>
-                    &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
-                  </template>
-                  <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" density="compact">
-                    <a
-                      target="_blank"
-                      :href="vm.html_url || vm.download_url"
-                      rel="noopener"
-                      >{{
-                        vm.pathname || vm.name || vm.html_url || vm.download_url
-                      }}</a
-                    >
-                    &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
-                  </v-list-item>
-                </v-list-group>
-              </v-list-item>
+              <v-list v-model:opened="fileOpened" density="compact">
+                <v-list-item
+                  v-for="(v, k) in record.artifact.files"
+                  :key="`file${k}`"
+                  :id="`file${k}`"
+                  density="compact"
+                >
+                  <v-list-group :value="v.name" density="compact">
+                    <template v-slot:activator="{ props }">
+                      <v-list-item v-bind="props">
+                        <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
+                          v.url
+                        }}</a>
+                        &nbsp; (type: {{ v.filetype ? v.filetype : 'unknown' }}, size: {{ v.size ? convertSize(v.size) : 'unknown' }})
+                      </v-list-item>
+                    </template>
+                    <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" density="compact">
+                      <a
+                        target="_blank"
+                        :href="vm.html_url || vm.download_url"
+                        rel="noopener"
+                        >{{
+                          vm.pathname || vm.name || vm.html_url || vm.download_url
+                        }}</a
+                      >
+                      &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
+                    </v-list-item>
+                  </v-list-group>
+                </v-list-item>
+              </v-list>
 
               <v-divider class="mx-4"></v-divider>
             </div>
@@ -527,7 +534,8 @@ export default defineComponent({
       justificationMessage: "",
       tab: 'content',
       claimEmail: "",
-      claimKey: ""
+      claimKey: "",
+      fileOpened: [],
     }
   },
   mounted() {

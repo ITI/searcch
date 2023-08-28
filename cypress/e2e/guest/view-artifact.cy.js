@@ -1,4 +1,9 @@
-import DOMPurify from "dompurify"
+const bytesToSize = bytes => {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+    if (bytes == 0) return '0 Bytes'
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i]
+  }
 
 describe('View Artifact', () => {
     beforeEach(() => {
@@ -77,11 +82,18 @@ describe('View Artifact', () => {
 
         it('should display artifact files', () => {
             cy.fixture('artifact.json').then((artifact) => {
-                artifact.artifact.files.forEach((file) => {
-                    cy.get(`a[href="${file.url}"]`)
-                        .should('be.visible')
-                        .and('contain', file.name)
-                        .and('have.attr', 'target', '_blank')
+                artifact.artifact.files.forEach((file, i) => {
+                    cy.get(`#file${i}`).should('contain', file.name)
+                        .and('contain', file.size ? bytesToSize(file.size) : 'unknown')
+                        .and('contain', file.filetype ?? 'unkown')
+
+                    cy.get(`#file${i}`).click()
+                    file.members.forEach((member) => {
+                        cy.get(`#file${i}`).find('.v-list-group__items')
+                            .should('contain', member.name)
+                            .and('contain', member.size ? bytesToSize(member.size) : 'unknown')
+                            .and('contain', member.filetype ?? 'unkown')
+                    })
                 })
             })
         })
