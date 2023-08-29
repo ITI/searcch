@@ -42,7 +42,7 @@
                 </v-row>
               </v-card-actions>
             </template>
-            <template v-slot:default="artifactdialog">
+            <template v-slot:default>
               <v-card>
                 <v-card-title>
                   <span class="text-h5">Search for Related Artifacts</span>
@@ -53,7 +53,7 @@
                   <v-btn
                     class="bg-error ml-2 mb-2"
                     variant="text"
-                    @click="artifactdialog.value = false"
+                    @click="artifactdialog = false"
                   >
                     Close
                   </v-btn>

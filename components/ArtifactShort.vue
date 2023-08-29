@@ -1,8 +1,8 @@
 <template>
   <v-sheet border>
     <v-card class="mx-auto overflow-hidden" elevation="0">
-      <v-container>
-        <v-row>
+      <v-container fluid>
+        <v-row class="justify-space-between">
           <v-col cols="9">
             <v-card-title class="align-start">
               <span class="text-h5">{{$filters.titlecase( artifact.title ) }}</span> 
@@ -263,7 +263,7 @@ export default defineComponent({
         id: id,
         relation: relation
       })
-      this.$emit('close', 'artifactdialog')
+      this.$trigger('close', 'artifactdialog')
     },
     isAdmin() {
       this.user_is_admin
