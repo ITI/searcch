@@ -3,7 +3,7 @@
     <v-chip
       v-if="fieldData.length"
       v-for="(item, index) in fieldData"
-      :key="`field${index}`"
+      :key="`field${index}${Math.random()}`"
       cols="12"
       class="ma-2"
       label
@@ -73,7 +73,6 @@
 
 <script>
 import { artifactIcon, artifactColor, venueIcon, reverseRelation } from '@/helpers'
-import { isEqual } from 'lodash';
 
 // properties are not suppose to change in vue, so we copy the object and change copy
 export default defineComponent({
@@ -147,15 +146,10 @@ export default defineComponent({
     Object.assign(this.fieldData, this.modelValue)
   },
   watch: {
-    field() {
-      Object.assign(this.fieldData, this.modelValue)
-    },
     fieldData: {
       deep: true,
-      handler() {
-        if (typeof this.fieldData !== 'undefined' && !isEqual(this.fieldData, this.modelValue)) {
-          this.$emit('update:modelValue', this.fieldData)
-        }
+      handler(value) {
+        this.$emit('update:modelValue', value)
       }
     }
   },
