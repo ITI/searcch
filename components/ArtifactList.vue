@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container id="container-artifact-list">
     <v-row v-for="artifact in artifacts" :key="getKey(artifact)">
       <v-col>
         <LazyHydrate when-visible>
@@ -11,7 +11,7 @@
         </LazyHydrate>
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>

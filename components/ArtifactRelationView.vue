@@ -55,8 +55,9 @@
       </v-row>
     </v-sheet>
     <v-list v-else density="compact">
-      <v-list-item v-for="relation, idx in relations"
-        :key="`${relation.artifact_id}-${idx}`"
+      <v-list-item v-for="relation in relations"
+        :key="`relation-${relation.id}`"
+        :id="`container-relation-${relation.id}`"
         class="item-artifact-relation">
         <v-row>
           <v-col cols="12" md="2" class="text-md-right pt-4 pb-0 mb-n3 text-grey-darken-2">
@@ -64,7 +65,7 @@
           </v-col>
           <v-col cols="12" md="10" class="pt-3">
             <p>
-              <v-btn v-if="edit" class="mb-1 text-red" size="xs" variant="plain"
+              <v-btn v-if="edit" :id="`btn-delete-relation-${relation.id}`" class="mb-1 text-red" size="xs" variant="plain"
                 @click="deleteRelationship(relation)" icon="mdi-trash-can">
               </v-btn>
               

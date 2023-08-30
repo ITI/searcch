@@ -16,6 +16,8 @@
         <v-card-title>Edit Relationship</v-card-title>
         <v-card-text>Want to edit content? <v-btn variant="text" size="small" color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
 
+        <v-divider></v-divider>
+
         <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
 
         <div>
@@ -32,6 +34,7 @@
                   <v-col cols="12" md="10">
                     <v-btn
                       color="primary"
+                      id="btn-open-relation-modal"
                       block variant="tonal"
                       v-bind="props"
                       :disabled="artifact_local.id ? false : true"
@@ -51,6 +54,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
+                    id="btn-close-relation-modal"
                     class="bg-error ml-2 mb-2"
                     variant="text"
                     @click="artifactdialog = false"

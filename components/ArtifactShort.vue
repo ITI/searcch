@@ -93,6 +93,7 @@
 
         <v-spacer></v-spacer>
         <v-select
+          id="select-artifact-relation"
           v-if="related"
           label="Relationship Type"
           :items="relations"
