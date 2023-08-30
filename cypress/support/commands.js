@@ -10,6 +10,10 @@ Cypress.Commands.add('login', (asAdmin) => {
     fixture: 'favorites.json',
   })
 
+  cy.intercept('/kg/artifact/imports?*', {
+    fixture: 'importer/empty.json'
+  })
+
   cy.request('/api/auth/csrf').then((res) => {
     cy.request({
       method: 'POST',

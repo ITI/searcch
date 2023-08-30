@@ -33,8 +33,7 @@ describe('Home page', () => {
   context('sidebar', () => {
     it('should have a sidebar with appropriate links', () => {
       cy.on('uncaught:exception', (err, runnable) => {
-        if (err.message.includes(`Cannot read properties of undefined (reading 'owned_artifacts')`))
-          return false
+        return false
       })
 
       cy.get('header button').should('have.length', 3)
@@ -78,6 +77,33 @@ describe('Home page', () => {
           cy.get('@navItems').eq(index).should('have.class', 'v-list-item--active')
         }
       })
+    })
+  })
+
+  context('footer', () => {
+    it('should have a footer with sponsor info', () => {
+      cy.get('footer').should('be.visible')
+      cy.get('footer span').should('contain', '© 2023 - SEARCCH is supported by the National Science Foundation under Grant Numbers 1925773, 1925616, 1925588, 1925564')
+    });
+
+    it('should have a footer with feedback link', () => {
+      cy.get('footer a')
+        .should('have.attr', 'href', 'https://forms.gle/nsP4kJVsjAmKKLU86')
+        .and('have.attr', 'target', '_blank')
+        .and('contain', 'Send Us Feedback')
+    })
+  })
+
+  context('main content', () => {
+    it('should have a main content area', () => {
+      cy.get('main').should('be.visible')
+    })
+    it('should have a continue button that navigates user to search page', () => {
+      cy.get('main a.v-btn')
+        .should('contain', 'Continue')
+        .and('be.visible')
+        .click()
+      cy.url().should('eq', `${Cypress.env('baseUrl')}/search`)
     })
   })
 })

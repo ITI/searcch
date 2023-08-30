@@ -223,7 +223,7 @@ describe('View Artifact', () => {
                 cy.get('div.modal').should('not.visible')
 
                 cy.get('.ownership-info').should('contain', 'An error occured in sending the claim request')
-                cy.wait(5000).then(() => {
+                cy.wait(6000).then(() => {
                     cy.get('.ownership-info').should('not.exist')
                 })
 

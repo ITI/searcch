@@ -130,13 +130,20 @@ describe('Edit Artifact', () => {
             cy.get('#container-artifact-programming-languages button .mdi-plus').should('be.visible')
             this.fixture.artifact.meta.filter((meta) => meta.name === 'languages').forEach((language) => {
                 cy.get('#container-artifact-programming-languages .v-chip')
-                    .should('contain', language.value)
+                    .find('input').should('have.value', language.value)
+                cy.get('#container-artifact-programming-languages .v-chip')
                     .find('.v-chip__close').should('be.visible')
             })
         })
 
-        it('should display artifact badge input', () => {
-
+        it('should display artifact badge input', function () {
+            cy.get('#container-artifact-badges .v-card-title').should('contain', 'Badges')
+            cy.get('#container-artifact-badges button .mdi-plus').should('be.visible')
+            this.fixture.artifact.badges.forEach((badge) => {
+                cy.get('#container-artifact-badges').should('contain', badge.badge.title)
+            })
+            cy.get('#container-artifact-badges .mdi-close')
+                .should('have.length', this.fixture.artifact.badges.length)
         })
 
         it('should display artifact importer', function () {
@@ -289,9 +296,9 @@ describe('Edit Artifact', () => {
 
         it(`should remove keywords`, function () {
             cy.get(`#container-artifact-keywords .v-chip__close`).first().click()
+            cy.get(`#container-artifact-keywords .v-chip`).should('have.length', this.fixture.artifact.tags.length - 1)
             cy.get('#btn-save-artifact').click()
             cy.get('@updateArtifact').its(`request.body.tags`).should('have.length', this.fixture.artifact.tags.length - 1)
-            cy.get(`#container-artifact-keywords .v-chip`).should('have.length', this.fixture.artifact.tags.length - 1)
         })
     })
 
@@ -312,11 +319,11 @@ describe('Edit Artifact', () => {
 
         it(`should remove programming-languages`, function () {
             cy.get(`#container-artifact-programming-languages .v-chip__close`).first().click()
+            cy.get(`#container-artifact-programming-languages .v-chip`).should('have.length', 0)
             cy.get('#btn-save-artifact').click()
             cy.get('@updateArtifact').its(`request.body.meta`).then((fixture) => {
                 expect(fixture.filter((meta) => meta.name === 'languages')).to.have.length(0)
             })
-            cy.get(`#container-artifact-programming-languages .v-chip`).should('have.length', 0)
         })
     })
 
