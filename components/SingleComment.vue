@@ -8,7 +8,7 @@
           v-model="rating"
           v-if="!editing"
           color="amber"
-          dense
+          density="compact"
           readonly
           size="18"
           class="ml-3"
@@ -21,7 +21,7 @@
         v-if="editing"
         label="Rating"
         color="amber"
-        dense
+        density="compact"
         hover
         size="24"
         class="ml-3"
@@ -53,7 +53,7 @@
       <v-btn color="error" @click="deleteReview()" v-if="!editing">
         Delete
       </v-btn>
-      <v-btn text color="error" @click="editing = false" v-if="editing">
+      <v-btn variant="text" color="error" @click="editing = false" v-if="editing">
         Cancel
       </v-btn>
     </v-card-actions>
@@ -61,12 +61,10 @@
   <v-card v-else>Loading...</v-card>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
 
-export default {
-  components: {
-    LazyHydrate: () => import('vue-lazy-hydration')
-  },
+export default defineComponent({
   props: {
     comment: {
       type: Object,
@@ -81,9 +79,9 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      userid: state => state.user.userid,
-      username: state => state.user.username
+    ...mapState(userStore, {
+      userid: state => state.userid,
+      username: state => state.username
     }),
     name() {
       return this.comment.review.reviewer.person.name
@@ -114,7 +112,7 @@ export default {
       }
       // FIXME: backend API
       await this.$reviewsEndpoint.post(this.$route.params.id, comment_payload)
-      this.$store.dispatch('artifacts/fetchArtifact', {
+      this.$artifactsStore.fetchArtifact( {
         artifact_group_id: this.$route.params.id
       })
     },
@@ -125,12 +123,12 @@ export default {
         reviewid: this.id
       }
       await this.$reviewsEndpoint.remove(this.$route.params.id, comment_payload)
-      this.$store.dispatch('artifacts/fetchArtifact', {
+      this.$artifactsStore.fetchArtifact( {
         artifact_group_id: this.$route.params.id
       })
     }
   }
-}
+});
 </script>
 <style scoped>
 pre {

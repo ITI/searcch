@@ -1,122 +1,60 @@
 <template>
-  <div>
-    <v-layout column justify-left align-top>
-      <v-row align="center">
-        <v-col cols="1">
-          <h3>Filters:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-subheader>
-            Status
-          </v-subheader>
-        </v-col>
-        <v-col cols="2">
-          <v-select
-            v-model="status_select"
-            label="Status"
-            :items="status_items"
-            single-line
-            @change="updateImports()"
-          ></v-select>
-        </v-col>
-        <v-col cols="1">
-          <v-subheader>
-            Archived
-          </v-subheader>
-        </v-col>
-        <v-col cols="1">
-          <v-checkbox v-model="archived" @change="updateImports()"></v-checkbox>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            v-model="owner_filter"
-            hint="Case-insensitive substring of user name or email"
-            label="Owner"
-            @change="updateImports()"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2"></v-col>
-        <v-col cols="1">
-          <h3>Refresh:</h3>
-        </v-col>
-        <v-col cols="1">
-          <v-btn icon @click="updateImports()">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-divider></v-divider><br />
-    </v-layout>
-    <v-card>
-      <v-card-title>
-        Artifact Imports
-        <v-spacer></v-spacer>
-        <!-- <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          dense
-        ></v-text-field> -->
-      </v-card-title>
-
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        :search="search"
-        :custom-filter="specializedFilter"
-        :loading="loading"
-        :options.sync="options"
-        :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }"
-        :server-items-length="total"
-        dense
-      >
-        <template v-slot:item.id="{ item }">
-          <a
-            v-if="item.id"
-            :href="`/artifact/import/${item.id}`"
-            target="_blank"
-            rel="noopener"
-            >View</a
-          >
-        </template>
-        <template v-slot:item.ctime="{ item }">
-          {{ $moment.utc(item.ctime).fromNow() }}
-        </template>
-        <template v-slot:item.url="{ item }">
-          <a
-            v-if="item.url"
-            :href="`${item.url}`"
-            target="_blank"
-            rel="noopener"
-            >{{ ellipsize(item.url, 32) }}</a
-          >
-        </template>
-        <template v-slot:item.artifact_id="{ item }">
-          <a
-            v-if="item.artifact_id"
-            :href="`/artifact/${item.artifact_group_id}/${item.artifact_id}`"
-            target="_blank"
-            rel="noopener"
-            >View</a
-          >
-        </template>
-        <template v-slot:item.owner.person="{ item }">
-          {{ item.owner.person.email
-          }}{{
-            item.owner.person.name ? ' (' + item.owner.person.name + ')' : ''
-          }}
-        </template>
-      </v-data-table>
-    </v-card>
-  </div>
+  <v-container>
+    <v-row justify="start" align="start">
+      <v-col cols="12">
+        <v-row align="start" class="mb-n12">
+          <v-col cols="2">
+            <v-select variant="outlined" density="compact" v-model="status_select" label="Status" :items="status_items"
+              @update:model-value="updateImports()"></v-select>
+          </v-col>
+          <v-col cols="2">
+            <v-checkbox density="compact" v-model="archived" @update:model-value="updateImports()" label="Archived"></v-checkbox>
+          </v-col>
+          <v-col cols="2">
+            <v-text-field variant="outlined" density="compact" v-model="owner_filter" hint="Case-insensitive substring of user name or email" label="Owner"
+              @change="updateImports()"></v-text-field>
+          </v-col>
+          <v-spacer/>
+          <v-col cols="1">
+            <v-btn @click="updateImports()" size="x-small" icon="mdi-refresh" variant="outlined" class="mt-1" />
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12">
+          <v-data-table-server :headers="headers" :items="items" :search="search" :custom-filter="specializedFilter"
+            :loading="loading" v-model:options="options"
+            :footer-props="{ 'items-per-page-options': [10, 20, 50, 100, -1] }" :items-length="total" dense>
+            <template v-slot:item.id="{ item: { raw: item } }">
+              <a v-if="item.id" :href="`/artifact/import/${item.id}`" target="_blank" rel="noopener">View</a>
+            </template>
+            <template v-slot:item.ctime="{ item: { raw: item } }">
+              {{ $moment.utc(item.ctime).fromNow() }}
+            </template>
+            <template v-slot:item.url="{ item: { raw: item } }">
+              <a v-if="item.url" :href="`${item.url}`" target="_blank" rel="noopener">{{ ellipsize(item.url, 32) }}</a>
+            </template>
+            <template v-slot:item.artifact_id="{ item: { raw: item } }">
+              <a v-if="item.artifact_id" :href="`/artifact/${item.artifact_group_id}/${item.artifact_id}`" target="_blank"
+                rel="noopener">View</a>
+            </template>
+            <template v-slot:item.owner.person="{ item: { raw: item } }">
+              {{ item.owner.person.email
+              }}{{
+  item.owner.person.name ? ' (' + item.owner.person.name + ')' : ''
+}}
+            </template>
+          </v-data-table-server>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
+import { systemStore } from '~/stores/system'
 
-export default {
+export default defineComponent({
   data() {
     return {
       loadingMessage: 'Loading imports...',
@@ -133,32 +71,30 @@ export default {
       archived: false,
       owner_filter: '',
       headers: [
-        { text: 'Import', value: 'id', align: 'start', sortable: true },
+        { title: 'Import', key: 'id', align: 'start', sortable: true },
         {
-          text: 'Created',
+          title: 'Created',
           sortable: true,
           align: 'start',
-          value: 'ctime',
-          sortable: true
+          key: 'ctime',
         },
-        { text: 'Status', value: 'status', sortable: true },
-        //{ text: "Phase", value: "phase", sortable: true },
-        { text: 'URL', value: 'url', sortable: true },
-        { text: 'Owner', value: 'owner.person', sortable: false },
-        //{ text: "Owner Email", value: "owner.person.email", sortable: false },
-        { text: 'Artifact', value: 'artifact_id', sortable: true }
+        { title: 'Status', key: 'status', sortable: true },
+        //{ title: "Phase", key: "phase", sortable: true },
+        { title: 'URL', key: 'url', sortable: true },
+        { title: 'Owner', key: 'owner.person', sortable: false },
+        //{ title: "Owner Email", key: "owner.person.email", sortable: false },
+        { title: 'Artifact', key: 'artifact_id', sortable: true }
       ],
       loading: true,
       options: {
         itemsPerPage: 20,
         page: 1,
-        sortDesc: [true]
       },
       search: ''
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
+    this.$userStore.fetchUser()
     this.loadingMessage = 'Loading imports...'
     this.updateImports()
     this.timeoutID = setTimeout(() => {
@@ -166,13 +102,14 @@ export default {
     }, 5000)
   },
   computed: {
-    ...mapState({
-      user_is_admin: state => state.user.user_is_admin,
-      items: state => state.system.artifact_imports.artifact_imports,
-      page: state => state.system.artifact_imports.page,
-      pages: state => state.system.artifact_imports.pages,
-      total: state => state.system.artifact_imports.total
-    })
+    ...mapState(systemStore, {
+      items: state => state.artifact_imports.artifact_imports,
+      page: state => state.artifact_imports.page,
+      pages: state => state.artifact_imports.pages,
+      total: state => state.artifact_imports.total
+    }),
+    ...mapState(userStore, ['user_is_admin']),
+
   },
   methods: {
     ellipsize(s, l) {
@@ -186,13 +123,12 @@ export default {
           page: this.options.page,
           items_per_page: this.options.itemsPerPage,
           sort: this.options.sortBy,
-          sort_desc: this.options.sortDesc[0] === true ? 1 : 0,
           allusers: 1
         }
         if (this.status_select) payload['status'] = this.status_select
         if (this.archived) payload['archived'] = 1
         if (this.owner_filter) payload['owner'] = this.owner_filter
-        this.$store.dispatch('system/fetchArtifactImports', payload)
+        this.$systemStore.fetchArtifactImports(payload)
       }
       clearTimeout(this.timeoutID)
     },
@@ -243,5 +179,5 @@ export default {
     clearTimeout(this.timeoutID)
     next()
   }
-}
+});
 </script>

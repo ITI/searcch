@@ -89,3 +89,12 @@ sw.*
 
 # Vim swap files
 *.swp
+
+.output/
+.nitro/
+.cache/
+.env
+
+# cypress videos
+cypress/videos
+cypress/screenshots

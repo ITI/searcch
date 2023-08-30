@@ -2,13 +2,12 @@
   <v-app-bar
     id="core-app-bar"
     absolute
-    app
     color="transparent"
     flat
     height="88"
   >
     <v-toolbar-title class="tertiary--text font-weight-light align-self-center">
-      <v-btn v-if="responsive" dark icon @click.stop="onClick">
+      <v-btn v-if="responsive" theme="dark" icon @click.stop="onClick">
         <v-icon>mdi-view-list</v-icon>
       </v-btn>
       {{ title }}
@@ -31,7 +30,7 @@
           </v-icon>
         </v-btn>
 
-        <v-menu bottom left offset-y transition="slide-y-transition">
+        <v-menu location="bottom" transition="slide-y-transition" offset="end">
           <template v-slot:activator="{ attrs, on }">
             <v-btn
               class="toolbar-items"
@@ -40,8 +39,8 @@
               v-bind="attrs"
               v-on="on"
             >
-              <v-badge color="error" overlap>
-                <template slot="badge">
+              <v-badge color="error">
+                <template v-slot:badge>
                   {{ notifications.length }}
                 </template>
                 <v-icon color="tertiary">
@@ -52,7 +51,7 @@
           </template>
 
           <v-card>
-            <v-list dense>
+            <v-list density="compact">
               <v-list-item
                 v-for="notification in notifications"
                 :key="notification"
@@ -76,9 +75,8 @@
 
 <script>
 // Utilities
-import { mapMutations } from 'vuex'
 
-export default {
+export default defineComponent({
   data: () => ({
     notifications: [
       'Mike, John responded to your email',
@@ -99,13 +97,12 @@ export default {
     this.onResponsiveInverted()
     window.addEventListener('resize', this.onResponsiveInverted)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.onResponsiveInverted)
   },
   methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     onClick() {
-      this.setDrawer(!this.$store.state.app.drawer)
+      this.$appStore.drawer = !this.$appStore.drawer
     },
     onResponsiveInverted() {
       if (window.innerWidth < 991) {
@@ -115,7 +112,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style>

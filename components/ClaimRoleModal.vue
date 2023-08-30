@@ -37,7 +37,7 @@
                 {{ isDisabled ? "Justification" : "Please justify your claim in the textbox below" }}
             </div>
             <div>
-                <textarea v-model="justificationMessage" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
+                <textarea v-model="message" placeholder="Enter your justification" id="justificationTextarea" :disabled="isDisabled"></textarea>
             </div>
         </slot>
        </section>
@@ -51,8 +51,9 @@
            </div>
         </div>
         <v-btn
+          id="btn-modal-claim-ownership"
           color="secondary"
-          class="claim-btn"
+          variant="flat"
           @click="claimRole"
           aria-label="Close modal"
           :disabled="isDisabled"
@@ -60,6 +61,8 @@
           {{ isDisabled ? "Ownership Claim Requested" : "Claim Ownership" }}
         </v-btn>
         <v-btn
+          id="btn-modal-magic-key"
+          variant="plain"
           @click="magicKeyModel = true"
           aria-label="Enter key to claim ownership"
           depressed text
@@ -100,7 +103,7 @@
               <span>{{ magicKeyErrorMessage }}</span>
             </div>
           </div>
-          <v-btn tile color="primary" block @click="claimRoleByMagicKey">Claim</v-btn>
+          <v-btn tile color="primary" block @click="claimRoleByMagicKey" id="btn-submit-magic-key">Claim</v-btn>
         </footer>
       </v-card>
     </v-dialog>
@@ -108,7 +111,7 @@
 </template>
 
 <script>
-  export default {
+  export default defineComponent({
     name: 'ClaimRoleModal',
     props: ['justificationMessage', 'isDisabled', 'artifact_group_id', 'email', 'claimKey'],
     methods: {
@@ -119,7 +122,7 @@
         if(this.isJustificationMessageValid()) {
             this.isError = false;
             try {
-              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.justificationMessage, email: this.email })
+              await this.$artifactClaimEndpoint.post(this.artifact_group_id, { message: this.message, email: this.email })
               this.close(`Claim request successfully sent`);
             } catch(ex) {
               this.close(`An error occured in sending the claim request`)
@@ -136,7 +139,7 @@
             this.magicKeyModel = false
             let response = await this.$artifactClaimEndpoint.post(this.artifact_group_id, { email: this.email, key: key })
             this.close(`Claim request successfully sent`);
-            this.$router.push("/artifact/" + this.artifact.artifact_group_id)
+            this.$router.push("/artifact/" + this.artifact_group_id)
           } catch(ex) {
             this.close(`An error occured in sending the claim request`)
           }
@@ -146,8 +149,8 @@
         }
       },
       isJustificationMessageValid() {
-        this.justificationMessage = this.justificationMessage.trim();
-        return this.justificationMessage!="";
+        this.message = this.message.trim();
+        return this.message !== "";
       }
     },
     data() {
@@ -158,6 +161,7 @@
           magicKeyModel: false,
           magicKey: "",
           magicKeyErrorMessage: "",
+          message: "",
         }
     },
     mounted() {
@@ -165,8 +169,13 @@
         this.magicKey = this.claimKey
         this.magicKeyModel = true
       }
+    },
+    watch: {
+      justificationMessage() {
+        this.message = this.justificationMessage;
+      },
     }
-  };
+  });
 </script>
 
 <style>
@@ -185,7 +194,7 @@
 
   .modal {
     background: #FFFFFF;
-    box-shadow: 2px 2px 20px 1px;
+    box-shadow: 2px 2px 10px -5px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;

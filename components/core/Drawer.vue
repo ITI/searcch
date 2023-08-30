@@ -2,10 +2,9 @@
   <v-navigation-drawer
     id="app-drawer"
     v-model="inputValue"
-    :src="image"
-    app
-    color="grey darken-2"
-    dark
+    :image="image"
+    color="grey-darken-2"
+    theme="dark"
     floating
     mobile-breakpoint="991"
     persistent
@@ -18,8 +17,8 @@
       ></v-img>
     </template>
 
-    <v-list-item two-line>
-      <v-list-item-title class="title">
+    <v-list-item lines="two">
+      <v-list-item-title class="text-h6">
         SEARCCH Admin
       </v-list-item-title>
     </v-list-item>
@@ -30,18 +29,21 @@
       <!-- Bug in Vuetify for first child of v-list not receiving proper border-radius -->
       <div />
 
-      <v-list-item
+      <nuxt-link
         v-for="(link, i) in links"
         :key="i"
         :to="link.to"
-        active-class="primary white--text"
       >
-        <v-list-item-action>
-          <v-icon>{{ link.icon }}</v-icon>
-        </v-list-item-action>
+        <v-list-item
+          active-class="primary white--text"
+        >
+          <v-list-item-action>
+            <v-icon>{{ link.icon }}</v-icon>
+          </v-list-item-action>
 
-        <v-list-item-title v-text="link.text" />
-      </v-list-item>
+          <v-list-item-title v-text="link.text" />
+        </v-list-item>
+      </nuxt-link>
     </v-list>
 
     <template v-slot:append>
@@ -62,9 +64,10 @@
 
 <script>
 // Utilities
-import { mapMutations, mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { appStore } from '~/stores/app'
 
-export default {
+export default defineComponent({
   props: {
     opened: {
       type: Boolean,
@@ -112,19 +115,15 @@ export default {
   }),
 
   computed: {
-    ...mapState('app', ['image', 'color']),
+    ...mapState(appStore, ['image', 'color']),
     inputValue: {
       get() {
-        return this.$store.state.app.drawer
+        return this.$appStore.drawer
       },
       set(val) {
-        this.setDrawer(val)
+        this.$appStore.drawer = val
       }
     }
   },
-
-  methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
-  }
-}
+});
 </script>

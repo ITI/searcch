@@ -3,7 +3,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   name: 'JsonPrettyPrint',
   props: {
     value: {
@@ -42,7 +42,7 @@ export default {
       return ''
     }
   }
-}
+});
 </script>
 
 <style>

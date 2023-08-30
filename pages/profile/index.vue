@@ -1,307 +1,300 @@
 <template>
-  <v-layout column justify-left align-top>
-    <v-container fill-height fluid>
-      <v-row justify="center">
-        <v-col cols="12" md="4" v-if="localuser">
-          <LazyHydrate never>
-            <material-card class="v-card-profile">
-              <v-avatar
-                slot="offset"
-                class="mx-auto d-block elevation-6"
-                size="130"
-              >
-                <v-img :src="profileImage(localuser.email)"></v-img>
-              </v-avatar>
-              <v-card-text class="text-center">
-                <h6 class="overline mb-3">
-                  {{ localuser.name }}
-                </h6>
-                <h6
-                  class="overline mb-3"
-                  v-if="userAffiliation"
-                  v-for="affil in userAffiliation"
+  <v-container>
+    <v-row justify="start" align="start">
+      <v-container fill-height fluid>
+        <v-row justify="center">
+          <v-col cols="12" md="4" v-if="localuser">
+            <LazyHydrate never>
+              <material-card class="v-card-profile">
+                <v-avatar
+                  slot="offset"
+                  class="mx-auto d-block elevation-6"
+                  size="130"
                 >
-                  <div v-if="affil.org">{{ affil.org.name }}</div>
-                </h6>
+                  <v-img :src="profileImage(localuser.email)"></v-img>
+                </v-avatar>
+                <v-card-text class="text-center">
+                  <h6 class="text-overline mb-3">
+                    {{ localuser.name }}
+                  </h6>
+                  <h6
+                    class="text-overline mb-3"
+                    v-if="userAffiliation"
+                    v-for="affil in userAffiliation"
+                  >
+                    <div v-if="affil.org">{{ affil.org.name }}</div>
+                  </h6>
 
-                <p class="font-weight-light">
-                  {{ localuser.email }}
-                </p>
-              </v-card-text>
-            </material-card>
-          </LazyHydrate>
-        </v-col>
+                  <p class="font-weight-light">
+                    {{ localuser.email }}
+                  </p>
+                </v-card-text>
+              </material-card>
+            </LazyHydrate>
+          </v-col>
 
-        <v-col cols="12" md="8">
-          <material-card
-            color="primary"
-            title="Edit Profile"
-            text="Complete your profile"
-          >
-            <v-form>
-              <v-container class="py-0">
-                <v-row v-if="localuser">
-                  <v-col cols="12" md="8">
-                    <v-text-field
-                      label="Name"
-                      class="primary-input"
-                      v-model="localuser.name"
-                    />
-                  </v-col>
+          <v-col cols="12" md="8">
+            <material-card
+              color="primary"
+              title="Edit Profile"
+              text="Complete your profile"
+            >
+              <v-form>
+                <v-container class="py-0">
+                  <v-row v-if="localuser">
+                    <v-col cols="12" md="8">
+                      <v-text-field
+                        label="Name"
+                        class="primary-input"
+                        v-model="localuser.name"
+                      />
+                    </v-col>
 
-                  <v-col cols="12" md="4">
-                    <v-text-field
-                      label="Email Address"
-                      class="primary-input"
-                      v-model="localuser.email"
-                      readonly
-                      disabled
-                    />
-                  </v-col>
+                    <v-col cols="12" md="4">
+                      <v-text-field
+                        label="Email Address"
+                        class="primary-input"
+                        v-model="localuser.email"
+                        readonly
+                        disabled
+                      />
+                    </v-col>
 
-                  <v-col cols="12" md="12">
-                    <v-text-field
-                      label="Website"
-                      class="primary-input"
-                      v-model="localuser.website"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="12">
-                    <v-combobox
-                      v-if="localuser"
-                      label="Interests"
-                      multiple
-                      small-chips
-                      deletable-chips
-                      persistent-hint
-                      :items="hardcodedInterests"
-                      v-model="researchInterests"
-                      hint="Select applicable items from the list or type in your own"
-                      :search-input.sync="interestSearch"
-                      return-object
-                    >
-                      <template v-slot:no-data>
-                        <v-list-item>
-                          <v-list-item-content>
+                    <v-col cols="12" md="12">
+                      <v-text-field
+                        label="Website"
+                        class="primary-input"
+                        v-model="localuser.website"
+                      />
+                    </v-col>
+                    <v-col cols="12" md="12">
+                      <v-combobox
+                        v-if="localuser"
+                        label="Interests"
+                        multiple
+                        chips
+                        closable-chips
+                        persistent-hint
+                        :items="hardcodedInterests"
+                        v-model="researchInterests"
+                        hint="Select applicable items from the list or type in your own"
+                        v-model:search-input="interestSearch"
+                        return-object
+                      >
+                        <template v-slot:no-data>
+                          <v-list-item>
                             <v-list-item-title>
                               No results matching "<strong>{{
                                 interestSearch
                               }}</strong
                               >". Press <kbd>tab</kbd> to create a new one item.
                             </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </template>
-                    </v-combobox>
-                  </v-col>
+                          </v-list-item>
+                        </template>
+                      </v-combobox>
+                    </v-col>
 
-                  <v-col cols="12" md="12">
-                    <v-combobox
-                      label="Affiliation"
-                      multiple
-                      small-chips
-                      deletable-chips
-                      persistent-hint
-                      :items="orgNames"
-                      v-model="userAffiliation"
-                      hint="Select applicable organization from the list or type in your own"
-                      :search-input.sync="orgSearch"
-                      item-text="org.name"
-                      item-value="org.name"
-                      return-object
-                    >
-                      <template v-slot:no-data>
-                        <v-list-item>
-                          <v-list-item-content>
+                    <v-col cols="12" md="12">
+                      <v-combobox
+                        label="Affiliation"
+                        multiple
+                        chips
+                        closable-chips
+                        persistent-hint
+                        :items="orgNames"
+                        v-model="userAffiliation"
+                        hint="Select applicable organization from the list or type in your own"
+                        v-model:search-input="orgSearch"
+                        item-title="org.name"
+                        item-value="org.name"
+                        return-object
+                      >
+                        <template v-slot:no-data>
+                          <v-list-item>
                             <v-list-item-title>
                               No results matching "<strong>{{
                                 orgSearch
                               }}</strong
                               >". Press <kbd>tab</kbd> to create a new one
                             </v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </template>
-                    </v-combobox>
-                  </v-col>
+                          </v-list-item>
+                        </template>
+                      </v-combobox>
+                    </v-col>
 
-                  <v-col cols="12" class="text-right">
-                    <v-btn color="success" @click="updateProfile">
-                      Update Profile
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-form>
-          </material-card>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" lg="12">
-          <LazyHydrate when-visible>
-            <material-card class="card-tabs" color="primary">
-              <template v-slot:header>
-                <v-tabs
-                  v-model="tabs"
-                  background-color="transparent"
-                  slider-color="white"
-                  class="ml-4"
-                >
-                  <v-tab class="mr-3">
-                    <v-icon class="mr-2">
-                      mdi-database
-                    </v-icon>
-                    Artifacts
-                  </v-tab>
-                  <v-tab class="mr-3">
-                    <v-icon class="mr-2">
-                      mdi-star
-                    </v-icon>
-                    Ratings
-                  </v-tab>
-                  <v-tab>
-                    <v-icon class="mr-2">
-                      mdi-heart
-                    </v-icon>
-                    Favorites
-                  </v-tab>
-                </v-tabs>
-              </template>
-
-              <v-tabs-items v-model="tabs">
-                <v-tab-item>
-                  <!-- artifacts -->
-                  <v-timeline align-top dense v-if="dashboard.owned_artifacts">
-                    <v-timeline-item
-                      v-for="item in sortedArtifacts"
-                      :key="item.id"
-                      :color="iconColor(item.type)"
-                      :icon="iconImage(item.type)"
-                      small
-                    >
-                      <div>
-                        <div class="font-weight-normal">
-                          <strong>{{ new Date(item.ctime) }}</strong>
-                        </div>
-                        <div>
-                          {{ item.title }}
-                          <v-btn
-                            class="v-btn--simple"
-                            color="primary"
-                            icon
-                            :to="`/artifact/${item.artifact_group_id}/${item.id}`"
-                            nuxt
-                          >
-                            <v-icon color="primary">
-                              mdi-arrow-top-right-thick
-                            </v-icon>
-                          </v-btn>
-                        </div>
-                      </div>
-                    </v-timeline-item>
-                  </v-timeline>
-                </v-tab-item>
-                <v-tab-item>
-                  <!-- ratings -->
-                  <v-list
-                    single-line
-                    class="py-0"
-                    v-for="(item, i) in dashboard.given_ratings"
-                    :key="i"
-                  >
-                    <v-list-item>
-                      <ArtifactChips
-                        :field="[item.type]"
-                        :type="item.type"
-                      ></ArtifactChips>
-
-                      <v-list-item-title v-text="item.title" />
-
-                      <div class="d-flex">
-                        <v-tooltip top content-class="top">
-                          <template v-slot:activator="{ attrs, on }">
-                            <v-chip
-                              color="amber"
-                              class="ma-2"
-                              label
-                              :to="`/artifact/review/${item.artifact_group_id}`"
-                              nuxt
-                            >
-                              <v-avatar left>
-                                <v-icon> mdi-star </v-icon>
-                              </v-avatar>
-                              <div>{{ item.rating }}</div>
-                            </v-chip>
-                          </template>
-                          <span>Goto Rating</span>
-                        </v-tooltip>
-                      </div>
-                    </v-list-item>
-                    <v-divider />
-                  </v-list>
-                </v-tab-item>
-                <v-tab-item>
-                  <!-- favorites -->
-                  <v-list
-                    single-line
-                    class="py-0"
-                    v-for="(item, i) in dashboard.favorite_artifacts"
-                    :key="i"
-                  >
-                    <v-list-item>
-                      <ArtifactChips
-                        :field="[item.type]"
-                        :type="item.type"
-                      ></ArtifactChips>
-                      <v-list-item-title
-                        v-text="item.title"
-                      ></v-list-item-title>
-                      <div class="d-flex">
-                        <v-tooltip top content-class="top">
-                          <template v-slot:activator="{ attrs, on }">
-                            <v-btn
-                              class="v-btn--simple"
-                              color="primary"
-                              icon
-                              v-bind="attrs"
-                              v-on="on"
-                              :to="`/artifact/${item.artifact_group_id}`"
-                              nuxt
-                            >
-                              <v-icon color="primary">
-                                mdi-arrow-top-right-thick
-                              </v-icon>
-                            </v-btn>
-                          </template>
-                          <span>Goto Artifact</span>
-                        </v-tooltip>
-                      </div>
-                    </v-list-item>
-                    <v-divider />
-                  </v-list>
-                </v-tab-item>
-              </v-tabs-items>
+                    <v-col cols="12" class="text-right">
+                      <v-btn color="success" @click="updateProfile">
+                        Update Profile
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
             </material-card>
-          </LazyHydrate>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-layout>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-container fluid>
+        <v-row>
+          <v-col cols="12" lg="12">
+            <LazyHydrate when-visible>
+              <material-card class="card-tabs" color="primary">
+                <template v-slot:header>
+                  <v-tabs
+                    v-model="tabs"
+                    bg-color="transparent"
+                    slider-color="white"
+                    class="ml-4"
+                  >
+                    <v-tab class="mr-3">
+                      <v-icon class="mr-2">
+                        mdi-database
+                      </v-icon>
+                      Artifacts
+                    </v-tab>
+                    <v-tab class="mr-3">
+                      <v-icon class="mr-2">
+                        mdi-star
+                      </v-icon>
+                      Ratings
+                    </v-tab>
+                    <v-tab>
+                      <v-icon class="mr-2">
+                        mdi-heart
+                      </v-icon>
+                      Favorites
+                    </v-tab>
+                  </v-tabs>
+                </template>
+
+                <v-window v-model="tabs">
+                  <v-window-item>
+                    <!-- artifacts -->
+                    <v-timeline align="start" density="compact" v-if="dashboard.owned_artifacts">
+                      <v-timeline-item
+                        v-for="item in sortedArtifacts"
+                        :key="item.id"
+                        :dot-color="iconColor(item.type)"
+                        :icon="iconImage(item.type)"
+                        size="small"
+                      >
+                        <div>
+                          <div class="font-weight-normal">
+                            <strong>{{ new Date(item.ctime) }}</strong>
+                          </div>
+                          <div>
+                            {{ item.title }}
+                            <v-btn
+                              size="small"
+                              variant="plain"
+                              :to="`/artifact/${item.artifact_group_id}/${item.id}`"
+                              icon="mdi-arrow-top-right-thick"
+                            >
+                            </v-btn>
+                          </div>
+                        </div>
+                      </v-timeline-item>
+                    </v-timeline>
+                  </v-window-item>
+                  <v-window-item>
+                    <!-- ratings -->
+                    <v-list
+                      single-line
+                      class="py-0"
+                      v-for="(item, i) in dashboard.given_ratings"
+                      :key="i"
+                    >
+                      <v-list-item>
+                        <ArtifactChips
+                          :modelValue="[item.type]"
+                          :type="item.type"
+                        ></ArtifactChips>
+
+                        <v-list-item-title v-text="item.title" />
+
+                        <div class="d-flex">
+                          <v-tooltip location="top" content-class="top">
+                            <template v-slot:activator="{ attrs, on }">
+                              <v-chip
+                                color="amber"
+                                class="ma-2"
+                                label
+                                :to="`/artifact/review/${item.artifact_group_id}`"
+                              >
+                                <v-avatar start>
+                                  <v-icon> mdi-star </v-icon>
+                                </v-avatar>
+                                <div>{{ item.rating }}</div>
+                              </v-chip>
+                            </template>
+                            <span>Goto Rating</span>
+                          </v-tooltip>
+                        </div>
+                      </v-list-item>
+                      <v-divider />
+                    </v-list>
+                  </v-window-item>
+                  <v-window-item>
+                    <!-- favorites -->
+                    <v-list
+                      single-line
+                      class="py-0"
+                      v-for="(item, i) in dashboard.favorite_artifacts"
+                      :key="i"
+                    >
+                      <v-list-item>
+                        <ArtifactChips
+                          :modelValue="[item.type]"
+                          :type="item.type"
+                        ></ArtifactChips>
+                        <v-list-item-title
+                          v-text="item.title"
+                        ></v-list-item-title>
+                        <div class="d-flex">
+                          <v-tooltip location="top" content-class="top">
+                            <template v-slot:activator="{ attrs, on }">
+                              <v-btn
+                                class="v-btn--simple"
+                                color="primary"
+                                icon
+                                v-bind="attrs"
+                                v-on="on"
+                                :to="`/artifact/${item.artifact_group_id}`"
+                              >
+                                <v-icon color="primary">
+                                  mdi-arrow-top-right-thick
+                                </v-icon>
+                              </v-btn>
+                            </template>
+                            <span>Goto Artifact</span>
+                          </v-tooltip>
+                        </div>
+                      </v-list-item>
+                      <v-divider />
+                    </v-list>
+                  </v-window-item>
+                </v-window>
+              </material-card>
+            </LazyHydrate>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
+import { userStore } from '~/stores/user'
 import { artifactIcon, artifactColor } from '@/helpers'
-import $RefParser from 'json-schema-ref-parser'
 import schemaWithPointers from '~/schema/affiliation.json'
+import md5 from 'md5'
 
-export default {
+export default defineComponent({
   components: {
-    LazyHydrate: () => import('vue-lazy-hydration'),
-    ArtifactChips: () => import('@/components/ArtifactChips')
+    ArtifactChips: defineAsyncComponent(() => import('@/components/ArtifactChips'))
   },
   head() {
     return {
@@ -348,13 +341,13 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      user: state => state.user.user,
-      organization: state => state.user.organization,
-      userid: state => state.user.userid,
-      orgs: state => state.user.orgs,
-      interests: state => state.user.interests,
-      authUser: state => state.auth.user
+    ...mapState(userStore, {
+      user: state => state.user,
+      organization: state => state.organization,
+      userid: state => state.userid,
+      orgs: state => state.orgs,
+      interests: state => state.interests,
+      authUser: state => state.authUser
     }),
     orgNames: {
       get: function() {
@@ -411,41 +404,39 @@ export default {
     }
   },
   async mounted() {
-    this.$store.dispatch('user/fetchUser')
-    this.$store.dispatch('user/fetchOrgs')
-    this.$store.dispatch('user/fetchInterests')
+    this.$userStore.fetchUser()
+    this.$userStore.fetchOrgs()
+    this.$userStore.fetchInterests()
     let response = await this.$dashboardEndpoint.index()
     this.dashboard = response
     this.userAffiliation = this.organization ? this.organization : []
     this.localuser = JSON.parse(JSON.stringify(this.user))
   },
   created() {
-    $RefParser.dereference(schemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.schema = schema
-        this.schemaLoaded = true
-      }
+    this.$resolver.resolve(schemaWithPointers).then(schema => {
+      this.schema = schema.result
+      this.schemaLoaded = true
+    }).catch(err => {
+      // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+      // including referenced files, combined into a single object
+      console.error(err)
     })
   },
   methods: {
     async updateProfile() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         await this.$userEndpoint.update(this.userid, this.localuser)
 
         // create any affiliations that were added
         this.userAffiliation.forEach((affil, index, object) => {
           if (typeof affil === 'string') {
-            this.$store.dispatch('user/createAffiliation', affil)
+            this.$userStore.createAffiliation(affil)
             object.splice(index, 1)
           }
         })
-        this.$store.dispatch('user/fetchUser')
+        this.$userStore.fetchUser()
       }
     },
     iconColor(type) {
@@ -461,7 +452,6 @@ export default {
           return this.authUser.avatar_url + '&size=130'
         }
       }
-      var md5 = require('md5')
       const url =
         'https://www.gravatar.com/avatar/' +
         md5(email.toLowerCase().trim()) +
@@ -475,5 +465,5 @@ export default {
       return Buffer.from(encodeURI(image.data), 'base64')
     }
   }
-}
+});
 </script>

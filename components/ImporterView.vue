@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-card class="mx-auto" max-width="800">
-      <v-card-title class="primary white--text">
+      <v-card-title class="bg-primary text-white">
         <span class="text-h6"
           >Importer {{ importer.id }} ({{ importer.url }})</span
         >
       </v-card-title>
       <v-card-text class="py-0">
-        <v-list class="transparent">
+        <v-list class="bg-transparent">
           <v-list-item>
             <v-list-item-title>Admin Status</v-list-item-title>
             <v-list-item-subtitle class="text-right">
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   props: {
     importer: {
       type: Object,
@@ -110,10 +110,10 @@ export default {
       this.updateImporters()
     },
     updateImporters() {
-      this.$store.dispatch('system/fetchImporters')
+      this.$systemStore.fetchImporters()
     }
   }
-}
+});
 </script>
 
 <style scoped>

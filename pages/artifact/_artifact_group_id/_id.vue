@@ -1,1 +1,0 @@
-../_artifact_group_id.vue

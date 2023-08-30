@@ -1,137 +1,88 @@
 <template>
   <v-app light>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      permanent
-      fixed
-      app
-    >
+    <v-navigation-drawer v-model="drawer" :rail="miniVariant" :order="order" permanent position="fixed">
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="`main${i}`"
-          :href="'href' in item ? item.href : undefined"
-          :target="'href' in item ? '_blank' : undefined"
-          :to="!('href' in item) ? item.to : undefined"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-on="on">{{ item.icon }}</v-icon>
-              </template>
-              <span>{{ item.title }}</span>
-            </v-tooltip>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+        <v-list-item v-for="(item, i) in items" :key="`main${i}`" :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
+          <template v-slot:prepend="{ on, attrs }">
+              <v-tooltip location="right">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">{{ item.icon }}</v-icon>
+                </template>
+                <span>{{ item.title }}</span>
+              </v-tooltip>
+          </template>
+          <v-list-item-title v-text="item.title" />
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
       <v-list v-if="adminItems.length">
-        <v-list-item
-          v-for="(item, i) in adminItems"
-          :key="`main${i}`"
-          :href="'href' in item ? item.href : undefined"
-          :target="'href' in item ? '_blank' : undefined"
-          :to="!('href' in item) ? item.to : undefined"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-on="on">{{ item.icon }}</v-icon>
-              </template>
-              <span>{{ item.title }}</span>
-            </v-tooltip>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+        <v-list-item v-for="(item, i) in adminItems" :key="`main${i}`" :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
+          <template v-slot:prepend="{ on, attrs }">
+              <v-tooltip location="right">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">{{ item.icon }}</v-icon>
+                </template>
+                <span>{{ item.title }}</span>
+              </v-tooltip>
+          </template>
+          <v-list-item-title v-text="item.title" />
         </v-list-item>
       </v-list>
       <v-divider v-if="adminItems.length"></v-divider>
       <v-list>
-        <v-list-item
-          v-for="(item, i) in footerItems"
-          :key="`footer${i}`"
-          :href="'href' in item ? item.href : undefined"
-          :target="'href' in item ? '_blank' : undefined"
-          :to="!('href' in item) ? item.to : undefined"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-tooltip right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-on="on">{{ item.icon }}</v-icon>
-              </template>
-              <span>{{ item.title }}</span>
-            </v-tooltip>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+        <v-list-item v-for="(item, i) in footerItems" :key="`footer${i}`" :href="'href' in item ? item.href : undefined"
+          :target="'href' in item ? '_blank' : undefined" :to="!('href' in item) ? item.to : undefined" router exact>
+          <template v-slot:prepend="{ on, attrs }">
+              <v-tooltip location="right">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">{{ item.icon }}</v-icon>
+                </template>
+                <span>{{ item.title }}</span>
+              </v-tooltip>
+          </template>
+          <v-list-item-title v-text="item.title" />
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+    <v-app-bar position="fixed" elevation="0" class="border-b">
+      <v-btn icon @click.stop="() => { miniVariant = !miniVariant }">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <!-- For some reasons v-app-bar-title will crash, use bare text instead -->
+      {{ title }}
       <v-spacer />
-      <span v-if="$auth.loggedIn" class="mr-2" v-text="$auth.user.name"></span>
-      <v-btn
-        v-if="$auth.loggedIn && this.user_can_admin && !this.user_is_admin"
-        icon
-        @click="setAdmin(true)"
-      >
+      <span v-if="$auth.loggedIn" class="mr-2">{{ $auth.user.name }}</span>
+      <v-btn v-if="$auth.loggedIn && user_can_admin && !user_is_admin" icon @click="() => setAdmin(true)">
         <v-icon style="color: green">mdi-alpha-a-circle</v-icon>
       </v-btn>
-      <v-btn
-        v-else-if="$auth.loggedIn && this.user_can_admin && this.user_is_admin"
-        icon
-        @click="setAdmin(false)"
-      >
+      <v-btn v-else-if="$auth.loggedIn && user_can_admin && user_is_admin" icon @click="() => setAdmin(false)">
         <v-icon style="color: red">mdi-alpha-a-circle</v-icon>
       </v-btn>
-      <v-btn v-if="$auth.loggedIn" class="primary" @click="logout()"
-        >Logout&nbsp;<v-icon small>mdi-logout</v-icon></v-btn
-      >
-      <v-menu v-else
-        open-on-click
-        bottom
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="primary"
-            v-bind="attrs"
-            v-on="on"
-          >
-            Login&nbsp;<v-icon small>mdi-login</v-icon>
+      <v-btn v-if="$auth.loggedIn" class="bg-primary mr-4" @click="() => logout()">Logout&nbsp;<v-icon
+          size="small">mdi-logout</v-icon></v-btn>
+      <v-menu v-else open-on-click location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn class="bg-primary mr-4" v-bind="props">
+            Login&nbsp;<v-icon size="small">mdi-login</v-icon>
           </v-btn>
         </template>
 
         <v-list>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="gitHubLogin()">
-              GitHub&nbsp;<v-icon small>mdi-github</v-icon>
+            <v-btn class="bg-primary" @click="() => gitHubLogin()">
+              GitHub&nbsp;<v-icon size="small">mdi-github</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="googleLogin()">
-              Google&nbsp;<v-icon small>mdi-google</v-icon>
+            <v-btn class="bg-primary" @click="() => googleLogin()">
+              Google&nbsp;<v-icon size="small">mdi-google</v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item>
-            <v-btn class="primary" nuxt @click="cilogonLogin()">
-              CILogon&nbsp;<v-icon small>mdi-login</v-icon>
+            <v-btn class="bg-primary" @click="() => cilogonLogin()">
+              CILogon&nbsp;<v-icon size="small">mdi-login</v-icon>
             </v-btn>
           </v-list-item>
         </v-list>
@@ -139,49 +90,65 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <nuxt />
+        <slot />
       </v-container>
     </v-main>
-    <v-footer app>
-      <span
-        >&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
+    <v-footer app class="border-t">
+      <span>&copy; {{ new Date().getFullYear() }} - SEARCCH is supported by the
         National Science Foundation under Grant Numbers 1925773, 1925616,
-        1925588, 1925564</span
-      >
-      <v-btn
-        color="error"
-        dark
-        raised
-        href="https://forms.gle/nsP4kJVsjAmKKLU86"
-        target="_blank"
-        rel="noopener"
-        >Send Us Feedback</v-btn
-      >
+        1925588, 1925564</span>
+      <v-btn color="error" theme="dark" variant="tonal" href="https://forms.gle/nsP4kJVsjAmKKLU86" target="_blank"
+        rel="noopener">Send Us Feedback</v-btn>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { userStore } from '../stores/user'
 
-export default {
+export default defineComponent({
   data() {
     return {
-      clipped: true,
+      order: 1,
       drawer: true,
       miniVariant: false,
       right: true,
-      title: 'SEARCCH Hub'
+      title: 'SEARCCH Hub',
+    }
+  },
+  async beforeMount() {
+    if (this.$auth.loggedIn) {
+      const payload = {
+        strategy: this.$auth.data?.value?.provider,
+        token: `Bearer ${this.$auth.data?.value?.token}`,
+      }
+
+      if (window.Cypress) {
+        payload.strategy = 'google'
+        payload.token = `Bearer ${localStorage.getItem('token')}`
+      }
+
+      this.$userStore.user_token = payload.token
+      await this.$loginEndpoint.create(payload).then((response) => {
+        if (typeof response !== 'undefined' && response.userid >= 0) {
+          this.$userStore.user = response.person
+          this.$userStore.userid = response.userid
+          this.$userStore.user_is_admin = response.is_admin
+          this.$userStore.user_can_admin = response.can_admin
+          this.$artifactsStore.fetchFavorites(response.userid)
+        }
+      })
     }
   },
   mounted() {
     this.miniVariant = window.innerWidth < 992;
   },
   computed: {
-    ...mapState({
-      userid: state => state.user.userid,
-      user_is_admin: state => state.user.user_is_admin,
-      user_can_admin: state => state.user.user_can_admin
+    ...mapState(userStore, {
+      userid: state => state.userid,
+      user_is_admin: state => state.user_is_admin,
+      user_can_admin: state => state.user_can_admin
     }),
     items() {
       let items = [
@@ -274,19 +241,19 @@ export default {
   },
   methods: {
     async gitHubLogin() {
-      let response = await this.$auth.loginWith('github')
+      await this.$auth.loginWith('github')
     },
     async googleLogin() {
-      let response = await this.$auth.loginWith('googlecustom')
+      await this.$auth.loginWith('google')
     },
     async cilogonLogin() {
-      let response = await this.$auth.loginWith('cilogon')
+      await this.$auth.loginWith('cilogon')
     },
     async logout() {
       if (confirm('Log out of SEARCCH?')) {
         console.log('Logging out')
-        this.$store.commit('user/LOGOUT')
-        this.$store.commit('system/LOGOUT')
+        this.$userStore.logout()
+        this.$systemStore.logout()
         this.$auth.logout()
       }
     },
@@ -295,12 +262,12 @@ export default {
       await this.$loginEndpoint
         .put({ is_admin: mode })
         .then(response => {
-          this.$store.commit('user/SET_USER_IS_ADMIN', mode)
+          this.$userStore.user_is_admin = mode
           if (!mode) {
-            this.$store.commit('user/ADMIN_OFF')
-            this.$store.commit('system/ADMIN_OFF')
+            this.$userStore.adminOff()
+            this.$systemStore.adminOff()
             if (this.$route.name.startsWith('admin')) {
-              this.$router.push('/')
+              navigateTo('/')
             }
           }
         })
@@ -309,20 +276,20 @@ export default {
         })
     }
   }
-}
+});
 </script>
 
 <style>
-  .v-footer {
-    flex-wrap: nowrap;
-    z-index: 9;
-    justify-content: space-between;
-  }
+.v-footer {
+  flex-wrap: nowrap;
+  z-index: 9;
+  justify-content: space-between;
+}
 
-  @media screen and (max-width: 992px) {
-    .v-footer {
-      flex-direction: column;
-      position: relative;
-    }
+@media screen and (max-width: 992px) {
+  .v-footer {
+    flex-direction: column;
+    position: relative;
   }
+}
 </style>

@@ -11,9 +11,11 @@
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   components: {
-    ArtifactImportView: () => import('@/components/ArtifactImportView')
+    ArtifactImportView: defineAsyncComponent(() => import('@/components/ArtifactImportView'))
   },
   props: {
     imports: {
@@ -25,5 +27,5 @@ export default {
       required: false
     }
   }
-}
+});
 </script>

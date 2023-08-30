@@ -1,5 +1,5 @@
 <template>
-	<v-card :style="styles" v-bind="$attrs" v-on="$listeners">
+	<v-card :style="styles" v-bind="$attrs" >
 		<helper-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
 			<v-card
 				v-if="!$slots.offset"
@@ -78,6 +78,7 @@ export default {
 			return {
 				marginBottom: `${this.offset}px`,
 				marginTop: `${this.offset * 2}px`,
+				overflow: `visible`,
 			};
 		},
 	},

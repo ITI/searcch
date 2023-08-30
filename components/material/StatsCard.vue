@@ -1,5 +1,5 @@
 <template>
-	<material-card class="v-card--material-stats" v-bind="$attrs" v-on="$listeners">
+	<material-card class="v-card--material-stats" v-bind="$attrs" >
 		<v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4" dark>
 			<v-icon size="40">
 				{{ icon }}

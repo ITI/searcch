@@ -1,0 +1,303 @@
+{
+    "artifact_imports": [
+        {
+            "owner": {
+                "person": {
+                    "id": 999,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": null,
+            "artifact_group": null,
+            "candidate_artifact": null,
+            "id": 576,
+            "type": "unknown",
+            "url": "https://doi.org/10.1145/3276998",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T19:52:03.198861",
+            "mtime": "2023-08-18T19:52:03.198861",
+            "status": "pending",
+            "phase": "start",
+            "message": null,
+            "progress": 0.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": null,
+            "artifact_group_id": null,
+            "parent_artifact_id": null,
+            "artifact_id": null,
+            "archived": false
+        },
+        {
+            "owner": {
+                "person": {
+                    "id": 999,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": null,
+            "artifact_group": null,
+            "candidate_artifact": null,
+            "id": 568,
+            "type": "unknown",
+            "url": "https://github.com/iti/searcch-frontend.git",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T15:10:29.463748",
+            "mtime": "2023-08-18T15:12:39.091242",
+            "status": "scheduled",
+            "phase": "start",
+            "message": null,
+            "progress": 0.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": null,
+            "artifact_group_id": null,
+            "parent_artifact_id": null,
+            "artifact_id": null,
+            "archived": false
+        },
+        {
+            "owner": {
+                "person": {
+                    "id": 999,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": null,
+            "artifact_group": null,
+            "candidate_artifact": null,
+            "id": 576,
+            "type": "unknown",
+            "url": "https://doi.org/10.1145/3276998",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T19:52:03.198861",
+            "mtime": "2023-08-18T19:52:04.979624",
+            "status": "running",
+            "phase": "import",
+            "message": "",
+            "progress": 10.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": "done.\nImporting artifact: ",
+            "artifact_group_id": null,
+            "parent_artifact_id": null,
+            "artifact_id": null,
+            "archived": false
+        },
+        {
+            "owner": {
+                "person": {
+                    "id": 999,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": null,
+            "artifact_group": null,
+            "candidate_artifact": null,
+            "id": 576,
+            "type": "unknown",
+            "url": "https://doi.org/10.1145/3276998",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T19:52:03.198861",
+            "mtime": "2023-08-18T19:52:07.114033",
+            "status": "running",
+            "phase": "extract",
+            "message": "",
+            "progress": 70.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": "done.\nImporting artifact: done (<Artifact(id=None,type='publication',url='https://doi.org/10.1145/3276998',ctime='2023-08-18T19:52:07.044608',owner=<User(id=1,person_id=1)>)>)\nRetrieving artifact sources: done.\nExtracting artifact sources: ",
+            "artifact_group_id": null,
+            "parent_artifact_id": null,
+            "artifact_id": null,
+            "archived": false
+        },
+        {
+            "owner": {
+                "person": {
+                    "id": 999,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": null,
+            "artifact_group": null,
+            "candidate_artifact": null,
+            "id": 574,
+            "type": "unknown",
+            "url": "github.com/iti/searcch-frontend.git",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T19:48:19.434753",
+            "mtime": "2023-08-18T19:48:20.115657",
+            "status": "failed",
+            "phase": "validate",
+            "message": "Error while choosing importer module; please manually import this artifact (MissingSchema(\"Invalid URL 'github.com/iti/searcch-frontend.git': No scheme supplied. Perhaps you meant https://github.com/iti/searcch-frontend.git?\")).",
+            "progress": 1.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": null,
+            "artifact_group_id": null,
+            "parent_artifact_id": null,
+            "artifact_id": null,
+            "archived": false
+        },
+        {
+            "owner": {
+                "person": {
+                    "id": 999,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": null,
+            "artifact_group": null,
+            "candidate_artifact": null,
+            "id": 575,
+            "type": "unknown",
+            "url": "https://github.com/iti/searcch-frontend.git",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T19:50:27.153361",
+            "mtime": "2023-08-18T19:50:28.718351",
+            "status": "failed",
+            "phase": "import",
+            "message": "error importing artifact (HttpError(\"Failed to get repo object from github API (path 'iti/searcch-frontend' from url 'https://github.com/iti/searcch-frontend.git'): Bad credentials\"))",
+            "progress": 10.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": "done.\nImporting artifact: error:\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.8/dist-packages/searcch_importer-0.1-py3.8.egg/searcch/importer/importer/github.py\", line 63, in import_artifact\n    repo = hub.get_repo(path)\n  File \"/usr/local/lib/python3.8/dist-packages/github/MainClass.py\", line 363, in get_repo\n    headers, data = self.__requester.requestJsonAndCheck(\"GET\", url)\n  File \"/usr/local/lib/python3.8/dist-packages/github/Requester.py\", line 442, in requestJsonAndCheck\n    return self.__check(\n  File \"/usr/local/lib/python3.8/dist-packages/github/Requester.py\", line 487, in __check\n    raise self.__createException(status, responseHeaders, data)\ngithub.GithubException.BadCredentialsException: 401 {\"message\": \"Bad credentials\", \"documentation_url\": \"https://docs.github.com/rest\"}\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.8/dist-packages/searcch_importer-0.1-py3.8.egg/searcch/importer/server/resources/artifact_import.py\", line 131, in _run\n    artifact = imp.import_artifact(CandidateArtifact(url=artifact_import.url))\n  File \"/usr/local/lib/python3.8/dist-packages/searcch_importer-0.1-py3.8.egg/searcch/importer/importer/github.py\", line 66, in import_artifact\n    raise_from(HttpError(\n  File \"/usr/local/lib/python3.8/dist-packages/future/utils/__init__.py\", line 406, in raise_from\n    exec(execstr, myglobals, mylocals)\n  File \"<string>\", line 1, in <module>\nsearcch.importer.exceptions.HttpError: Failed to get repo object from github API (path 'iti/searcch-frontend' from url 'https://github.com/iti/searcch-frontend.git'): Bad credentials\n",
+            "artifact_group_id": null,
+            "parent_artifact_id": null,
+            "artifact_id": null,
+            "archived": false
+        },
+        {
+            "owner": {
+                "person": {
+                    "id": 1584,
+                    "name": null,
+                    "email": "testing@example.com",
+                    "research_interests": null,
+                    "website": null
+                },
+                "id": 999
+            },
+            "artifact": {
+                "artifact_group": {
+                    "owner": {
+                        "person": {
+                            "id": 1584,
+                            "name": null
+                        },
+                        "id": 999
+                    },
+                    "publication": null,
+                    "relationships": [],
+                    "reverse_relationships": [],
+                    "publications": [],
+                    "id": 515,
+                    "owner_id": 53,
+                    "publication_id": null,
+                    "next_version": 0
+                },
+                "owner": {
+                    "person": {
+                        "id": 1584,
+                        "name": null
+                    },
+                    "id": 999
+                },
+                "candidate_relationships": [],
+                "exporter": null,
+                "id": 517,
+                "artifact_group_id": 515,
+                "type": "publication",
+                "url": "https://doi.org/10.1145/3276998",
+                "ext_id": "10.1145/3276998",
+                "title": "Effect Substitutability Study",
+                "name": "Effect Substitutability Study",
+                "ctime": "2023-08-18T19:52:07.044608",
+                "mtime": null,
+                "description": "\n    <p>This artifact provides the necessary source code and data to reconstruct the results in our paper \"Large-scale Study of Substitutability in the Presence of Effects\". Specifically, this artifact provides the following: 1. source code of our 5 effect analyses provided as self-contained Boa programs 2. the raw output of running these 5 analyses on Boa's 2015 GitHub dataset 3. the list of randomly chosen cases (called examples herein) from our case study along with files of our analysis and categorizations each example.</p>\n"
+            },
+            "artifact_group": 515,
+            "candidate_artifact": null,
+            "id": 576,
+            "type": "unknown",
+            "url": "https://doi.org/10.1145/3276998",
+            "importer_module_name": null,
+            "nofetch": false,
+            "noextract": false,
+            "noremove": false,
+            "autofollow": true,
+            "owner_id": 53,
+            "ctime": "2023-08-18T19:52:03.198861",
+            "mtime": "2023-08-18T19:52:14.243276",
+            "status": "completed",
+            "phase": "done",
+            "message": "",
+            "progress": 100.0,
+            "bytes_retrieved": 0,
+            "bytes_extracted": 0,
+            "log": "done.\nImporting artifact: done (<Artifact(id=None,type='publication',url='https://doi.org/10.1145/3276998',ctime='2023-08-18T19:52:07.044608',owner=<User(id=1,person_id=1)>)>)\nRetrieving artifact sources: done.\nExtracting artifact sources: done.\nFinished import:\n\n{\"license\": null, \"meta\": [{\"name\": \"doi\", \"value\": \"10.1145/3276998\", \"type\": null, \"source\": \"acm_dl\"}, {\"name\": \"call-number\", \"value\": \"10.1145/3276998\", \"type\": null, \"source\": \"acm_dl\"}, {\"name\": \"publisher\", \"value\": \"Association for Computing Machinery\", \"type\": null, \"source\": \"acm_dl\"}, {\"name\": \"acm_full_citation\", \"value\": \"{\\\"id\\\": \\\"10.1145/3276998\\\", \\\"type\\\": \\\"DATASET\\\", \\\"author\\\": [{\\\"family\\\": \\\"Maddox\\\", \\\"given\\\": \\\"Jackson\\\"}, {\\\"family\\\": \\\"Long\\\", \\\"given\\\": \\\"Yuheng\\\"}, {\\\"family\\\": \\\"Rajan\\\", \\\"given\\\": \\\"Hridesh\\\"}], \\\"accessed\\\": {\\\"date-parts\\\": [[2023, 8, 18]]}, \\\"issued\\\": {\\\"date-parts\\\": [[2018, 9, 25]]}, \\\"abstract\\\": \\\"\\\\n    <p>This artifact provides the necessary source code and data to reconstruct the results in our paper \\\\\\\"Large-scale Study of Substitutability in the Presence of Effects\\\\\\\". Specifically, this artifact provides the following: 1. source code of our 5 effect analyses provided as self-contained Boa programs 2. the raw output of running these 5 analyses on Boa's 2015 GitHub dataset 3. the list of randomly chosen cases (called examples herein) from our case study along with files of our analysis and categorizations each example.</p>\\\\n\\\", \\\"call-number\\\": \\\"10.1145/3276998\\\", \\\"DOI\\\": \\\"10.1145/3276998\\\", \\\"genre\\\": \\\"dataset\\\", \\\"keyword\\\": \\\"Object-oriented Software Engineering, Side-effects, Substitutability\\\", \\\"publisher\\\": \\\"Association for Computing Machinery\\\", \\\"title\\\": \\\"Effect Substitutability Study\\\", \\\"URL\\\": \\\"https://doi.org/10.1145/3276998\\\"}\", \"type\": \"text/json\", \"source\": \"acm_dl\"}, {\"name\": \"citations\", \"value\": \"[]\", \"type\": \"text/json\", \"source\": \"semantic_scholar\"}, {\"name\": \"references\", \"value\": \"[]\", \"type\": \"text/json\", \"source\": \"semantic_scholar\"}, {\"name\": \"top_keywords\", \"value\": \"[[\\\"substitutability\\\",2],[\\\"artifact\\\",2],[\\\"boa\\\",2],[\\\"reconstruct\\\",1],[\\\"github\\\",1],[\\\"dataset\\\",1],[\\\"randomly\\\",1],[\\\"categorizations\\\",1]]\", \"type\": \"json\", \"source\": \"top_keywords\"}, {\"name\": \"top_ngram_keywords\", \"value\": \"[[\\\"Effect Substitutability Study\\\",0.008873124638963534],[\\\"Large-scale Study\\\",0.02138967154325],[\\\"Effect Substitutability\\\",0.02383668520067391],[\\\"Substitutability Study\\\",0.0254433069827981],[\\\"data to reconstruct\\\",0.036736508035458956],[\\\"reconstruct the results\\\",0.036736508035458956],[\\\"Substitutability\\\",0.03762180917432369],[\\\"Large-scale\\\",0.06350682817868734],[\\\"source code\\\",0.06431596664800865],[\\\"Presence of Effects\\\",0.07044271689835158],[\\\"Presence\\\",0.07526154242328394],[\\\"Study of Substitutability\\\",0.09917358814714088],[\\\"artifact\\\",0.10870973849530083],[\\\"Study\\\",0.10991854638162174],[\\\"self-contained Boa programs\\\",0.13061110994541678],[\\\"code and data\\\",0.14278791485986703],[\\\"effect analyses provided\\\",0.1480459705881941],[\\\"paper\\\",0.15077420031656635],[\\\"Boa\\\",0.151428843974096],[\\\"Effect\\\",0.15470897424533242]]\", \"type\": \"json\", \"source\": \"yake_ngram_keywords\"}, {\"name\": \"pke_keywords\", \"value\": \"[[\\\"necessary source code\\\",1.0],[\\\"effects\\\",1.0],[\\\"self-contained boa programs\\\",0.9979185807990324],[\\\"effect analyses\\\",0.9735390229000547],[\\\"source code\\\",0.9622081790708041],[\\\"effect substitutability study\\\",0.9621370664870037],[\\\"necessary source\\\",0.9561638495400338],[\\\"artifact\\\",0.8947358263361795],[\\\"cases\\\",0.7581305499737763],[\\\"large-scale study\\\",0.7266334854742776],[\\\"substitutability\\\",0.6687962217558554],[\\\"paper\\\",0.6530996218475054],[\\\"presence\\\",0.650380432373642],[\\\"data\\\",0.6186161994496097],[\\\"artifact provides\\\",0.39467353689896667],[\\\"substitutability study\\\",0.3358517382757521],[\\\"effect substitutability\\\",0.27576485699692366]]\", \"type\": \"json\", \"source\": \"pke_keywords\"}], \"tags\": [{\"tag\": \"substitutability\", \"source\": \"top_keywords\"}, {\"tag\": \"artifact\", \"source\": \"top_keywords\"}, {\"tag\": \"boa\", \"source\": \"top_keywords\"}, {\"tag\": \"reconstruct\", \"source\": \"top_keywords\"}, {\"tag\": \"github\", \"source\": \"top_keywords\"}, {\"tag\": \"dataset\", \"source\": \"top_keywords\"}, {\"tag\": \"randomly\", \"source\": \"top_keywords\"}, {\"tag\": \"categorizations\", \"source\": \"top_keywords\"}, {\"tag\": \"Effect Substitutability Study\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Large-scale Study\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Effect Substitutability\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Substitutability Study\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"data to reconstruct\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"reconstruct the results\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Large-scale\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"source code\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Presence of Effects\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Presence\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Study of Substitutability\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Study\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"self-contained Boa programs\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"code and data\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"effect analyses provided\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"paper\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"Effect\", \"source\": \"yake_ngram_keywords\"}, {\"tag\": \"necessary source code\", \"source\": \"pke_keywords\"}, {\"tag\": \"effects\", \"source\": \"pke_keywords\"}, {\"tag\": \"effect analyses\", \"source\": \"pke_keywords\"}, {\"tag\": \"necessary source\", \"source\": \"pke_keywords\"}, {\"tag\": \"cases\", \"source\": \"pke_keywords\"}, {\"tag\": \"data\", \"source\": \"pke_keywords\"}, {\"tag\": \"artifact provides\", \"source\": \"pke_keywords\"}], \"files\": [], \"owner\": {\"person\": {\"meta\": [], \"name\": \"automatic-imports\", \"email\": \"automatic-imports@cyberexperimentation.org\"}}, \"importer\": {\"name\": \"acm_dl\", \"version\": \"0.1\"}, \"curations\": [], \"publication\": null, \"releases\": [], \"affiliations\": [{\"affiliation\": {\"person\": {\"meta\": [], \"name\": \"Jackson Maddox\", \"email\": null}, \"org\": null}, \"roles\": \"Author\"}, {\"affiliation\": {\"person\": {\"meta\": [], \"name\": \"Yuheng Long\", \"email\": null}, \"org\": null}, \"roles\": \"Author\"}, {\"affiliation\": {\"person\": {\"meta\": [], \"name\": \"Hridesh Rajan\", \"email\": null}, \"org\": null}, \"roles\": \"Author\"}], \"relationships\": [], \"badges\": [], \"venues\": [], \"candidate_relationships\": [], \"fundings\": [], \"type\": \"publication\", \"url\": \"https://doi.org/10.1145/3276998\", \"ext_id\": \"10.1145/3276998\", \"title\": \"Effect Substitutability Study\", \"name\": \"Effect Substitutability Study\", \"ctime\": \"2023-08-18T19:52:07.044608\", \"mtime\": null, \"description\": \"\\n    <p>This artifact provides the necessary source code and data to reconstruct the results in our paper \\\"Large-scale Study of Substitutability in the Presence of Effects\\\". Specifically, this artifact provides the following: 1. source code of our 5 effect analyses provided as self-contained Boa programs 2. the raw output of running these 5 analyses on Boa's 2015 GitHub dataset 3. the list of randomly chosen cases (called examples herein) from our case study along with files of our analysis and categorizations each example.</p>\\n\"}\n",
+            "artifact_group_id": 515,
+            "parent_artifact_id": null,
+            "artifact_id": 517,
+            "archived": false
+        }
+    ],
+    "page": 1,
+    "total": 7,
+    "pages": 1
+}

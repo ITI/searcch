@@ -1,0 +1,208 @@
+{
+    "page": 1, 
+    "total": 417, 
+    "pages": 42, 
+    "artifacts": [
+      {
+        "id": 514, 
+        "artifact_group_id": 514, 
+        "artifact_group": {
+          "id": 514, 
+          "owner_id": 2
+        }, 
+        "uri": "/v1/artifact/514/514", 
+        "doi": "https://github.com/carboxylman/stackdb", 
+        "type": "software", 
+        "title": "carboxylman/stackdb", 
+        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 52
+        }, 
+        "views": 1
+      }, 
+      {
+        "id": 79, 
+        "artifact_group_id": 79, 
+        "artifact_group": {
+          "id": 79, 
+          "owner_id": 1
+        }, 
+        "uri": "/v1/artifact/79/79", 
+        "doi": "https://github.com/emp-toolkit/emp-agmpc", 
+        "type": "software", 
+        "title": "emp-toolkit/emp-agmpc", 
+        "description": "Global-Scale Secure Multiparty Computation", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 1
+        }, 
+        "views": 0
+      }, 
+      {
+        "id": 516, 
+        "artifact_group_id": 514, 
+        "artifact_group": {
+          "id": 514, 
+          "owner_id": 2
+        }, 
+        "uri": "/v1/artifact/514/516", 
+        "doi": "https://github.com/carboxylman/stackdb", 
+        "type": "software", 
+        "title": "carboxylman/stackdb", 
+        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 2
+        }, 
+        "views": 1
+      }, 
+      {
+        "id": 23, 
+        "artifact_group_id": 23, 
+        "artifact_group": {
+          "id": 23, 
+          "owner_id": 1
+        }, 
+        "uri": "/v1/artifact/23/23", 
+        "doi": "https://github.com/sprout-uci/PDoT", 
+        "type": "software", 
+        "title": "sprout-uci/PDoT", 
+        "description": "Private DNS-over-TLS with TEE Support", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 1
+        }, 
+        "views": 0
+      }, 
+      {
+        "id": 516, 
+        "artifact_group_id": 514, 
+        "artifact_group": {
+          "id": 514, 
+          "owner_id": 2
+        }, 
+        "uri": "/v1/artifact/514/516", 
+        "doi": "https://github.com/carboxylman/stackdb", 
+        "type": "software", 
+        "title": "carboxylman/stackdb", 
+        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 2
+        }, 
+        "views": 1
+      }, 
+      {
+        "id": 514, 
+        "artifact_group_id": 514, 
+        "artifact_group": {
+          "id": 514, 
+          "owner_id": 2
+        }, 
+        "uri": "/v1/artifact/514/514", 
+        "doi": "https://github.com/carboxylman/stackdb", 
+        "type": "software", 
+        "title": "carboxylman/stackdb", 
+        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 52
+        }, 
+        "views": 1
+      }, 
+      {
+        "id": 515, 
+        "artifact_group_id": 514, 
+        "artifact_group": {
+          "id": 514, 
+          "owner_id": 2
+        }, 
+        "uri": "/v1/artifact/514/515", 
+        "doi": "https://github.com/carboxylman/stackdb", 
+        "type": "software", 
+        "title": "carboxylman/stackdb", 
+        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 52
+        }, 
+        "views": 1
+      }, 
+      {
+        "id": 515, 
+        "artifact_group_id": 514, 
+        "artifact_group": {
+          "id": 514, 
+          "owner_id": 2
+        }, 
+        "uri": "/v1/artifact/514/515", 
+        "doi": "https://github.com/carboxylman/stackdb", 
+        "type": "software", 
+        "title": "carboxylman/stackdb", 
+        "description": "Stackdb is a C library that allows a user to write programs to debug, inspect, modify, and analyze the behavior of other running programs --- from virtual machines (Xen, KVM/QEMU) to Linux userspace programs (via ptrace(2) ).  This means Stackdb can be used to debug programs running on your desktop machine; or it can be used to debug virtual machines and the programs running inside them! Stackdb is useful both as a featureful debugger, and as a tool for Virtual Machine Introspection (i.e., memory forensics, execution monitoring).  It supports breakpoints, watchpoints, stack unwinding, multi-threaded program debugging, debugging symbol information (via ELF and DWARF), and C and C++ programs.  It supports multi-target analysis --- meaning your Stackdb program can attach to or spawn multiple target programs (of different types, if desired), and cooperatively analyze or monitor their behavior. However, Stackdb' s defining feature is its ability to create stacks of debugging targets.  This means that Stackdb drivers (which allow you, the user, to attach to a running program and debug it) can be stacked , allowing you to attach to and debug a program running in another program! For instance, using Stackdb, you can attach to a Xen virtual machine and the Linux kernel running inside it (the base target); and subsequently attach to a userspace process running inside that VM (an overlay target).  Stackdb' s user API functions can be applied to all targets.  Thus, you can insert a breakpoint on the sys_open system call function in the Linux kernel in your base target, and another on the make_child function in a bash process running in userspace (your overlay target).", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 52
+        }, 
+        "views": 1
+      }, 
+      {
+        "id": 61, 
+        "artifact_group_id": 61, 
+        "artifact_group": {
+          "id": 61, 
+          "owner_id": 1
+        }, 
+        "uri": "/v1/artifact/61/61", 
+        "doi": "https://github.com/malicialab/avclass", 
+        "type": "software", 
+        "title": "malicialab/avclass", 
+        "description": "AVClass malware labeling tool", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 1
+        }, 
+        "views": 0
+      }, 
+      {
+        "id": 167, 
+        "artifact_group_id": 167, 
+        "artifact_group": {
+          "id": 167, 
+          "owner_id": 1
+        }, 
+        "uri": "/v1/artifact/167/167", 
+        "doi": "https://doi.org/10.5281/zenodo.200365", 
+        "type": "software", 
+        "title": "Post-processing procedure for quantum key distribution systems", 
+        "description": "<p>We present proof-of-principle realizations of\u00a0algorithmic solutions aimed on post-processing procedure for quantum key distribution systems. The main steps of the procedure are error correction, parameter estimation, and privacy amplification. Authentication of classical public communication channel is also considered.\u00a0</p>", 
+        "avg_rating": 0.0, 
+        "num_ratings": 0, 
+        "num_reviews": 0, 
+        "owner": {
+          "id": 1
+        }, 
+        "views": 0
+      }
+    ]
+  }
+  

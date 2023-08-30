@@ -1,0 +1,781 @@
+{
+    "licenses": [
+        {
+            "id": 1,
+            "short_name": "0BSD",
+            "long_name": "0-clause BSD License",
+            "url": "https://opensource.org/licenses/0BSD",
+            "verified": true
+        },
+        {
+            "id": 2,
+            "short_name": "BSD-1-Clause",
+            "long_name": "1-clause BSD License",
+            "url": "https://opensource.org/licenses/BSD-1-Clause",
+            "verified": true
+        },
+        {
+            "id": 3,
+            "short_name": "BSD-2-Clause",
+            "long_name": "2-clause BSD License",
+            "url": "https://opensource.org/licenses/BSD-2-Clause",
+            "verified": true
+        },
+        {
+            "id": 4,
+            "short_name": "BSD-3-Clause",
+            "long_name": "3-clause BSD License",
+            "url": "https://opensource.org/licenses/BSD-3-Clause",
+            "verified": true
+        },
+        {
+            "id": 5,
+            "short_name": "AFL-3.0",
+            "long_name": "Academic Free License 3.0",
+            "url": "https://opensource.org/licenses/AFL-3.0",
+            "verified": true
+        },
+        {
+            "id": 6,
+            "short_name": "APL-1.0",
+            "long_name": "Adaptive Public License",
+            "url": "https://opensource.org/licenses/APL-1.0",
+            "verified": true
+        },
+        {
+            "id": 8,
+            "short_name": "Apache-2.0",
+            "long_name": "Apache License 2.0",
+            "url": "https://opensource.org/licenses/Apache-2.0",
+            "verified": true
+        },
+        {
+            "id": 7,
+            "short_name": "Apache-1.1",
+            "long_name": "Apache Software License 1.1",
+            "url": "https://opensource.org/licenses/Apache-1.1",
+            "verified": true
+        },
+        {
+            "id": 9,
+            "short_name": "APSL-2.0",
+            "long_name": "Apple Public Source License",
+            "url": "https://opensource.org/licenses/APSL-2.0",
+            "verified": true
+        },
+        {
+            "id": 10,
+            "short_name": "Artistic-1.0",
+            "long_name": "Artistic license 1.0",
+            "url": "https://opensource.org/licenses/Artistic-1.0",
+            "verified": true
+        },
+        {
+            "id": 11,
+            "short_name": "Artistic-2.0",
+            "long_name": "Artistic License 2.0",
+            "url": "https://opensource.org/licenses/Artistic-2.0",
+            "verified": true
+        },
+        {
+            "id": 12,
+            "short_name": "AAL",
+            "long_name": "Attribution Assurance License",
+            "url": "https://opensource.org/licenses/AAL",
+            "verified": true
+        },
+        {
+            "id": 13,
+            "short_name": "BSL-1.0",
+            "long_name": "Boost Software License",
+            "url": "https://opensource.org/licenses/BSL-1.0",
+            "verified": true
+        },
+        {
+            "id": 14,
+            "short_name": "BSD-2-Clause-Patent",
+            "long_name": "BSD+Patent",
+            "url": "https://opensource.org/licenses/BSD-2-Clause-Patent",
+            "verified": true
+        },
+        {
+            "id": 117,
+            "short_name": "CC0-1.0",
+            "long_name": "CC0 1.0 Universal Public Domain Dedication",
+            "url": "https://creativecommons.org/publicdomain/zero/1.0",
+            "verified": true
+        },
+        {
+            "id": 15,
+            "short_name": "CECILL-2.1",
+            "long_name": "CeCILL License 2.1",
+            "url": "https://opensource.org/licenses/CECILL-2.1",
+            "verified": true
+        },
+        {
+            "id": 82,
+            "short_name": "CNRI-Python",
+            "long_name": "CNRI Python license",
+            "url": "https://opensource.org/licenses/CNRI-Python",
+            "verified": true
+        },
+        {
+            "id": 16,
+            "short_name": "CDDL-1.0",
+            "long_name": "Common Development and Distribution License 1.0",
+            "url": "https://opensource.org/licenses/CDDL-1.0",
+            "verified": true
+        },
+        {
+            "id": 17,
+            "short_name": "CPAL-1.0",
+            "long_name": "Common Public Attribution License 1.0",
+            "url": "https://opensource.org/licenses/CPAL-1.0",
+            "verified": true
+        },
+        {
+            "id": 18,
+            "short_name": "CPL-1.0",
+            "long_name": "Common Public License 1.0",
+            "url": "https://opensource.org/licenses/CPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 19,
+            "short_name": "CATOSL-1.1",
+            "long_name": "Computer Associates Trusted Open Source License 1.1",
+            "url": "https://opensource.org/licenses/CATOSL-1.1",
+            "verified": true
+        },
+        {
+            "id": 111,
+            "short_name": "CC-BY-4.0",
+            "long_name": "Creative Commons Attribution 4.0 International Public License",
+            "url": "https://creativecommons.org/licenses/by/4.0",
+            "verified": true
+        },
+        {
+            "id": 115,
+            "short_name": "CC-BY-ND-4.0",
+            "long_name": "Creative Commons Attribution-NoDerivatives 4.0 International Public License",
+            "url": "https://creativecommons.org/licenses/by-nd/4.0",
+            "verified": true
+        },
+        {
+            "id": 113,
+            "short_name": "CC-BY-NC-4.0",
+            "long_name": "Creative Commons Attribution-NonCommercial 4.0 International Public License",
+            "url": "https://creativecommons.org/licenses/by-nc/4.0",
+            "verified": true
+        },
+        {
+            "id": 116,
+            "short_name": "CC-BY-NC-ND-4.0",
+            "long_name": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License",
+            "url": "https://creativecommons.org/licenses/by-nc-nd/4.0",
+            "verified": true
+        },
+        {
+            "id": 114,
+            "short_name": "CC-BY-NC-SA-4.0",
+            "long_name": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License",
+            "url": "https://creativecommons.org/licenses/by-nc-sa/4.0",
+            "verified": true
+        },
+        {
+            "id": 112,
+            "short_name": "CC-BY-SA-4.0",
+            "long_name": "Creative Commons Attribution-ShareAlike 4.0 International Public License",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0",
+            "verified": true
+        },
+        {
+            "id": 20,
+            "short_name": "CAL-1.0",
+            "long_name": "Cryptographic Autonomy License v.1.0",
+            "url": "https://opensource.org/licenses/CAL-1.0",
+            "verified": true
+        },
+        {
+            "id": 21,
+            "short_name": "CUA-OPL-1.0",
+            "long_name": "CUA Office Public License Version 1.0",
+            "url": "https://opensource.org/licenses/CUA-OPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 22,
+            "short_name": "EPL-1.0",
+            "long_name": "Eclipse Public License 1.0",
+            "url": "https://opensource.org/licenses/EPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 23,
+            "short_name": "EPL-2.0",
+            "long_name": "Eclipse Public License 2.0",
+            "url": "https://opensource.org/licenses/EPL-2.0",
+            "verified": true
+        },
+        {
+            "id": 24,
+            "short_name": "eCos-2.0",
+            "long_name": "eCos License version 2.0",
+            "url": "https://opensource.org/licenses/eCos-2.0",
+            "verified": true
+        },
+        {
+            "id": 25,
+            "short_name": "ECL-1.0",
+            "long_name": "Educational Community License, Version 1.0",
+            "url": "https://opensource.org/licenses/ECL-1.0",
+            "verified": true
+        },
+        {
+            "id": 26,
+            "short_name": "ECL-2.0",
+            "long_name": "Educational Community License, Version 2.0",
+            "url": "https://opensource.org/licenses/ECL-2.0",
+            "verified": true
+        },
+        {
+            "id": 27,
+            "short_name": "EFL-1.0",
+            "long_name": "Eiffel Forum License V1.0",
+            "url": "https://opensource.org/licenses/EFL-1.0",
+            "verified": true
+        },
+        {
+            "id": 28,
+            "short_name": "EFL-2.0",
+            "long_name": "Eiffel Forum License V2.0",
+            "url": "https://opensource.org/licenses/EFL-2.0",
+            "verified": true
+        },
+        {
+            "id": 29,
+            "short_name": "Entessa",
+            "long_name": "Entessa Public License",
+            "url": "https://opensource.org/licenses/Entessa",
+            "verified": true
+        },
+        {
+            "id": 30,
+            "short_name": "EUDatagrid",
+            "long_name": "EU DataGrid Software License",
+            "url": "https://opensource.org/licenses/EUDatagrid",
+            "verified": true
+        },
+        {
+            "id": 31,
+            "short_name": "EUPL-1.2",
+            "long_name": "European Union Public License 1.2",
+            "url": "https://opensource.org/licenses/EUPL-1.2",
+            "verified": true
+        },
+        {
+            "id": 32,
+            "short_name": "Fair",
+            "long_name": "Fair License",
+            "url": "https://opensource.org/licenses/Fair",
+            "verified": true
+        },
+        {
+            "id": 33,
+            "short_name": "Frameworx-1.0",
+            "long_name": "Frameworx License",
+            "url": "https://opensource.org/licenses/Frameworx-1.0",
+            "verified": true
+        },
+        {
+            "id": 34,
+            "short_name": "0BSD",
+            "long_name": "Free Public License 1.0.0",
+            "url": "https://opensource.org/licenses/0BSD",
+            "verified": true
+        },
+        {
+            "id": 35,
+            "short_name": "AGPL-3.0",
+            "long_name": "GNU Affero General Public License version 3",
+            "url": "https://opensource.org/licenses/AGPL-3.0",
+            "verified": true
+        },
+        {
+            "id": 36,
+            "short_name": "GPL-2.0",
+            "long_name": "GNU General Public License version 2",
+            "url": "https://opensource.org/licenses/GPL-2.0",
+            "verified": true
+        },
+        {
+            "id": 37,
+            "short_name": "GPL-3.0",
+            "long_name": "GNU General Public License version 3",
+            "url": "https://opensource.org/licenses/GPL-3.0",
+            "verified": true
+        },
+        {
+            "id": 38,
+            "short_name": "LGPL-2.1",
+            "long_name": "GNU Lesser General Public License version 2.1",
+            "url": "https://opensource.org/licenses/LGPL-2.1",
+            "verified": true
+        },
+        {
+            "id": 39,
+            "short_name": "LGPL-3.0",
+            "long_name": "GNU Lesser General Public License version 3",
+            "url": "https://opensource.org/licenses/LGPL-3.0",
+            "verified": true
+        },
+        {
+            "id": 40,
+            "short_name": "HPND",
+            "long_name": "Historical Permission Notice and Disclaimer",
+            "url": "https://opensource.org/licenses/HPND",
+            "verified": true
+        },
+        {
+            "id": 41,
+            "short_name": "IPL-1.0",
+            "long_name": "IBM Public License 1.0",
+            "url": "https://opensource.org/licenses/IPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 42,
+            "short_name": "Intel",
+            "long_name": "Intel Open Source License",
+            "url": "https://opensource.org/licenses/Intel",
+            "verified": true
+        },
+        {
+            "id": 43,
+            "short_name": "IPA",
+            "long_name": "IPA Font License",
+            "url": "https://opensource.org/licenses/IPA",
+            "verified": true
+        },
+        {
+            "id": 44,
+            "short_name": "ISC",
+            "long_name": "ISC License",
+            "url": "https://opensource.org/licenses/ISC",
+            "verified": true
+        },
+        {
+            "id": 45,
+            "short_name": "jabberpl",
+            "long_name": "Jabber Open Source License",
+            "url": "https://opensource.org/licenses/jabberpl",
+            "verified": true
+        },
+        {
+            "id": 46,
+            "short_name": "LPPL-1.3c",
+            "long_name": "LaTeX Project Public License 1.3c",
+            "url": "https://opensource.org/licenses/LPPL-1.3c",
+            "verified": true
+        },
+        {
+            "id": 47,
+            "short_name": "BSD-3-Clause-LBNL",
+            "long_name": "Lawrence Berkeley National Labs BSD Variant License",
+            "url": "https://opensource.org/licenses/BSD-3-Clause-LBNL",
+            "verified": true
+        },
+        {
+            "id": 48,
+            "short_name": "LiLiQ-P-1.1",
+            "long_name": "Licence Libre du Québec – Permissive (LiLiQ-P) version 1.1 (LiliQ-P) ",
+            "url": "https://opensource.org/licenses/LiLiQ-P-1.1",
+            "verified": true
+        },
+        {
+            "id": 50,
+            "short_name": "LiLiQ-Rplus-1.1",
+            "long_name": "Licence Libre du Québec – Réciprocité forte (LiLiQ-R+) version 1.1 (LiliQ-R+)",
+            "url": "https://opensource.org/licenses/LiLiQ-Rplus-1.1",
+            "verified": true
+        },
+        {
+            "id": 49,
+            "short_name": "LiLiQ-R-1.1",
+            "long_name": "Licence Libre du Québec – Réciprocité (LiLiQ-R) version 1.1 (LiliQ-R)",
+            "url": "https://opensource.org/licenses/LiLiQ-R-1.1",
+            "verified": true
+        },
+        {
+            "id": 51,
+            "short_name": "LPL-1.0",
+            "long_name": "Lucent Public License (\"Plan9\"), version 1.0 (LPL-1.0)",
+            "url": "https://opensource.org/licenses/LPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 52,
+            "short_name": "LPL-1.02",
+            "long_name": "Lucent Public License Version 1.02",
+            "url": "https://opensource.org/licenses/LPL-1.02",
+            "verified": true
+        },
+        {
+            "id": 53,
+            "short_name": "MS-PL",
+            "long_name": "Microsoft Public License",
+            "url": "https://opensource.org/licenses/MS-PL",
+            "verified": true
+        },
+        {
+            "id": 54,
+            "short_name": "MS-RL",
+            "long_name": "Microsoft Reciprocal License",
+            "url": "https://opensource.org/licenses/MS-RL",
+            "verified": true
+        },
+        {
+            "id": 55,
+            "short_name": "MirOS",
+            "long_name": "MirOS Licence",
+            "url": "https://opensource.org/licenses/MirOS",
+            "verified": true
+        },
+        {
+            "id": 56,
+            "short_name": "MIT",
+            "long_name": "MIT License",
+            "url": "https://opensource.org/licenses/MIT",
+            "verified": true
+        },
+        {
+            "id": 57,
+            "short_name": "MIT-0",
+            "long_name": "MIT No Attribution License",
+            "url": "https://opensource.org/licenses/MIT-0",
+            "verified": true
+        },
+        {
+            "id": 58,
+            "short_name": "CVW",
+            "long_name": "MITRE Collaborative Virtual Workspace License",
+            "url": "https://opensource.org/licenses/CVW",
+            "verified": true
+        },
+        {
+            "id": 59,
+            "short_name": "Motosoto",
+            "long_name": "Motosoto License",
+            "url": "https://opensource.org/licenses/Motosoto",
+            "verified": true
+        },
+        {
+            "id": 60,
+            "short_name": "MPL-1.0",
+            "long_name": "Mozilla Public License 1.0",
+            "url": "https://opensource.org/licenses/MPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 61,
+            "short_name": "MPL-1.1",
+            "long_name": "Mozilla Public License 1.1",
+            "url": "https://opensource.org/licenses/MPL-1.1",
+            "verified": true
+        },
+        {
+            "id": 62,
+            "short_name": "MPL-2.0",
+            "long_name": "Mozilla Public License 2.0",
+            "url": "https://opensource.org/licenses/MPL-2.0",
+            "verified": true
+        },
+        {
+            "id": 63,
+            "short_name": "MulanPSL - 2.0",
+            "long_name": "Mulan Permissive Software License v2",
+            "url": "https://opensource.org/licenses/MulanPSL - 2.0",
+            "verified": true
+        },
+        {
+            "id": 64,
+            "short_name": "Multics",
+            "long_name": "Multics License",
+            "url": "https://opensource.org/licenses/Multics",
+            "verified": true
+        },
+        {
+            "id": 65,
+            "short_name": "NASA-1.3",
+            "long_name": "NASA Open Source Agreement 1.3",
+            "url": "https://opensource.org/licenses/NASA-1.3",
+            "verified": true
+        },
+        {
+            "id": 66,
+            "short_name": "Naumen",
+            "long_name": "Naumen Public License",
+            "url": "https://opensource.org/licenses/Naumen",
+            "verified": true
+        },
+        {
+            "id": 67,
+            "short_name": "NGPL",
+            "long_name": "Nethack General Public License",
+            "url": "https://opensource.org/licenses/NGPL",
+            "verified": true
+        },
+        {
+            "id": 68,
+            "short_name": "Nokia",
+            "long_name": "Nokia Open Source License",
+            "url": "https://opensource.org/licenses/Nokia",
+            "verified": true
+        },
+        {
+            "id": 69,
+            "short_name": "NPOSL-3.0",
+            "long_name": "Non-Profit Open Software License 3.0",
+            "url": "https://opensource.org/licenses/NPOSL-3.0",
+            "verified": true
+        },
+        {
+            "id": 70,
+            "short_name": "NTP",
+            "long_name": "NTP License",
+            "url": "https://opensource.org/licenses/NTP",
+            "verified": true
+        },
+        {
+            "id": 71,
+            "short_name": "OCLC-2.0",
+            "long_name": "OCLC Research Public License 2.0",
+            "url": "https://opensource.org/licenses/OCLC-2.0",
+            "verified": true
+        },
+        {
+            "id": 72,
+            "short_name": "OGTSL",
+            "long_name": "Open Group Test Suite License",
+            "url": "https://opensource.org/licenses/OGTSL",
+            "verified": true
+        },
+        {
+            "id": 76,
+            "short_name": "OLDAP-2.8",
+            "long_name": "OpenLDAP Public License Version 2.8",
+            "url": "https://opensource.org/licenses/OLDAP-2.8",
+            "verified": true
+        },
+        {
+            "id": 73,
+            "short_name": "OSL-1.0",
+            "long_name": "Open Software License 1.0",
+            "url": "https://opensource.org/licenses/OSL-1.0",
+            "verified": true
+        },
+        {
+            "id": 74,
+            "short_name": "OSL-2.1",
+            "long_name": "Open Software License 2.1",
+            "url": "https://opensource.org/licenses/OSL-2.1",
+            "verified": true
+        },
+        {
+            "id": 75,
+            "short_name": "OSL-3.0",
+            "long_name": "Open Software License 3.0",
+            "url": "https://opensource.org/licenses/OSL-3.0",
+            "verified": true
+        },
+        {
+            "id": 77,
+            "short_name": "OPL-2.1",
+            "long_name": "OSET Public License version 2.1",
+            "url": "https://opensource.org/licenses/OPL-2.1",
+            "verified": true
+        },
+        {
+            "id": 78,
+            "short_name": "PHP-3.0",
+            "long_name": "PHP License 3.0",
+            "url": "https://opensource.org/licenses/PHP-3.0",
+            "verified": true
+        },
+        {
+            "id": 79,
+            "short_name": "PHP-3.01",
+            "long_name": "PHP License 3.01",
+            "url": "https://opensource.org/licenses/PHP-3.01",
+            "verified": true
+        },
+        {
+            "id": 81,
+            "short_name": "Python-2.0",
+            "long_name": "Python License",
+            "url": "https://opensource.org/licenses/Python-2.0",
+            "verified": true
+        },
+        {
+            "id": 83,
+            "short_name": "QPL-1.0",
+            "long_name": "Q Public License",
+            "url": "https://opensource.org/licenses/QPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 84,
+            "short_name": "RPSL-1.0",
+            "long_name": "RealNetworks Public Source License V1.0",
+            "url": "https://opensource.org/licenses/RPSL-1.0",
+            "verified": true
+        },
+        {
+            "id": 86,
+            "short_name": "RPL-1.5",
+            "long_name": "Reciprocal Public License 1.5",
+            "url": "https://opensource.org/licenses/RPL-1.5",
+            "verified": true
+        },
+        {
+            "id": 85,
+            "short_name": "RPL-1.1",
+            "long_name": "Reciprocal Public License, version 1.1",
+            "url": "https://opensource.org/licenses/RPL-1.1",
+            "verified": true
+        },
+        {
+            "id": 87,
+            "short_name": "RSCPL",
+            "long_name": "Ricoh Source Code Public License",
+            "url": "https://opensource.org/licenses/RSCPL",
+            "verified": true
+        },
+        {
+            "id": 88,
+            "short_name": "OFL-1.1",
+            "long_name": "SIL Open Font License 1.1",
+            "url": "https://opensource.org/licenses/OFL-1.1",
+            "verified": true
+        },
+        {
+            "id": 89,
+            "short_name": "SimPL-2.0",
+            "long_name": "Simple Public License 2.0",
+            "url": "https://opensource.org/licenses/SimPL-2.0",
+            "verified": true
+        },
+        {
+            "id": 90,
+            "short_name": "Sleepycat",
+            "long_name": "Sleepycat License",
+            "url": "https://opensource.org/licenses/Sleepycat",
+            "verified": true
+        },
+        {
+            "id": 91,
+            "short_name": "SISSL",
+            "long_name": "Sun Industry Standards Source License",
+            "url": "https://opensource.org/licenses/SISSL",
+            "verified": true
+        },
+        {
+            "id": 92,
+            "short_name": "SPL-1.0",
+            "long_name": "Sun Public License 1.0",
+            "url": "https://opensource.org/licenses/SPL-1.0",
+            "verified": true
+        },
+        {
+            "id": 93,
+            "short_name": "Watcom-1.0",
+            "long_name": "Sybase Open Watcom Public License 1.0",
+            "url": "https://opensource.org/licenses/Watcom-1.0",
+            "verified": true
+        },
+        {
+            "id": 80,
+            "short_name": "PostgreSQL",
+            "long_name": "The PostgreSQL License",
+            "url": "https://opensource.org/licenses/PostgreSQL",
+            "verified": true
+        },
+        {
+            "id": 97,
+            "short_name": "unlicense",
+            "long_name": "The Unlicense",
+            "url": "https://opensource.org/licenses/unlicense",
+            "verified": true
+        },
+        {
+            "id": 94,
+            "short_name": "UPL",
+            "long_name": "Universal Permissive License",
+            "url": "https://opensource.org/licenses/UPL",
+            "verified": true
+        },
+        {
+            "id": 95,
+            "short_name": "NCSA",
+            "long_name": "University of Illinois/NCSA Open Source License",
+            "url": "https://opensource.org/licenses/NCSA",
+            "verified": true
+        },
+        {
+            "id": 96,
+            "short_name": "UCL-1.0",
+            "long_name": "Upstream Compatibility License v1.0",
+            "url": "https://opensource.org/licenses/UCL-1.0",
+            "verified": true
+        },
+        {
+            "id": 98,
+            "short_name": "VSL-1.0",
+            "long_name": "Vovida Software License v. 1.0",
+            "url": "https://opensource.org/licenses/VSL-1.0",
+            "verified": true
+        },
+        {
+            "id": 99,
+            "short_name": "W3C",
+            "long_name": "W3C License",
+            "url": "https://opensource.org/licenses/W3C",
+            "verified": true
+        },
+        {
+            "id": 100,
+            "short_name": "WXwindows",
+            "long_name": "wxWindows Library License",
+            "url": "https://opensource.org/licenses/WXwindows",
+            "verified": true
+        },
+        {
+            "id": 101,
+            "short_name": "Xnet",
+            "long_name": "X.Net License",
+            "url": "https://opensource.org/licenses/Xnet",
+            "verified": true
+        },
+        {
+            "id": 102,
+            "short_name": "0BSD",
+            "long_name": "Zero-Clause BSD",
+            "url": "https://opensource.org/licenses/0BSD",
+            "verified": true
+        },
+        {
+            "id": 104,
+            "short_name": "Zlib",
+            "long_name": "zlib/libpng license",
+            "url": "https://opensource.org/licenses/Zlib",
+            "verified": true
+        },
+        {
+            "id": 103,
+            "short_name": "ZPL-2.0",
+            "long_name": "Zope Public License 2.0",
+            "url": "https://opensource.org/licenses/ZPL-2.0",
+            "verified": true
+        }
+    ]
+}

@@ -9,9 +9,9 @@
             </div>
           </div>
           <div class="layout column ma-0 justify-center" style="color: white;">
-            <span class="caption">{{ subTitle }}</span>
-            <div class="headline">{{ title }}</div>
-            <span class="caption">{{ supTitle }}</span>
+            <span class="text-caption">{{ subTitle }}</span>
+            <div class="text-h5">{{ title }}</div>
+            <span class="text-caption">{{ supTitle }}</span>
           </div>
         </div>
       </v-container>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   props: {
     supTitle: {
       type: String,
@@ -48,7 +48,7 @@ export default {
     return {
     }
   }
-}
+});
 </script>
 
 <style>

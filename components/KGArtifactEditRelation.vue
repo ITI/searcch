@@ -1,7 +1,7 @@
 <template>
   <div v-if="artifact_local">
-    <div>
-      <v-card class="mx-auto my-2" outlined>
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
         <v-card-title> {{ artifact_local.title }} </v-card-title>
         <v-card-text>
           <a target="_blank" :href="artifact_local.url" rel="noopener">
@@ -9,60 +9,65 @@
           </a>
         </v-card-text>
       </v-card>
-    </div>
-    <v-card class="mx-auto my-2" outlined>
-      
-      <v-card-title>Edit Relationship</v-card-title>
-      <v-card-text>Want to edit content? <v-btn text small color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
+    </v-sheet>
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
+        
+        <v-card-title>Edit Relationship</v-card-title>
+        <v-card-text>Want to edit content? <v-btn variant="text" size="small" color="primary" :to="`/artifact/${artifact_local.artifact_group_id}/${artifact_local.id}?edit=true`">Click here</v-btn></v-card-text>
 
-      <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
+        <v-divider></v-divider>
 
-      <div>
-        <v-dialog
-          transition="dialog-bottom-transition"
-          persistent
-          fullscreen
-          v-model="artifactdialog"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-card-actions class="mt-n4">
-              <v-row>
-                <v-col cols="12" md="2"></v-col>
-                <v-col cols="12" md="10">
-                  <v-btn
-                    color="primary"
-                    block depressed outlined
-                    v-bind="attrs"
-                    v-on="on"
-                    :disabled="artifact_local.id ? false : true"
-                  >
-                    Add New Relation
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-actions>
-          </template>
-          <template v-slot:default="artifactdialog">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Search for Related Artifacts</span>
-              </v-card-title>
-              <SearchCard :search="search" related></SearchCard>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  class="error ml-2 mb-2"
-                  text
-                  @click="artifactdialog.value = false"
-                >
-                  Close
-                </v-btn>
+        <ArtifactRelationView :artifact_group="artifact_local.artifact_group" edit></ArtifactRelationView>
+
+        <div>
+          <v-dialog
+            transition="dialog-bottom-transition"
+            persistent
+            fullscreen
+            v-model="artifactdialog"
+          >
+            <template v-slot:activator="{ props }">
+              <v-card-actions class="mt-n4">
+                <v-row>
+                  <v-col cols="12" md="2"></v-col>
+                  <v-col cols="12" md="10">
+                    <v-btn
+                      color="primary"
+                      id="btn-open-relation-modal"
+                      block variant="tonal"
+                      v-bind="props"
+                      :disabled="artifact_local.id ? false : true"
+                    >
+                      Add New Relation
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-      </div>
-    </v-card>
+            </template>
+            <template v-slot:default>
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Search for Related Artifacts</span>
+                </v-card-title>
+                <SearchCard :search="search" related></SearchCard>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    id="btn-close-relation-modal"
+                    class="bg-error ml-2 mb-2"
+                    variant="text"
+                    @click="artifactdialog = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </div>
+      </v-card>
+    </v-sheet>
 
   </div>
   <!-- The loading is needed because otherwise the var dereferences above would cause a failure to load if the data is not available yet -->
@@ -72,13 +77,12 @@
 </template>
 
 <script>
-import $RefParser from 'json-schema-ref-parser'
+import { defineAsyncComponent } from 'vue'
 import schemaWithPointers from '~/schema/artifact.json'
 import affiliationSchemaWithPointers from '~/schema/affiliation.json'
-import { EventBus } from '@/helpers'
 import ArtifactRelationView from './ArtifactRelationView.vue'
 
-export default {
+export default defineComponent({
   name: 'KGArtifactEditRelation',
   props: {
     record: {
@@ -91,8 +95,8 @@ export default {
     }
   },
   components: {
-    SearchCard: () => import("@/components/SearchCard"),
-    ArtifactRelationView: () => import("@/components/ArtifactRelationView"),
+    SearchCard: defineAsyncComponent(() => import("@/components/SearchCard")),
+    ArtifactRelationView: defineAsyncComponent(() => import("@/components/ArtifactRelationView")),
 },
   data() {
     return {
@@ -113,26 +117,22 @@ export default {
     }
   },
   async created() {
-    $RefParser.dereference(schemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.schema = schema
-        this.schemaLoaded = true
-      }
+    this.$resolver.resolve(schemaWithPointers).then(schema => {
+      this.schema = schema.result
+      this.schemaLoaded = true
+    }).catch(err => {
+      // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+      // including referenced files, combined into a single object
+      console.error(err)
     })
-    $RefParser.dereference(affiliationSchemaWithPointers, (err, schema) => {
-      if (err) {
-        console.error(err)
-      } else {
-        // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
-        // including referenced files, combined into a single object
-        this.affiliationSchema = schema
-        this.schemaLoaded = true
-      }
-    })
+    this.$resolver.resolve(affiliationSchemaWithPointers).then(schema => {
+      this.affiliationSchema = schema.result
+      this.schemaLoaded = true
+    }).catch(err => {
+      // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+      // including referenced files, combined into a single object
+      console.error(err)
+    });
     this.artifact_local = JSON.parse(JSON.stringify(this.record.artifact))
     this.meta.languages = this.getLanguages()
     this.meta.keywords = this.getPossibleTags()
@@ -146,9 +146,9 @@ export default {
     setTimeout(() => {
       this.loadingMessage = 'Error loading'
     }, 5000)
-    EventBus.$on('close', this.closeHandler)
-    this.$store.dispatch('user/fetchOrgs')
-    this.$store.dispatch('user/fetchBadges')
+    this.$on('close', this.closeHandler)
+    this.$userStore.fetchOrgs()
+    this.$userStore.fetchBadges()
   },
   watch: {
     record(val) {
@@ -200,5 +200,5 @@ export default {
       }
     },
   }
-}
+});
 </script>

@@ -17,10 +17,11 @@
 </template>
 
 <script>
-export default {
+import { defineAsyncComponent } from 'vue'
+
+export default defineComponent({
   components: {
-    ArtifactCuration: () => import('@/components/ArtifactCuration'),
-    LazyHydrate: () => import('vue-lazy-hydration')
+    ArtifactCuration: defineAsyncComponent(() => import('@/components/ArtifactCuration')),
   },
   props: {
     curations: {
@@ -31,5 +32,5 @@ export default {
   data() {
     return {}
   }
-}
+});
 </script>

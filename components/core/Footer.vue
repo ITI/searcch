@@ -22,7 +22,7 @@
 </template>
 
 <script>
-export default {
+export default defineComponent({
   data: () => ({
     links: [
       {
@@ -31,7 +31,7 @@ export default {
       }
     ]
   })
-}
+});
 </script>
 
 <style>

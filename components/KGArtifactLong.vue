@@ -1,435 +1,446 @@
 <template>
   <div v-if="record.artifact">
-    <v-card class="mx-auto my-2">
-      <v-card-title>{{ record.artifact.title }}</v-card-title>
-      <v-card-subtitle>
-        <div
-          v-if="record.artifact.artifact_group.publication != null &&
-                record.artifact.artifact_group.publication.artifact_id != record.artifact.id"
-          align="left"
-          class="mx-0"
-        >
-          &nbsp;&nbsp;(<a :href="`/artifact/${record.artifact.artifact_group_id}`">newest version</a>)
-        </div>
-        <div>
-        <a target="_blank" :href="record.artifact.url" rel="noopener">
-          {{ record.artifact.url }}
-        </a>
-        </div>
-      </v-card-subtitle>
-
-      <v-card-text>
-        <v-row align="center" class="mx-0">
-          <v-rating
-            v-model="record.avg_rating"
-            color="amber"
-            dense
-            half-increments
-            size="18"
-            readonly
-          ></v-rating>
-          <div class="grey--text ml-4">({{ record.num_ratings }})</div>
-        </v-row>
-        <v-row align="center" class="mx-0">
-          <span v-if="record.artifact.publication">
-            Published: {{ $moment(record.artifact.publication.time) }}
-            &nbsp;(record version
-            <a
-              :href="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}`"
-              rel="noopener"
-              >
-              {{ record.artifact.publication.version }}</a>)
-          </span>
-          <span v-else>
-            Draft: {{ $moment(record.artifact.mtime || record.artifact.ctime) }}
-            &nbsp;(version
-            <a
-              :href="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}`"
-              rel="noopener"
-              >
-              {{ record.artifact.artifact_group_id + "/" + record.artifact.id }}</a>)
-          </span>
-        </v-row>
-        <v-row align="center" class="mx-0">
-          <span v-if="this.$auth.loggedIn">
-	    Owner:
-	    <a
-	      :href="`/profile/${record.artifact.artifact_group.owner_id}`"
-	      rel="noopener"
-	      >{{ record.artifact.artifact_group.owner.person.name }}
-	    </a>
-	  </span>
-	</v-row>
-        <v-row
-          v-if="record.artifact.artifact_group.publications.length"
-          align="center"
-          class="mx-0"
-        >
-          <v-btn
-            v-if="record.artifact.artifact_group.publications"
-            x-small
-            @click="history_expanded = !history_expanded"
+    <v-sheet border class="my-2">
+      <v-card class="mx-auto" elevation="0">
+        <v-card-title>{{ record.artifact.title }}</v-card-title>
+        <v-card-subtitle>
+          <div
+            v-if="record.artifact.artifact_group.publication != null &&
+                  record.artifact.artifact_group.publication.artifact_id != record.artifact.id"
+            align="left"
+            class="mx-0"
           >
-            {{ !history_expanded ? 'Show Record History' : 'Hide Record History' }}
-          </v-btn>
-	  <v-btn
-	    x-small
-	    @click="claimThis()"
-	    >Claim This Record
-	  </v-btn>
-        </v-row>
-
-        <transition name="modal-fade">
-          <ClaimRoleModal
-            v-show="isModalVisible"
-            @close="closeModal"
-            v-bind:justificationMessage="justificationMessage"
-            v-bind:isDisabled="isModalDisabled"
-            v-bind:artifact_group_id="record.artifact.artifact_group_id"
-            v-bind:email="claimEmail || user.email"
-            v-bind:claimKey="claimKey">
-          </ClaimRoleModal>
-        </transition>
-
-        <transition name="info-message-fade">
-          <div v-if="showOwnershipMessage" class="ownership-info">
-            {{ ownershipMessage }}
-          </div>
-        </transition>
-
-      </v-card-text>
-
-      <v-card-text v-if="history_expanded">
-        <v-container
-          align="center" class="mx-0"
-          v-for="publication in record.artifact.artifact_group.publications.slice().reverse()"
-          :key="publication.id"
-        >
-          <v-row align="center" class="mx-0">
-            <v-container>
-              <v-row>
-                <v-icon
-                  v-if="publication.artifact.id === record.artifact.id"
-                >
-                  mdi-arrow-right-thin
-                </v-icon>
-                Record Version: &nbsp;
-                <a
-                  :href="`/artifact/${publication.artifact.artifact_group_id}/${publication.artifact.id}`"
-                  rel="noopener"
-                >
-                  {{ publication.version }}
-                </a>
-                &nbsp;
-                <span v-if="publication.artifact.id !== record.artifact.id">
-                  (compare:&nbsp;
-                  <a
-                    rel="noopener"
-                    @click="getDiff(publication.artifact.id,record.artifact.id)"
-                  >from</a>,
-                  <a
-                    rel="noopener"
-                    @click="getDiff(record.artifact.id,publication.artifact.id)"
-                  >
-                    to</a>)
-                </span>
-              </v-row>
-              <v-row align="center" class="mx-0">
-                Published: {{ $moment(publication.time) }}
-              </v-row>
-              <v-row align="center" class="mx-0">
-                Publisher: &nbsp; <a :href="`/profile/${publication.publisher.id}`" rel="noopener">{{ publication.publisher.person.name }}</a>
-              </v-row>
-              <v-row
-                align="center"
-                class="mx-0"
-                v-if="publication.notes && publication.notes != ''">
-                Notes: {{ publication.notes }}
-              </v-row>
-            </v-container>
-          </v-row>
-        </v-container>
-      </v-card-text>
-
-      <v-divider class="mt-4 grey lighten-2"></v-divider>
-      <v-tabs v-model="tab" background-color="grey lighten-4">
-        <v-tab>Content</v-tab>
-        <v-tab>Related{{ numberRelationships ? " (" + numberRelationships + ")" : "" }}</v-tab>
-
-        <v-tab-item>
-
-          <v-card-title>Description</v-card-title>
-
-          <v-card-text>
-            <div v-html="sanitizedDescription"></div>
-          </v-card-text>
-
-          <div v-if="markdown" :class="hideOverflow">
-            <v-divider class="mx-4"></v-divider>
-            <v-card-title>
-              <v-row class="mx-1">
-                Readme
-                <v-spacer></v-spacer>
-                <v-btn :v-if="false && isOverflow" @click="expanded = !expanded">
-                  {{ overflowText }}
-                  <v-icon>{{ overflowIcon }}</v-icon>
-                </v-btn>
-              </v-row>
-            </v-card-title>
-            <v-card-text>
-              <div class="markdown-content">
-                <div v-html="markdown"></div>
-              </div>
-            </v-card-text>
+            &nbsp;&nbsp;(<a :href="`/artifact/${record.artifact.artifact_group_id}`">newest version</a>)
           </div>
           <div>
-            <v-card-text>
-              <v-row class="mx-1">
-                <v-btn
-                  elevation="0"
-                  tile
-                  :v-if="isOverflow"
-                  @click="expanded = !expanded"
-                  block
-                  >
-                  {{ overflowText }}
-                  <v-icon>{{ overflowIcon }}</v-icon>
-                </v-btn>
-              </v-row>
-            </v-card-text>
+          <a target="_blank" :href="record.artifact.url" rel="noopener">
+            {{ record.artifact.url }}
+          </a>
           </div>
+        </v-card-subtitle>
 
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-title class="py-0"> Artifact Type </v-card-title>
-
-          <v-chip :color="iconColor(record.artifact.type)" class="ma-2 ml-6" label>
-            <v-avatar left>
-              <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
-            </v-avatar>
-
-            <div>{{ record.artifact.type | titlecase }}</div>
-          </v-chip>
-
-          <v-divider class="mx-4"></v-divider>
-
-          <div v-if="record.artifact.affiliations">
-            <v-card-title class="py-0">Authors</v-card-title>
-            <ArtifactChips class="ml-4"
-              :field="record.artifact.affiliations"
-              type="role"
-              display
-              link
-            ></ArtifactChips>
-
-            <v-divider class="mx-4"></v-divider>
-          </div>
-
-          <div v-if="record.artifact.venues && record.artifact.venues.length">
-            <v-card-title class="py-0">Venues</v-card-title>
-            <ArtifactChips class="ml-4"
-              :field="record.artifact.venues"
-              type="venue"
-              display
-              link
-            ></ArtifactChips>
-
-            <v-divider class="mx-4"></v-divider>
-          </div>
-
-          <div v-if="tags.length">
-            <v-card-title class="py-0">Keywords</v-card-title>
-            <ArtifactChips class="ml-4"
-              :field="tags"
-              type="keyword"
-              display
-              link
-            ></ArtifactChips>
-
-            <v-divider class="mx-4"></v-divider>
-          </div>
-
-          <div v-if="languages.length > 0">
-            <v-card-title class="py-0">Programming Languages</v-card-title>
-            <ArtifactChips class="ml-4"
-              :field="languages"
-              type="software"
-              display
-            ></ArtifactChips>
-
-            <v-divider class="mx-4"></v-divider>
-          </div>
-
-          <div v-if="badgesPresent">
-            <v-card-title class="py-0">Badges</v-card-title>
-
-            <span v-for="(b, index) in record.artifact.badges">
-              <v-img
-                :key="`badgeimg${index}`"
-                max-height="100"
-                max-width="100"
-                :src="b.badge.image_url"
-              ></v-img>
-              <a :href="b.badge.url" target="_blank" rel="noopener">
-                {{ b.badge.title }}
-              </a>
+        <v-card-text>
+          <v-row align="center" class="mx-0">
+            <v-rating
+              v-model="record.avg_rating"
+              color="amber"
+              density="compact"
+              half-increments
+              size="18"
+              readonly
+            ></v-rating>
+            <div class="text-grey ml-4">({{ record.num_ratings }})</div>
+          </v-row>
+          <v-row align="center" class="mx-0">
+            <span v-if="record.artifact.publication">
+              Published: {{ $moment(record.artifact.publication.time) }}
+              &nbsp;(record version
+              <a
+                :href="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}`"
+                rel="noopener"
+                >
+                {{ record.artifact.publication.version }}</a>)
             </span>
-            <v-divider class="mx-4"></v-divider>
-          </div>
+            <span v-else>
+              Draft: {{ $moment(record.artifact.mtime || record.artifact.ctime) }}
+              &nbsp;(version
+              <a
+                :href="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}`"
+                rel="noopener"
+                >
+                {{ record.artifact.artifact_group_id + "/" + record.artifact.id }}</a>)
+            </span>
+          </v-row>
+          <v-row align="center" class="mx-0">
+            <span v-if="this.$auth.loggedIn">
+        Owner:
+        <a
+          :href="`/profile/${record.artifact.artifact_group.owner_id}`"
+          rel="noopener"
+          >{{ record.artifact.artifact_group.owner.person.name }}
+        </a>
+      </span>
+    </v-row>
+          <v-row
+            v-if="record.artifact.artifact_group.publications.length"
+            align="center"
+            class="mx-0"
+          >
+            <v-btn
+              v-if="record.artifact.artifact_group.publications"
+              id="btn-show-history"
+              size="x-small"
+              @click="history_expanded = !history_expanded"
+            >
+              {{ !history_expanded ? 'Show Record History' : 'Hide Record History' }}
+            </v-btn>
+      <v-btn
+        id="btn-claim-artifact"
+        size="x-small"
+        @click="claimThis()"
+        >Claim This Record
+      </v-btn>
+          </v-row>
 
-          <div v-if="record.artifact.type == 'software'">
-            <div v-if="stars || watchers">
-              <v-card-title class="py-0">GitHub Metrics</v-card-title>
+          <transition name="modal-fade">
+            <ClaimRoleModal
+              v-show="isModalVisible"
+              @close="closeModal"
+              v-bind:justificationMessage="justificationMessage"
+              v-bind:isDisabled="isModalDisabled"
+              v-bind:artifact_group_id="record.artifact.artifact_group_id"
+              v-bind:email="claimEmail || user?.email"
+              v-bind:claimKey="claimKey">
+            </ClaimRoleModal>
+          </transition>
 
-              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
-                  <v-icon color="yellow">mdi-star</v-icon>
-                </v-avatar>
+          <transition name="info-message-fade">
+            <div v-if="showOwnershipMessage" class="ownership-info">
+              {{ ownershipMessage }}
+            </div>
+          </transition>
 
-                {{ stars }}
-              </v-chip>
-              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
-                  <v-icon>mdi-eye</v-icon>
-                </v-avatar>
+        </v-card-text>
 
-                {{ watchers }}
-              </v-chip>
+        <v-card-text v-if="history_expanded" id="container-artifact-history">
+          <v-container
+            align="center" class="mx-0"
+            v-for="publication in record.artifact.artifact_group.publications.slice().reverse()"
+            :key="publication.id"
+          >
+            <v-row align="center" class="mx-0">
+              <v-container>
+                <v-row>
+                  <v-icon
+                    v-if="publication.artifact.id === record.artifact.id"
+                  >
+                    mdi-arrow-right-thin
+                  </v-icon>
+                  Record Version: &nbsp;
+                  <a
+                    :href="`/artifact/${publication.artifact.artifact_group_id}/${publication.artifact.id}`"
+                    rel="noopener"
+                  >
+                    {{ publication.version }}
+                  </a>
+                  &nbsp;
+                  <span v-if="publication.artifact.id !== record.artifact.id">
+                    (compare:&nbsp;
+                    <a
+                      rel="noopener"
+                      @click="getDiff(publication.artifact.id,record.artifact.id)"
+                    >from</a>,
+                    <a
+                      rel="noopener"
+                      @click="getDiff(record.artifact.id,publication.artifact.id)"
+                    >
+                      to</a>)
+                  </span>
+                </v-row>
+                <v-row align="center" class="mx-0">
+                  Published: {{ $moment(publication.time) }}
+                </v-row>
+                <v-row align="center" class="mx-0">
+                  Publisher: &nbsp; <a :href="`/profile/${publication.publisher.id}`" rel="noopener">{{ publication.publisher.person.name }}</a>
+                </v-row>
+                <v-row
+                  align="center"
+                  class="mx-0"
+                  v-if="publication.notes && publication.notes != ''">
+                  Notes: {{ publication.notes }}
+                </v-row>
+              </v-container>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-divider class="mt-4 bg-grey-lighten-2"></v-divider>
+        <v-tabs v-model="tab" bg-color="grey-lighten-4">
+          <v-tab>Content</v-tab>
+          <v-tab>Related{{ numberRelationships ? " (" + numberRelationships + ")" : "" }}</v-tab>
+        </v-tabs>
+
+        <v-window v-model="tab">
+          <v-window-item>
+
+            <v-card-title>Description</v-card-title>
+
+            <v-card-text>
+              <div v-html="sanitizedDescription"></div>
+            </v-card-text>
+
+            <div v-if="markdown" :class="hideOverflow">
+              <v-divider class="mx-4"></v-divider>
+              <v-card-title>
+                <v-row class="mx-1 justify-space-between">
+                  <v-col cols="auto">
+                    Readme
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-btn :v-if="false && isOverflow" @click="expanded = !expanded" variant="tonal">
+                      {{ overflowText }}
+                      <v-icon>{{ overflowIcon }}</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <div class="markdown-content">
+                  <div v-html="markdown"></div>
+                </div>
+              </v-card-text>
+            </div>
+            <div>
+              <v-card-text>
+                <v-row class="mx-1">
+                  <v-btn
+                    elevation="0"
+                    rounded="0"
+                    :v-if="isOverflow"
+                    @click="expanded = !expanded"
+                    block
+                    >
+                    {{ overflowText }}
+                    <v-icon>{{ overflowIcon }}</v-icon>
+                  </v-btn>
+                </v-row>
+              </v-card-text>
             </div>
 
-            <div v-if="record.artifact.importer">
-              <v-card-title class="py-0">Importer</v-card-title>
+            <v-divider class="mx-4"></v-divider>
 
-              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
-                  <v-icon>mdi-file-download-outline</v-icon>
-                </v-avatar>
-                {{
-                  `${record.artifact.importer.name} v${record.artifact.importer.version}`
-                }}
-              </v-chip>
+            <v-card-title class="py-0"> Artifact Type </v-card-title>
+
+            <v-chip :color="iconColor(record.artifact.type)" class="ma-2 ml-6" label>
+              <v-avatar start>
+                <v-icon>{{ iconImage(record.artifact.type) }}</v-icon>
+              </v-avatar>
+
+              <div>{{$filters.titlecase( record.artifact.type ) }}</div>
+            </v-chip>
+
+            <v-divider class="mx-4"></v-divider>
+
+            <div v-if="record.artifact.affiliations">
+              <v-card-title class="py-0">Authors</v-card-title>
+              <ArtifactChips class="ml-4"
+                :modelValue="record.artifact.affiliations"
+                type="role"
+                display
+                link
+              ></ArtifactChips>
+
               <v-divider class="mx-4"></v-divider>
             </div>
-          </div>
 
-          <div v-if="license">
-            <v-card-title class="py-0">License</v-card-title>
-            <a :href="record.artifact.license.url">
-              <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
-                <v-avatar left>
-                  <v-icon>mdi-scale-balance</v-icon>
-                </v-avatar>
+            <div v-if="record.artifact.venues && record.artifact.venues.length">
+              <v-card-title class="py-0">Venues</v-card-title>
+              <ArtifactChips class="ml-4"
+                :modelValue="record.artifact.venues"
+                type="venue"
+                display
+                link
+              ></ArtifactChips>
 
-                {{ license }}
-              </v-chip>
-            </a>
-            <v-divider class="mx-4"></v-divider>
-          </div>
+              <v-divider class="mx-4"></v-divider>
+            </div>
 
-          <div v-if="record.artifact.files.length">
-            <v-card-title class="py-0">Files</v-card-title>
+            <div v-if="tags.length">
+              <v-card-title class="py-0">Keywords</v-card-title>
+              <ArtifactChips class="ml-4"
+                :modelValue="tags"
+                type="keyword"
+                display
+                link
+              ></ArtifactChips>
 
-            <v-list-item
-              v-for="(v, k) in record.artifact.files"
-              :key="`file${k}`"
-              dense
-            >
-              <v-list-group :value="true" no-action sub-group>
-                <template v-slot:activator>
-                  <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
-                    v.url
-                  }}</a>
-                  &nbsp; (type: {{ v.filetype }}, size: {{ convertSize(v.size) }})
-                </template>
-                <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" dense>
-                  <a
-                    target="_blank"
-                    :href="vm.html_url || vm.download_url"
-                    rel="noopener"
-                    >{{
-                      vm.pathname || vm.name || vm.html_url || vm.download_url
-                    }}</a
-                  >
-                  &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
+              <v-divider class="mx-4"></v-divider>
+            </div>
+
+            <div v-if="languages.length > 0">
+              <v-card-title class="py-0">Programming Languages</v-card-title>
+              <ArtifactChips class="ml-4"
+                :modelValue="languages"
+                type="software"
+                display
+              ></ArtifactChips>
+
+              <v-divider class="mx-4"></v-divider>
+            </div>
+
+            <div v-if="badgesPresent">
+              <v-card-title class="py-0">Badges</v-card-title>
+
+              <span v-for="(b, index) in record.artifact.badges">
+                <v-img
+                  :key="`badgeimg${index}`"
+                  max-height="100"
+                  max-width="100"
+                  :src="b.badge.image_url"
+                ></v-img>
+                <a :href="b.badge.url" target="_blank" rel="noopener">
+                  {{ b.badge.title }}
+                </a>
+              </span>
+              <v-divider class="mx-4"></v-divider>
+            </div>
+
+            <div v-if="record.artifact.type == 'software'">
+              <div v-if="stars || watchers">
+                <v-card-title class="py-0">GitHub Metrics</v-card-title>
+
+                <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
+                  <v-avatar start>
+                    <v-icon color="yellow">mdi-star</v-icon>
+                  </v-avatar>
+
+                  {{ stars }}
+                </v-chip>
+                <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
+                  <v-avatar start>
+                    <v-icon>mdi-eye</v-icon>
+                  </v-avatar>
+
+                  {{ watchers }}
+                </v-chip>
+              </div>
+
+              <div v-if="record.artifact.importer">
+                <v-card-title class="py-0">Importer</v-card-title>
+
+                <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
+                  <v-avatar start>
+                    <v-icon>mdi-file-download-outline</v-icon>
+                  </v-avatar>
+                  {{
+                    `${record.artifact.importer.name} v${record.artifact.importer.version}`
+                  }}
+                </v-chip>
+                <v-divider class="mx-4"></v-divider>
+              </div>
+            </div>
+
+            <div v-if="license">
+              <v-card-title class="py-0">License</v-card-title>
+              <a :href="record.artifact.license.url">
+                <v-chip color="primary" cols="12" class="ma-2 ml-6" label>
+                  <v-avatar start>
+                    <v-icon>mdi-scale-balance</v-icon>
+                  </v-avatar>
+
+                  {{ license }}
+                </v-chip>
+              </a>
+              <v-divider class="mx-4"></v-divider>
+            </div>
+
+            <div v-if="record.artifact.files.length">
+              <v-card-title class="py-0">Files</v-card-title>
+              <v-list v-model:opened="fileOpened" density="compact">
+                <v-list-item
+                  v-for="(v, k) in record.artifact.files"
+                  :key="`file${k}`"
+                  :id="`file${k}`"
+                  density="compact"
+                >
+                  <v-list-group :value="v.name" density="compact">
+                    <template v-slot:activator="{ props }">
+                      <v-list-item v-bind="props">
+                        <a @click.stop target="_blank" :href="v.url" rel="noopener">{{
+                          v.url
+                        }}</a>
+                        &nbsp; (type: {{ v.filetype ? v.filetype : 'unknown' }}, size: {{ v.size ? convertSize(v.size) : 'unknown' }})
+                      </v-list-item>
+                    </template>
+                    <v-list-item v-for="(vm, km) in v.members" :key="`mem${km}`" density="compact">
+                      <a
+                        target="_blank"
+                        :href="vm.html_url || vm.download_url"
+                        rel="noopener"
+                        >{{
+                          vm.pathname || vm.name || vm.html_url || vm.download_url
+                        }}</a
+                      >
+                      &nbsp; (type: {{ vm.filetype }}, size: {{ convertSize(vm.size) }})
+                    </v-list-item>
+                  </v-list-group>
                 </v-list-item>
-              </v-list-group>
-            </v-list-item>
+              </v-list>
 
-            <v-divider class="mx-4"></v-divider>
-          </div>
+              <v-divider class="mx-4"></v-divider>
+            </div>
 
-          <v-card-actions>
-            <v-btn
-              icon
-              @click="favoriteThis()"
-              :color="favorite == true ? 'red' : ''"
+            <v-card-actions>
+              <v-btn
+                icon
+                id="btn-favorite-artifact"
+                @click="favoriteThis()"
+                :color="favorite == true ? 'red' : ''"
+              >
+                <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+              </v-btn>
+
+              <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" id="btn-comment-artifact">
+                <v-icon>mdi-comment</v-icon>
+              </v-btn>
+              <v-spacer></v-spacer>
+              <span v-if="shouldShowEditBtn">
+                <v-btn
+                  color="success"
+                  size="small"
+                  :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit=true`"
+                  >
+                  Edit
+                </v-btn>
+              </span>
+              <span v-if="shouldShowEditVersionBtn">
+                <v-btn
+                  color="success"
+                  size="small"
+                  @click="newVersion()"
+                  >
+                  Edit New Version
+                </v-btn>
+                <v-btn
+                  color="success"
+                  size="small"
+                  @click="reImportNewVersion()"
+                  >
+                  Reimport New Version
+                </v-btn>
+              </span>
+            </v-card-actions>
+
+          </v-window-item>
+
+          <v-window-item>
+            <div
+              v-if="
+                (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
+                  record.artifact.artifact_group.relationships.length) ||
+                (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
+                  record.artifact.artifact_group.reverse_relationships.length)
+              "
             >
-              <v-icon>{{ favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-            </v-btn>
-
-            <v-btn icon :to="`/artifact/review/${record.artifact.artifact_group_id}`" nuxt>
-              <v-icon>mdi-comment</v-icon>
-            </v-btn>
-            <v-spacer></v-spacer>
-            <span v-if="(isOwner() || isAdmin()) && !published">
+              <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
+            </div>
+            <div v-else>
+              <v-card-subtitle>No relation yet</v-card-subtitle>
+            </div>
+            <v-card-actions class="justify-end" v-if="(isOwner() || isAdmin()) && published">
+              <v-divider></v-divider>
               <v-btn
                 color="success"
-                small
-                :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit=true`"
-                nuxt
-                >
-                Edit
+                size="small"
+                :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit_relation=true`"
+              >
+                Edit Relation
               </v-btn>
-            </span>
-            <span v-if="(isOwner() || isAdmin()) && published">
-              <v-btn
-                color="success"
-                small
-                @click="newVersion()"
-                nuxt
-                >
-                Edit New Version
-              </v-btn>
-              <v-btn
-                color="success"
-                small
-                @click="reImportNewVersion()"
-                nuxt
-                >
-                Reimport New Version
-              </v-btn>
-            </span>
-          </v-card-actions>
-
-        </v-tab-item>
-
-        <v-tab-item>
-          <div
-            v-if="
-              (typeof record.artifact.artifact_group.relationships !== 'undefined' &&
-                record.artifact.artifact_group.relationships.length) ||
-              (typeof record.artifact.artifact_group.reverse_relationships !== 'undefined' &&
-                record.artifact.artifact_group.reverse_relationships.length)
-            "
-          >
-            <ArtifactRelationView :artifact_group="record.artifact.artifact_group"></ArtifactRelationView>
-          </div>
-          <div v-else>
-            <v-card-subtitle>No relation yet</v-card-subtitle>
-          </div>
-          <v-divider></v-divider>
-          <v-card-actions class="justify-end" v-if="(isOwner() || isAdmin()) && published">
-            <v-btn
-              color="success"
-              small
-              :to="`/artifact/${record.artifact.artifact_group_id}/${record.artifact.id}?edit_relation=true`"
-              nuxt>
-              Edit Relation
-            </v-btn>
-          </v-card-actions>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>
+            </v-card-actions>
+          </v-window-item>
+        </v-window>
+      </v-card>
+    </v-sheet>
 
     <template>
       <v-dialog v-model="diff_results_dialog" scrollable>
@@ -451,22 +462,22 @@
               <v-tab>Raw</v-tab>
             </v-tabs>
 
-            <v-tabs-items v-model="diff_results_tab">
-              <v-tab-item key="visual">
+            <v-tabs v-model="diff_results_tab">
+              <v-tab key="visual">
                 <ArtifactCurationList
                   :curations="diff_results">
                 </ArtifactCurationList>
-              </v-tab-item>
-              <v-tab-item key="raw">
+              </v-tab>
+              <v-tab key="raw">
                 <JsonPrettyPrint :value="diff_results"></JsonPrettyPrint>
-              </v-tab-item>
-            </v-tabs-items>
+              </v-tab>
+            </v-tabs>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="blue darken-1"
-              text
+              color="blue-darken-1"
+              variant="text"
               @click="diff_results_dialog = false"
             >
               Close
@@ -483,10 +494,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'pinia'
 import { artifactIcon, artifactColor, bytesToSize, reverseRelation } from '@/helpers'
+import { userStore } from '~/stores/user'
+import { artifactsStore } from '~/stores/artifacts'
 
-export default {
+export default defineComponent({
   name: 'KGArtifactLong',
   props: {
     record: {
@@ -495,11 +509,11 @@ export default {
     }
   },
   components: {
-    ArtifactChips: () => import("@/components/ArtifactChips"),
-    ArtifactCurationList: () => import("@/components/ArtifactCurationList"),
-    JsonPrettyPrint: () => import("@/components/pretty-print"),
-    ClaimRoleModal: () => import("@/components/ClaimRoleModal.vue"),
-    ArtifactRelationView: () => import("@/components/ArtifactRelationView.vue"),
+    ArtifactChips: defineAsyncComponent(() => import("@/components/ArtifactChips")),
+    ArtifactCurationList: defineAsyncComponent(() => import("@/components/ArtifactCurationList")),
+    JsonPrettyPrint: defineAsyncComponent(() => import("@/components/pretty-print")),
+    ClaimRoleModal: defineAsyncComponent(() => import("@/components/ClaimRoleModal.vue")),
+    ArtifactRelationView: defineAsyncComponent(() => import("@/components/ArtifactRelationView.vue")),
 },
   data() {
     return {
@@ -520,7 +534,8 @@ export default {
       justificationMessage: "",
       tab: 'content',
       claimEmail: "",
-      claimKey: ""
+      claimKey: "",
+      fileOpened: [],
     }
   },
   mounted() {
@@ -534,11 +549,10 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      user: state => state.user,
-      favorites: state => state.artifacts.favoritesIDs,
-      user_is_admin: state => state.user.user_is_admin,
-      artifactClaim: state => state.artifacts.artifactClaim
+    ...mapState(userStore, ['user', 'user_is_admin', 'userid']),
+    ...mapState(artifactsStore, {
+      favorites: 'favoritesIDs',
+      artifactClaim: 'artifactClaim'
     }),
     sanitizedDescription: function() {
       return this.$sanitize(this.record.artifact.description)
@@ -548,13 +562,9 @@ export default {
         return this.favorites[this.record.artifact.artifact_group_id] ? true : false
       },
       set(value) {
-        if (value)
-          this.$store.commit('artifacts/ADD_FAVORITE', this.record.artifact.artifact_group_id)
-        else
-          this.$store.commit(
-            'artifacts/REMOVE_FAVORITE',
-            this.record.artifact.artifact_group_id
-          )
+        value
+        ? this.$artifactsStore.addFavorite(this.record.artifact.artifact_group_id)
+        : this.$artifactsStore.removeFavorite(this.record.artifact.artifact_group_id)
       }
     },
     tags() {
@@ -661,12 +671,18 @@ export default {
             + ((typeof this.record.artifact.artifact_group.reverse_relationships !== 'undefined'
                 && this.record.artifact.artifact_group.reverse_relationships.length)
                ? this.record.artifact.artifact_group.reverse_relationships.length : 0)
+    },
+    shouldShowEditBtn() {
+      return (this.isOwner() || this.isAdmin()) && !this.published
+    },
+    shouldShowEditVersionBtn() {
+      return (this.isOwner() || this.isAdmin()) && this.published
     }
   },
   methods: {
     async favoriteThis() {
       if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
+        navigateTo('/login')
       } else {
         let action = !this.favorite
         this.favorite = !this.favorite
@@ -692,24 +708,24 @@ export default {
     },
     isOwner() {
       return typeof this.record.artifact.artifact_group.owner_id !== 'undefined'
-        ? (this.$auth.loggedIn && this.user !== "undefined" && this.record.artifact.artifact_group.owner_id == this.user.userid)
+        ? (this.$auth.loggedIn && this.record.artifact.artifact_group.owner_id == this.userid)
         : false
     },
     async newVersion() {
       let response = await this.$artifactEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],{})
-      this.$store.dispatch('artifacts/fetchArtifact', {
+      this.$artifactsStore.fetchArtifact( {
         artifact_group_id: response.artifact.artifact_group_id,
         id: response.artifact.id
       })
-      this.$router.push("/artifact/" + response.artifact.artifact_group_id
+      navigateTo("/artifact/" + response.artifact.artifact_group_id
         + "/" + response.artifact.id + "?edit=true")
     },
     async reImportNewVersion() {
       let response = await this.$artifactEndpoint.post(
         [this.record.artifact.artifact_group_id, this.record.artifact.id],
         { reimport: true })
-      this.$router.push("/import")
+      navigateTo("/import")
     },
     async getDiff(from, to) {
       this.diff_from = from
@@ -739,7 +755,7 @@ export default {
         this.ownershipMessage='Kindly login to claim role'
         this.showOwnershipMessage = true;
       } else {
-        await this.$store.dispatch('artifacts/fetchArtifactClaim', {
+        await this.$artifactsStore.fetchArtifactClaim( {
           artifact_group_id: this.record.artifact.artifact_group_id,
         })
         if(this.artifactClaim.artifact_owner_request && this.artifactClaim.artifact_owner_request.error) {
@@ -776,7 +792,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

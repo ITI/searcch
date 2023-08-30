@@ -1,5 +1,9 @@
-import Vue from 'vue'
+import DOMPurify from "dompurify"
 
-import VueSanitize from 'vue-sanitize'
-
-Vue.use(VueSanitize)
+export default defineNuxtPlugin((nuxtApp) => {
+  return {
+    provide: {
+      sanitize: DOMPurify.sanitize
+    }
+  }
+});
