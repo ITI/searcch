@@ -1,0 +1,1124 @@
+{
+    "owned_artifacts": [
+      {
+        "artifact_group": {
+          "owner": {
+            "person": {
+              "id": 1584, 
+              "name": null
+            }, 
+            "id": 53
+          }, 
+          "publication": {
+            "artifact": {
+              "owner": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 528, 
+              "artifact_group_id": 516, 
+              "type": "publication", 
+              "url": "https://doi.org/10.1145/3325975", 
+              "ext_id": "10.1145/3325975", 
+              "title": "new title", 
+              "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+              "ctime": "2023-08-29T21:34:51.153656", 
+              "mtime": "2023-08-29T21:35:03.440295", 
+              "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+              "license_id": null, 
+              "owner_id": 53, 
+              "parent_id": 527
+            }, 
+            "publisher": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 613, 
+            "artifact_id": 528, 
+            "time": "2023-08-29T21:35:03.440295", 
+            "notes": "sef", 
+            "version": 8
+          }, 
+          "relationships": [
+            {
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1584, 
+                        "name": null
+                      }, 
+                      "id": 53
+                    }, 
+                    "id": 528, 
+                    "artifact_group_id": 516, 
+                    "type": "publication", 
+                    "url": "https://doi.org/10.1145/3325975", 
+                    "ext_id": "10.1145/3325975", 
+                    "title": "new title", 
+                    "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                    "ctime": "2023-08-29T21:34:51.153656", 
+                    "mtime": "2023-08-29T21:35:03.440295", 
+                    "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                    "license_id": null, 
+                    "owner_id": 53, 
+                    "parent_id": 527
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1584, 
+                      "name": null
+                    }, 
+                    "id": 53
+                  }, 
+                  "id": 613, 
+                  "artifact_id": 528, 
+                  "time": "2023-08-29T21:35:03.440295", 
+                  "notes": "sef", 
+                  "version": 8
+                }, 
+                "id": 516, 
+                "owner_id": 53, 
+                "publication_id": 613, 
+                "next_version": 9
+              }, 
+              "id": 205, 
+              "artifact_id": 518, 
+              "artifact_group_id": 516, 
+              "relation": "supplements", 
+              "related_artifact_id": null, 
+              "related_artifact_group_id": 516
+            }, 
+            {
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1, 
+                    "name": "automatic-imports"
+                  }, 
+                  "id": 1
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1, 
+                        "name": "automatic-imports"
+                      }, 
+                      "id": 1
+                    }, 
+                    "id": 135, 
+                    "artifact_group_id": 135, 
+                    "type": "dataset", 
+                    "url": "https://doi.org/10.5281/zenodo.3693686", 
+                    "ext_id": "3693686", 
+                    "title": "Unified Bug Dataset", 
+                    "name": null, 
+                    "ctime": "2021-08-02T06:38:04.008119", 
+                    "mtime": null, 
+                    "description": "<p><strong>A Public Unified Bug Dataset for Java and its Assessment Regarding Metrics and Bug Prediction.</strong></p>\n\n<p>Online appendix for the paper submitted to the <strong><em>Software Quality Journal</em></strong>.</p>\n\n<p>Bug datasets have been created and used by many researchers to build and validate novel bug prediction models. In this work, our aim is to collect existing public source code metrics based bug datasets and unify their contents. Furthermore, we wish to assess the plethora of collected metrics and the capabilities of the unified bug dataset in bug prediction.<br>\nWe considered 5 public datasets and we downloaded the corresponding source code for each system in the datasets and performed source code analysis to obtain a common set of source code metrics. This way, we produced a unified bug dataset at class and file level as well. We investigated the diversion of metric definitions and values of the different bug datasets. Finally, we used a decision tree algorithm to show the capabilities of the dataset in bug prediction.<br>\nWe found that there are statistically significant differences in the values of the original and the newly calculated metrics, furthermore, notations and definitions can severely differ. We compared the bug prediction capabilities of the original and the extended metric suites (within-project learning). Afterwards, we merged all classes (and files) into one large dataset which consists of 47,618 elements (43,744 for files) and we evaluated the bug prediction model build on this large dataset as well. Finally, we also investigated cross-project capabilities of the bug prediction models and datasets. We made the unified dataset publicly available for everyone. By using a public unified dataset as an input for different bug prediction related investigations, researchers can make their studies reproducible, thus able to be validated and verified.</p>", 
+                    "license_id": 105, 
+                    "owner_id": 1, 
+                    "parent_id": null
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1, 
+                      "name": "automatic-imports"
+                    }, 
+                    "id": 1
+                  }, 
+                  "id": 229, 
+                  "artifact_id": 135, 
+                  "time": "2021-08-12T23:10:50.945841", 
+                  "notes": null, 
+                  "version": 0
+                }, 
+                "id": 135, 
+                "owner_id": 1, 
+                "publication_id": 229, 
+                "next_version": 1
+              }, 
+              "id": 207, 
+              "artifact_id": 518, 
+              "artifact_group_id": 516, 
+              "relation": "describes", 
+              "related_artifact_id": null, 
+              "related_artifact_group_id": 135
+            }, 
+            {
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1, 
+                    "name": "automatic-imports"
+                  }, 
+                  "id": 1
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1, 
+                        "name": "automatic-imports"
+                      }, 
+                      "id": 1
+                    }, 
+                    "id": 141, 
+                    "artifact_group_id": 141, 
+                    "type": "dataset", 
+                    "url": "https://doi.org/10.5281/zenodo.3506640", 
+                    "ext_id": "3506640", 
+                    "title": "Dataset: What Are Cybersecurity Education Papers About? A Systematic Literature Review of SIGCSE and ITiCSE Conferences", 
+                    "name": null, 
+                    "ctime": "2021-08-02T06:41:20.973397", 
+                    "mtime": null, 
+                    "description": "<p>The dataset for the following conference paper:</p>\n\n<p>Valdemar &Scaron;v&aacute;bensk&yacute;, Jan Vykopal, and Pavel \u010celeda. What Are Cybersecurity Education Papers About? A Systematic Literature Review of SIGCSE and ITiCSE Conferences. In Proceedings of The 51st ACM Technical Symposium on Computer Science Education (SIGCSE &#39;20). ACM, New York, NY, USA. DOI: https://doi.org/10.1145/3328778.3366816</p>\n\n<p>Preprint is available at:&nbsp;<a href=\"https://arxiv.org/abs/1911.11675\">https://arxiv.org/abs/1911.11675</a></p>\n\n<p>If using the dataset, please use the following BibTeX entry to cite the original paper:</p>\n\n<pre><code class=\"language-json\">@inproceedings{Svabensky:2020,\n\u00a0\u00a0 \u00a0author = {\\v{S}v\\'{a}bensk\\'{y}, Valdemar and Vykopal, Jan and \\v{C}eleda, Pavel},\n\u00a0\u00a0 \u00a0title = {What Are Cybersecurity Education Papers About? A Systematic Literature Review of SIGCSE and ITiCSE Conferences},\n\u00a0\u00a0 \u00a0booktitle = {Proceedings of The 51st ACM Technical Symposium on Computer Science Education},\n\u00a0\u00a0 \u00a0series = {SIGCSE '20},\n\u00a0\u00a0 \u00a0year = {2020},\n\u00a0\u00a0 \u00a0isbn = {978-1-4503-6793-6/20/03},\n\u00a0\u00a0 \u00a0location = {Portland, Oregon, USA},\n\u00a0\u00a0 \u00a0numpages = {7},\n\u00a0\u00a0 \u00a0url = {https://doi.org/10.1145/3328778.3366816},\n\u00a0\u00a0 \u00a0doi = {10.1145/3328778.3366816},\n\u00a0\u00a0 \u00a0publisher = {ACM},\n\u00a0\u00a0 \u00a0address = {New York, NY, USA},\n\u00a0\u00a0 \u00a0keywords = {cybersecurity education, systematic literature review, systematic mapping study, survey, SIGCSE community, ITiCSE community},\n}</code></pre>\n\n<p>The file &quot;SIGCSE 2020 Literature Review.xlsx&quot; is an Excel spreadsheet with three sheets corresponding to 1) all papers found by automated search, 2) manually excluded papers, and 3) papers included in the literature review. There are also three CSV files that correspond to the three individual sheets.</p>", 
+                    "license_id": 105, 
+                    "owner_id": 1, 
+                    "parent_id": null
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1, 
+                      "name": "automatic-imports"
+                    }, 
+                    "id": 1
+                  }, 
+                  "id": 452, 
+                  "artifact_id": 141, 
+                  "time": "2021-08-12T23:10:50.945841", 
+                  "notes": null, 
+                  "version": 0
+                }, 
+                "id": 141, 
+                "owner_id": 1, 
+                "publication_id": 452, 
+                "next_version": 1
+              }, 
+              "id": 209, 
+              "artifact_id": 518, 
+              "artifact_group_id": 516, 
+              "relation": "requires", 
+              "related_artifact_id": null, 
+              "related_artifact_group_id": 141
+            }, 
+            {
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1263, 
+                    "name": "Laura S Tinnel"
+                  }, 
+                  "id": 8
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1263, 
+                        "name": "Laura S Tinnel"
+                      }, 
+                      "id": 8
+                    }, 
+                    "id": 507, 
+                    "artifact_group_id": 507, 
+                    "type": "dataset", 
+                    "url": "https://www.stratosphereips.org/datasets-ctu13/", 
+                    "ext_id": null, 
+                    "title": " CTU-13: A Labeled Dataset With Botnet, Normal And Background Traffic ", 
+                    "name": null, 
+                    "ctime": "2022-09-07T20:38:11.732969", 
+                    "mtime": "2022-09-07T20:48:32.140802", 
+                    "description": "The CTU-13 is a dataset of botnet traffic that was captured in the CTU University, Czech Republic, in 2011. The goal of the dataset was to have a large capture of real botnet traffic mixed with normal traffic and background traffic. The CTU-13 dataset consists in thirteen captures (called scenarios) of different botnet samples. On each scenario we executed a specific malware, which used several protocols and performed different actions. Table 2 shows the characteristics of the botnet scenarios.\n\nEach scenario was captured in a pcap file that contains all the packets of the three types of traffic. These pcap files were processed to obtain other type of information, such as NetFlows, WebLogs, etc. The first analysis of the CTU-13 dataset, that was described and published in the paper \"An empirical comparison of botnet detection methods\" (see Citation below) used unidirectional NetFlows to represent the traffic and to assign the labels. These unidirectional NetFlows should not be used because they were outperformed by our second analysis of the dataset, which used bidirectional NetFlows. The bidirectional NetFlows have several advantages over the directional ones. First, they solve the issue of differentiating between the client and the server, second they include more information and third they include much more detailed labels. The second analysis of the dataset with the bidirectional NetFlows is the one published here. \n\nThe relationship between the duration of the scenario, the number of packets, the number of NetFlows and the size of the pcap file is shown in Table 3. This Table also shows the malware used to create the capture, and the number of infected computers on each scenario.\n\nEach of the scenarios in the dataset was processed to obtain different files. For privacy issues the complete pcap file containing all the background, normal and botnet data is not available. However, the rest of the files is available. \n\nContact Email: STRATOSPHEREIPS@AGENTS.FEL.CVUT.CZ\n", 
+                    "license_id": null, 
+                    "owner_id": 8, 
+                    "parent_id": null
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1263, 
+                      "name": "Laura S Tinnel"
+                    }, 
+                    "id": 8
+                  }, 
+                  "id": 597, 
+                  "artifact_id": 507, 
+                  "time": "2022-09-07T20:48:32.140802", 
+                  "notes": null, 
+                  "version": 0
+                }, 
+                "id": 507, 
+                "owner_id": 8, 
+                "publication_id": 597, 
+                "next_version": 1
+              }, 
+              "id": 210, 
+              "artifact_id": 518, 
+              "artifact_group_id": 516, 
+              "relation": "describes", 
+              "related_artifact_id": null, 
+              "related_artifact_group_id": 507
+            }, 
+            {
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1263, 
+                    "name": "Laura S Tinnel"
+                  }, 
+                  "id": 8
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1263, 
+                        "name": "Laura S Tinnel"
+                      }, 
+                      "id": 8
+                    }, 
+                    "id": 512, 
+                    "artifact_group_id": 512, 
+                    "type": "dataset", 
+                    "url": "https://github.com/icsdataset/hai", 
+                    "ext_id": "icsdataset/hai", 
+                    "title": "HIL-based Augmented ICS (HAI) Security Dataset (2)", 
+                    "name": "icsdataset/hai", 
+                    "ctime": "2022-09-09T17:07:19.713555", 
+                    "mtime": "2022-09-09T17:36:53.335311", 
+                    "description": "The HAI security dataset was collected from a realistic Industiral Control System (ICS) testbed augmented with a Hardware-In-the-Loop (HIL) simulator that emulates steam-turbine power generation and pumped-storage hydropower generation. ", 
+                    "license_id": 112, 
+                    "owner_id": 8, 
+                    "parent_id": null
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1263, 
+                      "name": "Laura S Tinnel"
+                    }, 
+                    "id": 8
+                  }, 
+                  "id": 601, 
+                  "artifact_id": 512, 
+                  "time": "2022-09-09T17:26:57.861255", 
+                  "notes": null, 
+                  "version": 0
+                }, 
+                "id": 512, 
+                "owner_id": 8, 
+                "publication_id": 601, 
+                "next_version": 1
+              }, 
+              "id": 211, 
+              "artifact_id": 518, 
+              "artifact_group_id": 516, 
+              "relation": "supplements", 
+              "related_artifact_id": null, 
+              "related_artifact_group_id": 512
+            }, 
+            {
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1263, 
+                    "name": "Laura S Tinnel"
+                  }, 
+                  "id": 8
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1263, 
+                        "name": "Laura S Tinnel"
+                      }, 
+                      "id": 8
+                    }, 
+                    "id": 512, 
+                    "artifact_group_id": 512, 
+                    "type": "dataset", 
+                    "url": "https://github.com/icsdataset/hai", 
+                    "ext_id": "icsdataset/hai", 
+                    "title": "HIL-based Augmented ICS (HAI) Security Dataset (2)", 
+                    "name": "icsdataset/hai", 
+                    "ctime": "2022-09-09T17:07:19.713555", 
+                    "mtime": "2022-09-09T17:36:53.335311", 
+                    "description": "The HAI security dataset was collected from a realistic Industiral Control System (ICS) testbed augmented with a Hardware-In-the-Loop (HIL) simulator that emulates steam-turbine power generation and pumped-storage hydropower generation. ", 
+                    "license_id": 112, 
+                    "owner_id": 8, 
+                    "parent_id": null
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1263, 
+                      "name": "Laura S Tinnel"
+                    }, 
+                    "id": 8
+                  }, 
+                  "id": 601, 
+                  "artifact_id": 512, 
+                  "time": "2022-09-09T17:26:57.861255", 
+                  "notes": null, 
+                  "version": 0
+                }, 
+                "id": 512, 
+                "owner_id": 8, 
+                "publication_id": 601, 
+                "next_version": 1
+              }, 
+              "id": 213, 
+              "artifact_id": 518, 
+              "artifact_group_id": 516, 
+              "relation": "cites", 
+              "related_artifact_id": null, 
+              "related_artifact_group_id": 512
+            }
+          ], 
+          "reverse_relationships": [
+            {
+              "id": 205, 
+              "artifact_id": null, 
+              "artifact_group_id": 516, 
+              "relation": "supplements", 
+              "related_artifact_id": 518, 
+              "related_artifact_group_id": 516, 
+              "related_artifact_group": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "publication": {
+                  "artifact": {
+                    "owner": {
+                      "person": {
+                        "id": 1584, 
+                        "name": null
+                      }, 
+                      "id": 53
+                    }, 
+                    "id": 528, 
+                    "artifact_group_id": 516, 
+                    "type": "publication", 
+                    "url": "https://doi.org/10.1145/3325975", 
+                    "ext_id": "10.1145/3325975", 
+                    "title": "new title", 
+                    "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                    "ctime": "2023-08-29T21:34:51.153656", 
+                    "mtime": "2023-08-29T21:35:03.440295", 
+                    "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                    "license_id": null, 
+                    "owner_id": 53, 
+                    "parent_id": 527
+                  }, 
+                  "publisher": {
+                    "person": {
+                      "id": 1584, 
+                      "name": null
+                    }, 
+                    "id": 53
+                  }, 
+                  "id": 613, 
+                  "artifact_id": 528, 
+                  "time": "2023-08-29T21:35:03.440295", 
+                  "notes": "sef", 
+                  "version": 8
+                }, 
+                "id": 516, 
+                "owner_id": 53, 
+                "publication_id": 613, 
+                "next_version": 9
+              }
+            }
+          ], 
+          "publications": [
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 518, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-18T20:28:17.468911", 
+                "mtime": "2023-08-22T15:00:48.230023", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": null
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 605, 
+              "artifact_id": 518, 
+              "time": "2023-08-22T15:00:48.230023", 
+              "notes": null, 
+              "version": 0
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 519, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-22T15:34:40.268181", 
+                "mtime": "2023-08-29T20:25:46.463076", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 518
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 606, 
+              "artifact_id": 519, 
+              "time": "2023-08-29T20:25:46.463076", 
+              "notes": "add files", 
+              "version": 1
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 520, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T20:36:01.240411", 
+                "mtime": "2023-08-29T20:39:59.009576", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 519
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 607, 
+              "artifact_id": 520, 
+              "time": "2023-08-29T20:39:59.009576", 
+              "notes": "asef", 
+              "version": 2
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 522, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T20:43:05.689800", 
+                "mtime": "2023-08-29T20:43:26.151693", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 520
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 608, 
+              "artifact_id": 522, 
+              "time": "2023-08-29T20:43:26.151693", 
+              "notes": "abc", 
+              "version": 3
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 523, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T20:43:47.643555", 
+                "mtime": "2023-08-29T20:43:58.405010", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 522
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 609, 
+              "artifact_id": 523, 
+              "time": "2023-08-29T20:43:58.405010", 
+              "notes": "def", 
+              "version": 4
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 524, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T20:46:00.264042", 
+                "mtime": "2023-08-29T20:46:16.723014", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 523
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 610, 
+              "artifact_id": 524, 
+              "time": "2023-08-29T20:46:16.723014", 
+              "notes": "ghi", 
+              "version": 5
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 525, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T21:03:09.911860", 
+                "mtime": "2023-08-29T21:05:50.005646", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 524
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 611, 
+              "artifact_id": 525, 
+              "time": "2023-08-29T21:05:50.005646", 
+              "notes": "t", 
+              "version": 6
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 527, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T21:28:51.477832", 
+                "mtime": "2023-08-29T21:34:39.230499", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 525
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 612, 
+              "artifact_id": 527, 
+              "time": "2023-08-29T21:34:39.230499", 
+              "notes": "jesus", 
+              "version": 7
+            }, 
+            {
+              "artifact": {
+                "owner": {
+                  "person": {
+                    "id": 1584, 
+                    "name": null
+                  }, 
+                  "id": 53
+                }, 
+                "id": 528, 
+                "artifact_group_id": 516, 
+                "type": "publication", 
+                "url": "https://doi.org/10.1145/3325975", 
+                "ext_id": "10.1145/3325975", 
+                "title": "new title", 
+                "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+                "ctime": "2023-08-29T21:34:51.153656", 
+                "mtime": "2023-08-29T21:35:03.440295", 
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+                "license_id": null, 
+                "owner_id": 53, 
+                "parent_id": 527
+              }, 
+              "publisher": {
+                "person": {
+                  "id": 1584, 
+                  "name": null
+                }, 
+                "id": 53
+              }, 
+              "id": 613, 
+              "artifact_id": 528, 
+              "time": "2023-08-29T21:35:03.440295", 
+              "notes": "sef", 
+              "version": 8
+            }
+          ], 
+          "id": 516, 
+          "owner_id": 53, 
+          "publication_id": 613, 
+          "next_version": 9
+        }, 
+        "license": null, 
+        "meta": [
+          {
+            "id": 6446, 
+            "name": "doi", 
+            "value": "10.1145/3325975", 
+            "type": null, 
+            "source": "acm_dl"
+          }, 
+          {
+            "id": 6447, 
+            "name": "call-number", 
+            "value": "10.1145/3325975", 
+            "type": null, 
+            "source": "acm_dl"
+          }, 
+          {
+            "id": 6448, 
+            "name": "publisher", 
+            "value": "Association for Computing Machinery", 
+            "type": null, 
+            "source": "acm_dl"
+          }, 
+          {
+            "id": 6449, 
+            "name": "acm_full_citation", 
+            "value": "{\"id\": \"10.1145/3325975\", \"type\": \"DATASET\", \"author\": [{\"family\": \"Campagna\", \"given\": \"Giovanni\"}, {\"family\": \"Xu\", \"given\": \"Silei\"}, {\"family\": \"Moradshahi\", \"given\": \"Mehrad\"}, {\"family\": \"Socher\", \"given\": \"Richard\"}, {\"family\": \"Lam\", \"given\": \"Monica S.\"}], \"accessed\": {\"date-parts\": [[2023, 8, 18]]}, \"issued\": {\"date-parts\": [[2019, 4, 19]]}, \"abstract\": \"\\n    <p>The artifact contains the benchmark dataset associated with the paper \\\"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\\\", published in PLDI 2019. Documentation is included in the README file.</p>\\n\", \"call-number\": \"10.1145/3325975\", \"DOI\": \"10.1145/3325975\", \"genre\": \"dataset\", \"keyword\": \"natural language processing, open datasets, semantic parsing, virtual assistants\", \"publisher\": \"Association for Computing Machinery\", \"title\": \"Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;\", \"URL\": \"https://doi.org/10.1145/3325975\"}", 
+            "type": "text/json", 
+            "source": "acm_dl"
+          }, 
+          {
+            "id": 6450, 
+            "name": "citations", 
+            "value": "[]", 
+            "type": "text/json", 
+            "source": "semantic_scholar"
+          }, 
+          {
+            "id": 6451, 
+            "name": "references", 
+            "value": "[]", 
+            "type": "text/json", 
+            "source": "semantic_scholar"
+          }, 
+          {
+            "id": 6452, 
+            "name": "top_keywords", 
+            "value": "[[\"dataset\",2],[\"quot\",2],[\"genie\",2],[\"semantic\",2],[\"parsers\",2],[\"artifact\",1],[\"pldi\",1],[\"readme\",1]]", 
+            "type": "json", 
+            "source": "top_keywords"
+          }, 
+          {
+            "id": 6453, 
+            "name": "top_ngram_keywords", 
+            "value": "[[\"Virtual Assistant Commands\",8.663250932764108e-05],[\"Natural Language Semantic\",0.0001120809291298965],[\"Language Semantic Parsers\",0.0001120809291298965],[\"Assistant Commands\",0.0014223468242603805],[\"Generator of Natural\",0.0018388020190339242],[\"Natural Language\",0.0018388020190339242],[\"Language Semantic\",0.0018388020190339242],[\"Semantic Parsers\",0.0018388020190339242],[\"Parsers for Virtual\",0.0018388020190339242],[\"Virtual Assistant\",0.0018388020190339242],[\"published in PLDI\",0.007853906115972585],[\"Public Dataset\",0.015864798097246342],[\"Genie\",0.016868846532462376],[\"benchmark dataset\",0.021757826455370485],[\"Commands\",0.02343076452626397],[\"Generator\",0.03026602395059504],[\"Natural\",0.03026602395059504],[\"Language\",0.03026602395059504],[\"Semantic\",0.03026602395059504],[\"Parsers\",0.03026602395059504]]", 
+            "type": "json", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 6454, 
+            "name": "pke_keywords", 
+            "value": "[[\"natural language semantic parsers\",1.0],[\"public dataset\",1.0],[\"generator\",0.9563946547060839],[\"genie\",0.6232483098750158],[\"assistant commands\",0.6106105044996253],[\"paper\",0.5922374909428743],[\"virtual assistant commands\",0.5382225187702285],[\"pldi\",0.4317895911192262],[\"artifact\",0.42508399147900583],[\"benchmark dataset\",0.3907681741260838],[\"documentation\",0.3801292148500186],[\"benchmark dataset associated\",0.3776954683732346],[\"virtual assistant\",0.2615367713060495],[\"natural language\",0.18946165850207594],[\"language semantic\",0.18946165850207594],[\"semantic parsers\",0.18946165850207594],[\"natural language semantic\",0.011136172886647866],[\"language semantic parsers\",0.011136172886647866]]", 
+            "type": "json", 
+            "source": "pke_keywords"
+          }, 
+          {
+            "id": 6455, 
+            "name": "languages", 
+            "value": "efad", 
+            "type": null, 
+            "source": null
+          }
+        ], 
+        "tags": [
+          {
+            "id": 9178, 
+            "tag": "semantic", 
+            "source": "top_keywords"
+          }, 
+          {
+            "id": 9179, 
+            "tag": "artifact", 
+            "source": "top_keywords"
+          }, 
+          {
+            "id": 9180, 
+            "tag": "pldi", 
+            "source": "top_keywords"
+          }, 
+          {
+            "id": 9181, 
+            "tag": "readme", 
+            "source": "top_keywords"
+          }, 
+          {
+            "id": 9183, 
+            "tag": "Natural Language Semantic", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9184, 
+            "tag": "Language Semantic Parsers", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9185, 
+            "tag": "Assistant Commands", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9186, 
+            "tag": "Generator of Natural", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9188, 
+            "tag": "Language Semantic", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9189, 
+            "tag": "Semantic Parsers", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9190, 
+            "tag": "Parsers for Virtual", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9191, 
+            "tag": "Virtual Assistant", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9193, 
+            "tag": "Commands", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9195, 
+            "tag": "Language", 
+            "source": "yake_ngram_keywords"
+          }, 
+          {
+            "id": 9196, 
+            "tag": "benchmark dataset associated", 
+            "source": "pke_keywords"
+          }, 
+          {
+            "id": 9197, 
+            "tag": "a keyword", 
+            "source": ""
+          }
+        ], 
+        "files": [
+          {
+            "file_content": null, 
+            "members": [], 
+            "id": 1073, 
+            "url": "google.com", 
+            "name": null, 
+            "filetype": "unknown", 
+            "size": null, 
+            "mtime": null
+          }
+        ], 
+        "owner": {
+          "person": {
+            "id": 1584, 
+            "name": null
+          }, 
+          "id": 53
+        }, 
+        "importer": null, 
+        "curations": [
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2282
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2283
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2284
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2285
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2286
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2287
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2288
+          }, 
+          {
+            "curator": {
+              "person": {
+                "id": 1584, 
+                "name": null
+              }, 
+              "id": 53
+            }, 
+            "id": 2289
+          }
+        ], 
+        "publication": null, 
+        "releases": [], 
+        "affiliations": [
+          {
+            "affiliation": {
+              "person": {
+                "id": 1588, 
+                "name": "Giovanni Campagna", 
+                "email": null, 
+                "research_interests": null, 
+                "website": null
+              }, 
+              "org": null, 
+              "id": 1602
+            }, 
+            "id": 2525, 
+            "roles": "Author"
+          }, 
+          {
+            "affiliation": {
+              "person": {
+                "id": 1590, 
+                "name": "Mehrad Moradshahi", 
+                "email": null, 
+                "research_interests": null, 
+                "website": null
+              }, 
+              "org": null, 
+              "id": 1604
+            }, 
+            "id": 2526, 
+            "roles": "Author"
+          }, 
+          {
+            "affiliation": {
+              "person": {
+                "id": 1592, 
+                "name": "Monica S. Lam", 
+                "email": null, 
+                "research_interests": null, 
+                "website": null
+              }, 
+              "org": null, 
+              "id": 1606
+            }, 
+            "id": 2528, 
+            "roles": "Author"
+          }
+        ], 
+        "badges": [
+          {
+            "badge": {
+              "id": 22, 
+              "title": "Artifact Evaluated - Passed", 
+              "url": "https://www.usenix.org/sites/default/files/artifact_evaluation_badge_250.png", 
+              "image_url": "https://www.usenix.org/sites/default/files/artifact_evaluation_badge_250.png", 
+              "description": "Artifact Evaluated - Passed", 
+              "version": "", 
+              "organization": "USENIX", 
+              "venue": null, 
+              "issue_time": null, 
+              "doi": null, 
+              "verified": true
+            }, 
+            "id": 52
+          }
+        ], 
+        "venues": [], 
+        "candidate_relationships": [], 
+        "view_count": 5, 
+        "exporter": null, 
+        "id": 530, 
+        "artifact_group_id": 516, 
+        "type": "publication", 
+        "url": "https://doi.org/10.1145/3325975", 
+        "ext_id": "10.1145/3325975", 
+        "title": "new title", 
+        "name": "Public Dataset for &quot;Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands&quot;", 
+        "ctime": "2023-08-29T22:00:04.337040", 
+        "mtime": "2023-08-30T03:10:05.180744", 
+        "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n", 
+        "parent_id": 528
+      }
+    ]
+  }
+  

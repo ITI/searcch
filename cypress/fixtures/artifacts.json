@@ -1,0 +1,216 @@
+{
+    "artifacts": {
+        "page": 1,
+        "total": 43,
+        "pages": 5,
+        "artifacts": [
+            {
+                "id": 528,
+                "artifact_group_id": 516,
+                "artifact_group": {
+                    "id": 516,
+                    "owner_id": 53
+                },
+                "uri": "/v1/artifact/516/528",
+                "doi": "https://doi.org/10.1145/3325975",
+                "type": "publication",
+                "title": "new title",
+                "description": "\n    <p>The artifact contains the benchmark dataset associated with the paper \"Genie: A Generator of Natural Language Semantic Parsers for Virtual Assistant Commands\", published in PLDI 2019. Documentation is included in the README file.</p>\n",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 53
+                },
+                "views": 5
+            },
+            {
+                "id": 14,
+                "artifact_group_id": 14,
+                "artifact_group": {
+                    "id": 14,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/14/14",
+                "doi": "https://doi.org/10.1145/3359789.3359833",
+                "type": "publication",
+                "title": "Opening Pandora's box through ATFuzzer: dynamic analysis of AT interface for Android smartphones",
+                "description": "This paper focuses on checking the correctness and robustness of the AT command interface\nexposed by the cellular baseband processor through Bluetooth and USB. A device's application\nprocessor uses this interface for issuing high-level commands (or, AT commands) to\nthe baseband processor for performing cellular network operations (e.g., placing a\nphone call). Vulnerabilities in this interface can be leveraged by malicious Bluetooth\nperipherals to launch pernicious attacks including DoS and privacy attacks. To identify\nsuch vulnerabilities, we propose ATFuzzer that uses a grammar-guided evolutionary\nfuzzing approach which mutates production rules of the AT command grammar instead\nof concrete AT commands. Empirical evaluation with ATFuzzer on 10 Android smartphones\nfrom 6 vendors revealed 4 invalid AT command grammars over Bluetooth and 13 over USB\nwith implications ranging from DoS, downgrade of cellular protocol version (e.g.,\nfrom 4G to 3G/2G) to severe privacy leaks. The vulnerabilities along with the invalid\nAT command grammars were responsibly disclosed to affected vendors and two of the\nreported vulnerabilities have been already assigned CVEs (CVE-2019-16400 and CVE-2019-16401).",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            },
+            {
+                "id": 446,
+                "artifact_group_id": 446,
+                "artifact_group": {
+                    "id": 446,
+                    "owner_id": 8
+                },
+                "uri": "/v1/artifact/446/446",
+                "doi": "https://isaorgwebsite.blob.core.windows.net/media/isa/media/pdf/logiic/logiic-project-12-final-report.pdf",
+                "type": "publication",
+                "title": "LOGIIC Safety Instrumentation Final Report April 2021",
+                "description": "<p>Industrial Control Systems use safety instrumented systems (SISs) to monitor operations and take automated actions to maintain a safe state when abnormal conditions occur. Instruments such as transmitters, valve controls, and fire and gas detectors provide inputs and controls to safety system function. Instruments have been modernized over time to provide smart features such as valve partial stroke testing.</p>\n<p>The lack of security concepts in the HART protocol necessitates the use of alternative methods to protect devices from unauthorized modifications. Protections considered under Project 12 included a hardware write-protect switch on the instrument, a software-based write-protect password or pin code on the instrument, password on the IMS/AMS (or its underlying operating system platform) that remotely manages the instrument, and a variety of disparate protections provided by various SIS solutions.</p>\n<p>Successfully demonstrated attacks used commonly available attacker tools and exploited common-knowledge architectural weaknesses that were present in all four assessments. These attacks required a low to moderate level of effort to exploit and included effects that can significantly impact device safety function.</p>\n<p>Project 12 exposed the risks associated with the two architectures and determined the circumstances under which each architecture poses the least risk. Key findings include:</p>\n<ul>\n<li>Attackers can make unauthorized device changes at will and evade detection. Some changes can result in unsafe operating conditions. The risk of cyberattack directly impacts safety and must be considered along with hardware faults and other safety considerations.\n<li>There is no simple and immediate remedy for securing safety systems; risk reduction requires a combination of protection and detection mechanisms.\n<li>Safety systems architectures that mediate IMS/AMS and safety instrument communications using an SIS with enabled protective features pose less risk of unauthorized device modification than do architectures using a passthrough MUX. If SIS protections are not enabled, the risk is equivalent to that of using a MUX.\n<li>Device hardware-based write protections are the only fully protective means to prevent unauthorized device configuration changes. Only 33% of sampled devices had hardware switches.\n<li>Software-based write protections can be bypassed with little effort; therefore, they do not protect against these changes. SIS write protections effectively prevent some, but not all, changes.\n<li>Device write-protect implementation is inconsistent, even across the same vendor products. This can lead to confusion and accidentally unprotected devices.\n<li>HART protocol lacks basic security concepts and does not include standardized security-relevant commands, which leads to inconsistent implementation across devices using device-specific commands. This hinders the detection of attempts to circumvent device security features. The protocol provides no means to differentiate device-specific read and write commands. This makes it impossible for any SIS to block device-specific write commands without also blocking read commands. The IMS/AMS depends on reading values to update device status in the display.\n<li>The practiced method of distributing and installing device type manager (DTM) software opens the door to a supply chain attacks and poses significant risk to IMS/AMS platforms. These platforms are trusted and can be used as a launch point for device attacks that can negatively impact safety system function.\n</ul>\n<br>\n<p>Because of this, we conclude that safety systems are vulnerable to malicious attacks that may be undetectable in practice. Extreme caution should be taken before introducing any software, which could insert malware into the process control environment. We cannot sufficiently emphasize the severity of this vulnerability.</p>\n<p>We recommend a vulnerability mitigation roadmap of short-, mid-, and long-term actions. Short-term actions are things that asset owners can do immediately to reduce their exposure and risk. Mid-term actions are things that asset owners can do cooperatively with vendors. Long-term actions are things that standards bodies and vendors can do to improve the security of safety system products.</p>",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 8
+                },
+                "views": 0
+            },
+            {
+                "id": 40,
+                "artifact_group_id": 40,
+                "artifact_group": {
+                    "id": 40,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/40/40",
+                "doi": "https://doi.org/10.1145/3427228.3427244",
+                "type": "publication",
+                "title": "App-Agnostic Post-Execution Semantic Analysis of Android In-Memory Forensics Artifacts",
+                "description": " Over the last decade, userland memory forensics techniques and algorithms have gained\npopularity among practitioners, as they have proven to be useful in real forensics\nand cybercrime investigations. These techniques analyze and recover objects and artifacts\nfrom process memory space that are of critical importance in investigations. Nonetheless,\nthe major drawback of existing techniques is that they cannot determine the origin\nand context within which the recovered object exists without prior knowledge of the\napplication logic. Thus, in this research, we present a solution to close the gap\nbetween application-specific and application-generic techniques. We introduce OAGen,\na post-execution and app-agnostic semantic analysis approach designed to help investigators\nestablish concrete evidence by identifying the provenance and relationships between\nin-memory objects in a process memory image. OAGen&nbsp; utilizes Points-to analysis to\nreconstruct a runtime\u2019s object allocation network. The resulting graph is then fed\nas an input into our semantic analysis algorithms to determine objects\u2019 origin, context,\nand scope in the network. The results of our experiments exhibit OAGen\u2019s ability to\neffectively create an allocation network even for memory-intensive applications with\nthousands of objects, like Facebook. The performance evaluation of our approach across\nfourteen different Android apps shows OAGen&nbsp; can efficiently search and decode nodes,\nand identify their references with a modest throughput rate. Further practical application\nof OAGen&nbsp; demonstrated in two case studies shows that our approach can aid investigators\nin the recovery of deleted messages and the detection of malware functionality in\npost-execution program analysis.",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            },
+            {
+                "id": 7,
+                "artifact_group_id": 7,
+                "artifact_group": {
+                    "id": 7,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/7/7",
+                "doi": "https://github.com/gehuangyi20/Koinonia",
+                "type": "software",
+                "title": "gehuangyi20/Koinonia",
+                "description": "The Koinonia system is an implementation of the Koinonia voting protocol. The protocol contains three independent servers (ESP, EA, and Tellers) which are recommended to be running on different machines. We use PostgreSQL (v9.6) on ESP, EA, and Tellers as the database back-end for storing election data. Clients will get the Voter application from the Authority and execute it on a Web browser. Both server-side and client-side applications are written in Node.js (v12) and use an abstract Koinonia library to get access to protocol functions such as vote share generation and proof verification. To accomodate the different deployment and optimization needs, we have thus made two implementations of the Koinonia library, one for client-side and the other for server-side. The client-side library is implemented with 500+ lines of JavaScript code based on SJCL. The server-side library is implemented through Node.js C++ Addons (1200 lines of native code) in order to optimize the performance of group exponentiations. The released software has been tested on Ubuntu 18.04. The Readme contains instructions to deploy and test the Koinonia system involving multiple servers (e.g., one ESP, one EA, and three Tellers). Also, the Readme provides a performance benchmark script to stress test the system with one million ballots under the multi-server setting. Beyond the Koinonia system, we also release an implementation of secure communication channel establishment using experimental quantum-safe cryptographic algorithms, based on Open Quantum Safe (OQS) and Stunnel. The source code can be found at https://github.com/gehuangyi20/Koinonia.",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            },
+            {
+                "id": 503,
+                "artifact_group_id": 503,
+                "artifact_group": {
+                    "id": 503,
+                    "owner_id": 36
+                },
+                "uri": "/v1/artifact/503/503",
+                "doi": "http://arxiv.org/abs/2111.07847v1",
+                "type": "publication",
+                "title": "Reproducible and Adaptable Log Data Generation for Sound Cybersecurity\n  Experiments",
+                "description": "Artifacts such as log data and network traffic are fundamental for\ncybersecurity research, e.g., in the area of intrusion detection. Yet, most\nresearch is based on artifacts that are not available to others or cannot be\nadapted to own purposes, thus making it difficult to reproduce and build on\nexisting work. In this paper, we identify the challenges of artifact generation\nwith the goal of conducting sound experiments that are valid, controlled, and\nreproducible. We argue that testbeds for artifact generation have to be\ndesigned specifically with reproducibility and adaptability in mind. To achieve\nthis goal, we present SOCBED, our proof-of-concept implementation and the first\ntestbed with a focus on generating realistic log data for cybersecurity\nexperiments in a reproducible and adaptable manner. SOCBED enables researchers\nto reproduce testbed instances on commodity computers, adapt them according to\nown requirements, and verify their correct functionality. We evaluate SOCBED\nwith an exemplary, practical experiment on detecting a multi-step intrusion of\nan enterprise network and show that the resulting experiment is indeed valid,\ncontrolled, and reproducible. Both SOCBED and the log dataset underlying our\nevaluation are freely available.",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 36
+                },
+                "views": 0
+            },
+            {
+                "id": 59,
+                "artifact_group_id": 59,
+                "artifact_group": {
+                    "id": 59,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/59/59",
+                "doi": "https://github.com/xfu2006/ACSAC20_Artifact",
+                "type": "software",
+                "title": "xfu2006/ACSAC20_Artifact",
+                "description": "This page contains the artifacts for ACSAC20 Submission 90 (ZeroAudit). The VirtualBox image of the artifact is available from the URL below: VBox Image (11.2GB) Please find the installation instructions in abstract.pdf. The uploaded artifact is for ACSAC20 Review Only. No derivative work permitted at this moment. Source code will be open-sourced under GLP2 after the paper is published by ACM.(around Jan 2021).",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            },
+            {
+                "id": 74,
+                "artifact_group_id": 74,
+                "artifact_group": {
+                    "id": 74,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/74/74",
+                "doi": "https://doi.org/10.1145/3427228.3427262",
+                "type": "publication",
+                "title": "RusTEE: Developing Memory-Safe ARM TrustZone Applications",
+                "description": " In the past decade, Trusted Execution Environment (TEE) provided by ARM TrustZone\nis becoming one of the primary techniques for enhancing the security of mobile devices.\nThe isolation enforced by TrustZone can protect the trusted applications running in\nthe TEE against malicious software in the untrusted rich execution environment (REE).\nHowever, TrustZone cannot completely prevent vulnerabilities in trusted applications\nresiding in the TEE, which can then be used to attack other trusted applications or\neven the trusted OS. Previously, a number of memory corruption vulnerabilities have\nbeen reported on different TAs, which are written in memory-unsafe languages like\nC. Recently, various memory-safe programming languages have emerged to mitigate the\nprevalent memory corruption bugs. In this paper, we propose RusTEE, a trusted application\nmechanism that leverages Rust, a newly emerged memory-safe language, to enhance the\nsecurity of TAs. Though the high-level idea is quite straight-forwarding, we resolve\nseveral challenges on adopting Rust in mobile TEEs. Specifically, since Rust currently\ndoes not support any TrustZone-assisted TEE systems, we extend the existing Rust compiler\nfor providing such support. Also, we apply comprehensive security mechanisms to resolve\ntwo security issues of trusted applications, namely, securely invoking high-privileged\nsystem services and securely communicating with untrusted REE. We implement a prototype\nof RusTEE as the trusted applications\u2019 SDK, which supports both emulator and real\nhardware devices. The experiment shows that RusTEE can compile applications with close-to-C\nperformance on the evaluated platforms. ",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            },
+            {
+                "id": 28,
+                "artifact_group_id": 28,
+                "artifact_group": {
+                    "id": 28,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/28/28",
+                "doi": "https://doi.org/10.1145/3359789.3359813",
+                "type": "publication",
+                "title": "JStap: a static pre-filter for malicious JavaScript detection",
+                "description": "Given the success of the Web platform, attackers have abused its main programming\nlanguage, namely JavaScript, to mount different types of attacks on their victims.\nDue to the large volume of such malicious scripts, detection systems rely on static\nanalyses to quickly process the vast majority of samples. These static approaches\nare not infallible though and lead to misclassifications. Also, they lack semantic\ninformation to go beyond purely syntactic approaches. In this paper, we propose JStap,\na modular static JavaScript detection system, which extends the detection capability\nof existing lexical and AST-based pipelines by also leveraging control and data flow\ninformation. Our detector is composed of ten modules, including five different ways\nof abstracting code, with differing levels of context and semantic information, and\ntwo ways of extracting features. Based on the frequency of these specific patterns,\nwe train a random forest classifier for each module. In practice, JStap outperforms\nexisting systems, which we reimplemented and tested on our dataset totaling over 270,000\nsamples. To improve the detection, we also combine the predictions of several modules.\nA first layer of unanimous voting classifies 93% of our dataset with an accuracy of\n99.73%, while a second layer-based on an alternative modules' combination-labels another\n6.5% of our initial dataset with an accuracy over 99%. This way, JStap can be used\nas a precise pre-filter, meaning that it would only need to forward less than 1% of\nsamples to additional analyses. For reproducibility and direct deployability of our\nmodules, we make our system publicly available.1",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            },
+            {
+                "id": 125,
+                "artifact_group_id": 125,
+                "artifact_group": {
+                    "id": 125,
+                    "owner_id": 1
+                },
+                "uri": "/v1/artifact/125/125",
+                "doi": "https://github.com/reddr/LibScout",
+                "type": "software",
+                "title": "reddr/LibScout",
+                "description": "LibScout: Third-party library detector for Java/Android apps",
+                "avg_rating": 0.0,
+                "num_ratings": 0,
+                "num_reviews": 0,
+                "owner": {
+                    "id": 1
+                },
+                "views": 0
+            }
+        ]
+    },
+    "avg_rating": null,
+    "num_ratings": 0,
+    "authors": [
+        "Giovanni Campagna",
+        "Mehrad Moradshahi",
+        "Monica S. Lam"
+    ]
+}
