@@ -36,3 +36,28 @@ Cypress.Commands.add('login', (asAdmin) => {
 Cypress.Commands.add('loginAsAdmin', () => {
   cy.login(true)
 })
+
+Cypress.Commands.add('loadArtifactAsOwner', (fixture) => {
+  const userId = Cypress.env('testUserId')
+  const userName = Cypress.env('testUserName')
+  function injectOwnerInfo(obj) {
+    if (Object.is(obj, null)
+      || Object.is(obj, undefined)
+      || typeof obj === 'string') return
+
+    Object.keys(obj).forEach((key) => {
+      if (key === 'owner' && Object.keys(obj[key]).includes('person')) {
+        obj[key]['person']['name'] = userName
+        obj[key]['id'] = userId
+      } else if (key === 'owner_id') {
+        obj[key] = userId
+      } else {
+        injectOwnerInfo(obj[key])
+      }
+    })
+  }
+  cy.fixture(fixture).then(function (fixture) {
+    injectOwnerInfo(fixture)
+    this.fixture = fixture
+  }).as('fixture')
+})

@@ -41,6 +41,9 @@ export default defineConfig({
     googleClientId: process.env.GOOGLE_CLIENT_ID,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    testUserId: 999,
+    testUserName: 'testuser',
+    testUserEmail: 'testuser@cyberexperimentation.org',
   }, 
   e2e: {
     baseUrl: process.env.BASE_URL || "http://localhost:3000",
