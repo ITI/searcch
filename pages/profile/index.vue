@@ -186,14 +186,11 @@
                           <div>
                             {{ item.title }}
                             <v-btn
-                              class="v-btn--simple"
-                              color="primary"
-                              icon
+                              size="small"
+                              variant="plain"
                               :to="`/artifact/${item.artifact_group_id}/${item.id}`"
+                              icon="mdi-arrow-top-right-thick"
                             >
-                              <v-icon color="primary">
-                                mdi-arrow-top-right-thick
-                              </v-icon>
                             </v-btn>
                           </div>
                         </div>
