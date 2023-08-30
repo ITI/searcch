@@ -130,7 +130,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import * as sha1 from 'sha1';
+import sha1 from 'sha1';
 
 export default defineComponent({
   components: {
