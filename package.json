@@ -12,7 +12,8 @@
     "build": "npx nuxi build",
     "start": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=80 npx nuxi start",
     "generate": "npx nuxi generate",
-    "test": "vitest run"
+    "test": "vitest run",
+    "e2e": "npx cypress run"
   },
   "dependencies": {
     "@babel/preset-env": "^7.21.4",

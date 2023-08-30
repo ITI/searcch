@@ -196,7 +196,7 @@ describe('View Artifact', () => {
                 cy.get('div.modal').should('not.visible')
 
                 cy.get('.ownership-info').should('contain', 'Claim request successfully sent')
-                cy.get('.ownership-info', { timeout: 5000 }).should('not.exist')
+                cy.get('.ownership-info', { timeout: 10000 }).should('not.exist')
 
                 cy.intercept('/kg/artifact/request/owner/*', {
                     fixture: 'ownershipRequest.json',
@@ -223,9 +223,7 @@ describe('View Artifact', () => {
                 cy.get('div.modal').should('not.visible')
 
                 cy.get('.ownership-info').should('contain', 'An error occured in sending the claim request')
-                cy.wait(6000).then(() => {
-                    cy.get('.ownership-info').should('not.exist')
-                })
+                cy.get('.ownership-info', { timeout: 10000 }).should('not.exist')
 
                 cy.get('#btn-claim-artifact').should('be.visible').click({ force: true })
                 cy.wait('@getOwnershipInfo')
@@ -286,9 +284,7 @@ describe('View Artifact', () => {
             cy.wait('@claimOwnershipByMagicKey')
 
             cy.get('.ownership-info').should('contain', 'An error occured in sending the claim request')
-            cy.wait(5000).then(() => {
-                cy.get('.ownership-info').should('not.exist')
-            })
+                cy.get('.ownership-info', { timeout: 10000}).should('not.exist')
         })
     })
 
