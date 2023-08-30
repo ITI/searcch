@@ -3,14 +3,13 @@
     <v-card class="mx-auto overflow-hidden" elevation="0">
       <v-container fluid>
         <v-row class="justify-space-between">
-          <v-col cols="9">
+          <v-col cols="auto" class="pa-0">
             <v-card-title class="align-start">
               <span class="text-h5">{{$filters.titlecase( artifact.title ) }}</span> 
             </v-card-title>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="auto" class="pa-0 pe-4">
             <ArtifactChips
-              class="card-chip"
               :modelValue="[artifact.type]"
               :type="artifact.type"
             ></ArtifactChips>
@@ -314,11 +313,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.card-chip {
+/* .card-chip {
   position: absolute;
   top: 0px;
   right: 0px;
-}
+} */
 
 .v-card__title {
   word-break: normal;
